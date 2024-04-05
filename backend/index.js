@@ -18,17 +18,16 @@ app.use(cors());
 // );
 
 
-// test if connected to mongo DB: localhost:3000/api/test
-// webpage should show 4 names in DB
-const databaseRoutes = require('./src/routes/test');
-app.use('/api', databaseRoutes);
+// show member info: localhost:3000/api/members
+const memberRoutes = require('./src/routes/test');
+app.use('/api', memberRoutes);
 
 const server = app.listen(process.env.PORT || 3000, () =>
     console.log(`Server running on port http://localhost:${server.address().port}`),
 );
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URL)
+mongoose.connect(process.env.MONGODB_URL, {dbName: 'isChange'})
     .then(() => {
         console.log('Connected to MongoDB');
     })
