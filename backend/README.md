@@ -35,3 +35,8 @@ npm start
     範例：
     feat: 新增登入api
     ```
+4. 程式命名風格
+* **constant**：使用全大寫命名，斷字間以 _ 連接，例如 MAX_VALUE, PI。
+* **variables and functions**：使用camelCase，例如 myFunction()、teaPrice。
+* **private variables and functions**：前面加 _ ，例如 _privateProp, _myPrivateFunction()。
+* **router、檔名**：使用短橫線分隔單詞，例如：/user-profile, /product-details, /login。
