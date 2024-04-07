@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
 const MemberAuth = require("../models/member-auth");
+const jwt = require("jsonwebtoken");
 
 require("dotenv").config(); // 加了這行就可以抓到 mailer
 
@@ -43,13 +44,18 @@ const login = async (req, res) => {
   try {
     const user = await MemberAuth.findOne({ email, password: hashedPassword });
     if (user) {
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+        expiresIn: "1h",
+      });
+      res.cookie("token", token, { httpOnly: true });
+
       return res.json({
         status: "success",
         message: "登入成功",
         data: {
           user_id: user._id,
-          email: user.email, // Assuming email serves as username
-          access_token: "your_access_token_here", // Generate or retrieve access token
+          email: user.email,
+          access_token: token,
         },
       });
     } else {
