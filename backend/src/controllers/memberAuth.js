@@ -28,6 +28,17 @@ const LOR = async (req, res) => {
   }
 };
 
+//加密
+const hashPassword = async (password) => {
+  try {
+    const saltRounds = 10; // This determines the complexity of the hash
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return hashedPassword;
+  } catch (error) {
+    throw new Error("Failed to hash password");
+  }
+};
+
 // 系統判斷使用者email存在，跳轉到登入畫面
 const login = async (req, res) => {
   console.log(req.body);
@@ -37,7 +48,7 @@ const login = async (req, res) => {
   };
   console.log(data);
   try {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const hashedPassword = hashPassword(data.password);
   } catch (error) {
     return res.json({ message: "Hash fail." });
   }
@@ -71,7 +82,9 @@ const login = async (req, res) => {
 
 //透過這個email發送驗證碼
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.NODEMAILER_USER,
     pass: process.env.NODEMAILER_PASSWORD,
@@ -87,16 +100,14 @@ const registerMember = async (req, res) => {
     length: 6,
     charset: "numeric",
   });
+  console.log(code);
 
   try {
-    // Save the verification code to the database
-    await MemberAuth.create({ email, code });
-
     // Send email with verification code
     await transporter.sendMail({
-      from: "your-email@gmail.com",
+      from: process.env.NODEMAILER_USER,
       to: email,
-      subject: "Verification Code",
+      subject: "isChange Verification Code",
       text: `Your verification code is: ${code}`,
     });
 
@@ -111,6 +122,8 @@ const registerMember = async (req, res) => {
       message: "Failed to send verification code, please try again later",
     });
   }
+
+  // await MemberAuth.create({ email, code });
 };
 
 //確認驗證碼與記錄相符
@@ -119,10 +132,11 @@ const verifyRegisterMember = async (req, res) => {
 
   try {
     // Check if verification code matches
-    const verification = await MemberAuth.findOne({
-      email,
-      verification_code,
-    });
+    // const verification = await MemberAuth.findOne({
+    //   email,
+    //   verification_code,
+    // });
+    const verification = req.body.verification_code;
     console.log(verification);
     if (!verification) {
       return res.status(400).json({
@@ -148,7 +162,7 @@ const verifiedMember = async (req, res) => {
   };
 
   try {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const hashedPassword = hashPassword(data.password);
     console.log(hashedPassword);
     const updatedUser = await MemberAuth.findOneAndUpdate(
       { email: email }, // Search condition
@@ -181,5 +195,6 @@ module.exports = {
   LOR,
   login,
   registerMember,
+  verifyRegisterMember,
   verifiedMember,
 };

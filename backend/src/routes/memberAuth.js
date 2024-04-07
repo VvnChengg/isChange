@@ -4,6 +4,8 @@ const memberAuthController = require("../controllers/memberAuth");
 
 router.put("/login-or-register", memberAuthController.LOR);
 router.post("/login", memberAuthController.login);
-router.post("/register", memberAuthController.verifiedMember);
+router.put("/register", memberAuthController.registerMember);
+router.post("/register", memberAuthController.verifyRegisterMember);
+// router.post("/register", memberAuthController.verifiedMember);
 
 module.exports = router;
