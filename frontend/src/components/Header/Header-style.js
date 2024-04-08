@@ -7,6 +7,7 @@ export const HeaderWrapper = styled.div `
     position: fixed;
         top: 0;
         left: 0;
+        z-index: 1;
     
     background: linear-gradient(360deg, #E0F0FF 0%, #FFFFFF 100%);
     box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.25);
@@ -19,7 +20,7 @@ export const HeaderWrapper = styled.div `
 export const HeaderTitle = styled.div `
     margin: 0 30px 0 30px;
 
-    font-family: 'Lilita One';
+    font-family: 'LilitaOne';
     font-style: normal;
     font-weight: 400;
     font-size: 40px;

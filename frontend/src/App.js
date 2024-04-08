@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import './App.css';
-import './global.css';
+import './styles/App.css';
+import './styles/global.css';
 
+import Layout from './pages/layout';
 import Home from './pages/home';
 
 import Header from './components/Header';
@@ -13,7 +14,9 @@ function App() {
         <Header />
         <div className="App">
           <Routes>
-            <Route path='/' element={<Home />} />
+            <Route path='' element={<Layout />}>
+              <Route path='/' element={<Home />} />
+            </Route>
           </Routes>
         </div>
       </Router>
