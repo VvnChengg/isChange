@@ -3,6 +3,12 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 
 const memberAuthSchema = new Schema({
+  user_id: {
+    type: Schema.Types.ObjectId,
+    ref: "Member",
+    required: true,
+  },
+
   password: {
     type: String,
     // required: true,
