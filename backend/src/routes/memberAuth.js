@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const memberAuthController = require("../controllers/memberAuth");
 
-router.get("/login", memberAuthController.LOR);
+router.get("/login-or-register", memberAuthController.LOR);
 router.get("/login", memberAuthController.login);
 router.post("/register", memberAuthController.registerMember);
 router.get("/register", memberAuthController.verifyRegisterMember);

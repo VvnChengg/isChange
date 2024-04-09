@@ -10,13 +10,13 @@ require("dotenv").config(); // 加了這行就可以抓到 mailer
 // 使用者輸入信箱後，判斷是否是會員，回傳一個狀態（若是進入登入頁面，否則進入註冊）
 const LOR = async (req, res) => {
   const email = req.body.email;
-  console.log(email);
+  // console.log(email);
   if (!email) {
     return res.status(400).json({ error: "Email cannot be empty" });
   }
   try {
     const existingUser = await MemberAuth.findOne({ email });
-    console.log(existingUser);
+    // console.log(existingUser);
     if (existingUser) {
       // If user exists
       return res.json({ status: "success" });
@@ -46,7 +46,7 @@ const login = async (req, res) => {
     email: req.body.email,
     password: req.body.password,
   };
-  console.log(data);
+  // console.log(data);
 
   try {
     const user = await MemberAuth.findOne({
@@ -107,7 +107,7 @@ const registerMember = async (req, res) => {
     length: 6,
     charset: "numeric",
   });
-  console.log(code);
+  // console.log(code);
 
   await MemberAuth.create({
     email: email,
@@ -143,7 +143,12 @@ const verifyRegisterMember = async (req, res) => {
 
   try {
     const user = await MemberAuth.findOne({ email });
-    if (!user || user.verification_code !== verification_code) {
+    if (user.is_verified) {
+      return res.status(400).json({
+        status: "error",
+        message: "電子郵件已驗證通過，請登入",
+      });
+    } else if (!user || user.verification_code !== verification_code) {
       return res.status(400).json({
         status: "error",
         message: "電子郵件驗證失敗，請確認您的驗證碼是否正確",
@@ -172,8 +177,13 @@ const verifiedMember = async (req, res) => {
     const hashedPassword = await hashPassword(password);
     const user = await MemberAuth.findOne({ email });
 
-    // If user is not verified, update password and return success
-    if (user && !user.is_verified) {
+    if (user.password) {
+      return res.json({
+        status: "failed",
+        message: "使用者已設定過密碼，請登入",
+        data: email,
+      });
+    } else if (user) {
       await MemberAuth.findOneAndUpdate(
         { email },
         { password: hashedPassword }
@@ -181,15 +191,6 @@ const verifiedMember = async (req, res) => {
       return res.json({
         status: "success",
         message: "註冊成功！",
-        data: email,
-      });
-    }
-
-    // If user is already verified, return failed message
-    if (user && user.is_verified) {
-      return res.json({
-        status: "failed",
-        message: "email已存在！",
         data: email,
       });
     }
