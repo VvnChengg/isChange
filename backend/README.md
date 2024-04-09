@@ -33,6 +33,13 @@ npm install
 ### 5. Test Api
 環境建置完成，可以在 http://localhost:3000 測試api了
 
+### @ 其他需要安裝的東西 @
+* **Joi** : 驗證資料的模組
+
+
+    ```
+    npm i joi
+    ```
 
 ## 其他注意事項
 ### 1. 資料夾說明
