@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
 const MemberAuth = require("../models/member-auth");
+const Member = require("../models/member");
 const jwt = require("jsonwebtoken");
 
 require("dotenv").config(); // 加了這行就可以抓到 mailer
@@ -41,20 +42,26 @@ const hashPassword = async (password) => {
 
 // 系統判斷使用者email存在，跳轉到登入畫面
 const login = async (req, res) => {
-  console.log(req.body);
   const data = {
     email: req.body.email,
     password: req.body.password,
   };
   console.log(data);
+
   try {
-    const hashedPassword = hashPassword(data.password);
-  } catch (error) {
-    return res.json({ message: "Hash fail." });
-  }
-  try {
-    const user = await MemberAuth.findOne({ email, password: hashedPassword });
-    if (user) {
+    const user = await MemberAuth.findOne({
+      email: data.email,
+    });
+    // Check if user exists
+    if (!user) {
+      return res.json({
+        status: "error",
+        message: "Email不存在",
+      });
+    }
+    // Check if password correct
+    const passwordMatch = await bcrypt.compare(data.password, user.password);
+    if (passwordMatch) {
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
         expiresIn: "1h",
       });
@@ -102,6 +109,12 @@ const registerMember = async (req, res) => {
   });
   console.log(code);
 
+  await MemberAuth.create({
+    email: email,
+    verification_code: code,
+    source: "credentials",
+  });
+
   try {
     // Send email with verification code
     await transporter.sendMail({
@@ -113,17 +126,15 @@ const registerMember = async (req, res) => {
 
     res.json({
       status: "verified",
-      message: "Verification code has been sent",
+      message: "驗證碼已寄出",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       status: "error",
-      message: "Failed to send verification code, please try again later",
+      message: "驗證碼寄送失敗，請稍後再試",
     });
   }
-
-  // await MemberAuth.create({ email, code });
 };
 
 //確認驗證碼與記錄相符
@@ -131,23 +142,23 @@ const verifyRegisterMember = async (req, res) => {
   const { email, verification_code } = req.body;
 
   try {
-    // Check if verification code matches
-    // const verification = await MemberAuth.findOne({
-    //   email,
-    //   verification_code,
-    // });
-    const verification = req.body.verification_code;
-    console.log(verification);
-    if (!verification) {
+    const user = await MemberAuth.findOne({ email });
+    if (!user || user.verification_code !== verification_code) {
       return res.status(400).json({
         status: "error",
-        message:
-          "Email verification failed, please check your verification code",
+        message: "電子郵件驗證失敗，請確認您的驗證碼是否正確",
       });
     }
-    // Implement user registration logic here
 
-    res.json({ status: "verified", message: "Email verification successful" });
+    const updatedUser = await MemberAuth.findOneAndUpdate(
+      { email },
+      { is_verified: true }
+    );
+    res.json({
+      status: "verified",
+      message: "電子郵件驗證成功",
+      // data: updatedUser,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ status: "error", message: "Internal server error" });
@@ -155,35 +166,65 @@ const verifyRegisterMember = async (req, res) => {
 };
 
 const verifiedMember = async (req, res) => {
-  const data = {
-    email: req.body.email,
-    password: req.body.password,
-    exchange_school_name: req.body.exchange_school_name,
-  };
+  const { email, password } = req.body;
 
   try {
-    const hashedPassword = hashPassword(data.password);
-    console.log(hashedPassword);
-    const updatedUser = await MemberAuth.findOneAndUpdate(
-      { email: email }, // Search condition
-      {
-        $set: {
-          password: hashedPassword,
-          exchange_school_name: exchange_school_name,
-        },
-      },
-      { new: true } // Return the updated document
-    );
+    const hashedPassword = await hashPassword(password);
+    const user = await MemberAuth.findOne({ email });
 
-    if (!updatedUser) {
-      return res.status(404).json({ error: "User not found" });
+    // If user is not verified, update password and return success
+    if (user && !user.is_verified) {
+      await MemberAuth.findOneAndUpdate(
+        { email },
+        { password: hashedPassword }
+      );
+      return res.json({
+        status: "success",
+        message: "註冊成功！",
+        data: email,
+      });
     }
 
-    // Return success response
+    // If user is already verified, return failed message
+    if (user && user.is_verified) {
+      return res.json({
+        status: "failed",
+        message: "email已存在！",
+        data: email,
+      });
+    }
+
+    // If user doesn't exist, return failed message
+    return res.json({
+      status: "failed",
+      message: "使用者不存在！",
+      data: email,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const deleteTestMember = async (req, res) => {
+  const { email } = req.body; // Extract email from request body
+  try {
+    // Assuming MemberAuth is your Mongoose model
+    const deletedMember = await MemberAuth.deleteOne({ email });
+
+    if (deletedMember.deletedCount === 0) {
+      // If no documents were deleted
+      return res.status(404).json({
+        status: "error",
+        message: "No matching member found for deletion",
+      });
+    }
+
+    // If deletion was successful
     return res.json({
       status: "success",
-      message: "User information updated successfully",
-      data: updatedUser,
+      message: "Deleted successfully",
+      data: email, // Assuming you want to return the deleted email
     });
   } catch (error) {
     console.error(error);
@@ -197,4 +238,5 @@ module.exports = {
   registerMember,
   verifyRegisterMember,
   verifiedMember,
+  deleteTestMember,
 };
