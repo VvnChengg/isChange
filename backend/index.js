@@ -17,6 +17,8 @@ app.use(cors());
 //     console.log(`Server running on port http://localhost:${process.env.PORT}`),
 // );
 
+const chatRoutes = require("./src/routes/chat");
+app.use("/api/chat", chatRoutes);
 
 // show member info: localhost:3000/api/members
 const memberRoutes = require('./src/routes/test');
