@@ -107,16 +107,29 @@ const registerMember = async (req, res) => {
     length: 6,
     charset: "numeric",
   });
-  // console.log(code);
 
-  await MemberAuth.create({
-    email: email,
-    verification_code: code,
-    source: "credentials",
-  });
+  const user = await MemberAuth.findOne({ email });
 
+  // create member and memberAuth in database
+  if (!user) {
+    const member = await Member.create({ username: email.split("@")[0] });
+    await MemberAuth.create({
+      user_id: member._id,
+      email: email,
+      verification_code: code,
+      source: "credentials",
+    });
+  } else if (user && !user.password) {
+    await MemberAuth.updateOne({ email }, { verification_code: code });
+  } else {
+    return res.json({
+      status: "error",
+      message: "已成為會員，請登入",
+    });
+  }
+
+  // send email
   try {
-    // Send email with verification code
     await transporter.sendMail({
       from: process.env.NODEMAILER_USER,
       to: email,
@@ -143,10 +156,15 @@ const verifyRegisterMember = async (req, res) => {
 
   try {
     const user = await MemberAuth.findOne({ email });
-    if (user.is_verified) {
+    if (!user) {
       return res.status(400).json({
         status: "error",
-        message: "電子郵件已驗證通過，請登入",
+        message: "電子郵件尚未驗證，請申請驗證碼",
+      });
+    } else if (user.is_verified) {
+      return res.status(400).json({
+        status: "error",
+        message: "電子郵件已完成驗證，請登入",
       });
     } else if (!user || user.verification_code !== verification_code) {
       return res.status(400).json({
@@ -171,7 +189,7 @@ const verifyRegisterMember = async (req, res) => {
 };
 
 const verifiedMember = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username, exchange_school_name } = req.body;
 
   try {
     const hashedPassword = await hashPassword(password);
@@ -184,14 +202,23 @@ const verifiedMember = async (req, res) => {
         data: email,
       });
     } else if (user) {
-      await MemberAuth.findOneAndUpdate(
+      const ma = await MemberAuth.findOneAndUpdate(
         { email },
-        { password: hashedPassword }
+        { password: hashedPassword },
+        { new: true }
+      );
+      const m = await Member.findOneAndUpdate(
+        { _id: user.user_id },
+        {
+          username: username,
+          exchange_school_name: exchange_school_name,
+        },
+        { new: true }
       );
       return res.json({
         status: "success",
         message: "註冊成功！",
-        data: email,
+        data: m,
       });
     }
 
@@ -211,9 +238,17 @@ const deleteTestMember = async (req, res) => {
   const { email } = req.body; // Extract email from request body
   try {
     // Assuming MemberAuth is your Mongoose model
-    const deletedMember = await MemberAuth.deleteOne({ email });
+    const toDelete = await MemberAuth.findOne({ email });
+    const deletedMemberAuth = await MemberAuth.deleteOne({ email });
+    const deletedMember = await Member.deleteOne({
+      //default
+      username: email.split("@")[0],
+    });
 
-    if (deletedMember.deletedCount === 0) {
+    if (
+      deletedMemberAuth.deletedCount === 0 ||
+      deletedMember.deletedCount === 0
+    ) {
       // If no documents were deleted
       return res.status(404).json({
         status: "error",
@@ -221,11 +256,10 @@ const deleteTestMember = async (req, res) => {
       });
     }
 
-    // If deletion was successful
     return res.json({
       status: "success",
       message: "Deleted successfully",
-      data: email, // Assuming you want to return the deleted email
+      data: email,
     });
   } catch (error) {
     console.error(error);

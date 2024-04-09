@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const memberSchema = new Schema({
-  user_id: {
-    type: Schema.Types.ObjectId,
-    ref: "MemberAuth",
-    required: true,
-  },
   username: {
     type: String,
     maxlength: 15,
@@ -32,7 +27,7 @@ const memberSchema = new Schema({
   },
   region: {
     type: String,
-    required: true,
+    // required: true,
   },
   region_list: {
     type: [String],
