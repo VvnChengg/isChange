@@ -28,9 +28,9 @@ app.use("/api/tour", tourRoutes);
 // const memberRoutes = require("./src/routes/test");
 // app.use("/api", memberRoutes);
 const memberAuthRoutes = require("./src/routes/memberAuth");
-app.use("/member-auth", memberAuthRoutes);
+app.use("/api/member-auth", memberAuthRoutes);
 const memberRoutes = require("./src/routes/member");
-app.use("/member", memberRoutes);
+app.use("/api/member", memberRoutes);
 
 const server = app.listen(process.env.PORT || 3000, () =>
   console.log(

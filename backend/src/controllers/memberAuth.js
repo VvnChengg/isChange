@@ -46,7 +46,7 @@ const login = async (req, res) => {
     email: req.body.email,
     password: req.body.password,
   };
-  // console.log(data);
+  console.log(data);
 
   try {
     const user = await MemberAuth.findOne({
