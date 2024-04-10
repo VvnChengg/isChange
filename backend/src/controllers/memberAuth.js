@@ -46,7 +46,6 @@ const login = async (req, res) => {
     email: req.body.email,
     password: req.body.password,
   };
-  console.log(data);
 
   try {
     const user = await MemberAuth.findOne({
@@ -113,6 +112,7 @@ const registerMember = async (req, res) => {
   // create member and memberAuth in database
   if (!user) {
     const member = await Member.create({ username: email.split("@")[0] });
+    console.log(member);
     await MemberAuth.create({
       user_id: member._id,
       email: email,

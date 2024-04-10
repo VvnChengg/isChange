@@ -19,7 +19,7 @@ const memberSchema = new Schema({
         // 檢查是否為合法的 URL 格式
         return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v);
       },
-      message: "Invalid URL format",
+      message: "Photo has to be in a valid URL format",
     },
   },
   exchange_school_name: {
