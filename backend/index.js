@@ -16,6 +16,8 @@ app.use(express.json())
 //     console.log(`Server running on port http://localhost:${process.env.PORT}`),
 // );
 
+const chatRoutes = require("./src/routes/chat");
+app.use("/api/chat", chatRoutes);
 
 // 載入controller
 const postRoutes = require('./src/routes/post');
