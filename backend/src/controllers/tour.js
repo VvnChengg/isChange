@@ -139,7 +139,77 @@ class tourApi {
                 message: '編輯揪團失敗',
             });
         }
-    };
+    }
+
+    async deleteTour(req, res) {
+        try {
+            const { user_id, event_id } = req.body;
+
+            if (!user_id || !event_id) {
+                return res.status(400).json({
+                    success: false,
+                    message: '請傳遞user_id和event_id',
+                });
+            }
+
+            // 檢查編輯者是否為該揪團的創建者
+            const tour = await TourModel.findById(event_id);
+            if (user_id != tour.creator_id) {
+                return res.status(401).json({
+                    success: false,
+                    message: '沒有權限編輯該揪團',
+                });
+            }
+
+            await TourModel.findByIdAndDelete(event_id);
+            return res.status(200).json({
+                success: true,
+                message: '刪除揪團成功'
+            });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                message: '刪除揪團失敗',
+            });
+        }
+    }
+
+    async getEstablishedTours(req, res) {
+        try {
+            const { user_id } = req.body;
+
+            const tours = await TourModel.find({ status: 'ongoing' });
+            return res.status(200).json({
+                established_list: tours
+            });
+
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                message: '取得揪團中列表失敗',
+            });
+        }
+    }
+
+    async getFinishedTours(req, res) {
+        try {
+            const { user_id } = req.body;
+
+            const tours = await TourModel.find({ status: 'complete' });
+            return res.status(200).json({
+                established_list: tours
+            });
+
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                message: '取得已成團列表失敗',
+            });
+        }
+    }
 }
 
 module.exports = new tourApi();
