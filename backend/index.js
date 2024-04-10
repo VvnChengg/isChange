@@ -17,8 +17,8 @@ app.use(bodyParser.json());
 
 // app.use('/api/名稱', 路徑)
 app.use("/api/chat", chatRoutes);
-app.use('/api/post', postRoutes);
-app.use('/api/tour', tourRoutes);
+app.use("/api/post", postRoutes);
+app.use("/api/tour", tourRoutes);
 
 // for test
 // const memberRoutes = require('./src/routes/test');

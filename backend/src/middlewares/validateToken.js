@@ -1,22 +1,24 @@
 const jwt = require("jsonwebtoken");
+const Member = require("../models/member");
+const MemberAuth = require("../models/member-auth");
 
-const validateToken = (req, res, next) => {
-  const token = req.body.token;
+function validateToken(req, res, next) {
+  const authHeader = req.header("Authorization");
 
-  if (!token) {
-    return res.status(401).json({ error: "Token is missing" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Access denied, no token exists" });
   }
+
+  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.user = decoded;
+    req.userId = decoded.userId;
+    req.body.userId = decoded.userId;
     next();
   } catch (error) {
-    console.error(error);
-    return res.status(401).json({ error: "Invalid token" });
+    res.status(401).json({ error: "Invalid token" });
   }
-};
+}
 
-module.exports = {
-  validateToken,
-};
+module.exports = validateToken;
