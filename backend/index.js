@@ -4,12 +4,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors') ;
-
+const app = express();
 require('dotenv').config(); // 加了這行就可以抓到 port
 
-const app = express();
-
 app.use(cors());
+app.use(express.json())
 
 // app.use('/api/名稱', 路徑)
 
@@ -20,9 +19,14 @@ app.use(cors());
 const chatRoutes = require("./src/routes/chat");
 app.use("/api/chat", chatRoutes);
 
-// show member info: localhost:3000/api/members
+// 載入controller
+const postRoutes = require('./src/routes/post');
 const memberRoutes = require('./src/routes/test');
-app.use('/api', memberRoutes);
+
+// 指定route對應的controller
+app.use('/post', postRoutes);
+app.use('api/', memberRoutes);
+
 
 const server = app.listen(process.env.PORT || 3000, () =>
     console.log(`Server running on port http://localhost:${server.address().port}`),
