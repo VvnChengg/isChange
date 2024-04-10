@@ -1,11 +1,16 @@
-const Chat = require("../models/chat")
-const Message = require("../models/message")
+const Chat = require("../models/chat");
+const Message = require("../models/message");
+const Member = require("../models/member");
 const mongoose = require('mongoose');
 
-// 確認聊天是否已存在
+// GET 確認聊天是否已存在
 const checkChat = async (req, res) => {
     try {
-        const { user_id, receiver_id } = req.body;
+        const user_id = req.body.user_id; // 使用者透過 token 或是某方式，抓自己的 member._id
+        // const user_id = "660bbad71dd21a48510f209c"; // test ok
+        const { receiver_id } = req.query; // 聊天對象的 id 放在 query 或 params 裡？待討論
+
+        console.log(user_id, receiver_id)
 
         const chat = await Chat.findOne({
             $or: [
@@ -17,22 +22,39 @@ const checkChat = async (req, res) => {
         console.log(chat)
 
         if (!chat) {
-            return res.status(200).json( {chat_id: ""});
+            return res.status(200).json({
+                chat_id: "",
+                message: "No chat found."
+            });
         } else {
-            return res.status(200).json( {chat_id: chat._id});
+            return res.status(200).json({
+                chat_id: chat._id,
+                message: "Chat found."
+            });
         }
-
     } catch (error) {
         console.error('Failed to check chat:', error);
         res.status(500).json({ error: 'Failed to check chat' });
     }
 };
 
-// 建立聊天
+// POST 建立聊天
 const createChat = async (req, res) => {
     try {
-        const { user_id, receiver_id } = req.body;
-        // const uid = "660bbad71dd21a48510f209c"; // 
+        const user_id = req.body.user_id;
+        const receiver_id = req.body.receiver_id;
+        // const user_id = "660bbad71dd21a48510f209c"; // test 
+        // const { receiver_id } = req.query; // test receiver_id 放在 query 裡
+
+        console.log(user_id, receiver_id)
+
+        const receiver = await Member.findById(receiver_id);
+        if (!receiver) {
+            res.status(404).json({
+                success: false,
+                message: 'Receiver not found.',
+            });
+        }
 
         // 創建新的聊天
         const newChat = await Chat.create({
@@ -46,9 +68,16 @@ const createChat = async (req, res) => {
 
         console.log(newChat)
 
+        // 更新兩個使用者的聊天 ID 列表
+        await Member.updateMany(
+            { _id: { $in: [user_id, receiver_id] } },
+            { $addToSet: { chat_ids: newChat._id } }
+        );
+
         res.status(201).json({
             success: true,
             message: 'New chat created.',
+            newChatId: newChat._id
         });
     } catch (error) {
         console.error('Failed to create chat:', error);
@@ -77,7 +106,7 @@ const createChat = async (req, res) => {
 //     }
 // };
 
-// 對話細節 ok
+// GET 對話細節 ok
 const getChatDetail = async (req, res) => {
     try {
         const { cid } = req.params;
@@ -95,10 +124,10 @@ const getChatDetail = async (req, res) => {
     }
 };
 
-// 聊天列表 應該 ok
+// GET 聊天列表 應該 ok
 const getChatList = async (req, res) => {
     try {
-        const { uid } = req.body.user_id;  // not sure
+        const { uid } = req.body.user_id;  // 使用者透過 token 或是某方式，抓自己的 member._id
         // const uid = "660bbad71dd21a48510f209c"; // test ok
 
         console.log(uid);
@@ -110,6 +139,12 @@ const getChatList = async (req, res) => {
             ]
         });
 
+        // 直接從 user 的 chat_ids list 抓出聊天
+        // const user = await Member.findById(uid);
+        // const chats = await Chat.find({
+        //      _id: { $in: user.chat_ids } 
+        // });
+
         res.status(200).json({ chats });
     } catch (error) {
         console.error('Failed to show chatlist:', error);
@@ -117,6 +152,7 @@ const getChatList = async (req, res) => {
     }
 };
 
+// POST 傳送訊息，尚未測試
 const sendMessage = async (req, res) => {
     try {
         const { cid } = req.params;
@@ -160,14 +196,3 @@ module.exports = {
     getChatDetail,
     sendMessage
 };
-
-// get member data
-// router.get('/members', async (req, res) => {
-//     try {
-//         const members = await Member.find({}, 'username intro exchage_school_name region'); // column names
-//         res.json({ members });
-//     } catch (error) {
-//         console.error('Failed to fetch members:', error);
-//         res.status(500).json({ error: 'Failed to fetch members' });
-//     }
-// });
