@@ -25,10 +25,12 @@ app.use("/api/tour", tourRoutes);
 // app.use('api/', memberRoutes);
 
 // show member info: localhost:3000/api/members
-const memberRoutes = require("./src/routes/test");
-app.use("/api", memberRoutes);
+// const memberRoutes = require("./src/routes/test");
+// app.use("/api", memberRoutes);
 const memberAuthRoutes = require("./src/routes/memberAuth");
 app.use("/member-auth", memberAuthRoutes);
+const memberRoutes = require("./src/routes/member");
+app.use("/member", memberRoutes);
 
 const server = app.listen(process.env.PORT || 3000, () =>
   console.log(

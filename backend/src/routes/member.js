@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const memberController = require("../controllers/member");
-const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
+const validateToken = require("../../src/middlewares/validateToken");
 
-router.put("/edit-page", cookieJwtAuth, memberController.modifyInfo);
-router.get("/edit-page", cookieJwtAuth, memberController.showInfo);
-router.get("/member/:uid", cookieJwtAuth, memberController.showDetailedInfo);
+// router.get("/edit-page", validateToken, memberController.showMember);
+// router.patch("/edit-page", validateToken, memberController.modifyMember);
+// router.get("/member/:uid", validateToken, memberController.showMemberDetail);
 
 module.exports = router;

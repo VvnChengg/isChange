@@ -10,6 +10,7 @@ const memberSchema = new Schema({
   intro: {
     type: String,
     maxlength: 200,
+    default: null,
   },
   photo: {
     type: String,
@@ -24,6 +25,11 @@ const memberSchema = new Schema({
   exchange_school_name: {
     type: String,
     maxlength: 50,
+  },
+  exchange_school_email: {
+    type: String,
+    unique: true,
+    match: /^\S+@\S+\.\S+$/, // 驗證 email 格式
   },
   region: {
     type: String,

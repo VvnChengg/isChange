@@ -150,7 +150,7 @@ const registerMember = async (req, res) => {
   }
 };
 
-//確認驗證碼與記錄相符
+//輸入驗證碼進行驗證
 const verifyRegisterMember = async (req, res) => {
   const { email, verification_code } = req.body;
 
@@ -188,6 +188,7 @@ const verifyRegisterMember = async (req, res) => {
   }
 };
 
+//設定密碼、使用者名稱、交換學校名稱
 const verifiedMember = async (req, res) => {
   const { email, password, username, exchange_school_name } = req.body;
 
