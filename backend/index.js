@@ -17,15 +17,17 @@ app.use(express.json())
 // );
 
 const chatRoutes = require("./src/routes/chat");
-app.use("/api/chat", chatRoutes);
+app.use("/chat", chatRoutes);
 
 // 載入controller
 const postRoutes = require('./src/routes/post');
-const memberRoutes = require('./src/routes/test');
 
 // 指定route對應的controller
 app.use('/post', postRoutes);
-app.use('api/', memberRoutes);
+
+// for test
+// const memberRoutes = require('./src/routes/test');
+// app.use('api/', memberRoutes);
 
 
 const server = app.listen(process.env.PORT || 3000, () =>
