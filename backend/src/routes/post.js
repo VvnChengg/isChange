@@ -5,7 +5,7 @@ const router = express.Router();
 const Article = require('../models/article');
 
 // 載入controller.
-var { getAllPosts, updatePost, deletePost} = require("../controllers/post-controller");
+var { getAllPosts, updatePost, deletePost} = require("../controllers/post");
 
 // 指定route對應的controller
 router.get('/all', getAllPosts);

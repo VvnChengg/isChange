@@ -1,5 +1,5 @@
 const Article = require('../models/article');
-const { validatePost, validatePut } = require('../middlewares/post-validation');
+const { validatePost, validatePut } = require('../middlewares/post');
 
 const getAllPosts = async (req, res, next) => {
     let articles;
