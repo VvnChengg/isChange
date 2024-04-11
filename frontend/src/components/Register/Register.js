@@ -11,11 +11,16 @@ const Register = () => {
 
     const [verificationCode, setVerificationCode] = useState(''); // 驗證碼
     const [verificationPass, setVerificationPass] = useState(false); // 驗證碼是否通過
+    const [shouldCheckVeri, setShouldCheckVeri] = useState(false); // 是否應該檢查驗證碼
+    const [veriHint, setVeriHint] = useState(''); // 驗證碼錯誤提示
 
     const [passWord, setPassword] = useState('');
     const [passWord_confirm, setPassword_confirm] = useState('');
+    const [isPassWordSame, setIsPassWordSame] = useState(true); // 密碼是否相同
+    const [passWordRuleMatched, setPassWordRuleMatched] = useState(true);
 
     const [username, setUserName] = useState('');
+    const [shouldCheck, setShouldCheck] = useState(false);
     const [usernameRegistered, setUsernameRegistered] = useState(false);
 
     const [file, setFile] = useState(null);
@@ -51,13 +56,12 @@ const Register = () => {
 
     const SentMail = () => {
         // 檢查此email是否已被註冊
-        const registered = checkEmailInDatabase(email);
+        let registered = checkEmailInDatabase(email);
         setEmailRegistered(registered);
 
         //若已被註冊則不寄送，並彈出視窗
         if (emailRegistered) {
             alert('此信箱已被註冊');
-            return
         } else {
             sendMail(email);
             // console.log('寄送驗證信:', email);
@@ -93,50 +97,64 @@ const Register = () => {
         setVerificationCode(e.target.value);
     };
 
-    const checkVerificationCode = (verificationCode) => {
+    const checkVerificationInDatabase = () => {
         // 在這裡檢查驗證碼是否正確
         // true => ok
         // false => 錯誤
         return true; // 模拟驗證碼正確的情况
     }
 
-    const checkVerification = () => {
+    const checkVerification = async () => {
         // 檢查驗證碼是否正確
-        const pass = checkVerificationCode(verificationCode);
+        let pass = await checkVerificationInDatabase(verificationCode);
         setVerificationPass(pass);
-        if (!pass) {
-            alert('驗證碼錯誤');
-            return;
-        }
-        console.log('驗證碼正確:', verificationCode);
+        setShouldCheckVeri(true);
     }
 
+    useEffect(() => {
+        if (shouldCheckVeri) {
+            if (!verificationPass) {
+                setVeriHint('驗證碼錯誤');
+            }
+        }
+    }, [verificationPass, shouldCheckVeri]);
 
-
-
-    const checkUserNameInDatabase = (username) => {
+    const checkUserNameInDatabase = () => {
         // true => ok
         // false => 已被註冊
-        return true; // 模拟未被注册的情况
+        return false; // 模拟未被注册的情况
     }
 
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
+        CheckpassWordRule();
     }
 
-    const CheckpassWordRule = (e) => {
+    const CheckpassWordRule = () => {
         // 之後要補密碼規則
-        return false;
+        // 密碼長度至少為 8
+        if (passWord.length < 8) {
+            setPassWordRuleMatched(false);
+            return;
+        }
+        setPassWordRuleMatched(true);
     }
 
     const CheckpassWordSame = () => {
-        return passWord === passWord_confirm;
+        if (passWord === passWord_confirm) {
+            setIsPassWordSame(true);
+        }else{
+            setIsPassWordSame(false);
+        }
     }
+
+    useEffect(() => {
+        CheckpassWordSame();
+    }, [passWord_confirm]);
 
     const handlePasswordConfirmChange = (e) => {
         setPassword_confirm(e.target.value);
-        CheckpassWordRule();
     }
 
 
@@ -146,13 +164,20 @@ const Register = () => {
         CheckUserName();
     }
 
-    const CheckUserName = () => {
-        const registered = checkUserNameInDatabase(username);
-        setUsernameRegistered(registered);
 
-        if (!usernameRegistered) return;
-        console.log('名稱可用:', username);
+    const CheckUserName = async () => {
+        let registered = await checkUserNameInDatabase(username);
+        setUsernameRegistered(registered);
+        setShouldCheck(true);
     }
+
+    useEffect(() => {
+        if (!usernameRegistered){
+            console.log('名稱可用:', username);
+        }
+        setShouldCheck(false);
+    }, [usernameRegistered, shouldCheck]);
+
 
 
     // 上傳文件
@@ -179,6 +204,9 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // 在這裡處理表單提交的邏輯，包括收集所有狀態中的資料並將其發送到後端
+        if (isPassWordSame || !verificationPass || !usernameRegistered || userSchoolNameError) {
+            alert('請確認表單資料');
+        }
         console.log('表單已提交:', { email, passWord, passWord_confirm, username, file });
     };
 
@@ -197,6 +225,7 @@ const Register = () => {
                             onBlur={handleInputBlur}
                             className="login-form__input"
                             placeholder="請輸入電子信箱"
+                            required
                         />
                         {emailRegistered && <span className="registered-text">已被註冊</span>}
                     </div>
@@ -205,7 +234,7 @@ const Register = () => {
                             className={`login-form__button send-button ${isSending ? 'disabled' : ''}`}
                             disabled={isSending}
                         >
-                            {isSending ? `再： ${countdown} 秒可以重新寄送` : '寄送驗證信'}
+                            {isSending ? `再 ${countdown} 秒可以重新寄送` : '寄送驗證信'}
                         </button>
                 </div>
 
@@ -217,17 +246,19 @@ const Register = () => {
                                 <input
                                     type="text"
                                     id="verificationCode"
-                                    value={email}
+                                    value={verificationCode}
                                     onChange={handleVerificationCodeChange}
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
                                     className="login-form__input"
                                     placeholder="請輸入驗證碼"
+                                    required
                                 />
-                                {verificationPass && <span className="registered-text">驗證碼錯誤</span>}
+                                {!verificationPass && <span className="registered-text"> {veriHint} </span>}
                             </div>
-                            <button onClick={checkVerification} className="login-form__button">
-                                確認
+                            <button onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`} 
+                            disabled={verificationPass}>
+                                {verificationPass ? `已驗證` : '驗證'}
                             </button>
                         </div>
                     </Fragment>
@@ -245,8 +276,9 @@ const Register = () => {
                             onBlur={handleInputBlur}
                             className="login-form__input"
                             placeholder="請輸入密碼"
+                            required
                         />
-                        {CheckpassWordRule && <span className="registered-text">密碼須符合...條件</span>}
+                        {!passWordRuleMatched && <span className="registered-text">密碼須符合...條件</span>}
                     </div>
                 </div>
 
@@ -262,8 +294,9 @@ const Register = () => {
                             onBlur={handleInputBlur}
                             className="login-form__input"
                             placeholder="再輸入密碼"
+                            required
                         />
-                        {!CheckpassWordSame() && <span className="registered-text">密碼不同</span>}
+                        {!isPassWordSame && <span className="registered-text">密碼不同</span>}
                     </div>
                 </div>
 
@@ -279,8 +312,9 @@ const Register = () => {
                             onBlur={handleInputBlur}
                             className="login-form__input"
                             placeholder="請輸入使用者名稱"
+                            required
                         />
-                        {!usernameRegistered && <span className="registered-text">該名稱已被使用</span>}
+                        {usernameRegistered && <span className="registered-text">該名稱已被使用</span>}
                     </div>
                 </div>
 
@@ -297,9 +331,8 @@ const Register = () => {
                             className="login-form__input"
                             placeholder="輸入交換學校"
                             required
-                            title="交換學校不可為空"
                         />
-                        {userSchoolNameError && <span className="registered-text">交換學校不可為空</span>}
+                        {/* {userSchoolNameError && <span className="registered-text">交換學校不可為空</span>} */}
                     </div>
                 </div>
                 {/* 這一區為學生證上傳, 但討論結果為暫時不需要,先註解 */}

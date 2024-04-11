@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate  } from 'react-router-dom'; // 匯入 useHistory 鉤子
 import '../../styles/LoginForm.css';
 import LoginFormPwd from './LoginFormPwd'; // 匯入密碼表單元件
+import EmailInput from './EmailInput';
+import AuthButton from './AuthButtons';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -41,28 +43,12 @@ const LoginForm = () => {
         <>
           <div className={`login-form ${showPasswordForm ? 'hidden' : ''}`}>
             <h2 className="login-form__title">登入或建立帳號</h2>
-            <div className="login-form__input-group">
-              <label htmlFor="email" className="login-form__label">
-                電子信箱
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={handleEmailChange}
-                className="login-form__input"
-                placeholder="請輸入電子信箱"
-              />
-            </div>
-            <button onClick={handleUseEmailAuth} className="login-form__button">
-              使用電子信箱登入
-            </button>
+            <EmailInput email={email} handleEmailChange={handleEmailChange}/>
+            <AuthButton handleAuth={handleUseEmailAuth} label="使用電子信箱登入" />
             <label className="login-form__label">
                 或
               </label>
-            <button onClick={handleUseGoogleAuth} className="login-form__button">
-              使用 Google 帳號登入
-            </button>
+            <AuthButton handleAuth={handleUseGoogleAuth} label="使用 Google 帳號登入" />
           </div>
         </>
       )}
