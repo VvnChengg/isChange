@@ -35,10 +35,19 @@ npm install
 
 ### @ 其他需要安裝的東西 @
 * **Joi** : 驗證資料的模組
+* **bcrypt** : 加密密碼的模組
+* **nodemailer** : 郵件發送的模組
+* **randomstring** : 產生隨機字串
+* **jsonwebtoken** : jwt - 在網頁間傳送身分驗證 token
+
 
 
     ```
     npm i joi
+    npm install bcrypt
+    npm install nodemailer
+    npm install randomstring
+    npm install jsonwebtoken
     ```
 
 ## 其他注意事項
