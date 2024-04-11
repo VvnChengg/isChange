@@ -2,6 +2,7 @@
 
 .register-container {
     /* max-width: 400px; */
+    max-width: 400px;
     margin: 2rem auto;
     padding: 1.5rem;
     border: 1px solid #ccc;
@@ -29,7 +30,7 @@
 .login-form__input {
     width: 80%;
     padding: 0.5rem;
-    border: none; /* 移除边框 */
+    border: none;
     border-radius: 20px;
     font-size: 0.9rem;
     background-color: transparent;
