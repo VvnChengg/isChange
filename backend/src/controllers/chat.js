@@ -1,29 +1,28 @@
 const Chat = require("../models/chat");
 const Message = require("../models/message");
 const Member = require("../models/member");
-const mongoose = require('mongoose');
 
 // GET 確認聊天是否已存在
 const checkChat = async (req, res) => {
     try {
-        const user_id = req.body.user_id; // 使用者透過 token 或是某方式，抓自己的 member._id
-        // const user_id = "660bbad71dd21a48510f209c"; // test ok
+        const { userId } = req.body.userId; // 使用者的 member._id, 如果是 object 就轉成 string
+        // const userId = "660bbad71dd21a48510f209c"; // test ok
         const { receiver_id } = req.query; // 聊天對象的 id 放在 query 或 params 裡？待討論
 
-        console.log(user_id, receiver_id)
+        console.log(userId, receiver_id)
 
         const chat = await Chat.findOne({
             $or: [
-                { first_person: user_id, second_person: receiver_id },
-                { first_person: receiver_id, second_person: user_id }
+                { first_person: userId, second_person: receiver_id },
+                { first_person: receiver_id, second_person: userId }
             ]
         });
 
-        console.log(chat)
+        // console.log(chat)
 
         if (!chat) {
             return res.status(200).json({
-                chat_id: "",
+                chat_id: null,
                 message: "No chat found."
             });
         } else {
@@ -41,27 +40,26 @@ const checkChat = async (req, res) => {
 // POST 建立聊天
 const createChat = async (req, res) => {
     try {
-        const user_id = req.body.user_id;
+        const userId = req.body.userId;
         const receiver_id = req.body.receiver_id;
-        // const user_id = "660bbad71dd21a48510f209c"; // test 
+        // const userId = "660bbad71dd21a48510f209c"; // for test 
         // const { receiver_id } = req.query; // test receiver_id 放在 query 裡
 
-        console.log(user_id, receiver_id)
+        console.log(userId, receiver_id)
 
         const receiver = await Member.findById(receiver_id);
         if (!receiver) {
             res.status(404).json({
-                success: false,
-                message: 'Receiver not found.',
+                error: 'Receiver not found.',
             });
         }
 
         // 創建新的聊天
         const newChat = await Chat.create({
-            first_person: user_id,
+            first_person: userId,
             second_person: receiver_id,
-            last_message: "",
-            last_sender: user_id,
+            last_message: null,
+            last_sender: userId,
             last_update: Date.now(),
             stranger: false // phase 1: accept all chat
         });
@@ -70,14 +68,13 @@ const createChat = async (req, res) => {
 
         // 更新兩個使用者的聊天 ID 列表
         await Member.updateMany(
-            { _id: { $in: [user_id, receiver_id] } },
+            { _id: { $in: [userId, receiver_id] } },
             { $addToSet: { chat_ids: newChat._id } }
         );
 
         res.status(201).json({
-            success: true,
-            message: 'New chat created.',
-            newChatId: newChat._id
+            new_chat_id: newChat._id,
+            message: 'New chat created.'
         });
     } catch (error) {
         console.error('Failed to create chat:', error);
@@ -85,74 +82,95 @@ const createChat = async (req, res) => {
     }
 };
 
-// const createChat = async (user_id, receiver_id) => {
-//     try {
-//         // 創建新的聊天
-//         const newChat = await Chat.create({
-//             first_person: user_id,
-//             second_person: receiver_id,
-//             last_message: "",
-//             last_sender: "",
-//             last_update_time: Date.now(),
-//             stranger: false // phase 1: accept all chat
-//         });
-
-//         console.log("New chat created");
-//         console.log(newChat)
-
-//         return newChat;
-//     } catch (error) {
-//         console.error('Failed to create chat:', error);
-//     }
-// };
-
 // GET 對話細節 ok
 const getChatDetail = async (req, res) => {
     try {
         const { cid } = req.params;
-        const messages = await Message.find({
-            chat_id: cid
+        const { userId } = req.body.userId; // 使用者的 member._id, 如果是 object 就轉成 string
+        // const userId = "660bbad71dd21a48510f209c"; // for test
+        const chat = await Chat.findById(cid);
+
+        // 檢查 chat 是否存在
+        if (!chat) {
+            return res.status(404).json({ error: "This chat doesn't exist." });
+        }
+
+        // 檢查使用者是不是聊天成員
+        if (userId != chat.first_person.toString() && userId != chat.second_person.toString()) {
+            return res.status(400).json({ error: "You are not one of members in this chat." });
+        }
+
+        // 聊天對象的 id
+        let chat_to_id;
+        if (userId == chat.first_person.toString()) {
+            chat_to_id = chat.second_person;
+        } else {
+            chat_to_id = chat.first_person;
+        }
+
+        // 找出聊天對象，回傳照片跟 username
+        const member = await Member.findById(chat_to_id);
+        const messages = await Message.find({ chat_id: cid });
+        // console.log(messages);
+
+        res.status(200).json({
+            chat_to_photo: member.photo,
+            chat_to_username: member.username,
+            messages
         });
-
-        console.log(messages);
-
-        res.status(200).json({ messages });
-
     } catch (error) {
         console.error('Failed to show chat detail:', error);
         res.status(500).json({ error: 'Failed to show chat detail' });
     }
 };
 
-// GET 聊天列表 應該 ok
+// GET 聊天列表 ok
 const getChatList = async (req, res) => {
     try {
-        const { uid } = req.body.user_id;  // 使用者透過 token 或是某方式，抓自己的 member._id
-        // const uid = "660bbad71dd21a48510f209c"; // test ok
-
-        console.log(uid);
-
-        const chats = await Chat.find({
-            $or: [
-                { first_person: uid },
-                { second_person: uid }
-            ]
-        });
+        const { userId } = req.body.userId;  // 使用者透過 token 或是某方式，抓自己的 member._id
+        // const userId = "660bbad71dd21a48510f209c"; // for test
+        //console.log(userId);
 
         // 直接從 user 的 chat_ids list 抓出聊天
-        // const user = await Member.findById(uid);
-        // const chats = await Chat.find({
-        //      _id: { $in: user.chat_ids } 
-        // });
+        const user = await Member.findById(userId);
+        const chatData = [];
 
-        res.status(200).json({ chats });
+        // 一筆一筆挑出聊天來看
+        for (const chatId of user.chat_ids) {
+            const chat = await Chat.findById(chatId);
+            // 確定聊天對象的 id
+            let chat_to_id;
+            if (userId.toString() == chat.first_person.toString()) {
+                chat_to_id = chat.second_person;
+            } else {
+                chat_to_id = chat.first_person;
+            }
+
+            // 找出聊天對象，回傳照片和使用者名稱
+            const member = await Member.findById(chat_to_id);
+
+            // 將資料添加到 chatData 中
+            chatData.push({
+                chat_to_photo: member.photo,
+                chat_to_username: member.username,
+                chat_id: chat._id,
+                first_person: chat.first_person,
+                second_person: chat.second_person,
+                last_message: chat.last_message,
+                last_sender: chat.last_sender,
+                last_update: chat.last_update,
+                stranger: chat.stranger
+            });
+        }
+
+        res.status(200).json({ chats: chatData });
     } catch (error) {
         console.error('Failed to show chatlist:', error);
         res.status(500).json({ error: 'Failed to show chatlist' });
     }
 };
 
-// POST 傳送訊息，尚未測試
+// POST 傳送訊息，未完成
 const sendMessage = async (req, res) => {
     try {
         const { cid } = req.params;
@@ -170,11 +188,11 @@ const sendMessage = async (req, res) => {
 
         const updateChat = {
             last_message: req.body.content,
-            
+
         }
 
         await Chat.findByIdAndUpdate(cid, updateChat);
-        
+
         // 抓出所有訊息
         const messages = await Message.find({
             chat_id: cid
