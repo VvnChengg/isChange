@@ -4,9 +4,12 @@ import './styles/App.css';
 import './styles/global.css';
 
 import Layout from './pages/layout';
-import Home from './pages/home';
+import Share from './pages/shareDetail';
+import ShareCreate from './pages/shareCreate';
+import ShareEdit from './pages/shareEdit';
 
 import Header from './components/Header';
+import Home from './pages/home/home';
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
           <Routes>
             <Route path='' element={<Layout />}>
               <Route path='/' element={<Home />} />
+              <Route path='/share' element={<Share />} />
+              <Route path='/shareCreate' element={<ShareCreate />} />
+              <Route path='/shareEdit' element={<ShareEdit />} />
             </Route>
           </Routes>
         </div>
