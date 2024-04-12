@@ -10,9 +10,8 @@ const showMember = async (req, res) => {
     return res.status(400).json({ error: "未取得使用者資訊" });
   }
   try {
-    const userAuth = await MemberAuth.findOne({ _id: userId });
     const user = await Member.findOne({
-      _id: userAuth.user_id,
+      _id: userId,
       username: username,
     });
 
@@ -41,9 +40,8 @@ const modifyMember = async (req, res) => {
 
   if (!origin_password || !new_password) {
     try {
-      const userAuth = await MemberAuth.findOne({ _id: userId });
       const updatedUser = await Member.findOneAndUpdate(
-        { _id: userAuth.user_id, username: username },
+        { _id: userId, username: username },
         {
           $set: {
             intro: intro,
@@ -73,20 +71,22 @@ const modifyMember = async (req, res) => {
     }
   } else {
     try {
-      const user = await MemberAuth.findOne({ _id: userId });
+      // 確認有沒有會員資料
+      const user = await MemberAuth.findOne({ user_id: userId });
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
+      //確認原密碼
       const passwordMatch = await bcrypt.compare(
         origin_password,
         user.password
       );
-
+      console.log(origin_password);
+      //修改密碼
       if (passwordMatch) {
         const h_Password = await hashPassword(new_password);
-
         const updatedUser = await MemberAuth.findOneAndUpdate(
-          { _id: userId },
+          { user_id: userId },
           {
             $set: {
               password: h_Password,
@@ -94,6 +94,7 @@ const modifyMember = async (req, res) => {
           },
           { new: true, runValidators: true }
         );
+
         return res.json({
           status: "success",
           message: "密碼修改成功",
@@ -148,8 +149,35 @@ const hashPassword = async (password) => {
   }
 };
 
+//刪除會員資料（Member, for internal testing）
+const deleteTestMember = async (req, res) => {
+  const { username } = req.body; // Extract email from request body
+  try {
+    const deletedMember = await Member.deleteMany({ username });
+    console.log(`${deletedMember.deletedCount} member(s) deleted.`);
+
+    if (deletedMember.deletedCount === 0) {
+      // If no documents were deleted
+      return res.status(404).json({
+        status: "error",
+        message: "No matching member found for deletion",
+      });
+    }
+
+    return res.json({
+      status: "success",
+      message: "Deleted successfully",
+      data: deletedMember,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   showMember,
   modifyMember,
   showMemberDetail,
+  deleteTestMember,
 };

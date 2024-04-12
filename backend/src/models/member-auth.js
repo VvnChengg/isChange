@@ -12,7 +12,7 @@ const memberAuthSchema = new Schema({
   password: {
     type: String,
     // required: true,
-    minlength: 6, // 最小長度為 6
+    minlength: [6, "密碼長度至少需要 6 個字元"], // 最小長度為 6
   },
   source: {
     type: String,
