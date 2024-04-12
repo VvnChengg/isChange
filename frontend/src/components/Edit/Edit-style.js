@@ -7,3 +7,4 @@ export const UserIcon = styled.div `
     background-image: url('/icons/${props => props.src}.png');
     background-size: cover;
 `
+

@@ -1,14 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../styles/Edit.css';
 import { UserIcon } from './Edit-style';
+import { PassWordEdit } from './Edit-components';
 
 const Edit = () => {
     const [showPasswordDiv, setShowPasswordDiv] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
+
+
+    const [OriginPassWord, setOriginPassWord] = useState(''); // 之後要補原密碼的判斷
+    const [isOriginPassWordCorrect, setIsOriginPassWordCorrect] = useState(true); // 之後要補原密碼的判斷
+    const [passWord, setPassword] = useState('');
+    const [passWord_confirm, setPassword_confirm] = useState('');
+    const [isPassWordSame, setIsPassWordSame] = useState(true); // 密碼是否相同
+    const [passWordRuleMatched, setPassWordRuleMatched] = useState(true);
 
     const handleClose = () => {
         setShowPasswordDiv(false);
-      };
-      
+    };
+
+    const handleOriginPassWordChange = (e) => {
+        setOriginPassWord(e.target.value);
+    }
+
+    const CheckOriginPassWord = () => {
+        return true;
+    }
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        CheckpassWordRule();
+    }
+
+    const CheckpassWordRule = () => {
+        // 之後要補密碼規則
+        // 密碼長度至少為 8
+        if (passWord.length < 8) {
+            setPassWordRuleMatched(false);
+            return;
+        }
+        setPassWordRuleMatched(true);
+    }
+
+    const CheckpassWordSame = () => {
+        if (passWord === passWord_confirm) {
+            setIsPassWordSame(true);
+        } else {
+            setIsPassWordSame(false);
+        }
+    }
+
+    useEffect(() => {
+        CheckpassWordSame();
+    }, [passWord_confirm]);
+
+    const handlePasswordConfirmChange = (e) => {
+        setPassword_confirm(e.target.value);
+    }
+
+
+    const handleSubmitPassWord = (e) => {
+        e.preventDefault();
+        if(!CheckOriginPassWord() || !isPassWordSame || !passWordRuleMatched){
+            setIsOriginPassWordCorrect(false);
+            alert("原始密碼不正確")
+            return;
+        }
+        console.log('表單已提交:', { passWord});
+    }
+
+
+
     return (
         <div className="edit-container">
             <div className="edit-form">
@@ -23,29 +85,21 @@ const Edit = () => {
                         </div>
                     </div>
 
-                    <div className="section-1-right">
-                        <div className="section-heading">基本資料修改</div>
-                        <div className="action-buttons">
-                            <button onClick={() => setShowPasswordDiv(true)}>修改密碼</button>
-                            <button>修改名稱學校</button>
-                        </div>
-                    </div>
-                    {showPasswordDiv && (
-                        <div className='floating-div'>
-                            <button onClick={handleClose} className="close-button">X</button>
-                            <input
-                                type="email"
-                                id="email"
-                                // value={email}
-                                // onChange={handleEmailChange}
-                                // onFocus={handleInputFocus}
-                                // onBlur={handleInputBlur}
-                                className="login-form__input"
-                                placeholder="請輸入電子信箱"
-                                required
-                            />
-                        </div>
-                    )}
+
+                    <PassWordEdit
+                        setShowPasswordDiv={setShowPasswordDiv}
+                        showPasswordDiv={showPasswordDiv}
+                        handleClose={handleClose}
+                        isFocused={isFocused}
+                        passWord={passWord}
+                        handlePasswordChange={handlePasswordChange}
+                        handlePasswordConfirmChange={handlePasswordConfirmChange}
+                        passWord_confirm={passWord_confirm}
+                        isPassWordSame={isPassWordSame}
+                        passWordRuleMatched={passWordRuleMatched}
+                        handleSubmitPassWord = {handleSubmitPassWord}
+                    />
+
                 </div>
                 <div className="section-2">
                     <div className="section-heading">自我介绍</div>
