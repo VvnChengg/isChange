@@ -76,3 +76,14 @@ span.visually-hidden {
   position: absolute;
   width: 1px;
 }
+
+/*
+  10. 統一 placeholder 顏色
+*/
+input::placeholder {
+  color: #A6A6A6;
+}
+
+textarea::placeholder {
+  color: #A6A6A6;
+}
