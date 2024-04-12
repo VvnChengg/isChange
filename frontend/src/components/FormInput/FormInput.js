@@ -29,7 +29,7 @@ export function FormInput({type, title, placeholder, text, setText}) {
     )
 }
 
-export function FormRange({title, placeholder, unit, range, setRange}) {
+export function FormRange({title, placeholder, unit, currency, setCurrency, range, setRange}) {
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
@@ -55,27 +55,30 @@ export function FormRange({title, placeholder, unit, range, setRange}) {
                         placeholder={placeholder[1]}
                     />
                 </div>
-                <div>{unit}</div>
+                {unit ? <div>{unit}</div> :
+                    <FormTextInput
+                        value={currency}
+                        onChange={e => setCurrency(e.target.value)}
+                        placeholder='單位'
+                        style={{ width: '50px', textAlign: 'right' }}
+                    />
+                }
             </div>
         </FormTextBox>
     )
 }
 
-export function FormDate({title, placeholder, unit, range, setRange}) {
+export function FormDate({title, setDate}) {
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
             <RangePicker
                 style={{
                     border: 'none',
-                    padding: 0,
-                    input: {
-                        '::placeholder': {
-                            color: 'red'
-                        }
-                    }
+                    padding: 0
                 }}
                 placeholder={['開始日期', '結束日期']}
+                onChange={setDate}
             />
         </FormTextBox>
     )
