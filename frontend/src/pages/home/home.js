@@ -7,7 +7,6 @@ import Post from "../../components/Post";
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
-
     useEffect(() => {
         api.getAllPosts()
         .then(res => setPosts(res))
@@ -16,8 +15,8 @@ export default function Home() {
 
     return (
         <PostContainer>
-            {posts?.map(post => 
-                <Post key={post._id} post={post} />
+            {posts?.map((post, index) => 
+                <Post key={`post${index}`} post={post} />
             )}
         </PostContainer>
     )
