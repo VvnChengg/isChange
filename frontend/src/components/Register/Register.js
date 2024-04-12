@@ -1,5 +1,6 @@
 import React, { useState, useRef, Fragment, useEffect } from 'react';
 import '../../styles/Register.css';
+import { InputWithButton } from './Register-components';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -144,7 +145,7 @@ const Register = () => {
     const CheckpassWordSame = () => {
         if (passWord === passWord_confirm) {
             setIsPassWordSame(true);
-        }else{
+        } else {
             setIsPassWordSame(false);
         }
     }
@@ -172,7 +173,7 @@ const Register = () => {
     }
 
     useEffect(() => {
-        if (!usernameRegistered){
+        if (!usernameRegistered) {
             console.log('名稱可用:', username);
         }
         setShouldCheck(false);
@@ -229,13 +230,13 @@ const Register = () => {
                         />
                         {emailRegistered && <span className="registered-text">已被註冊</span>}
                     </div>
-                        <button
-                            onClick={SentMail}
-                            className={`login-form__button send-button ${isSending ? 'disabled' : ''}`}
-                            disabled={isSending}
-                        >
-                            {isSending ? `再 ${countdown} 秒可以重新寄送` : '寄送驗證信'}
-                        </button>
+                    <button
+                        onClick={SentMail}
+                        className={`login-form__button send-button ${isSending ? 'disabled' : ''}`}
+                        disabled={isSending}
+                    >
+                        {isSending ? `再 ${countdown} 秒可以重新寄送` : '寄送驗證信'}
+                    </button>
                 </div>
 
                 {isSending && (
@@ -256,14 +257,13 @@ const Register = () => {
                                 />
                                 {!verificationPass && <span className="registered-text"> {veriHint} </span>}
                             </div>
-                            <button onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`} 
-                            disabled={verificationPass}>
+                            <button onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`}
+                                disabled={verificationPass}>
                                 {verificationPass ? `已驗證` : '驗證'}
                             </button>
                         </div>
                     </Fragment>
                 )}
-
                 <label htmlFor="password-input" className="login-form__label">輸入密碼</label>
                 <div className="login-form__input-group">
                     <div className={`input-container ${isFocused ? 'focused' : ''}`}>
