@@ -112,7 +112,6 @@ const registerMember = async (req, res) => {
   // create member and memberAuth in database
   if (!user) {
     const member = await Member.create({ username: email.split("@")[0] });
-    console.log(member);
     await MemberAuth.create({
       user_id: member._id,
       email: email,
@@ -193,6 +192,16 @@ const verifiedMember = async (req, res) => {
   const { email, password, username, exchange_school_name } = req.body;
 
   try {
+    //檢查使用者名稱有無重複
+    const m0 = await Member.findOne({ username: username });
+    console.log(m0);
+    if (m0) {
+      return res.json({
+        status: "failed",
+        message: "使用者名稱已有人使用，請更換其他名稱",
+      });
+    }
+    //設定密碼
     const hashedPassword = await hashPassword(password);
     const user = await MemberAuth.findOne({ email });
 
@@ -203,6 +212,7 @@ const verifiedMember = async (req, res) => {
         data: email,
       });
     } else if (user) {
+      //未設定過密碼，設定member auth和member
       const ma = await MemberAuth.findOneAndUpdate(
         { email },
         { password: hashedPassword },
@@ -239,23 +249,14 @@ const deleteTestMember = async (req, res) => {
   const { email } = req.body; // Extract email from request body
   try {
     // Assuming MemberAuth is your Mongoose model
-    const toDelete = await MemberAuth.findOne({ email });
+    const m = await MemberAuth.findOne({ email });
+    let memberId = m.user_id;
     const deletedMemberAuth = await MemberAuth.deleteOne({ email });
     const deletedMember = await Member.deleteOne({
-      //default
-      username: email.split("@")[0],
+      _id: memberId,
     });
-
-    if (
-      deletedMemberAuth.deletedCount === 0 ||
-      deletedMember.deletedCount === 0
-    ) {
-      // If no documents were deleted
-      return res.status(404).json({
-        status: "error",
-        message: "No matching member found for deletion",
-      });
-    }
+    console.log(`${deletedMember.deletedCount} member(s) deleted.`);
+    console.log(`${deletedMemberAuth.deletedCount} member(s) auth deleted.`);
 
     return res.json({
       status: "success",
