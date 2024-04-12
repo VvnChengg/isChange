@@ -12,15 +12,15 @@ export default function Post({ post }) {
     return (
         <PostWrapper>
             <div style={{display: 'flex', alignItems: 'center'}}>
-                <Tag type='trans' />
+                <Tag type={post.type} />
                 <PostIcon src='location' />
                 <div>法國，巴黎</div>
             </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
-                <PostTitle>{post.article_title}</PostTitle>
-                <PostPreview>使用半年，準備回國故售出～狀態良好......</PostPreview>
+                <PostTitle>{post.title}</PostTitle>
+                <PostPreview>{post.content.substring(0, 20)}......</PostPreview>
             </div>
-            <PostImage />
+            {(post.coverPhoto) ? <PostImage src={post.coverPhoto} /> : ''}
         </PostWrapper>
     )
 }
