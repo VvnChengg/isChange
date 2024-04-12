@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/LoginForm.css';
+import { loginApi } from '../../api/loginApi';
 
 const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
   const [password, setPassword] = useState('');
@@ -8,12 +9,14 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
     setPassword(e.target.value);
   };
 
-  const handlePassword = () => {
-    // 實現使用電子信箱登入的邏輯
-    console.log('email:', email); // 輸出 email
-    console.log('密碼為:', password);
+  const handleFormSubmit = async () => {
+    try {
+      // 調用 loginApi 中的 login 函數，傳入 email 和 password
+      await loginApi.login(email, password);
+    } catch (error) {
+      console.error(error);
+    }
   };
-
   return (
     <div className="login-form">
       <h2 className="login-form__title">請輸入密碼</h2>
@@ -30,7 +33,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
           placeholder="請輸入密碼" // 設置密碼輸入框的占位符
         />
       </div>
-      <button onClick={handlePassword} className="login-form__button">
+      <button onClick={handleFormSubmit} className="login-form__button">
         確認
       </button>
     </div>

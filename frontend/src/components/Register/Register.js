@@ -193,22 +193,18 @@ const Register = () => {
     // 檢查交換學校是否為空
     const handleUserSchoolNameChange = (e) => {
         setUserSchoolname(e.target.value);
-        setUserSchoolNameError(e.target.value);
-        if (e.target.value === '') {
-            setUserSchoolNameError(true);
-        } else {
-            setUserSchoolNameError(false);
-        }
-    };
+    }
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // 在這裡處理表單提交的邏輯，包括收集所有狀態中的資料並將其發送到後端
-        if (isPassWordSame || !verificationPass || !usernameRegistered || userSchoolNameError) {
+        if (!isPassWordSame || !verificationPass || usernameRegistered) {
             alert('請確認表單資料');
+            console.log(isPassWordSame, verificationPass, !usernameRegistered)
+            return
         }
-        console.log('表單已提交:', { email, passWord, passWord_confirm, username, file });
+        console.log('表單已提交:', { email, passWord, passWord_confirm, username});
     };
 
     return (
@@ -322,7 +318,7 @@ const Register = () => {
                 <div className="login-form__input-group">
                     <div className={`input-container ${isFocused ? 'focused' : ''}`}>
                         <input
-                            type="password"
+                            type="text"
                             id="userSchoolName"
                             value={userSchoolName}
                             onChange={handleUserSchoolNameChange}
