@@ -4,15 +4,12 @@ import './ChatRoom.css';
 
 
 
-
-
-
-
-export default function ChatRoom({ }) {
+export default function ChatRoom({chatId}) {
   const hostname = 'http://localhost:3000/api';
   const [chatData, setChatData] = useState(null);
-  const chatId = '6614e7491dd21a48510f2108'
-  const your_user_id = "660bbad71dd21a48510f209c";
+  //const chatId = '6614e7491dd21a48510f2108'
+  const user_id = "660bbad71dd21a48510f209c";
+  const userId = "660bbad71dd21a48510f209c";
   // const ChatId = window.localStorage.getItem('chat_id');
   // const your_user_id = window.localStorage.getItem('user_id');
   
@@ -44,7 +41,7 @@ export default function ChatRoom({ }) {
           {/* 渲染訊息 */}
           {chatData.messages.map(message => (
             <div className='message-container'>
-              <div className={`message-box ${message.sender_id === your_user_id ? "own-message" : ""}`} key={message._id}>
+              <div className={`message-box ${message.sender_id === user_id ? "own-message" : ""}`} key={message._id}>
                 <p className="message-content">{message.content}</p>
                 <p className="timestamp">{new Date(message.timestamp).toLocaleString()}</p>
               </div>
