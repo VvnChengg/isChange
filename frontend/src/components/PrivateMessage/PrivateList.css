@@ -28,6 +28,14 @@
   text-align: right; 
 }
 
-.a-chat {
+.bottom {
   border-bottom: 1px solid #008CD9;
+}
+
+.chat-name {
+  color: #008CD9;
+}
+
+.a-chat {
+  height: 60px;
 }
