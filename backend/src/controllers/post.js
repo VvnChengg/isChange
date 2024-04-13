@@ -9,9 +9,9 @@ const getAllPosts = async (req, res, next) => {
     let result = [];
     try {
         // 取得所有文章、活動、商品資訊
-        articles = await Article.find({},);   
+        articles = await Article.find({},);
         events = await Event.find({},);
-        products = await Product.find({},); 
+        products = await Product.find({},);
 
         // 抽取文章需要的資訊並統一格式
         articles.forEach(article => {
@@ -41,9 +41,9 @@ const getAllPosts = async (req, res, next) => {
         products.forEach(product => {
             const item = {
                 title: product.product_title,
-                content:product.description,
+                content: product.description,
                 type: "product",
-                coverPhoto:product.product_pic,
+                coverPhoto: product.product_pic,
                 datetime: product.post_time
             };
             result.push(item);
@@ -63,11 +63,68 @@ const getAllPosts = async (req, res, next) => {
     return res.status(200).json({ result });
 };
 
+const getUserPosts = async (req, res, next) => {
+    let articles;
+    let result = [];
+    let uid;
+    try {
+        // 取得所有文章、活動、商品資訊
+        articles = await Article.find({creator_id: uid},);
+
+        // 抽取文章需要的資訊並統一格式
+        articles.forEach(article => {
+            const item = {
+                title: article.article_title,
+                content: article.content,
+                type: "article",
+                coverPhoto: article.article_pic,
+                datetime: article.post_date
+            };
+            result.push(item);
+            console.log("creator id: ", article.creator_id);
+        });
+
+        // 依時間倒序排序
+        result.sort((a, b) => {
+            return new Date(b.datetime) - new Date(a.datetime);
+        }
+        );
+    } catch (err) {
+        return next(err);
+    }
+    if (!articles) {
+        return res.status(500).json({ message: err.message });
+    }
+    return res.status(200).json({ result });
+};
+
+const createPost = async (req, res, next) => {
+    const postData = req.body;
+    if (!postData) {
+        return res.status(404).json({ message: "未傳入文章創建資訊" });
+    }
+    try {
+        newPost = new Article({
+            article_title: postData.title,
+            content: postData.content,
+            article_pic: postData.photo,
+            status: postData.status,
+            creator_id: postData.creator_id     // 之後要改成自動帶入
+        })
+        await newPost.save();
+        console.log("new post: ", newPost);
+    } catch (err) {
+        return res.status(400).json({ message: err.message });
+    }
+    // console.log("發布文章",newPost);
+    return res.status(200).json({ message: "成功創建文章" });
+}
+
 const updatePost = async (req, res, next) => {
     // 測試可用 http://localhost:3000/api/post/6617996b1067c62b7d70464e
     try {
         const pId = req.params.pid;
-        const updates = {article_title: req.body.title,content: req.body.content};
+        const updates = { article_title: req.body.title, content: req.body.content };
         let post = await Article.findById(pId);
         if (!post) {
             return res.status(404).json({ message: '貼文不存在' });
@@ -98,5 +155,6 @@ const deletePost = async (req, res, next) => {
 };
 
 exports.getAllPosts = getAllPosts;
+exports.createPost = createPost;
 exports.updatePost = updatePost;
 exports.deletePost = deletePost;
