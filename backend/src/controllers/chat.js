@@ -127,13 +127,22 @@ const getChatDetail = async (req, res) => {
 // GET 聊天列表 ok
 const getChatList = async (req, res) => {
     try {
+        // const { userId } = req.query; //  如果 userId 直接放在 query
         const { userId } = req.body.userId;  // 使用者透過 token 或是某方式，抓自己的 member._id
         // const userId = "660bbad71dd21a48510f209c"; // for test
-        //console.log(userId);
+        // console.log(userId);
 
         // 直接從 user 的 chat_ids list 抓出聊天
         const user = await Member.findById(userId);
         const chatData = [];
+
+        // 如果用戶沒有聊天，chats 回傳 null
+        if (user.chat_ids == null) {
+            res.status(200).json({
+                chats: null,
+                message: "You don't have any chat."
+            });
+        }
 
         // 一筆一筆挑出聊天來看
         for (const chatId of user.chat_ids) {
