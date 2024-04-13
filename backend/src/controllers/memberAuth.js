@@ -9,7 +9,7 @@ require("dotenv").config(); // 加了這行就可以抓到 mailer
 
 // 使用者輸入信箱後，判斷是否是會員，回傳一個狀態（若是進入登入頁面，否則進入註冊）
 const LOR = async (req, res) => {
-  const email = req.body.email;
+  const { email } = req.query;
   // console.log(email);
   if (!email) {
     return res.status(400).json({ error: "Email cannot be empty" });
@@ -151,7 +151,7 @@ const registerMember = async (req, res) => {
 
 //輸入驗證碼進行驗證
 const verifyRegisterMember = async (req, res) => {
-  const { email, verification_code } = req.body;
+  const { email, verification_code } = req.query;
 
   try {
     const user = await MemberAuth.findOne({ email });
