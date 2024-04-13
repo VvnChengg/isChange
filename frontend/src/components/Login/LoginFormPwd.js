@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
 import '../../styles/LoginForm.css';
 import { loginApi } from '../../api/loginApi';
 
 const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -12,7 +14,10 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
   const handleFormSubmit = async () => {
     try {
       // 調用 loginApi 中的 login 函數，傳入 email 和 password
-      await loginApi.login(email, password);
+      const data = await loginApi.login(email, password);
+      if(data.status === "success") {
+        navigate('/edit');
+      }
     } catch (error) {
       console.error(error);
     }
