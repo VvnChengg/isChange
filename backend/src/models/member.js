@@ -6,6 +6,7 @@ const memberSchema = new Schema({
     type: String,
     maxlength: 15,
     required: true,
+    unique: true,
   },
   intro: {
     type: String,
