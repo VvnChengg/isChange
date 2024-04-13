@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt");
 
 //查看自己的個人資料（Member)
 const showMember = async (req, res) => {
-  const { userId, username } = req.body;
+  const { username } = req.query;
+  const { userId } = req.body;
 
   if (!userId) {
     return res.status(400).json({ error: "未取得使用者資訊" });
