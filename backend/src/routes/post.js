@@ -5,10 +5,11 @@ const router = express.Router();
 const Article = require('../models/article');
 
 // 載入controller.
-var { getAllPosts, updatePost, deletePost} = require("../controllers/post");
+var { getAllPosts, createPost, updatePost, deletePost} = require("../controllers/post");
 
 // 指定route對應的controller
 router.get('/all', getAllPosts);
+router.post('/create', createPost);
 router.put('/:pid', updatePost);
 router.delete('/:pid', deletePost);
 module.exports = router;
