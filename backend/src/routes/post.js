@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-
-// 載入models(Schema)
-const Article = require('../models/article');
+const validateToken = require("../../src/middlewares/validateToken");
 
 // 載入controller.
-var { getAllPosts, createPost, updatePost, deletePost} = require("../controllers/post");
+var { getAllPosts, getUserPosts, createPost, updatePost, deletePost } = require("../controllers/post");
 
 // 指定route對應的controller
 router.get('/all', getAllPosts);
-router.post('/create', createPost);
-router.put('/:pid', updatePost);
-router.delete('/:pid', deletePost);
+router.get('/:uid', validateToken,getUserPosts);
+router.post('/create', validateToken, createPost);
+router.put('/:pid', validateToken, updatePost);
+// router.put('/:pid', updatePost);
+router.delete('/:pid', validateToken, deletePost);
 module.exports = router;
