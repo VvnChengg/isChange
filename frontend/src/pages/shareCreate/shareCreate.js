@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import "./shareCreate-style.css";
 // import { AiOutlineMail } from "https://esm.sh/react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 
 
 
@@ -22,13 +22,6 @@ export default function Share() {
         <div className="title-box">
           <div className="text-xl text-neutral-500">標題</div>
           <div>
-          {/* <TextField
-            label="Multiline"
-            multiline
-            maxRows={4}
-            value={inputTitle}
-            onChange={(event) => setInputTitle(event.target.value)}
-          /> */}
             <input className="input-box"
               value={inputTitle}
               onChange={(event) => setInputTitle(event.target.value)}
@@ -40,12 +33,6 @@ export default function Share() {
             文字說明
           </div>
           <div>
-            {/* <input className="input-box"
-              value={inputContent}
-              onChange={(event) => setInputContent(event.target.value)}
-              placeholder="說些什麼吧！"
-              aria-multiline="true"
-               /> */}
             <textarea 
               className="input-box"
               value={inputContent}

@@ -7,8 +7,10 @@
     background-color: #ffffff;
   }
   
-  .container {
-    margin-top: -7px;
+  .detail-container {
+    position: absolute;
+    top: 80px;
+    left: 50px;
     width: 100%;
     max-width: 1078px;
   }
@@ -34,7 +36,7 @@
   .left-section {
     flex: 1;
     margin-left: 5px;
-    max-width: 78%;
+    max-width: 100%;
   }
   
   @media (max-width: 767px) {
@@ -51,6 +53,7 @@
     padding: 20px;
     background-color: #ffffff;
     line-height: 130%;
+    text-align: left;
   }
   
   @media (max-width: 767px) {
@@ -78,10 +81,14 @@
     flex-shrink: 0;
     align-self: start;
     width: 41px;
+    margin: 3px;
+    margin-bottom: 10px;
   }
   
   .title-text {
     flex-grow: 1;
+    font-size: 30px;
+    margin-top: 14px;
   }
   
   .share-info {
@@ -93,24 +100,24 @@
   
   .share-btn {
     justify-content: center;
-    padding: 2px 4px;
+    padding: 4px 8px;
     font-size: 2xl;
     text-align: center;
     color: #ffffff;
-    background-color: #3498db;
+    background-color: #008cd9;
   }
   
   .location-info {
     display: flex;
     gap: 0;
     align-self: center;
-    font-size: 1.5rem;
+    font-size: 20px;
     color: #000000;
   }
   
   .location-img {
     flex-shrink: 0;
-    width: 6px;
+    /* width: 6px; */
   }
   
   .location-text {
@@ -118,10 +125,12 @@
   }
   
   .content-info {
-    margin-top: 7px;
+    margin-top: 15px;
+    margin-bottom: 10px;
     font-size: 2xl;
-    line-height: 8;
+    line-height: 1.5;
     color: #000000;
+    max-width: 100%;
   }
   
   .image-wrapper {
@@ -139,18 +148,27 @@
     gap: 0px;
   }
 
-  .figure-button {
+  .icon-button {
     justify-content: center;
     align-items: center;
-    padding: 5px;
+    padding: 3px;
     margin-top: 5px;
     line-height: 2;
     color: #fff;
     border: 0;
     background-color: #fff;
-    opacity: 0.8;
     cursor: pointer;
     /* position: absolute;
     bottom: 230px;
     right: 150px; */
+  }
+
+  .inserted-figure {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    max-width: 100%;
+    /* aspect-ratio: 3.45; */
+    /* width: 50px; */
+    /* flex: auto; */
+    padding: 3px;
   }
