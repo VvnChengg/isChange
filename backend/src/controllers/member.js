@@ -30,8 +30,10 @@ const showMember = async (req, res) => {
     }
     const resData = {
       _id: user._id,
+      username: user.username,
       intro: user.intro,
       photo: photoBase64,
+      exchange_school_name: user.exchange_school_name,
     };
 
     return res.status(200).json(resData);
@@ -164,10 +166,7 @@ const showMemberDetail = async (req, res) => {
     return res.status(400).json({ error: "Username is missing" });
   }
   try {
-    const observed_user = await Member.findOne(
-      { username: observed_username },
-      "intro photo exchange_school_name region"
-    );
+    const observed_user = await Member.findOne({ username: observed_username });
     if (!observed_user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -181,8 +180,10 @@ const showMemberDetail = async (req, res) => {
     }
     const resData = {
       _id: observed_user._id,
+      username: observed_user.username,
       intro: observed_user.intro,
       photo: photoBase64,
+      exchange_school_name: observed_user.exchange_school_name,
     };
 
     return res.status(200).json(resData);
