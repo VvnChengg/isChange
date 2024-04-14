@@ -1,6 +1,8 @@
 import React, { useState, useRef, Fragment, useEffect } from 'react';
 import '../../styles/Register.css';
 import { InputWithButton } from './Register-components';
+import { loginApi } from '../../api/loginApi';
+import { registerApi } from '../../api/registerApi';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -8,6 +10,7 @@ const Register = () => {
     const [emailRegistered, setEmailRegistered] = useState(false);
 
     const [isSending, setIsSending] = useState(false);
+    const [showVerification, setShowVerification] = useState(false);
     const [countdown, setCountdown] = useState(45);
 
     const [verificationCode, setVerificationCode] = useState(''); // 驗證碼
@@ -43,11 +46,23 @@ const Register = () => {
 
 
     // 檢查email是否已被註冊
-    const checkEmailInDatabase = (email) => {
+    const checkEmailInDatabase = async (email) => {
         // 在這裡從資料庫檢查email是否已被註冊
-        // true => ok
-        // false => 已被註冊
-        return false; // 模拟未被注册的情况
+        // true => 已被註冊
+        // false => 尚未被註冊
+        try {
+            const data = await loginApi.login_or_register(email);
+            console.log(data);
+            if (data === 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            // Handle error
+            console.error('Error getting user info:', error);
+            alert('請再試一次');
+        }
     };
 
     const handleEmailChange = (e) => {
@@ -55,13 +70,13 @@ const Register = () => {
     };
 
 
-    const SentMail = () => {
+    const SentMail = async () => {
         // 檢查此email是否已被註冊
-        let registered = checkEmailInDatabase(email);
-        setEmailRegistered(registered);
+        let registered = await checkEmailInDatabase(email);
+        setEmailRegistered(false);
 
         //若已被註冊則不寄送，並彈出視窗
-        if (emailRegistered) {
+        if (registered) {
             alert('此信箱已被註冊');
         } else {
             sendMail(email);
@@ -69,20 +84,33 @@ const Register = () => {
         }
     };
 
-    const sendMail = (email) => {
+    const sendMail = async (email) => {
         // 在這裡寄送驗證信
-
-        setIsSending(true);
-        setCountdown(45);
-
-        const intervalId = setInterval(() => {
-            setCountdown((prevCountdown) => prevCountdown - 1);
-        }, 1000);
-
-        setTimeout(() => {
-            setIsSending(false);
-            clearInterval(intervalId);
-        }, 45000);
+        try {
+            const data = await registerApi.register(email);
+            if (data.status === 'verified') {
+                setIsSending(true);
+                setShowVerification(true);
+                setCountdown(45);
+        
+                const intervalId = setInterval(() => {
+                    setCountdown((prevCountdown) => prevCountdown - 1);
+                }, 1000);
+        
+                setTimeout(() => {
+                    setIsSending(false);
+                    clearInterval(intervalId);
+                }, 45000);
+                alert(`${data.message}`);
+                return true;
+            } else {
+                alert(`${data.message}`);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error getting user info:', error);
+            alert(`'錯誤訊息，請重新驗證'`);
+        }
     };
 
     useEffect(() => {
@@ -98,32 +126,38 @@ const Register = () => {
         setVerificationCode(e.target.value);
     };
 
-    const checkVerificationInDatabase = () => {
+    const checkVerificationInDatabase = async () => {
         // 在這裡檢查驗證碼是否正確
         // true => ok
         // false => 錯誤
-        return true; // 模拟驗證碼正確的情况
-    }
-
-    const checkVerification = async () => {
-        // 檢查驗證碼是否正確
-        let pass = await checkVerificationInDatabase(verificationCode);
-        setVerificationPass(pass);
-        setShouldCheckVeri(true);
+        try{
+            const data = await registerApi.verifyEmailGet(email, verificationCode);
+            console.log(data);
+            if(data.status === 'verified'){
+                console.log(data);
+                setVerificationPass(true);
+                setVeriHint('');
+                alert(`${data.message}`);
+                return true;
+            }else{
+                setVerificationPass(false);
+                setVeriHint('驗證碼錯誤');
+                alert(`${data.message}`);
+                return false;
+            }
+        }catch(error){
+            console.error('Error getting user info:', error);
+            alert(`'錯誤訊息，請重新驗證'`);
+        }
     }
 
     useEffect(() => {
-        if (shouldCheckVeri) {
-            if (!verificationPass) {
-                setVeriHint('驗證碼錯誤');
-            }
-        }
-    }, [verificationPass, shouldCheckVeri]);
+        console.log('verificationPass changed:', verificationPass);
+    }, [verificationPass]);
 
-    const checkUserNameInDatabase = () => {
-        // true => ok
-        // false => 已被註冊
-        return false; // 模拟未被注册的情况
+    const checkVerification = async () => {
+        // 檢查驗證碼是否正確
+        await checkVerificationInDatabase(verificationCode);
     }
 
 
@@ -166,9 +200,30 @@ const Register = () => {
     }
 
 
+    const checkUserNameInDatabase = async () => {
+        // true => ok
+        // false => 已被註冊
+        // try {
+        //     const data = await registerApi.verifyUsername(username);
+        //     if (data.status === 'success') {
+        //         return false;
+        //     } else {
+        //         return true;
+        //     }
+        // } catch (error) {
+        //     console.error('Error getting user info:', error);
+        //     alert('請再試一次');
+        // }
+        return false;
+    }
+
     const CheckUserName = async () => {
         let registered = await checkUserNameInDatabase(username);
-        setUsernameRegistered(registered);
+        setShouldCheck(true);
+        if (registered) {
+            setUsernameRegistered(true);
+        }
+        
         setShouldCheck(true);
     }
 
@@ -196,15 +251,23 @@ const Register = () => {
     }
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // 在這裡處理表單提交的邏輯，包括收集所有狀態中的資料並將其發送到後端
-        if (!isPassWordSame || !verificationPass || usernameRegistered) {
-            alert('請確認表單資料');
-            console.log(isPassWordSame, verificationPass, !usernameRegistered)
-            return
+        console.log('表單已提交:', { email, passWord, passWord_confirm, username });
+        try{
+            const data = await registerApi.verifyMemberPatch(email, passWord, username, userSchoolName);
+            if(data.status === 'success'){
+                console.log(data);
+                alert(`${data.message}`);
+                // 跳轉到登入頁面
+                window.location.href = '/login';
+            }else{
+                alert(`${data.message}`);
+            }
+        }catch(error){
+            console.error('Error getting user info:', error);
+            alert(`'錯誤訊息，請重新嘗試註冊'`);
         }
-        console.log('表單已提交:', { email, passWord, passWord_confirm, username});
     };
 
     return (
@@ -227,15 +290,16 @@ const Register = () => {
                         {emailRegistered && <span className="registered-text">已被註冊</span>}
                     </div>
                     <button
+                        type = "button"
                         onClick={SentMail}
                         className={`login-form__button send-button ${isSending ? 'disabled' : ''}`}
-                        disabled={isSending}
+                        disabled={isSending || verificationPass}
                     >
                         {isSending ? `再 ${countdown} 秒可以重新寄送` : '寄送驗證信'}
                     </button>
                 </div>
 
-                {isSending && (
+                {showVerification && (
                     <Fragment>
                         <label htmlFor="verificationCode" className="login-form__label">驗證碼</label>
                         <div className="login-form__input-group">
@@ -253,7 +317,7 @@ const Register = () => {
                                 />
                                 {!verificationPass && <span className="registered-text"> {veriHint} </span>}
                             </div>
-                            <button onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`}
+                            <button type="button" onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`}
                                 disabled={verificationPass}>
                                 {verificationPass ? `已驗證` : '驗證'}
                             </button>
@@ -349,8 +413,8 @@ const Register = () => {
 
                 <br />
                 <div className="submit-container">
-                    <button type="submit" className="login-form__button">
-                        送出表單
+                    <button type="submit" disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName} className="login-form__button">
+                        {(!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName) ? '請檢查表單' : '送出表單'}
                     </button>
                 </div>
             </form>

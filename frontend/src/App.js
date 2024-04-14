@@ -6,6 +6,7 @@ import Header from './components/Header';
 import LoginForm from './components/Login/LoginForm';
 import Register from './components/Register/Register';
 import Edit from './components/Edit/Edit';
+import View from './components/View/View';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path='/login' element={<LoginForm />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/edit' element={<Edit />} />
+                <Route path='/member' element={<View />} />
             </Routes>
           </div>
         </div>

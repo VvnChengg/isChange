@@ -61,6 +61,11 @@
     background-color: #005ea6;
 }
 
+.login-form__button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 .send-button.disabled {
     background-color: #ccc;
     color: #888;
