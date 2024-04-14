@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 
 export const ImageUploadDiv = ({setImageURL}) => {
     const editorRef = useRef(null);
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState('/icons/profile.png');
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const handleFileChange = (event) => {
@@ -49,7 +49,7 @@ export const ImageUploadDiv = ({setImageURL}) => {
                     <button onClick={handleSave}>裁減</button>
                 </div>}
                 <div className="profile-picture">
-                    {image && <img src={image} alt="Preview" style={{ borderRadius: '50%' }} />}
+                    {image && <img src={image} className="profile-image" alt="Preview"/>}
                 </div>
 
                 <input

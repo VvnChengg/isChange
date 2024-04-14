@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { BASE_URL } from '../../constants';
+import { editApi } from '../../api/editApi';
 
 export const PassWordEdit = ({ showPasswordDiv,
     handleClose, isFocused, handleInputBlur, handleInputFocus }) => {
@@ -122,8 +122,10 @@ export const PassWordEdit = ({ showPasswordDiv,
     }
 
     useEffect(() => {
+        CheckpassWordRule();
         CheckpassWordSame();
-    }, [passWord_confirm]);
+    }, [passWord, passWord_confirm]);
+
 
     const handlePasswordConfirmChange = (e) => {
         setPassword_confirm(e.target.value);
@@ -133,19 +135,23 @@ export const PassWordEdit = ({ showPasswordDiv,
         setOriginPassWord(e.target.value);
     }
 
-    const CheckOriginPassWord = () => {
-        return true;
-    }
-
 
     const handleSubmitPassWord = async (e) => {
         e.preventDefault();
-        if (!CheckOriginPassWord() || !isPassWordSame || !passWordRuleMatched) {
-            setIsOriginPassWordCorrect(false);
-            alert("原始密碼不正確")
-            return;
+        console.log('表單已提交:', { OriginPassWord, passWord, passWord_confirm });
+
+        try{
+            const token = localStorage.getItem('access_token');
+            const data = await editApi.editBasicInfo(OriginPassWord, passWord, token);
+            if(data.status === 'success'){
+                alert('更新成功');
+                handleClose();
+            }
+        }catch(error){
+            console.error(error);
+            alert('更新失敗');
         }
-        
+
     }
 
     return (
@@ -206,7 +212,7 @@ export const PassWordEdit = ({ showPasswordDiv,
                                 {!isPassWordSame && <span className="registered-text">密碼不同</span>}
                             </div>
                         </div>
-                        <button type="submit" className="login-form__button">
+                        <button type="submit" className="login-form__button" disabled={!isPassWordSame || !passWordRuleMatched}>
                             確認
                         </button>
                     </form>

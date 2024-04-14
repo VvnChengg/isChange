@@ -1,18 +1,38 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../../styles/Edit.css';
-import { UserIcon } from './Edit-style';
 import { PassWordEdit } from './PassWordDiv';
 import { BasicInfoEdit } from './BasicInfoDiv';
 import { SelfInfo } from './SelfInfo';
 import { ImageUploadDiv } from './ImageDiv';
+import { viewApi } from '../../api/viewApi';
 
 const Edit = () => {
     const [showPasswordDiv, setShowPasswordDiv] = useState(false);
     const [showBasicInfoDiv, setShowBasicInfoDiv] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
-    const [imageURL, setImageURL] = useState(null);
+    const [imageURL, setImageURL] = useState('');
     const [introText, setIntroText] = useState('');
+
+    const [username, setUsername] = useState('');
+    const [school, setSchool] = useState('');
+    const [photo, setPhoto] = useState('');
+
+    const getInfo = async () => {
+        // use viewApi.getMember to get member info
+        const token = localStorage.getItem('access_token');
+        const memberInfo = await viewApi.getMember(token);
+        console.log(memberInfo);
+
+        setUsername(memberInfo.username);
+        setSchool(memberInfo.exchange_school_name);
+        setPhoto(memberInfo.photo);
+        setIntroText(memberInfo.intro);
+    }
+
+    useEffect(() => {
+        getInfo();
+    }, []);
     
 
 
@@ -46,11 +66,12 @@ const Edit = () => {
             return;
         }
         console.log('表單已提交:', { introText });
+
     }
 
     const handleSubmitStore = () => {
         handleSubmitIntro()
-        handleSubmitImage()
+        // handleSubmitImage()
     }
 
     return (
@@ -58,7 +79,7 @@ const Edit = () => {
             <div className="edit-form">
                 <div className="section-1">
                     <div className="section-1-left">
-                        <ImageUploadDiv setImageURL={setImageURL}/>
+                        <ImageUploadDiv setImageURL={setImageURL} />
                     </div>
 
                     <div className="section-1-right">
@@ -75,6 +96,8 @@ const Edit = () => {
                         handleClose={handleShowBasicInfoDivClose}
                         handleInputFocus={handleInputFocus}
                         handleInputBlur={handleInputBlur}
+                        username={username}
+                        school={school}
                     />
 
                     <PassWordEdit
@@ -87,10 +110,9 @@ const Edit = () => {
 
                 </div>
                 <div className="section-2">
-                    <SelfInfo setIntroText={setIntroText} introText={introText}/>
+                    <SelfInfo setIntroText={setIntroText} introText={introText} />
                 </div>
             </div>
-            <button onClick={handleSubmitStore}>儲存</button>
         </div>
     );
 }

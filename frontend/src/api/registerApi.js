@@ -20,32 +20,39 @@ export const registerApi = {
     },
 
     // 確認驗證碼與記錄相符
-    verifyEmailGet: (email, verification_code) => {
-        return axios.get(`${hostname}/member-auth/register/verification`, {
-            params: {
-                email: email,
-                verification_code: verification_code
-            }
+    verifyEmailPost: (email, verification_code) => {
+        console.log(email, verification_code);
+        return axios.post(`${hostname}/member-auth/register/verification`, {
+            email: email,
+            verification_code: verification_code
         })
             .then(res => {
                 console.log(res)
-                return res.data})
-            .catch(err => console.log(err));
+                return res.data
+            })
+            .catch(err => {
+                // console.log(err)
+                throw err
+            });
     },
 
     // 檢查使用者名稱是否重複
-    verifyUsername: (username) => {
+    verifyUsername: (username, email) => {
         return axios.get(`${hostname}/member-auth/register/checkuser`, {
             params: {
-                username: username
+                username: username,
+                email: email
             }
         })
             .then(res => {
-                console.log(res)
-                return res.data})
-            .catch(err => console.log(err));
+                console.log("使用者名稱res", res);
+                return res.data;
+            })
+            .catch(err => {
+                // console.error('Error:', err.response ? err.response.data : err.message);
+                throw err;
+            });
     },
-
     // 送出註冊資料
     verifyMemberPatch: (email, password, username, exchange_school_name) => {
         return axios.patch(`${hostname}/member-auth/register`, {
@@ -56,7 +63,8 @@ export const registerApi = {
         })
             .then(res => {
                 console.log(res)
-                return res.data})
+                return res.data
+            })
             .catch(err => console.log(err));
     },
 

@@ -1,24 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import viewStyles from '../../styles/View.module.css';
 import ViewMemberSelfIntro from './ViewMemberSelfIntro';
 import ViewMemberPost from './ViewMemberPost';
+import ViewMemberInfo from './ViewMemberInfo';
+import { viewApi } from '../../api/viewApi';
+
 
 const View = () => {
+
+  const [username, setUsername] = useState('');
+  const [school, setSchool] = useState('');
+  const [photo, setPhoto] = useState('');
+  const [intro, setIntro] = useState('');
+
+  const getInfo = async () =>{
+    // use viewApi.getMember to get member info
+    const token =  localStorage.getItem('access_token');
+    const memberInfo = await viewApi.getMember(token);
+    console.log(memberInfo);
+
+    setUsername(memberInfo.username);
+    setSchool(memberInfo.exchange_school_name);
+    setPhoto(memberInfo.photo);
+    setIntro(memberInfo.intro);
+  }
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+
   return (
     <div className={viewStyles.isChange}>
-        <div className={viewStyles.profile}>
-            <div className={viewStyles.profileLeft}>
-                <img src="avatar.png" alt="個人頭像" />
-                <p>example</p>
-                <p>加拿大不列頗留憐比亞溫哥華拉僧佛學院</p>
-                <p>溫哥華 &lt; 國旗&gt;</p>
-            </div>
-            <div className={viewStyles.profileRight}>
-            <button className={viewStyles.viewbutton}>追蹤</button>
-            </div>
-        </div>
-        <ViewMemberSelfIntro />
-        <ViewMemberPost/>        
+      <ViewMemberInfo photo={photo} username={username} school={school}/>
+      <ViewMemberSelfIntro intro={intro}/>
+      <ViewMemberPost />
     </div>
   );
 };

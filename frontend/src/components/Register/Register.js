@@ -1,6 +1,6 @@
+// Register.js這塊沒有組件化，之後有空再來改
 import React, { useState, useRef, Fragment, useEffect } from 'react';
 import '../../styles/Register.css';
-import { InputWithButton } from './Register-components';
 import { loginApi } from '../../api/loginApi';
 import { registerApi } from '../../api/registerApi';
 
@@ -15,7 +15,6 @@ const Register = () => {
 
     const [verificationCode, setVerificationCode] = useState(''); // 驗證碼
     const [verificationPass, setVerificationPass] = useState(false); // 驗證碼是否通過
-    const [shouldCheckVeri, setShouldCheckVeri] = useState(false); // 是否應該檢查驗證碼
     const [veriHint, setVeriHint] = useState(''); // 驗證碼錯誤提示
 
     const [passWord, setPassword] = useState('');
@@ -24,7 +23,7 @@ const Register = () => {
     const [passWordRuleMatched, setPassWordRuleMatched] = useState(true);
 
     const [username, setUserName] = useState('');
-    const [shouldCheck, setShouldCheck] = useState(false);
+    const [debounceTimeoutId, setDebounceTimeoutId] = useState(null);
     const [usernameRegistered, setUsernameRegistered] = useState(false);
 
     const [file, setFile] = useState(null);
@@ -131,7 +130,7 @@ const Register = () => {
         // true => ok
         // false => 錯誤
         try{
-            const data = await registerApi.verifyEmailGet(email, verificationCode);
+            const data = await registerApi.verifyEmailPost(email, verificationCode);
             console.log(data);
             if(data.status === 'verified'){
                 console.log(data);
@@ -163,7 +162,6 @@ const Register = () => {
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
-        CheckpassWordRule();
     }
 
     const CheckpassWordRule = () => {
@@ -185,8 +183,9 @@ const Register = () => {
     }
 
     useEffect(() => {
+        CheckpassWordRule();
         CheckpassWordSame();
-    }, [passWord_confirm]);
+    }, [passWord, passWord_confirm]);
 
     const handlePasswordConfirmChange = (e) => {
         setPassword_confirm(e.target.value);
@@ -196,44 +195,58 @@ const Register = () => {
     // 檢查使用者名稱是否已被註冊
     const handleUserNameChange = (e) => {
         setUserName(e.target.value);
-        CheckUserName();
     }
+
+
+    useEffect(() => {
+        if (debounceTimeoutId) {
+            clearTimeout(debounceTimeoutId);
+        }
+    
+        if (username) {
+            const id = setTimeout(CheckUserName, 500); // Wait for 500ms before calling CheckUserName
+            setDebounceTimeoutId(id);
+        }
+    }, [username]);
 
 
     const checkUserNameInDatabase = async () => {
         // true => ok
         // false => 已被註冊
-        // try {
-        //     const data = await registerApi.verifyUsername(username);
-        //     if (data.status === 'success') {
-        //         return false;
-        //     } else {
-        //         return true;
-        //     }
-        // } catch (error) {
-        //     console.error('Error getting user info:', error);
-        //     alert('請再試一次');
-        // }
-        return false;
+        try {
+            const email = localStorage.getItem('email');
+            const data = await registerApi.verifyUsername(username, email);
+            console.log(data);
+
+            if (data.status === 'success') {
+                setUsernameRegistered(false);
+                return false;
+            } else {
+                setUsernameRegistered(true);
+                return true;
+            }        
+        } catch(error) {
+            if (error.response) {
+                console.log(error.response.data);
+                // error.response.data 將會是你的錯誤訊息物件，例如：
+                // { status: "failed", message: "使用者名稱已有人使用，請更換其他名稱" }
+                if (error.response.data.status === 'failed') {
+                    setUsernameRegistered(true);
+                } else {
+                    setUsernameRegistered(false);
+                }
+            } else if (error.request) {
+                console.error('No response was received', error.request);
+            } else {
+                console.error('Error setting up the request', error.message);
+            }
+            console.error('Error config:', error.config);
+        };
     }
 
     const CheckUserName = async () => {
-        let registered = await checkUserNameInDatabase(username);
-        setShouldCheck(true);
-        if (registered) {
-            setUsernameRegistered(true);
-        }
-        
-        setShouldCheck(true);
+        await checkUserNameInDatabase(username);
     }
-
-    useEffect(() => {
-        if (!usernameRegistered) {
-            console.log('名稱可用:', username);
-        }
-        setShouldCheck(false);
-    }, [usernameRegistered, shouldCheck]);
-
 
 
     // 上傳文件
