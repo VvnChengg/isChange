@@ -118,10 +118,9 @@ const modifyMember = async (req, res) => {
 
 //查看別人的個人資料（Member）
 const showMemberDetail = async (req, res) => {
-  const userId = req.body;
   const observed_username = req.params.uid;
 
-  if (!userId || !observed_username) {
+  if (!observed_username) {
     return res.status(400).json({ error: "Username is missing" });
   }
   try {

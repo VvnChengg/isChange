@@ -157,7 +157,7 @@ const registerMember = async (req, res) => {
 
 //輸入驗證碼進行驗證
 const verifyRegisterMember = async (req, res) => {
-  const { email, verification_code } = req.query;
+  const { email, verification_code } = req.body;
 
   try {
     const user = await MemberAuth.findOne({ email });
@@ -193,24 +193,31 @@ const verifyRegisterMember = async (req, res) => {
   }
 };
 
+//檢查使用者名稱有無重複
+const checkUsername = async (req, res) => {
+  const { username } = req.body;
+  const m0 = await Member.findOne({ username: username });
+  if (m0) {
+    return res.status(409).json({
+      status: "failed",
+      message: "使用者名稱已有人使用，請更換其他名稱",
+    });
+  }
+  return res.status(200).json({
+    status: "success",
+    message: "可使用此名稱",
+  });
+};
+
 //設定密碼、使用者名稱、交換學校名稱
 const verifiedMember = async (req, res) => {
   const { email, password, username, exchange_school_name } = req.body;
 
   try {
-    //檢查使用者名稱有無重複
-    const m0 = await Member.findOne({ username: username });
-    // console.log(m0);
-    if (m0) {
-      return res.status(400).json({
-        status: "failed",
-        message: "使用者名稱已有人使用，請更換其他名稱",
-      });
-    }
     //設定密碼
     const hashedPassword = await hashPassword(password);
     const user = await MemberAuth.findOne({ email });
-
+    console.log("user:", user);
     if (user.password) {
       return res.status(400).json({
         status: "failed",
@@ -280,6 +287,7 @@ module.exports = {
   login,
   registerMember,
   verifyRegisterMember,
+  checkUsername,
   verifiedMember,
   deleteTestMember,
 };
