@@ -16,8 +16,8 @@ const LOR = async (req, res) => {
   }
   try {
     const existingUser = await MemberAuth.findOne({ email });
-    // console.log(existingUser);
-    if (existingUser) {
+    console.log(existingUser.password);
+    if (existingUser && existingUser.password) {
       // If user exists
       return res.json({ status: "success" });
     } else {
@@ -57,7 +57,13 @@ const login = async (req, res) => {
         status: "error",
         message: "Email不存在",
       });
+    } else if (!user.password) {
+      return res.json({
+        status: "error",
+        message: "請進行驗證碼驗證",
+      });
     }
+    console.log(user);
     // Check if password correct
     const passwordMatch = await bcrypt.compare(data.password, user.password);
     if (passwordMatch) {
