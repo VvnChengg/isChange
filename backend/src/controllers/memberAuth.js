@@ -157,7 +157,7 @@ const registerMember = async (req, res) => {
 
 //輸入驗證碼進行驗證
 const verifyRegisterMember = async (req, res) => {
-  const { email, verification_code } = req.query;
+  const { email, verification_code } = req.body;
 
   try {
     const user = await MemberAuth.findOne({ email });
@@ -195,17 +195,25 @@ const verifyRegisterMember = async (req, res) => {
 
 //檢查使用者名稱有無重複
 const checkUsername = async (req, res) => {
-  const { username } = req.body;
+  const { username, email } = req.query;
   const m0 = await Member.findOne({ username: username });
-  if (m0) {
-    return res.status(409).json({
-      status: "failed",
-      message: "使用者名稱已有人使用，請更換其他名稱",
+  const m1 = await MemberAuth.findOne({ email: email });
+  if (!m0) {
+    return res.status(200).json({
+      status: "success",
+      message: "可使用此名稱",
     });
+  } else {
+    if (m0._id.toString() == m1.user_id.toString()) {
+      return res.status(200).json({
+        status: "success",
+        message: "可使用此名稱",
+      });
+    }
   }
-  return res.status(200).json({
-    status: "success",
-    message: "可使用此名稱",
+  return res.status(409).json({
+    status: "failed",
+    message: "使用者名稱已有人使用，請更換其他名稱",
   });
 };
 
@@ -214,15 +222,6 @@ const verifiedMember = async (req, res) => {
   const { email, password, username, exchange_school_name } = req.body;
 
   try {
-    //檢查使用者名稱有無重複
-    const m0 = await Member.findOne({ username: username });
-    // console.log(m0);
-    if (m0) {
-      return res.status(400).json({
-        status: "failed",
-        message: "使用者名稱已有人使用，請更換其他名稱",
-      });
-    }
     //設定密碼
     const hashedPassword = await hashPassword(password);
     const user = await MemberAuth.findOne({ email });
@@ -272,17 +271,24 @@ const deleteTestMember = async (req, res) => {
   try {
     // Assuming MemberAuth is your Mongoose model
     const m = await MemberAuth.findOne({ email });
-    let memberId = m.user_id;
-    const deletedMemberAuth = await MemberAuth.deleteOne({ email });
-    const deletedMember = await Member.deleteOne({
-      _id: memberId,
-    });
-    console.log(`${deletedMember.deletedCount} member(s) deleted.`);
-    console.log(`${deletedMemberAuth.deletedCount} member(s) auth deleted.`);
+    if (m) {
+      let memberId = m.user_id;
+      const deletedMemberAuth = await MemberAuth.deleteOne({ email });
+      const deletedMember = await Member.deleteOne({
+        _id: memberId,
+      });
+      console.log(`${deletedMember.deletedCount} member(s) deleted.`);
+      console.log(`${deletedMemberAuth.deletedCount} member(s) auth deleted.`);
 
-    return res.status(200).json({
-      status: "success",
-      message: "Deleted successfully",
+      return res.status(200).json({
+        status: "success",
+        message: "Deleted successfully",
+        data: email,
+      });
+    }
+    return res.status(404).json({
+      status: "failed",
+      message: "no existing user",
       data: email,
     });
   } catch (error) {
