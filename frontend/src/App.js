@@ -5,6 +5,8 @@ import './global.css';
 
 import Layout from './pages/layout';
 import Home from './pages/home';
+import PrivateMessageList from './pages/private-messages/private-message-list';
+import Chatroom from './pages/chatroom/chat-room';
 import TourCreate from './pages/tourCreate';
 import LoginForm from './components/Login/LoginForm';
 import Register from './components/Register/Register';
@@ -21,7 +23,9 @@ function App() {
               <Route path='/login' element={<LoginForm />} />
               <Route path='/register' element={<Register />} />
               <Route path='/edit' element={<Edit />} />
-              <Route path='/member' element={<View />} />
+              <Route path='/member' element={<View />} />   
+              <Route path='/chat-list' element={<PrivateMessageList/>}/>
+              <Route path='/chatroom/:chatid' element={<Chatroom/>} />
               <Route path='/tour'>
                 <Route path='create' element={<TourCreate />} />
               </Route>
