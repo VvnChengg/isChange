@@ -5,6 +5,8 @@ import './styles/global.css';
 
 import Layout from './pages/layout';
 import Home from './pages/home';
+import PrivateMessageList from './pages/private-messages/private-message-list';
+import Chatroom from './pages/chatroom/chat-room';
 
 import Header from './components/Header';
 
@@ -16,6 +18,8 @@ function App() {
           <Routes>
             <Route path='' element={<Layout />}>
               <Route path='/' element={<Home />} />
+              <Route path='/chat-list' element={<PrivateMessageList/>}/>
+              <Route path='/chatroom/:chatid' element={<Chatroom/>} />
             </Route>
           </Routes>
         </div>
