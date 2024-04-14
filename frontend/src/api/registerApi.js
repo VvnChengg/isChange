@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const hostname = 'http://localhost:3000/api';
+const hostname = process.env.REACT_APP_API_HOSTNAME;
 
 export const registerApi = {
     // 寄送驗證信
     register: (email) => {
-        return axios.post(`${hostname}/register`, {
+        return axios.post(`${hostname}/member-auth/register/email`, {
             email: email
         })
             .then(res => {
@@ -21,22 +21,42 @@ export const registerApi = {
 
     // 確認驗證碼與記錄相符
     verifyEmailGet: (email, verification_code) => {
-        return axios.get(`${hostname}/register`, {
+        return axios.get(`${hostname}/member-auth/register/verification`, {
             params: {
                 email: email,
                 verification_code: verification_code
             }
         })
-            .then(res => res.data)
+            .then(res => {
+                console.log(res)
+                return res.data})
             .catch(err => console.log(err));
     },
 
-    verifyEmailPatch: (email, verification_code) => {
-        return axios.patch(`${hostname}/register`, {
-            email: email,
-            verification_code: verification_code
+    // 檢查使用者名稱是否重複
+    verifyUsername: (username) => {
+        return axios.get(`${hostname}/member-auth/register/checkuser`, {
+            params: {
+                username: username
+            }
         })
-            .then(res => res.data)
+            .then(res => {
+                console.log(res)
+                return res.data})
+            .catch(err => console.log(err));
+    },
+
+    // 送出註冊資料
+    verifyMemberPatch: (email, password, username, exchange_school_name) => {
+        return axios.patch(`${hostname}/member-auth/register`, {
+            email: email,
+            password: password,
+            username: username,
+            exchange_school_name: exchange_school_name
+        })
+            .then(res => {
+                console.log(res)
+                return res.data})
             .catch(err => console.log(err));
     },
 

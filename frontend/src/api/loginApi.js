@@ -1,12 +1,11 @@
 import axios from 'axios';
 
-const hostname = 'http://localhost:3000/api/member-auth';
+const hostname = process.env.REACT_APP_API_HOSTNAME;
 
 export const loginApi = {
     // 登入前檢查是否已註冊
     login_or_register: (email) => {
-        console.log('email:', email);
-        return axios.get(`${hostname}/login-or-register`, {
+        return axios.get(`${hostname}/member-auth/login-or-register`, {
             params: {
                 email: email
             }
@@ -26,7 +25,7 @@ export const loginApi = {
 
     // 登入api    
     login: (email, password) => {
-        return axios.post(`${hostname}/login`, {
+        return axios.post(`${hostname}/member-auth/login`, {
             email: email,
             password: password
         })
@@ -37,9 +36,10 @@ export const loginApi = {
                 localStorage.setItem('user_id', res.data.data.user_id);
                 localStorage.setItem('email', res.data.data.email);
                 localStorage.setItem('access_token', res.data.data.access_token);
-                alert('登入成功');
+                alert(`${res.data.message}`);
             }else{
-                alert('登入失敗');
+                console.log('Failed to login: ' + res.data.message);
+                alert(`${res.data.message}`);
             }
             return res.data;
         })
