@@ -157,7 +157,7 @@ const registerMember = async (req, res) => {
 
 //輸入驗證碼進行驗證
 const verifyRegisterMember = async (req, res) => {
-  const { email, verification_code } = req.body;
+  const { email, verification_code } = req.query;
 
   try {
     const user = await MemberAuth.findOne({ email });
@@ -214,6 +214,15 @@ const verifiedMember = async (req, res) => {
   const { email, password, username, exchange_school_name } = req.body;
 
   try {
+    //檢查使用者名稱有無重複
+    const m0 = await Member.findOne({ username: username });
+    // console.log(m0);
+    if (m0) {
+      return res.status(400).json({
+        status: "failed",
+        message: "使用者名稱已有人使用，請更換其他名稱",
+      });
+    }
     //設定密碼
     const hashedPassword = await hashPassword(password);
     const user = await MemberAuth.findOne({ email });
