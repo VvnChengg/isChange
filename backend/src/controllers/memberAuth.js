@@ -16,13 +16,13 @@ const LOR = async (req, res) => {
   }
   try {
     const existingUser = await MemberAuth.findOne({ email });
-    // console.log(existingUser);
-    if (existingUser) {
+    console.log(existingUser.password);
+    if (existingUser && existingUser.password) {
       // If user exists
-      return res.json({ status: "success" });
+      return res.status(200).json({ status: "success" });
     } else {
       // If user doesn't exist
-      return res.json({ status: "None" });
+      return res.status(404).json({ status: "None" });
     }
   } catch (error) {
     return res.status(500).json({ error: "Internal server error" });
@@ -53,20 +53,26 @@ const login = async (req, res) => {
     });
     // Check if user exists
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         status: "error",
         message: "Email不存在",
       });
+    } else if (!user.password) {
+      return res.status(404).json({
+        status: "error",
+        message: "請進行驗證碼驗證",
+      });
     }
+    console.log(user);
     // Check if password correct
     const passwordMatch = await bcrypt.compare(data.password, user.password);
     if (passwordMatch) {
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
         expiresIn: "1h",
       });
-      res.cookie("token", token, { httpOnly: true });
+      res.cookie("token", token, { httpOnly: true, secure: true });
 
-      return res.json({
+      return res.status(200).json({
         status: "success",
         message: "登入成功",
         data: {
@@ -76,7 +82,7 @@ const login = async (req, res) => {
         },
       });
     } else {
-      return res.json({
+      return res.status(400).json({
         status: "error",
         message: "密碼錯誤",
       });
@@ -121,7 +127,7 @@ const registerMember = async (req, res) => {
   } else if (user && !user.password) {
     await MemberAuth.updateOne({ email }, { verification_code: code });
   } else {
-    return res.json({
+    return res.status(400).json({
       status: "error",
       message: "已成為會員，請登入",
     });
@@ -136,7 +142,7 @@ const registerMember = async (req, res) => {
       text: `Your verification code is: ${code}`,
     });
 
-    res.json({
+    res.status(200).json({
       status: "verified",
       message: "驗證碼已寄出",
     });
@@ -176,7 +182,7 @@ const verifyRegisterMember = async (req, res) => {
       { email },
       { is_verified: true }
     );
-    res.json({
+    res.status(200).json({
       status: "verified",
       message: "電子郵件驗證成功",
       // data: updatedUser,
@@ -187,6 +193,22 @@ const verifyRegisterMember = async (req, res) => {
   }
 };
 
+//檢查使用者名稱有無重複
+const checkUsername = async (req, res) => {
+  const { username } = req.body;
+  const m0 = await Member.findOne({ username: username });
+  if (m0) {
+    return res.status(409).json({
+      status: "failed",
+      message: "使用者名稱已有人使用，請更換其他名稱",
+    });
+  }
+  return res.status(200).json({
+    status: "success",
+    message: "可使用此名稱",
+  });
+};
+
 //設定密碼、使用者名稱、交換學校名稱
 const verifiedMember = async (req, res) => {
   const { email, password, username, exchange_school_name } = req.body;
@@ -194,9 +216,9 @@ const verifiedMember = async (req, res) => {
   try {
     //檢查使用者名稱有無重複
     const m0 = await Member.findOne({ username: username });
-    console.log(m0);
+    // console.log(m0);
     if (m0) {
-      return res.json({
+      return res.status(400).json({
         status: "failed",
         message: "使用者名稱已有人使用，請更換其他名稱",
       });
@@ -204,9 +226,9 @@ const verifiedMember = async (req, res) => {
     //設定密碼
     const hashedPassword = await hashPassword(password);
     const user = await MemberAuth.findOne({ email });
-
+    console.log("user:", user);
     if (user.password) {
-      return res.json({
+      return res.status(400).json({
         status: "failed",
         message: "使用者已設定過密碼，請登入",
         data: email,
@@ -226,7 +248,7 @@ const verifiedMember = async (req, res) => {
         },
         { new: true }
       );
-      return res.json({
+      return res.status(200).json({
         status: "success",
         message: "註冊成功！",
         data: m,
@@ -234,7 +256,7 @@ const verifiedMember = async (req, res) => {
     }
 
     // If user doesn't exist, return failed message
-    return res.json({
+    return res.status(404).json({
       status: "failed",
       message: "使用者不存在！",
       data: email,
@@ -258,7 +280,7 @@ const deleteTestMember = async (req, res) => {
     console.log(`${deletedMember.deletedCount} member(s) deleted.`);
     console.log(`${deletedMemberAuth.deletedCount} member(s) auth deleted.`);
 
-    return res.json({
+    return res.status(200).json({
       status: "success",
       message: "Deleted successfully",
       data: email,
@@ -274,6 +296,7 @@ module.exports = {
   login,
   registerMember,
   verifyRegisterMember,
+  checkUsername,
   verifiedMember,
   deleteTestMember,
 };
