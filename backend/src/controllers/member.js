@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 
 //查看自己的個人資料（Member)
 const showMember = async (req, res) => {
-  const { username } = req.query;
   const { userId } = req.body;
 
   if (!userId) {
@@ -13,7 +12,6 @@ const showMember = async (req, res) => {
   try {
     const user = await Member.findOne({
       _id: userId,
-      username: username,
     });
 
     if (!user) {
