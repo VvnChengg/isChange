@@ -1,10 +1,11 @@
 const Member = require("../models/member");
 const MemberAuth = require("../models/member-auth");
 const bcrypt = require("bcrypt");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 //查看自己的個人資料（Member)
 const showMember = async (req, res) => {
-  const { username } = req.query;
   const { userId } = req.body;
 
   if (!userId) {
@@ -13,14 +14,27 @@ const showMember = async (req, res) => {
   try {
     const user = await Member.findOne({
       _id: userId,
-      username: username,
     });
 
     if (!user) {
       console.log(`Member not found with ID: ${userId}`);
       return res.status(404).json({ error: "會員不存在" });
     }
-    return res.status(200).json(user);
+
+    // Convert photo data to base64
+    let photoBase64 = null;
+    if (user.photo && user.photo.contentType) {
+      photoBase64 = `data:${
+        user.photo.contentType
+      };base64,${user.photo.data.toString("base64")}`;
+    }
+    const resData = {
+      _id: user._id,
+      intro: user.intro,
+      photo: photoBase64,
+    };
+
+    return res.status(200).json(resData);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
@@ -31,53 +45,23 @@ const showMember = async (req, res) => {
 const modifyMember = async (req, res) => {
   const {
     userId,
-    username,
     intro,
-    photo,
-    exchange_school_email,
+    username,
+    exchange_school_name,
     origin_password,
     new_password,
   } = req.body;
 
-  if (!origin_password || !new_password) {
-    try {
-      const updatedUser = await Member.findOneAndUpdate(
-        { _id: userId, username: username },
-        {
-          $set: {
-            intro: intro,
-            photo: photo,
-            exchange_school_email: exchange_school_email,
-          },
-        },
-        { new: true, runValidators: true }
-      );
+  // 確認有沒有會員資料
+  const user = await MemberAuth.findOne({ user_id: userId });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  const updateFields = {};
 
-      if (!updatedUser) {
-        return res.status(404).json({ error: "User not found" });
-      }
-
-      return res.status(200).json({
-        status: "success",
-        message: "User information updated successfully",
-        data: updatedUser,
-      });
-    } catch (error) {
-      if (error.name === "ValidationError") {
-        const errors = Object.values(error.errors).map((err) => err.message);
-        return res.status(400).json({ error: errors.join(", ") });
-      }
-      console.error(error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  } else {
+  if (origin_password && new_password) {
     try {
-      // 確認有沒有會員資料
-      const user = await MemberAuth.findOne({ user_id: userId });
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      //確認原密碼
+      //確認和原密碼相符
       const passwordMatch = await bcrypt.compare(
         origin_password,
         user.password
@@ -113,6 +97,62 @@ const modifyMember = async (req, res) => {
       console.error(error);
       return res.status(500).json({ error: "修改失敗請稍後再試" });
     }
+  } else {
+    //紀錄要更新的欄位
+    if (username && exchange_school_name) {
+      updateFields.username = username;
+      updateFields.exchange_school_name = exchange_school_name;
+    } else if (intro) {
+      updateFields.intro = intro;
+    }
+
+    // 看有沒有上傳圖片
+    let photoData;
+    if (req.file) {
+      photoData = {
+        photo: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+    }
+    if (req.file) {
+      try {
+        updateFields.photo = {
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
+        };
+      } catch (error) {
+        console.error(error);
+        return res
+          .status(500)
+          .json({ error: "Failed to process photo upload" });
+      }
+    }
+
+    // 更新欄位
+    try {
+      const updatedUser = await Member.findOneAndUpdate(
+        { _id: userId },
+        { $set: updateFields },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      return res.status(200).json({
+        status: "success",
+        message: "User information updated successfully",
+        data: updatedUser,
+      });
+    } catch (error) {
+      if (error.name === "ValidationError") {
+        const errors = Object.values(error.errors).map((err) => err.message);
+        return res.status(400).json({ error: errors.join(", ") });
+      }
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
   }
 };
 
@@ -131,10 +171,24 @@ const showMemberDetail = async (req, res) => {
     if (!observed_user) {
       return res.status(404).json({ error: "User not found" });
     }
-    res.status(200).json(observed_user);
+
+    // Convert photo data to base64
+    let photoBase64 = null;
+    if (observed_user.photo && observed_user.photo.contentType) {
+      photoBase64 = `data:${
+        observed_user.photo.contentType
+      };base64,${observed_user.photo.data.toString("base64")}`;
+    }
+    const resData = {
+      _id: observed_user._id,
+      intro: observed_user.intro,
+      photo: photoBase64,
+    };
+
+    return res.status(200).json(resData);
   } catch (error) {
     console.error("Failed to fetch user info:", error);
-    res.status(500).json({ error: "Failed to fetch user info" });
+    return res.status(500).json({ error: "Failed to fetch user info" });
   }
 };
 
