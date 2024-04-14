@@ -13,15 +13,19 @@ const memberSchema = new Schema({
     maxlength: 200,
     default: null,
   },
+  // photo: {
+  //   type: String,
+  //   validate: {
+  //     validator: function (v) {
+  //       // 檢查是否為合法的 URL 格式
+  //       return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v);
+  //     },
+  //     message: "Photo has to be in a valid URL format",
+  //   },
+  // },
   photo: {
-    type: String,
-    validate: {
-      validator: function (v) {
-        // 檢查是否為合法的 URL 格式
-        return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v);
-      },
-      message: "Photo has to be in a valid URL format",
-    },
+    data: Buffer,
+    contentType: String,
   },
   exchange_school_name: {
     type: String,
