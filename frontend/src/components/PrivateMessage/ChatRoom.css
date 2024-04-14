@@ -1,7 +1,7 @@
 /* ChatRoom.css */
 
 /* 整個聊天室容器 */
-.chat-room-container {
+.private-message-chat-room-container {
     position: fixed; /* 使用絕對定位 */
     top: 100px; /* 距離頂部 100 像素 */
     bottom: 200px;
@@ -20,7 +20,7 @@
     
 
 /* 單個訊息框 */
-.message-container {
+.private-message-message-container {
     display: block ; /* 將每個訊息設置為區塊元素，確保每個訊息都在新的一行上 */
     width: 100%; /* 寬度佔滿父元素 */
     clear: both; /* 確保訊息框不會浮動到浮動元素旁邊 */
@@ -30,12 +30,12 @@
 
 
 /* 訊息時間戳 */
-.timestamp {
+.private-message-timestamp {
 font-size: 0.8rem;
 color: #888;
 }
 
-.message-box {
+.private-message-message-box {
     display: inline-block; /* 將元素設置為內聯塊，使其大小根據內容自動調整 */
     margin-bottom: 15px;
     padding: 10px;
@@ -45,7 +45,7 @@ color: #888;
 }
 
 /* 自己發送的訊息靠右 */
-.own-message {
+.private-message-own-message {
   text-align: right;
   display: block;
   background-color: #4629F2;
@@ -54,7 +54,7 @@ color: #888;
 }
 
 /* 別人發送的訊息靠左 */
-.message-box:not(.own-message) {
+.private-message-message-box:not(.own-message) {
   background-color: #F1F7FF;
   color: black;
   text-align: left;

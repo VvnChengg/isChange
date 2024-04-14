@@ -1,9 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
 import './StartPrivate.css';
+import { useNavigate } from "react-router-dom";
+
 
 
 const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
+    const navigate = useNavigate();
     // 設定 checkbox 的狀態
     const [isChecked, setIsChecked] = useState(false);
   
@@ -14,6 +17,7 @@ const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
     // 若有打勾則可按按鈕
     const handleButtonClick = async (action) => {
       const hostname = 'http://localhost:3000/api';
+      //const hostname = process.env.REACT_APP_API_HOSTNAME;
       if (isChecked) {
         if (action === 'confirm') {
           const requestBody = {
@@ -21,6 +25,7 @@ const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
             receiver_id: receiver
           };
           try {
+            console.log(requestBody)
             const response = await fetch(`${hostname}/chat/create`, {
               method: 'POST',
               headers: {
@@ -36,7 +41,7 @@ const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
             // 後續
             const responseData = await response.json();
             const newChatId = responseData.new_chat_id;
-            // 開啟該 ChatID
+            navigate("/chatroom/"+newChatId);
 
     
           } catch (error) {
@@ -50,9 +55,9 @@ const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
   
     return (
       isOpen && (
-        <div className="popup">
-          <button className="close-button" onClick={onClose}>X</button>
-          <div className="popup-content">
+        <div className="startprivate-popup">
+          <button className="startprivate-close-button" onClick={onClose}>X</button>
+          <div className="startprivate-popup-content">
             <h2>開啟私訊</h2>
             <p>
               您將發出 {receiver_name} 的私訊邀請。若對方也同意即會開始進行私訊，私訊過程中請確認自身個資安全及相關法規限制。並請依循下列規則：
@@ -69,14 +74,14 @@ const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
                 </li>
               </ol>
             </p>
-            <label>
+            <label className = 'startprivate-label'>
               <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
               我了解使用規範及可能的風險
             </label>
-            <div className="button-container">
-              <div className="buttons">
+            <div className="startprivate-button-container">
+              <div className="startprivate-buttons">
                 <button className="button" onClick={() => handleButtonClick('confirm')} disabled={!isChecked} >確認</button>
-                <div className="spacer"></div>
+                <div className="startprivate-spacer"></div>
                 <button className="button" onClick={() => handleButtonClick('reject')} disabled={!isChecked} >拒絕 </button>
               </div>
             </div>

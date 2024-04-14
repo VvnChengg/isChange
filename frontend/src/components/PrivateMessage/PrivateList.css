@@ -1,4 +1,4 @@
-.container {
+.private-message-container {
   position: fixed; /* 使用絕對定位 */
   top: 100px; /* 距離頂部 100 像素 */
   bottom: 100px;
@@ -10,11 +10,11 @@
 }
 
 
-.chat-room-title {
+.private-message-chat-room-title {
     color: #008CD9;
 }
   
-.chat-list-table {
+.private-message-chat-list-table {
   border-collapse: collapse;
   border: 1px solid #008CD9;
   width: 500px;
@@ -22,20 +22,20 @@
   border-radius: 20px ; 
 }
 
-.chat-time, .chat-status {
+.private-message-chat-time, .private-message-chat-status {
   font-size: 12px;
   color: #999;
   text-align: right; 
 }
 
-.bottom {
+.private-message-bottom {
   border-bottom: 1px solid #008CD9;
 }
 
-.chat-name {
+.private-message-chat-name {
   color: #008CD9;
 }
 
-.a-chat {
+.private-message-a-chat {
   height: 60px;
 }
