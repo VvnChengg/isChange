@@ -21,6 +21,7 @@ const getAllPosts = async (req, res, next) => {
                 content: article.content,
                 type: "post",
                 coverPhoto: article.article_pic,
+                location: article.article_region,
                 datetime: article.post_date
             };
             result.push(item);
@@ -32,8 +33,16 @@ const getAllPosts = async (req, res, next) => {
             const item = {
                 title: event.event_title,
                 content: event.event_intro,
-                type: "event",
-                datetime: event.start_time
+                type: "tour",
+                location: event.destination,
+                datetime: event.start_time,
+                currency: event.currency,
+                budget: event.budget,
+                end_time: event.end_time,
+                people_lb: event.people_lb,
+                people_ub: event.people_ub,
+                creator_id: event.creator_id,
+                status: event.status
             };
             result.push(item);
         });
@@ -45,7 +54,14 @@ const getAllPosts = async (req, res, next) => {
                 content: product.description,
                 type: "trans",
                 coverPhoto: product.product_pic,
-                datetime: product.post_time
+                location: product.transaction_region,
+                datetime: product.post_time,
+                currency: product.currency,
+                price: product.price,
+                product_type: product.product_type,
+                period: product.period,
+                status: product.status,
+                transaction_way: product.transaction_way
             };
             result.push(item);
         });
