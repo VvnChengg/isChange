@@ -1,14 +1,39 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./shareDetail-style.css";
 // import { AiOutlineMail } from "https://esm.sh/react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../api";
+import axios from 'axios';
 
 export default function MyComponent() {
+  const [post, setPost] = useState()
+  // const [posts, setPosts] = useState();
+  // useEffect(() => {
+  //     api.getAllPosts()
+  //     .then(res => setPosts(res))
+  //     .catch(err => console.log(err));
+  // }, []);
+  
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
     let path = '/'; 
     navigate(path);
   };
+
+  const hostname = 'http://localhost:3000/api';
+  // useEffect(() => {
+  //   // 發送 API 請求
+  //   axios.get(`${hostname}/chat/check`, { params: { receiver_id: receiver_id } })
+  //     .then(response => {
+  //       // 設置獲取到的數據
+  //       //console.log(response.data);
+  //       setchatId(response.data.chat_id);
+        
+  //     })
+  //     .catch(error => {
+  //       console.error('API 請求失敗:', error);
+  //     });
+  // }, []);
 
   return (
     <div className="flex-container">
@@ -38,7 +63,6 @@ export default function MyComponent() {
               <div className="content-info">
                 這半年來玩了十個國家，整理了一些買機票、火車票的經驗跟大家分享
                 XX 航空的機票在 1 月常常會特價，還會附行李額......
-                這半年來玩了十個國家，整理了一些買機票、火車票的經驗跟大家分享 XX 航空的機票在 1 月常常會特價，還會附行李額......
                 <img
                   loading="lazy"
                   src="https://hips.hearstapps.com/hmg-prod/images/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2-2023-06-17-215142-648dc0e3d1ef6.png"
