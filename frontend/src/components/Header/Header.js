@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import {
     HeaderWrapper,
@@ -12,7 +11,6 @@ import {
 
 export default function Header() {
     const [language, setLanguage] = useState('中');
-    const navigate = useNavigate();
 
     function changeLanguage() {
         if (language === '中') setLanguage('EN');
@@ -21,10 +19,10 @@ export default function Header() {
 
     return (
         <HeaderWrapper>
-            <HeaderTitle onClick={() => navigate('/')}>isChange!</HeaderTitle>
+            <HeaderTitle>isChange!</HeaderTitle>
             <HeaderSearch />
             <HeaderButtonContainer>
-                <HeaderIcon src={'user'} onClick={() => navigate('/edit')} />
+                <HeaderIcon src={'user'} />
                 <HeaderButton onClick={() => changeLanguage()}>{language}</HeaderButton>
             </HeaderButtonContainer>
         </HeaderWrapper>

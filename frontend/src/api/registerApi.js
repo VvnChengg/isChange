@@ -20,7 +20,8 @@ export const registerApi = {
     },
 
     // 確認驗證碼與記錄相符
-    verifyEmailGet: (email, verification_code) => {
+    verifyEmailPost: (email, verification_code) => {
+        // console.log(email, verification_code);
         return axios.post(`${hostname}/member-auth/register/verification`, {
             email: email,
             verification_code: verification_code
@@ -35,7 +36,7 @@ export const registerApi = {
             });
     },
 
-    // 檢查使用者名稱是否重複
+    // 檢查使用者名稱是否重複(先拿掉email，後端應該也會改掉，但如果出錯可以直接註解掉email看看)
     verifyUsername: (username, email) => {
         return axios.get(`${hostname}/member-auth/register/checkuser`, {
             params: {
@@ -44,7 +45,7 @@ export const registerApi = {
             }
         })
             .then(res => {
-                console.log("使用者名稱res", res);
+                // console.log("使用者名稱res", res);
                 return res.data;
             })
             .catch(err => {

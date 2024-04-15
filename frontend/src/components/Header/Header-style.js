@@ -7,7 +7,6 @@ export const HeaderWrapper = styled.div `
     position: fixed;
         top: 0;
         left: 0;
-        z-index: 1;
     
     background: linear-gradient(360deg, #E0F0FF 0%, #FFFFFF 100%);
     box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.25);
@@ -20,7 +19,7 @@ export const HeaderWrapper = styled.div `
 export const HeaderTitle = styled.div `
     margin: 0 30px 0 30px;
 
-    font-family: 'LilitaOne';
+    font-family: 'Lilita One';
     font-style: normal;
     font-weight: 400;
     font-size: 40px;
@@ -30,8 +29,6 @@ export const HeaderTitle = styled.div `
     align-items: center;
 
     color: #008CD9;
-
-    cursor: pointer;
 `
 
 export const HeaderSearch = styled.input `
@@ -58,8 +55,6 @@ export const HeaderButton = styled.div `
     width: 20px;
     color: #008CD9;
     text-align: center;
-
-    cursor: pointer;
 `
 
 export const HeaderIcon = styled.div `
@@ -68,6 +63,4 @@ export const HeaderIcon = styled.div `
 
     background-image: url('/icons/${props => props.src}.png');
     background-size: cover;
-
-    cursor: pointer;
 `

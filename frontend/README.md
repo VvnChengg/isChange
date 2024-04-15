@@ -1,38 +1,3 @@
-# 啟動前端
-```
-cd frontend
-npm install
-npm start
-```
-在瀏覽器上開啟 http://localhost:3001 即可。
-
-## 其他注意事項
-### 1. 資料夾說明
-* `public` 放素材、圖片，例如 icon
-* `src/api` 放 api
-* `src/components` 放各個頁面共用的元件
-* `src/pages` 放各個頁面，底下一個頁面一個資料夾，裏面包含 `<page_name>.js`、`<page_name>-style.js`、`index.js`
-* `src/styles` 放各種 css 和字體
-### 2. git commit 說明文字
-* `build` : Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
-* `ci` : Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
-* `docs` : Documentation only changes
-* `feat` : A new feature
-* `fix` : A bug fix
-* `perf` : A code change that improves performance
-* `refactor` : A code change that neither fixes a bug nor adds a feature
-* `style` : Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-* `test` : Adding missing tests or correcting existing tests
-
-### 3. 程式命名風格
-* **constant**：使用全大寫命名，斷字間以 _ 連接，例如 MAX_VALUE, PI。
-* **variables and functions**：使用camelCase，例如 myFunction()、teaPrice。
-* **private variables and functions**：前面加 _ ，例如 _privateProp, _myPrivateFunction()。
-* **檔名**：頁面開頭小寫、元件開頭大寫，例如 home.js, Header.js。
-
-
----
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -26,7 +26,7 @@ export const loginApi = {
         });
     },
 
-    // 登入api    
+    // 登入
     login: (email, password) => {
         return axios.post(`${hostname}/member-auth/login`, {
             email: email,

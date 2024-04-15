@@ -5,7 +5,7 @@ const hostname = process.env.REACT_APP_API_HOSTNAME;
 export const editApi = {
 
     editPassWord: (origin_password, new_password, token) => {
-        console.log(token)
+        // console.log(token)
         return axios.patch(`${hostname}/member/edit-page`, {
             origin_password: origin_password,
             new_password: new_password,
@@ -52,6 +52,27 @@ export const editApi = {
                 'Authorization': `Bearer ${token}`
             }
         })
+            .then(res => {
+                console.log(res)
+                return res.data
+            })
+            .catch(err => {
+                console.log(err)
+                throw err
+            });
+    },
+
+    editImage: (formData, token) => {
+        console.log("formData", formData);
+        console.log("token", token);
+        return axios.patch(`${hostname}/member/edit-page`,
+            formData, {
+
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        }, )
             .then(res => {
                 console.log(res)
                 return res.data
