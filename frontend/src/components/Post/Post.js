@@ -9,11 +9,17 @@ import {
 import Tag from '../Tag';
 
 export default function Post({ post }) {
+    const samplePost = {
+        type: 'post',
+        title: 'SAMPLE',
+        content: 'this is a sample post :D'
+    }
+
     return (
         <PostWrapper>
             <div style={{display: 'flex', alignItems: 'center'}}>
-                <Tag type={post.type} />
-                {post.location &&
+                <Tag type={post ? post.type : samplePost.type} />
+                {post && post.location &&
                     <>
                         <PostIcon src='location' />
                         <div>{post.location}</div>
@@ -21,10 +27,10 @@ export default function Post({ post }) {
                 }
             </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
-                <PostTitle>{post.title}</PostTitle>
-                <PostPreview>{post.content.substring(0, 20)}......</PostPreview>
+                <PostTitle>{post ? post.title : samplePost.title}</PostTitle>
+                <PostPreview>{post ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview>
             </div>
-            {(post.coverPhoto) ? <PostImage src={post.coverPhoto} /> : ''}
+            {(post && post.coverPhoto) ? <PostImage src={post.coverPhoto} /> : ''}
         </PostWrapper>
     )
 }
