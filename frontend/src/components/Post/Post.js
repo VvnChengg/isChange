@@ -8,19 +8,23 @@ import {
 
 import Tag from '../Tag';
 
-export default function Post() {
+export default function Post({ post }) {
     return (
         <PostWrapper>
             <div style={{display: 'flex', alignItems: 'center'}}>
-                <Tag type='trans' />
-                <PostIcon src='location' />
-                <div>法國，巴黎</div>
+                <Tag type={post.type} />
+                {post.location &&
+                    <>
+                        <PostIcon src='location' />
+                        <div>{post.location}</div>
+                    </>
+                }
             </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
-                <PostTitle>#售 二手床墊 NT$350</PostTitle>
-                <PostPreview>使用半年，準備回國故售出～狀態良好......</PostPreview>
+                <PostTitle>{post.title}</PostTitle>
+                <PostPreview>{post.content.substring(0, 20)}......</PostPreview>
             </div>
-            <PostImage />
+            {(post.coverPhoto) ? <PostImage src={post.coverPhoto} /> : ''}
         </PostWrapper>
     )
 }
