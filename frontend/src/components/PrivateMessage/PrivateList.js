@@ -22,8 +22,8 @@ function ChatRoomList({ rooms, onSelectRoom }) {
           <AiOutlineMail style={{ marginRight: "8px", verticalAlign: "middle" }}/> 聊天室
         </h1>
         <table className="private-message-chat-list-table">
-            {rooms.map(room => (
-              <React.Fragment key={room._id}>
+            {rooms.map((room, index) => (
+              <React.Fragment key={`room_${index}`}>
                 <tbody className='private-message-a-chat' onClick={() => handleRoomClick(room.chat_id)}>
                 <tr>
                   <td rowSpan={2}>
@@ -60,17 +60,17 @@ function ChatRoomList({ rooms, onSelectRoom }) {
 // 主應用程序
 function PrivateList() {
   const [rooms, setRooms] = useState([]);
-  const hostname = 'http://localhost:3000/api';
-  //const hostname = process.env.REACT_APP_API_HOSTNAME;
-
+  //const hostname = 'http://localhost:3000/api';
+  const hostname = process.env.REACT_APP_API_HOSTNAME;
+  //console.log(hostname)
   useEffect(() => {
-    // const userId = window.localStorage.getItem('user_id');
-    const userId ='660bbad71dd21a48510f209c'
-    axios.get(`${hostname}/chat/chatlist`, {
-      params: {
-        userId: userId,
-      }
-    })
+    const userId = window.localStorage.getItem('user_id');
+    const token = window.localStorage.getItem('access_token');
+    // console.log(userId, token);
+    // const userId ='660bbad71dd21a48510f209c'
+    axios.get(`${hostname}/chat/chatlist`, {headers: {
+      'Authorization':  `Bearer ${token}`
+  }})
     .then(response => {
       // 數據取得
       console.log(response.data);

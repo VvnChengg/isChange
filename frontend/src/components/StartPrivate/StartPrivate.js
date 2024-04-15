@@ -22,7 +22,11 @@ const StartPrivate = () => {
   const [ischatId, setchatId] = useState("");
 
   const hostname = process.env.REACT_APP_API_HOSTNAME;
+  
   useEffect(() => {
+    const userId = window.localStorage.getItem('user_id');
+    // console.log(userId)
+    const token = window.localStorage.getItem('access_token');
     // 發送 API 請求
     axios.get(`${hostname}/chat/check`, { params: { receiver_id: receiver_id } })
       .then(response => {
