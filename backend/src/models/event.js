@@ -69,6 +69,10 @@ const eventSchema = new Schema({
     },
     budget: {
         type: Number
+    },
+    event_region: {
+        type: String,
+        maxlength: 30
     }
 });
 
