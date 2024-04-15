@@ -19,17 +19,11 @@ const showMember = async (req, res) => {
       return res.status(404).json({ error: "會員不存在" });
     }
 
-    // Construct photo URL using filename
-    let photoURL = null;
-    if (user.photo && user.photo.filename) {
-      photoURL = `/uploads/${user.photo.filename}`;
-    }
-
     const resData = {
       _id: user._id,
       username: user.username,
       intro: user.intro,
-      photo: photoURL,
+      photo: user.photo,
       exchange_school_name: user.exchange_school_name,
     };
 
@@ -41,10 +35,11 @@ const showMember = async (req, res) => {
 };
 
 const changeAvatar = async (req, res) => {
-  const { userId } = req.userId;
-  console.log(userId);
-  const user = await Member.findOne({ _id: userId });
+  const { userId } = req.body;
+  console.log(req.file);
   try {
+    const user = await Member.findOne({ _id: userId });
+
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -52,17 +47,15 @@ const changeAvatar = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No photo uploaded" });
     }
+    const updatedUser = await Member.findOneAndUpdate(
+      { _id: userId },
+      { photo: req.file.path }
+    );
 
-    user.photo = {
-      filename: userId,
-      data: req.file.buffer,
-      contentType: req.file.mimetype,
-    };
-
-    await user.save();
-
-    console.log("Photo uploaded for user:", user);
-    return res.status(200).json({ message: "Photo uploaded successfully" });
+    console.log("Photo uploaded for user:", userId);
+    return res
+      .status(200)
+      .json({ message: "Photo uploaded successfully", data: updatedUser });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Failed to process photo upload" });
@@ -174,18 +167,11 @@ const showMemberDetail = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Convert photo data to base64
-    let photoBase64 = null;
-    if (observed_user.photo && observed_user.photo.contentType) {
-      photoBase64 = `data:${
-        observed_user.photo.contentType
-      };base64,${observed_user.photo.data.toString("base64")}`;
-    }
     const resData = {
       _id: observed_user._id,
       username: observed_user.username,
       intro: observed_user.intro,
-      photo: photoBase64,
+      photo: observed_user.photo,
       exchange_school_name: observed_user.exchange_school_name,
     };
 

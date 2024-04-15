@@ -8,8 +8,8 @@ router.get("/edit-page", validateToken, memberController.showMember);
 router.patch("/edit-page", validateToken, memberController.modifyMember);
 router.patch(
   "/edit-page/photo",
-  validateToken,
   upload,
+  validateToken,
   memberController.changeAvatar
 );
 router.get("/:uid", memberController.showMemberDetail); //非會員也可以查看資料

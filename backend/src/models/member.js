@@ -25,7 +25,6 @@ const memberSchema = new Schema({
   // },
   photo: {
     filename: String,
-    data: Buffer,
     contentType: String,
   },
   exchange_school_name: {
