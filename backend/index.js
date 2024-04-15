@@ -1,19 +1,56 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
+// import express from 'express';
+// import mongoose from 'mongoose';
+// import cors from 'cors';
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors') ;
 
 const app = express();
+app.use(express.json());
+require("dotenv").config(); // 加了這行就可以抓到 port
 
 app.use(cors());
+app.use(express.json());
+
+const chatRoutes = require("./src/routes/chat");
+const postRoutes = require("./src/routes/post");
+const tourRoutes = require("./src/routes/tour.js");
+const memberAuthRoutes = require("./src/routes/memberAuth");
+const memberRoutes = require("./src/routes/member");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // app.use('/api/名稱', 路徑)
+app.use("/api/chat", chatRoutes);
+app.use("/api/post", postRoutes);
+app.use("/api/tour", tourRoutes);
+app.use("/api/member-auth", memberAuthRoutes);
+app.use("/api/member", memberRoutes);
 
-const server = app.listen(process.env.PORT, '0.0.0.0', () =>
-    console.log(`Server running on port http://localhost:${process.env.PORT}`),
+// for test
+// const memberRoutes = require('./src/routes/test');
+// app.use('api/', memberRoutes);
+
+// show member info: localhost:3000/api/members
+// const memberRoutes = require("./src/routes/test");
+// app.use("/api", memberRoutes);
+
+
+// const server = app.listen(process.env.PORT, '0.0.0.0', () =>
+//     console.log(`Server running on port http://localhost:${process.env.PORT}`),
+// );
+
+
+// show member info: localhost:3000/api/members
+const memberRoutes = require('./src/routes/test');
+app.use('/api', memberRoutes);
+
+const server = app.listen(process.env.PORT || 3000, () =>
+    console.log(`Server running on port http://localhost:${server.address().port}`),
 );
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URL)
+mongoose.connect(process.env.MONGODB_URL, {dbName: 'isChange'})
     .then(() => {
         console.log('Connected to MongoDB');
     })

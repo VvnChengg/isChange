@@ -31,6 +31,9 @@ export const PostTitle = styled.div `
 
     display: flex;
     align-items: center;
+
+    white-space: nowrap;
+    overflow: hidden;
 `
 
 export const PostPreview = styled.div `
@@ -42,6 +45,9 @@ export const PostPreview = styled.div `
     align-items: center;
 
     color: #6B6B6B;
+
+    white-space: nowrap;
+    overflow: hidden;
 `
 
 export const PostImage = styled.img `
@@ -53,4 +59,6 @@ export const PostImage = styled.img `
 
     background: #D9D9D9;
     border-radius: 20px;
+
+    object-fit: cover;
 `
