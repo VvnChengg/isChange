@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const hostname = 'http://localhost:3000/api';
+const hostname = process.env.REACT_APP_API_HOSTNAME;
 
 export const api = {
     getAllPosts: () => {
