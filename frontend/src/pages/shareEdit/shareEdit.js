@@ -1,58 +1,101 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./shareEdit-style.css";
-import { PostContainer } from "./post-style";
+// import { AiOutlineMail } from "https://esm.sh/react-icons/ai";
+import { useNavigate } from "react-router-dom";
+// import TextField from '@material-ui/core/TextField';
+import { api } from "../../api";
 
-import Post from "../../components/Post";
 
-export default function MyComponent() {
+export default function Share() {
+  let navigate = useNavigate(); 
+  const routeChange = () =>{ 
+    let path = '/'; 
+    navigate(path);
+  };
+
+  const routeChangeToDetail = () =>{ 
+    let path = '/post/detail'; 
+    navigate(path);
+  };
+
+  // const [inputTitle, setInputTitle] = useState('')
+  // const [inputContent, setInputContent] = useState('')
+
+  const [post, setPost] = useState({
+    title: '',
+    content: '',
+    // photo: '',
+    // status: ['draft'],
+  })
+
+  function setTitle(input) {
+    setPost({
+        ...post,
+        title: input
+    });
+  }
+  
+  function setContent(input) {
+      setPost({
+          ...post,
+          content: input
+      });
+  }
+
+  // function setPhoto(input) {
+  //   setPost({
+  //       ...post,
+  //       photo: input
+  //   });
+  // }
+
+  // function setStatus(input) {
+  //   setPost({
+  //       ...post,
+  //       status: input
+  //   });
+  // }
+
+  function onSubmit() {
+    console.log(post);
+
+    api.createPost(post)
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
+  }
+
   return (
     <div className="container">
-      <div className="edit-content">
-        <div className="left-section">
-          <div className="flex flex-col grow post-content">
-            <div className="blue-rectangle-group">
-              <button className="blue-rectangle">已發布貼文</button>
-              <button className="gray-rectangle">尋找貼文</button>
-            </div>
-          </div>
-          {/* <PostContainer> */}
-            <Post/>
-            <Post/>
-          {/* </PostContainer> */}
-        </div>
-        <div className="right-section">
-          <div className="flex flex-col py-5 pr-5 pl-2.5 mx-auto mt-36 w-full rounded-3xl bg-sky-600 bg-opacity-80 max-md:mt-10">
-            <div className="button-container">
-              <button className="blue-button">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/b0cb189945a8eb1b5251b980af85a97b83f902f561131a62ef6b241205de074b?"
-                  className="object-cover"
-                  alt="Create Post"
-                />
-                <span className="text-xl font-bold leading-7">建立貼文</span>
-              </button>
-              <button className="blue-button">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/c9421264e6e8cfbeade02b8b178018220efeb1e96004486e15ba139fd54bcf95?"
-                  className="object-cover"
-                  alt="Edit Post"
-                />
-                <span className="text-xl font-bold leading-7">編輯貼文</span>
-              </button>
-              <button className="blue-button">
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/d6f5c289d2c51390652a5d5eb3bf61a141ba6da687f96b5444e6f26645b8844f?"
-                  className="object-cover"
-                  alt="Delete Post"
-                />
-                <span className="text-xl font-bold leading-7">刪除貼文</span>
-              </button>
-            </div>
+      <div className="content">
+        <div className="title-box">
+          <div className="text-xl text-neutral-500">標題</div>
+          <div>
+            <input className="input-box"
+              value={post.title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="標題是什麼咧～" />
           </div>
         </div>
+        <div className="text-box">
+          <div className="text-xl leading-7 text-neutral-500">
+            文字說明
+          </div>
+          <div>
+            <textarea 
+              className="input-box"
+              value={post.content}
+              onChange={(event) => setContent(event.target.value)}
+              placeholder="說些什麼吧！"
+              rows={9}
+            />
+          </div>
+          <button className="figure-button" onClick={() => routeChange()}><img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/3f570a0c69a52557b5a1cd2aabd09f0ea82824f62a802a9b9d432ad5b29bbd66?"
+            // className="self-end aspect-square fill-sky-600 mt-[469px] w-[30px] max-md:mt-10"
+          /></button>
+        </div>
+        <button className="publish-button" onClick={() => routeChangeToDetail()}>編輯完成</button>
       </div>
     </div>
   );
