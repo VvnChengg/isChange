@@ -14,10 +14,14 @@ const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
     const handleCheckboxChange = () => {
       setIsChecked(!isChecked);
     };
+
+    const token = window.localStorage.getItem('access_token');
+    const userId = window.localStorage.getItem('user_id');
+
     // 若有打勾則可按按鈕
     const handleButtonClick = async (action) => {
-      const hostname = 'http://localhost:3000/api';
-      //const hostname = process.env.REACT_APP_API_HOSTNAME;
+      //const hostname = 'http://localhost:3000/api';
+      const hostname = process.env.REACT_APP_API_HOSTNAME;
       if (isChecked) {
         if (action === 'confirm') {
           const requestBody = {
@@ -32,7 +36,9 @@ const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify(requestBody)
-            });
+            },{headers: {
+              'Authorization':  `Bearer ${token}`
+          }});
     
             if (!response.ok) {
               throw new Error('Failed to create chat');

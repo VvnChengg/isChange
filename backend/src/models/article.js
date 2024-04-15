@@ -49,6 +49,10 @@ const articleSchema = new Schema({
     comment_ids: {
         type: [Schema.Types.ObjectId],
         ref: 'Comment'
+    },
+    article_region: {
+        type: String,
+        maxlength: 30
     }
 });
 
