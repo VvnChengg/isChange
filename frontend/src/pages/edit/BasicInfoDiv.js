@@ -1,50 +1,99 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { registerApi } from '../../api/registerApi';
+import { editApi } from '../../api/editApi';
 
-export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInputFocus, handleInputBlur }) => {
+// 編輯基本資料的元件
+export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInputFocus, handleInputBlur, username, school }) => {
     const [userName, setUserName] = useState('');
-    const [shouldCheckName, setShouldCheckName] = useState(false);
     const [userNameRegistered, setUserNameRegistered] = useState(false);
     const [userSchoolName, setUserSchoolName] = useState('');
-    const [userSchoolNameError, setUserSchoolNameError] = useState(false);
+    const [debounceTimeoutId, setDebounceTimeoutId] = useState(null);
 
+    useEffect(() => {
+        setUserName(username);
+    }, [username]);
+
+    useEffect(() => {
+        setUserSchoolName(school);
+    }, [school]);
 
     // 檢查使用者名稱是否已被註冊
     const handleUserNameChange = (e) => {
         setUserName(e.target.value);
-        CheckUserName();
-    }
-
-    const CheckUserName = async () => {
-        let registered = await checkUserNameInDatabase(userName);
-        setUserNameRegistered(registered);
-        setShouldCheckName(true);
-    }
-
-    const checkUserNameInDatabase = () => {
-        // true => ok
-        // false => 已被註冊
-        return false; // 模拟未被注册的情况
     }
 
 
     useEffect(() => {
-        if (!userNameRegistered) {
-            console.log('名稱可用:', userName);
+        if (debounceTimeoutId) {
+            clearTimeout(debounceTimeoutId);
         }
-        setShouldCheckName(false);
-    }, [userNameRegistered, shouldCheckName]);
+    
+        if (username) {
+            const id = setTimeout(CheckUserName, 500); // Wait for 500ms before calling CheckUserName
+            setDebounceTimeoutId(id);
+        }
+    }, [userName]);
+
+
+    // 檢查使用者名稱是否已被註冊
+    const checkUserNameInDatabase = async () => {
+        // true => ok
+        // false => 已被註冊
+        try {
+            const email = localStorage.getItem('email');
+            const data = await registerApi.verifyUsername(userName, email);
+            // console.log(data);
+
+            if (data.status === 'success') {
+                setUserNameRegistered(false);
+                return false;
+            } else {
+                setUserNameRegistered(true);
+                return true;
+            }        
+        } catch(error) {
+            if (error.response) {
+                console.log(error.response.data);
+                // error.response.data 將會是你的錯誤訊息物件，例如：
+                // { status: "failed", message: "使用者名稱已有人使用，請更換其他名稱" }
+                if (error.response.data.status === 'failed') {
+                    setUserNameRegistered(true);
+                } else {
+                    setUserNameRegistered(false);
+                }
+            } else if (error.request) {
+                console.error('No response was received', error.request);
+            } else {
+                console.error('Error setting up the request', error.message);
+            }
+            console.error('Error config:', error.config);
+        };
+    }
+
+    const CheckUserName = async () => {
+        await checkUserNameInDatabase(username);
+    }
 
     const handleUserSchoolNameChange = (e) => {
         setUserSchoolName(e.target.value);
     }
 
-    const handleSubmitBasicInfo = (e) => {
+    // 儲存基本資料
+    const handleSubmitBasicInfo = async (e) => {
         e.preventDefault();
-        if (userNameRegistered) {
-            alert('此名稱已被使用');
-            return;
+        // console.log('表單已提交:', { userName, userSchoolName });
+
+        try{
+            const token = localStorage.getItem('access_token');
+            const data = await editApi.editBasicInfo(userName, userSchoolName, token);
+            if(data.status === 'success'){
+                alert('更新成功');
+                handleClose();
+            }
+        }catch(error){
+            console.error(error);
+            alert('更新失敗');
         }
-        console.log('表單已提交:', { userName, userSchoolName });
     }
 
     return (
@@ -67,7 +116,7 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                     placeholder="請輸入使用者名稱"
                                     required
                                 />
-                                {userNameRegistered && <span className="registered-text">該名稱已被使用</span>}
+                                {userNameRegistered && userName !== username && <span className="registered-text">該名稱已被使用</span>}
                             </div>
                         </div>
 
@@ -87,7 +136,7 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                 />
                             </div>
                         </div>
-                        <button type="submit" className="login-form__button">
+                        <button type="submit" className="login-form__button" disabled={userName === username && userSchoolName === school}>
                             確認
                         </button>
                     </form>

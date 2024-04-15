@@ -1,10 +1,11 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { BASE_URL } from '../../constants';
+import { editApi } from '../../api/editApi';
 
+// 編輯密碼的元件
 export const PassWordEdit = ({ showPasswordDiv,
     handleClose, isFocused, handleInputBlur, handleInputFocus }) => {
     const [OriginPassWord, setOriginPassWord] = useState(''); // 之後要補原密碼的判斷
-    const [isOriginPassWordCorrect, setIsOriginPassWordCorrect] = useState(true); // 之後要補原密碼的判斷
+    // const [isOriginPassWordCorrect, setIsOriginPassWordCorrect] = useState(true); // 之後要補原密碼的判斷
 
     //不知道有沒有要用的一塊 先放著
     // const [email, setEmail] = useState('');
@@ -122,8 +123,10 @@ export const PassWordEdit = ({ showPasswordDiv,
     }
 
     useEffect(() => {
+        CheckpassWordRule();
         CheckpassWordSame();
-    }, [passWord_confirm]);
+    }, [passWord, passWord_confirm]);
+
 
     const handlePasswordConfirmChange = (e) => {
         setPassword_confirm(e.target.value);
@@ -133,19 +136,23 @@ export const PassWordEdit = ({ showPasswordDiv,
         setOriginPassWord(e.target.value);
     }
 
-    const CheckOriginPassWord = () => {
-        return true;
-    }
-
 
     const handleSubmitPassWord = async (e) => {
         e.preventDefault();
-        if (!CheckOriginPassWord() || !isPassWordSame || !passWordRuleMatched) {
-            setIsOriginPassWordCorrect(false);
-            alert("原始密碼不正確")
-            return;
+        console.log('表單已提交:', { OriginPassWord, passWord, passWord_confirm });
+
+        try{
+            const token = localStorage.getItem('access_token');
+            const data = await editApi.editPassWord(OriginPassWord, passWord, token);
+            if(data.status === 'success'){
+                alert('更新成功');
+                handleClose();
+            }
+        }catch(error){
+            console.error(error);
+            alert('更新失敗');
         }
-        
+
     }
 
     return (
@@ -186,7 +193,7 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     placeholder="請輸入密碼"
                                     required
                                 />
-                                {!passWordRuleMatched && <span className="registered-text">密碼須符合...條件</span>}
+                                {!passWordRuleMatched && <span className="registered-text">密碼至少要8個字</span>}
                             </div>
                         </div>
                         <label htmlFor="password-confirm-input" className="login-form__label">確認新密碼</label>
@@ -206,7 +213,7 @@ export const PassWordEdit = ({ showPasswordDiv,
                                 {!isPassWordSame && <span className="registered-text">密碼不同</span>}
                             </div>
                         </div>
-                        <button type="submit" className="login-form__button">
+                        <button type="submit" className="login-form__button" disabled={!isPassWordSame || !passWordRuleMatched}>
                             確認
                         </button>
                     </form>

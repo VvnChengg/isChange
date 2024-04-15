@@ -14,21 +14,36 @@ const LoginForm = () => {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
+  // 模擬從資料庫中獲取使用者資訊的函數
+  const getUserInfoFromDatabase = async (email) => {
+    try {
+      const data = await loginApi.login_or_register(email);
+      console.log(data);
+      if (data && data.error) {
+        // Handle error in data
+        console.error('Error in data:', data.error);
+      } else {
+        setShowPasswordForm(true);
+      }
+      return data;
+    } catch (error) {
+      // Handle error
+      if (error.response && error.response.data.status === 'None') {
+        // 如果使用者資訊不存在，執行其他登入邏輯（例如發送驗證郵件等）
+        // 實現使用電子郵件登入的邏輯
+        // console.log('電子信箱建立新帳號:', email);
+        navigate('/register');
+
+      } else {
+        console.error('Error getting user info:', error);
+      }
+      
+      // navigate('/register'); //因為現在可以判斷成功登入，但找不到使用者會噴錯，有點偷吃步但之後應該要改掉
+    }
+  }
 
   const handleUseEmailAuth = async () => {
-    // 模擬從資料庫中獲取使用者資訊的邏輯
-    let userInfo = await getUserInfoFromDatabase(email); // 假設這個函數是用來從資料庫中獲取使用者資訊的
-    console.log(userInfo)
-    if (userInfo === 1) {
-      console.log('使用者資訊存在:', userInfo)
-      // 如果使用者資訊存在，則直接顯示密碼輸入表單
-      setShowPasswordForm(true);
-    } else {
-      // 如果使用者資訊不存在，執行其他登入邏輯（例如發送驗證郵件等）
-      // 實現使用電子郵件登入的邏輯
-      console.log('電子信箱建立新帳號:', email);
-      navigate('/register');
-    }
+    await getUserInfoFromDatabase(email); // 假設這個函數是用來從資料庫中獲取使用者資訊的
   };
 
   const handleUseGoogleAuth = () => {
@@ -37,7 +52,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
+    <>
       {!showPasswordForm && (
         <>
           <div className={`login-form ${showPasswordForm ? 'hidden' : ''}`}>
@@ -52,21 +67,8 @@ const LoginForm = () => {
         </>
       )}
       {showPasswordForm && <LoginFormPwd email={email} />} {/* 根據狀態來決定是否渲染密碼表單 */}
-    </div>
+    </>
   );
 };
 
-// 模擬從資料庫中獲取使用者資訊的函數
-
-
-const getUserInfoFromDatabase = async (email) => {
-  try {
-      const data = await loginApi.login_or_register(email);
-      // console.log(data);
-      return data;
-  } catch (error) {
-      // Handle error
-      console.error('Error getting user info:', error);
-  }
-}
 export default LoginForm;

@@ -1,5 +1,5 @@
 .edit-container {
-    max-width: 400px;
+    width: 40%;
     margin: 2rem auto;
     padding: 1.5rem;
     border: 1px solid #ccc;
@@ -33,16 +33,14 @@
     align-items: center;
 } */
 
-.section-1-right {
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    text-align: left;
-}
-
 .section-1-left, .section-1-right {
     width: 50%; /* or any other value that suits your needs */
     height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .action-buttons {
@@ -62,8 +60,7 @@ button {
     border-radius: 10px;
     cursor: pointer;
     font-size: 0.9rem;
-    /* white-space: nowrap; */
-
+    white-space: nowrap;
 }
 
 button:hover {
@@ -110,4 +107,13 @@ button:hover {
     font-size: 20px;
     cursor: pointer;
     color: black;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 2px solid grey;
+    overflow: hidden;
   }

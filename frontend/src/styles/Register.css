@@ -1,8 +1,7 @@
 /* styles/Register.css */
 
 .register-container {
-    /* max-width: 400px; */
-    max-width: 400px;
+    width: 40%;
     margin: 2rem auto;
     padding: 1.5rem;
     border: 1px solid #ccc;
@@ -75,6 +74,7 @@
     text-align: right;
     color: red;
     margin-left: auto;
+    white-space: nowrap;
 }
   
 

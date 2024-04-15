@@ -20,10 +20,13 @@ export const loginApi = {
                 return null;
               }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            throw err;
+        });
     },
 
-    // 登入api    
+    // 登入
     login: (email, password) => {
         return axios.post(`${hostname}/member-auth/login`, {
             email: email,
@@ -43,7 +46,10 @@ export const loginApi = {
             }
             return res.data;
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err)
+            throw err;
+        });
     },
 
 };
