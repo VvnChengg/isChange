@@ -14,7 +14,7 @@ export const api = {
         const token = window.localStorage.getItem('access_token');
 
         return (
-            axios.post(hostname + '/tour/create', { tour }, {
+            axios.post(hostname + '/tour/create', tour, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

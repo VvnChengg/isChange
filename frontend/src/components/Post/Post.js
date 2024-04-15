@@ -13,8 +13,12 @@ export default function Post({ post }) {
         <PostWrapper>
             <div style={{display: 'flex', alignItems: 'center'}}>
                 <Tag type={post.type} />
-                <PostIcon src='location' />
-                <div>法國，巴黎</div>
+                {post.location &&
+                    <>
+                        <PostIcon src='location' />
+                        <div>{post.location}</div>
+                    </>
+                }
             </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
                 <PostTitle>{post.title}</PostTitle>
