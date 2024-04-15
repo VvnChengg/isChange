@@ -30,6 +30,8 @@ export const HeaderTitle = styled.div `
     align-items: center;
 
     color: #008CD9;
+
+    cursor: pointer;
 `
 
 export const HeaderSearch = styled.input `
@@ -56,6 +58,8 @@ export const HeaderButton = styled.div `
     width: 20px;
     color: #008CD9;
     text-align: center;
+
+    cursor: pointer;
 `
 
 export const HeaderIcon = styled.div `
@@ -64,4 +68,6 @@ export const HeaderIcon = styled.div `
 
     background-image: url('/icons/${props => props.src}.png');
     background-size: cover;
+
+    cursor: pointer;
 `
