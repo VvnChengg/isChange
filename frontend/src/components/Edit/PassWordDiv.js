@@ -143,14 +143,14 @@ export const PassWordEdit = ({ showPasswordDiv,
 
         try{
             const token = localStorage.getItem('access_token');
-            const data = await editApi.editBasicInfo(OriginPassWord, passWord, token);
+            const data = await editApi.editPassWord(OriginPassWord, passWord, token);
             if(data.status === 'success'){
-                alert('更新成功');
+                alert('密碼更新成功');
                 handleClose();
             }
         }catch(error){
             console.error(error);
-            alert('更新失敗');
+            alert(`${error.response.data.message}`);
         }
 
     }

@@ -87,12 +87,12 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
             const token = localStorage.getItem('access_token');
             const data = await editApi.editBasicInfo(userName, userSchoolName, token);
             if(data.status === 'success'){
-                alert('更新成功');
+                alert(`${data.message}`);
                 handleClose();
             }
         }catch(error){
             console.error(error);
-            alert('更新失敗');
+            alert(`更新失敗`);
         }
     }
 

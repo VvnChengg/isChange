@@ -6,6 +6,7 @@ export const editApi = {
 
     editPassWord: (origin_password, new_password, token) => {
         // console.log(token)
+        console.log("origin_password", origin_password);
         return axios.patch(`${hostname}/member/edit-page`, {
             origin_password: origin_password,
             new_password: new_password,
