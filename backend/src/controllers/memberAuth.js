@@ -16,14 +16,10 @@ const LOR = async (req, res) => {
   }
   try {
     const existingUser = await MemberAuth.findOne({ email });
-    console.log(existingUser.password);
     if (existingUser && existingUser.password) {
-      // If user exists
       return res.status(200).json({ status: "success" });
-    } else {
-      // If user doesn't exist
-      return res.status(404).json({ status: "None" });
     }
+    return res.status(404).json({ status: "None" });
   } catch (error) {
     return res.status(500).json({ error: "Internal server error" });
   }
@@ -63,7 +59,7 @@ const login = async (req, res) => {
         message: "請進行驗證碼驗證",
       });
     }
-    console.log(user);
+    // console.log(user);
     // Check if password correct
     const passwordMatch = await bcrypt.compare(data.password, user.password);
     if (passwordMatch) {
@@ -76,7 +72,7 @@ const login = async (req, res) => {
         status: "success",
         message: "登入成功",
         data: {
-          user_id: user._id,
+          user_id: user.user_id,
           email: user.email,
           access_token: token,
         },
@@ -117,9 +113,7 @@ const registerMember = async (req, res) => {
 
   // create member and memberAuth in database
   if (!user) {
-    const member = await Member.create({ username: email.split("@")[0] });
     await MemberAuth.create({
-      user_id: member._id,
       email: email,
       verification_code: code,
       source: "credentials",
@@ -197,19 +191,11 @@ const verifyRegisterMember = async (req, res) => {
 const checkUsername = async (req, res) => {
   const { username, email } = req.query;
   const m0 = await Member.findOne({ username: username });
-  const m1 = await MemberAuth.findOne({ email: email });
   if (!m0) {
     return res.status(200).json({
       status: "success",
       message: "可使用此名稱",
     });
-  } else {
-    if (m0._id.toString() == m1.user_id.toString()) {
-      return res.status(200).json({
-        status: "success",
-        message: "可使用此名稱",
-      });
-    }
   }
   return res.status(409).json({
     status: "failed",
@@ -225,7 +211,6 @@ const verifiedMember = async (req, res) => {
     //設定密碼
     const hashedPassword = await hashPassword(password);
     const user = await MemberAuth.findOne({ email });
-    console.log("user:", user);
     if (user.password) {
       return res.status(400).json({
         status: "failed",
@@ -234,19 +219,17 @@ const verifiedMember = async (req, res) => {
       });
     } else if (user) {
       //未設定過密碼，設定member auth和member
+      const m = await Member.create({
+        username: username,
+        exchange_school_name: exchange_school_name,
+      });
+
       const ma = await MemberAuth.findOneAndUpdate(
         { email },
-        { password: hashedPassword },
+        { user_id: m._id, password: hashedPassword },
         { new: true }
       );
-      const m = await Member.findOneAndUpdate(
-        { _id: user.user_id },
-        {
-          username: username,
-          exchange_school_name: exchange_school_name,
-        },
-        { new: true }
-      );
+
       return res.status(200).json({
         status: "success",
         message: "註冊成功！",

@@ -17,7 +17,7 @@ const showMember = async (req, res) => {
     });
 
     if (!user) {
-      console.log(`Member not found with ID: ${userId}`);
+      // console.log(`Member not found with ID: ${userId}`);
       return res.status(404).json({ error: "會員不存在" });
     }
 
@@ -68,7 +68,6 @@ const modifyMember = async (req, res) => {
         origin_password,
         user.password
       );
-      console.log(origin_password);
       //修改密碼
       if (passwordMatch) {
         const h_Password = await hashPassword(new_password);
