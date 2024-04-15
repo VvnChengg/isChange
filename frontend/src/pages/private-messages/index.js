@@ -1,1 +1,1 @@
-export { default } from './private-messsge-list';
+export { default } from './private-message-list';
