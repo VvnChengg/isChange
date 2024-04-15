@@ -25,6 +25,7 @@ export const editApi = {
     },
 
     editBasicInfo: (username, school, token) => {
+        console.log(token);
         return axios.patch(`${hostname}/member/edit-page`, {
             username: username,
             exchange_school_name: school,

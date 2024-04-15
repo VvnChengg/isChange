@@ -41,7 +41,7 @@ export const registerApi = {
         return axios.get(`${hostname}/member-auth/register/checkuser`, {
             params: {
                 username: username,
-                email: email
+                // email: email
             }
         })
             .then(res => {

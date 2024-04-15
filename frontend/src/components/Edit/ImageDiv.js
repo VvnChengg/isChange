@@ -65,6 +65,7 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
     
     useEffect(() => {
         setImage(photo);
+        console.log(photo);
     }, [photo]);
 
 
@@ -89,8 +90,9 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
 
                     <button onClick={handleSave}>裁減</button>
                 </div>}
+                
                 <div className="profile-picture">
-                    {image && <img src={image} className="profile-image" alt="Preview"/>}
+                    <img src={image || "/icons/profile.png"} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src="/icons/profile.png"; }} />
                 </div>
 
                 <input
