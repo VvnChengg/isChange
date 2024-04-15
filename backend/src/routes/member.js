@@ -10,7 +10,7 @@ const upload = multer({ storage: storage });
 router.get("/edit-page", validateToken, memberController.showMember);
 router.patch(
   "/edit-page",
-  upload.single("photo"),
+  upload.single("image"),
   validateToken,
   memberController.modifyMember
 );
