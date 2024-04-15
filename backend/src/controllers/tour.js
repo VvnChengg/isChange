@@ -3,7 +3,7 @@ const TourModel = require('../models/event.js');
 class tourApi {
     async createTour(req, res) {
         try {
-            const { event_title, destination, event_intro, start_time, end_time, people_lb, people_ub,  user_id, currency, budget } = req.body;
+            const { userId, event_title, destination, event_intro, start_time, end_time, people_lb, people_ub, currency, budget } = req.body;
     
             const payload = {
                 event_title,
@@ -13,7 +13,7 @@ class tourApi {
                 end_time,
                 people_lb,
                 people_ub,
-                creator_id: user_id,
+                creator_id: userId,
                 status: 'ongoing',
                 like_by_user_ids: [],
                 save_by_user_ids: [],
@@ -70,12 +70,12 @@ class tourApi {
     async checkEditingTour(req, res) {
         try {
             const { eid } = req.params;
-            const { user_id } = req.body;
+            const { userId } = req.body;
     
             const tour = await TourModel.findById(eid);
             console.log("tour creator_id", tour.creator_id);
     
-            if (user_id != tour.creator_id) {
+            if (userId != tour.creator_id) {
                 return res.status(401).json({
                     success: false,
                     message: '沒有權限編輯該揪團',
@@ -107,18 +107,12 @@ class tourApi {
     async editTour(req, res) {
         try {
             const { eid } = req.params;
+            const { userId } = req.body;
             const payload = req.body;
-    
-            if (!payload.user_id) {
-                return res.status(401).json({
-                    success: false,
-                    message: '請傳遞user_id',
-                });
-            }
     
             const tour = await TourModel.findById(eid);
     
-            if (payload.user_id != tour.creator_id) {
+            if (userId != tour.creator_id) {
                 return res.status(401).json({
                     success: false,
                     message: '沒有權限編輯該揪團',
@@ -143,18 +137,18 @@ class tourApi {
 
     async deleteTour(req, res) {
         try {
-            const { user_id, event_id } = req.body;
+            const { userId, event_id } = req.body;
 
-            if (!user_id || !event_id) {
+            if (!event_id) {
                 return res.status(400).json({
                     success: false,
-                    message: '請傳遞user_id和event_id',
+                    message: '請傳遞event_id',
                 });
             }
 
             // 檢查編輯者是否為該揪團的創建者
             const tour = await TourModel.findById(event_id);
-            if (user_id != tour.creator_id) {
+            if (userId != tour.creator_id) {
                 return res.status(401).json({
                     success: false,
                     message: '沒有權限編輯該揪團',
@@ -177,7 +171,7 @@ class tourApi {
 
     async getEstablishedTours(req, res) {
         try {
-            const { user_id } = req.body;
+            const { userId } = req.body;
 
             const tours = await TourModel.find({ status: 'ongoing' });
             return res.status(200).json({
@@ -195,7 +189,7 @@ class tourApi {
 
     async getFinishedTours(req, res) {
         try {
-            const { user_id } = req.body;
+            const { userId } = req.body;
 
             const tours = await TourModel.find({ status: 'complete' });
             return res.status(200).json({
