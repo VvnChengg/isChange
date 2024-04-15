@@ -12,6 +12,6 @@ router.post(
 );
 router.get("/register/checkuser", memberAuthController.checkUsername);
 router.patch("/register", memberAuthController.verifiedMember);
-router.delete("/delete", memberAuthController.deleteTestMember);
+router.delete("/delete", memberAuthController.deleteTestMember); //後端測試用
 
 module.exports = router;
