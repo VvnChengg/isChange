@@ -19,9 +19,10 @@ const getAllPosts = async (req, res, next) => {
             const item = {
                 title: article.article_title,
                 content: article.content,
-                type: "article",
+                type: "post",
                 coverPhoto: article.article_pic,
-                datetime: article.post_date
+                datetime: article.post_date,
+                region: article.article_region
             };
             result.push(item);
             // console.log("creator id: ", article.creator_id);
@@ -32,8 +33,17 @@ const getAllPosts = async (req, res, next) => {
             const item = {
                 title: event.event_title,
                 content: event.event_intro,
-                type: "event",
-                datetime: event.start_time
+                type: "tour",
+                datetime: event.start_time,
+                region: event.event_region,
+                currency: event.currency,
+                budget: event.budget,
+                destination: event.destination,
+                end_time: event.end_time,
+                people_lb: event.people_lb,
+                people_ub: event.people_ub,
+                creator_id: event.creator_id,
+                status: event.status
             };
             result.push(item);
         });
@@ -43,9 +53,16 @@ const getAllPosts = async (req, res, next) => {
             const item = {
                 title: product.product_title,
                 content: product.description,
-                type: "product",
+                type: "trans",
                 coverPhoto: product.product_pic,
-                datetime: product.post_time
+                datetime: product.post_time,
+                region: product.transaction_region,
+                currency: product.currency,
+                price: product.currency,
+                product_type: product.product_type,
+                period: product.period,
+                status: product.status,
+                transaction_way: product.transaction_way
             };
             result.push(item);
         });
