@@ -42,7 +42,6 @@ export const HeaderSearch = styled.input `
 `
 
 export const HeaderButtonContainer = styled.div `
-    width: 50px;
     height: 20px;
     
     position: absolute;
@@ -55,7 +54,6 @@ export const HeaderButtonContainer = styled.div `
 `
 
 export const HeaderButton = styled.div `
-    width: 20px;
     color: #008CD9;
     text-align: center;
 

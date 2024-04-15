@@ -19,12 +19,20 @@ export default function Header() {
         else if (language === 'EN') setLanguage('中');
     }
 
+    function clickUser() {
+        const token = window.localStorage.getItem('access_token');
+
+        if (token) navigate('/edit');
+        else navigate('/login');
+    }
+
     return (
         <HeaderWrapper>
             <HeaderTitle onClick={() => navigate('/')}>isChange!</HeaderTitle>
             <HeaderSearch />
             <HeaderButtonContainer>
-                <HeaderIcon src={'user'} onClick={() => navigate('/edit')} />
+                <HeaderIcon src={'chat'} onClick={() => navigate('/chat-list')} />
+                <HeaderIcon src={'user'} onClick={() => clickUser()} />
                 <HeaderButton onClick={() => changeLanguage()}>{language}</HeaderButton>
             </HeaderButtonContainer>
         </HeaderWrapper>
