@@ -5,15 +5,18 @@ import  './ChatRoom.css';
 
 
 export default function ChatRoom({chatid}) {
-  const hostname = 'http://localhost:3000/api';
-  //const hostname = process.env.REACT_APP_API_HOSTNAME;
+  //const hostname = 'http://localhost:3000/api';
+  const hostname = process.env.REACT_APP_API_HOSTNAME;
   const [chatData, setChatData] = useState(null);
   // const userId = "660bbad71dd21a48510f209c";
-  // const userId = window.localStorage.getItem('user_id');
-  
+  const userId = window.localStorage.getItem('user_id');
+  // console.log(userId)
+  const token = window.localStorage.getItem('access_token');
   useEffect(() => {
     // 發送 API 請求
-    axios.get(`${hostname}/chat/detail/${chatid}`)
+    axios.get(`${hostname}/chat/detail/${chatid}`, {headers: {
+      'Authorization':  `Bearer ${token}`
+  }})
       .then(response => {
         // 設置獲取到的數據
         console.log(response.data);

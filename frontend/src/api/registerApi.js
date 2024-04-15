@@ -20,8 +20,7 @@ export const registerApi = {
     },
 
     // 確認驗證碼與記錄相符
-    verifyEmailPost: (email, verification_code) => {
-        console.log(email, verification_code);
+    verifyEmailGet: (email, verification_code) => {
         return axios.post(`${hostname}/member-auth/register/verification`, {
             email: email,
             verification_code: verification_code

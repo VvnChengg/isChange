@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../api";
 
 import { PostContainer } from "./home-style";
+
 import Post from "../../components/Post";
 
 export default function Home() {
