@@ -54,7 +54,7 @@ color: #888;
 }
 
 /* 別人發送的訊息靠左 */
-.private-message-message-box:not(.own-message) {
+.private-message-message-box:not(.private-message-own-message) {
   background-color: #F1F7FF;
   color: black;
   text-align: left;
