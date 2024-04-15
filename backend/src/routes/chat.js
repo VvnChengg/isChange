@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const chatController = require("../controllers/chat.js");
-const validateToken = require("../../src/middlewares/validateToken");
+const validateToken = require("../middlewares/validateToken");
 
 router.get("/check", validateToken, chatController.checkChat);
 router.post("/create", validateToken, chatController.createChat);

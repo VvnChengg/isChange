@@ -1,0 +1,18 @@
+const member = require("../models/member");
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/avatar/");
+  },
+  filename: (req, file, cb) => {
+    const userId = req.body.userId;
+    const filename = `${userId}.png`;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+module.exports = upload.single("photo");

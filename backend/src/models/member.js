@@ -24,6 +24,7 @@ const memberSchema = new Schema({
   //   },
   // },
   photo: {
+    filename: String,
     data: Buffer,
     contentType: String,
   },

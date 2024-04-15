@@ -23,6 +23,7 @@ async function validateToken(req, res, next) {
       return res.status(404).json({ error: "User data not found" });
     }
     req.body.userId = member._id;
+    console.log("middleware", req.body);
     next();
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });

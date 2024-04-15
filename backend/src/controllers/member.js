@@ -1,8 +1,6 @@
 const Member = require("../models/member");
 const MemberAuth = require("../models/member-auth");
 const bcrypt = require("bcrypt");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
 
 //查看自己的個人資料（Member)
 const showMember = async (req, res) => {
@@ -21,18 +19,17 @@ const showMember = async (req, res) => {
       return res.status(404).json({ error: "會員不存在" });
     }
 
-    // Convert photo data to base64
-    let photoBase64 = null;
-    if (user.photo && user.photo.contentType) {
-      photoBase64 = `data:${
-        user.photo.contentType
-      };base64,${user.photo.data.toString("base64")}`;
+    // Construct photo URL using filename
+    let photoURL = null;
+    if (user.photo && user.photo.filename) {
+      photoURL = `/uploads/${user.photo.filename}`;
     }
+
     const resData = {
       _id: user._id,
       username: user.username,
       intro: user.intro,
-      photo: photoBase64,
+      photo: photoURL,
       exchange_school_name: user.exchange_school_name,
     };
 
@@ -40,6 +37,35 @@ const showMember = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const changeAvatar = async (req, res) => {
+  const { userId } = req.userId;
+  console.log(userId);
+  const user = await Member.findOne({ _id: userId });
+  try {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No photo uploaded" });
+    }
+
+    user.photo = {
+      filename: userId,
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    };
+
+    await user.save();
+
+    console.log("Photo uploaded for user:", user);
+    return res.status(200).json({ message: "Photo uploaded successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to process photo upload" });
   }
 };
 
@@ -105,28 +131,6 @@ const modifyMember = async (req, res) => {
       updateFields.exchange_school_name = exchange_school_name;
     } else if (intro) {
       updateFields.intro = intro;
-    }
-
-    // 看有沒有上傳圖片
-    let photoData;
-    if (req.file) {
-      photoData = {
-        photo: req.file.buffer,
-        contentType: req.file.mimetype,
-      };
-    }
-    if (req.file) {
-      try {
-        updateFields.photo = {
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-        };
-      } catch (error) {
-        console.error(error);
-        return res
-          .status(500)
-          .json({ error: "Failed to process photo upload" });
-      }
     }
 
     // 更新欄位
@@ -231,6 +235,7 @@ const deleteTestMember = async (req, res) => {
 
 module.exports = {
   showMember,
+  changeAvatar,
   modifyMember,
   showMemberDetail,
   deleteTestMember,
