@@ -47,12 +47,12 @@ export default function MyComponent() {
           </div>
             <button className="edit-button" onClick={() => routeChangeToEdit()}><img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/b51470401f02606b092e147d5fe402187132d2f05102357e73d8c55c5ad55ad2?"
+              src="/icons/edit.png"
             /></button>
             <Post/>
             <button className="edit-button" onClick={() => routeChangeToEdit()}><img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/b51470401f02606b092e147d5fe402187132d2f05102357e73d8c55c5ad55ad2?"
+              src="/icons/edit.png"
             /></button>
             <Post/>
         </div>
