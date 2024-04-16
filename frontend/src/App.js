@@ -16,6 +16,7 @@ import View from './pages/view';
 // chat
 import PrivateMessageList from './pages/private-messages';
 import Chatroom from './pages/chatroom/chat-room';
+import StartPrivate from './components/StartPrivate/StartPrivate';
 
 // share post
 import ShareCreate from './pages/shareCreate';
@@ -42,6 +43,7 @@ function App() {
               <Route path='member' element={<View />} />   
               <Route path='chat-list' element={<PrivateMessageList/>}/>
               <Route path='chatroom/:chatid' element={<Chatroom/>} />
+              <Route path='testing' element={<StartPrivate/>} />
               <Route path='post'>
                 <Route path='detail' element={<ShareDetail />} />
                 <Route path='create' element={<ShareCreate />} />

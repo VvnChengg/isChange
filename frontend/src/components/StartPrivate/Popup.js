@@ -26,19 +26,18 @@ const Popup = ({ isOpen, onClose, receiver, receiver_name  }) => {
         if (action === 'confirm') {
           const requestBody = {
             user_id: window.localStorage.getItem('user_id'),
-            receiver_id: receiver
+            //receiver_id: receiver
           };
           try {
             console.log(requestBody)
             const response = await fetch(`${hostname}/chat/create`, {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
               },
               body: JSON.stringify(requestBody)
-            },{headers: {
-              'Authorization':  `Bearer ${token}`
-          }});
+            });
     
             if (!response.ok) {
               throw new Error('Failed to create chat');
