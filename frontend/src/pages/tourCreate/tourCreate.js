@@ -10,6 +10,7 @@ import {
 import {
     FormInput,
     FormRange,
+    FormBudget,
     FormDate
 } from "../../components/FormInput";
 import Button from "../../components/Button";
@@ -20,8 +21,7 @@ export default function TourCreate() {
         destination: '',
         people_lb: '',
         people_ub: '',
-        budget_lb: '',
-        budget_ub: '',
+        budget: '',
         currency: '',
         start_time: '',
         end_time: '',
@@ -50,11 +50,10 @@ export default function TourCreate() {
         });
     }
 
-    function setBudget([input1, input2]) {
+    function setBudget(input) {
         setTour({
             ...tour,
-            budget_lb: input1,
-            budget_ub: input2,
+            budget: input,
         });
     }
 
@@ -87,8 +86,14 @@ export default function TourCreate() {
         console.log(tour);
 
         api.createTour(tour)
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+        .then(res => {
+            console.log(res);
+            alert(res.message);
+        })
+        .catch(err => {
+            console.log(err);
+            alert(err.message);
+        });
     }
 
     return (
@@ -114,13 +119,13 @@ export default function TourCreate() {
                 range={[tour.people_lb, tour.people_ub]}
                 setRange={setPeople}
             />
-            <FormRange
+            <FormBudget
                 title='預算範圍'
-                placeholder={['最低', '最高']}
+                placeholder={'最高'}
                 currency={tour.currency}
                 setCurrency={setCurrency}
-                range={[tour.budget_lb, tour.budget_ub]}
-                setRange={setBudget}
+                budget={tour.budget}
+                setBudget={setBudget}
             />
             <FormDate
                 title='日期'
