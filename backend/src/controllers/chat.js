@@ -39,9 +39,12 @@ const checkChat = async (req, res) => {
 // POST 建立聊天
 const createChat = async (req, res) => {
     try {
-        const { userId, receiver_id } = req.body;
-        // const receiver_id = req.body.receiver_id;
+        // const { userId, receiver_id } = req.body;
         // const { receiver_id } = req.query; // test receiver_id 放在 query 裡
+
+        // for 0416 demo
+        const { userId } = req.body;
+        const receiver_id = "660bbad71dd21a48510f209c";
 
         console.log(userId, receiver_id)
 

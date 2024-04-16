@@ -29,7 +29,7 @@ export function FormInput({type, title, placeholder, text, setText}) {
     )
 }
 
-export function FormRange({title, placeholder, unit, currency, setCurrency, range, setRange}) {
+export function FormRange({title, placeholder, unit, range, setRange}) {
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
@@ -55,14 +55,30 @@ export function FormRange({title, placeholder, unit, currency, setCurrency, rang
                         placeholder={placeholder[1]}
                     />
                 </div>
-                {unit ? <div>{unit}</div> :
+                <div>{unit}</div>
+            </div>
+        </FormTextBox>
+    )
+}
+
+export function FormBudget({title, placeholder, currency, setCurrency, budget, setBudget}) {
+    return (
+        <FormTextBox>
+            <FormTextTitle>{title}</FormTextTitle>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ width: '90%', display: 'flex', justifyContent: 'space-between' }}>
                     <FormTextInput
-                        value={currency}
-                        onChange={e => setCurrency(e.target.value)}
-                        placeholder='單位'
-                        style={{ width: '50px', textAlign: 'right' }}
+                        value={budget}
+                        onChange={e => setBudget(e.target.value)}
+                        placeholder={placeholder}
                     />
-                }
+                </div>
+                <FormTextInput
+                    value={currency}
+                    onChange={e => setCurrency(e.target.value)}
+                    placeholder='單位'
+                    style={{ width: '50px', textAlign: 'right' }}
+                />
             </div>
         </FormTextBox>
     )
