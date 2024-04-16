@@ -7,7 +7,7 @@ const checkChat = async (req, res) => {
     try {
         const { receiver_id } = req.params;
         const { userId } = req.body; // 使用者的 member._id, 如果是 object 就轉成 string
-        
+
         console.log(userId, receiver_id)
 
         const chat = await Chat.findOne({
@@ -112,9 +112,17 @@ const getChatDetail = async (req, res) => {
         const member = await Member.findById(chat_to_id);
         const messages = await Message.find({ chat_id: cid });
         // console.log(messages);
+        
+        // Convert photo data to base64
+        let photoBase64 = null;
+        if (member.photo && member.photo.contentType) {
+            photoBase64 = `data:${
+                member.photo.contentType
+            };base64,${member.photo.data.toString("base64")}`;
+        }
 
         res.status(200).json({
-            chat_to_photo: member.photo,
+            chat_to_photo: photoBase64,
             chat_to_username: member.username,
             messages
         });
@@ -158,9 +166,17 @@ const getChatList = async (req, res) => {
             // 找出聊天對象，回傳照片和使用者名稱
             const member = await Member.findById(chat_to_id);
 
+            // Convert photo data to base64
+            let photoBase64 = null;
+            if (member.photo && member.photo.contentType) {
+                photoBase64 = `data:${
+                    member.photo.contentType
+                };base64,${member.photo.data.toString("base64")}`;
+            }
+
             // 將資料添加到 chatData 中
             chatData.push({
-                chat_to_photo: member.photo,
+                chat_to_photo: photoBase64,
                 chat_to_username: member.username,
                 chat_id: chat._id,
                 first_person: chat.first_person,
@@ -183,30 +199,46 @@ const getChatList = async (req, res) => {
 const sendMessage = async (req, res) => {
     try {
         const { cid } = req.params;
-        const msg = req.body;
+        const {
+            userId,
+            content,
+        } = req.body;
 
-        // 找出聊天，新增訊息
+        console.log(typeof (content));
+
+        let msg_type = "text";
+        if (typeof (content) != "text") {
+            msg_type = "pic";
+        }
+
+        // 找出聊天，先確認傳送者是否屬於這則聊天
         const chat = await Chat.findById(cid);
-
-        if (msg.sender_id != chat.first_person && msg.sender_id != chat.second_person) {
+        if (userId != chat.first_person && userId != chat.second_person) {
             return res.status(401).json({
-                success: false,
                 message: 'User is not in this chat.',
             });
         }
 
-        const updateChat = {
-            last_message: req.body.content,
+        // 建立新訊息
+        const newMessage = await Message.create({
+            type: msg_type,
+            content: content,
+            sender_id: userId,
+            chat_id: cid,
+            timestamp: Date.now(),
+        });
 
+        // 更新聊天：最新訊息的內容、時間、傳送者
+        const updateChat = {
+            last_message: content,
+            last_sender: userId,
+            last_update: Date.now(),
         }
 
         await Chat.findByIdAndUpdate(cid, updateChat);
 
-        // 抓出所有訊息
-        const messages = await Message.find({
-            chat_id: cid
-        });
-
+        // 重新抓出所有訊息
+        const messages = await Message.find({ chat_id: cid });
         console.log(messages);
 
         res.status(200).json({ messages });
