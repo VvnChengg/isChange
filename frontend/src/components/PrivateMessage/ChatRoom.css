@@ -62,4 +62,21 @@ color: #888;
   float: left;
 }
 
+.private-message-chat-header{
+  border-bottom: 2px solid #008CD9;
+  display: flex; 
+  align-items: baseline;
+}
 
+.private-message-photo {
+  width: 50px; 
+  height: 50px; 
+}
+
+
+.private-message-name {
+  text-align: left;
+  font-size: 24px;
+  margin-left: 10px;
+  color: #008CD9;
+}

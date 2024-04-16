@@ -27,7 +27,8 @@ function ChatRoomList({ rooms, onSelectRoom }) {
                 <tbody className='private-message-a-chat' onClick={() => handleRoomClick(room.chat_id)}>
                 <tr>
                   <td rowSpan={2}>
-                    <img src={room.chat_to_photo} alt="Avatar" style={{ width: '100px' }} />
+                    {/* <img src={room.chat_to_photo} alt="Avatar" style={{ width: '50px' }} /> */}
+                    <img src={room.chat_to_photo|| "/icons/profile.png"} alt="Avatar" onError={(e) => { e.target.onerror = null; e.target.src="/icons/profile.png"; }}style={{ width: '50px' }} />
                   </td>
                   <td colSpan={1} className="private-message-chat-name" style={{textAlign:'left'}}>{room.chat_to_username}</td>
                   <td colSpan={2} className="private-message-chat-time">{room.last_update}</td>
