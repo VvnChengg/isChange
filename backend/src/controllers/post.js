@@ -124,7 +124,7 @@ const getUserPosts = async (req, res, next) => {
 };
 
 const createPost = async (req, res, next) => {
-    const postData = req.body;
+    const postData = req.body.post;
     const uId = req.body.userId;
     if (!postData) {
         return res.status(404).json({ message: "未傳入文章創建資訊" });
