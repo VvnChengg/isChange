@@ -1,0 +1,114 @@
+/* share_edit-style.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  width: 70%;
+}
+
+/* .menu {
+  display: flex;
+  gap: 5px;
+}
+
+.menu-item {
+  flex: 1;
+} */
+
+/* .menu-item-text {
+  font-size: xl;
+  line-height: 7;
+  text-align: center;
+  color: #2cb3e0;
+}
+
+.menu-item-bold {
+  font-weight: bold;
+} */
+
+.edit-content {
+  display: flex;
+  gap: 5px;
+}
+
+.left-section {
+  width: 85%;
+}
+
+.right-section {
+  width: 15%;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #008cd9;
+  border-radius: 15px;
+  width: 70%;
+  padding: 3px 7px;
+}
+
+.blue-button {
+  padding: 0px 0px;
+  background-color: #008cd9;
+  color: #fff;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  margin: 5px;
+  /* border-bottom: 2px solid #fff; */
+}
+
+.blue-rectangle {
+  background-color: #008cd9;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 0px;
+  border: 0;
+  cursor: pointer;
+  width: 100px;
+}
+
+.gray-rectangle {
+  background-color: #6b6b6b;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 0px;
+  border: 0;
+  cursor: pointer;
+  width: 100px;
+}
+
+.blue-rectangle-group {
+  display: flex;
+  gap: 0px;
+}
+
+/* .blue-rectangle-group .blue-rectangle {
+  flex: 1;
+} */
+
+.post-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 2px 3.5px;
+  width: 50%;
+  font-size: xl;
+  line-height: 2;
+  color: #000;
+  white-space: nowrap;
+  background-color: #fff;
+  max-width: 100%;
+}
+
+.edit-button {
+  justify-content: center;
+  align-items: center;
+  color: #008cdf;
+  border: 0;
+  background-color: #fff;
+  cursor: pointer;
+  float: right;
+}
