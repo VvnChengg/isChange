@@ -35,8 +35,10 @@ export default function ChatRoom({chatid}) {
         <div className="private-message-chat-room-container" >
           {/* 渲染聊天對象的頭像和用戶名 */}
           <div className="private-message-chat-header">
-            <img src={chatData.chat_to_photo} alt="chat-to-avatar" />
-            <p>{chatData.chat_to_username}</p>
+            {/* <img className='private-message-photo' src={image || "/icons/profile.png"} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src="/icons/profile.png"; }} /> */}
+            {/* <img className='private-message-photo' src={chatData.chat_to_photo} alt="Avatar"/> */}
+            <img className='private-message-photo' src={chatData.chat_to_photo|| "/icons/profile.png"} alt="Avatar" onError={(e) => { e.target.onerror = null; e.target.src="/icons/profile.png"; }}/> 
+            <p className='private-message-name'>{chatData.chat_to_username}</p>
           </div>
 
           {/* 渲染訊息 */}
