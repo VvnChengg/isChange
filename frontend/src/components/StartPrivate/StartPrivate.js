@@ -28,20 +28,20 @@ const StartPrivate = () => {
     // console.log(userId)
     const token = window.localStorage.getItem('access_token');
     // 發送 API 請求
-    axios.get(`${hostname}/chat/check`, { params: { receiver_id: receiver_id } })
-      .then(response => {
-        // 設置獲取到的數據
-        //console.log(response.data);
-        setchatId(response.data.chat_id);
-        
-      })
+    axios.get(`${hostname}/chat/check/660bbad71dd21a48510f209c` ,{headers: {
+      'Authorization':  `Bearer ${token}`
+  }})
+    .then(response => {
+      // 數據取得
+      setchatId(response.data.chat_id);
+    })     
       .catch(error => {
         console.error('API 請求失敗:', error);
       });
   }, []);
-
+  console.log(ischatId)
   const togglePopup = () => {
-    if (ischatId === "") { // 檢查是否為空
+    if (ischatId === null) { // 檢查是否為空
       setIsOpen(!isOpen);
     } else {
       navigate("/chatroom/"+ischatId);
@@ -51,7 +51,7 @@ const StartPrivate = () => {
   return (
     <div>
       <StartPrivateButton onClick={togglePopup} />
-      <Popup receiver={receiver_id} receiver_name={receiver_name} isOpen={isOpen} onClose={togglePopup} />
+      <Popup receiver={'660bbad71dd21a48510f209c'} receiver_name={'testing'} isOpen={isOpen} onClose={togglePopup} />
     </div>
   );
 };
