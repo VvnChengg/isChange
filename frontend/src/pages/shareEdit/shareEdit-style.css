@@ -1,0 +1,130 @@
+/* share_style.css */
+
+.container {
+    /* display: flex; */
+    /* flex-direction: column; */
+    padding-bottom: 5px;
+    background-color: #fff;
+  }
+  
+  .header {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    font-size: 5xl;
+    color: #008cd9;
+    max-width: 100%;
+  }
+  
+  .header-item {
+    flex-grow: 1;
+  }
+  
+  .header-image {
+    flex-shrink: 0;
+    width: 10px;
+  }
+  
+  /* .menu {
+    margin-top: 8px;
+    width: 100%;
+    max-width: 1020px;
+    display: flex;
+    gap: 5px;
+  }
+  
+  .menu-item {
+    flex: 1 0 auto;
+  }
+  
+  .menu-item-text {
+    font-size: xl;
+    line-height: 7;
+    text-align: left;
+    color: #008cd9;
+  }
+  
+  .menu-item-bold {
+    font-weight: bold;
+  } */
+  
+  .content {
+    margin-top: 8px;
+    width: 100%;
+    /* display: flex; */
+    gap: 5px;
+  }
+  
+  /* .left-section {
+    width: 29%;
+  }
+  
+  .right-section {
+    width: 71%;
+  } */
+  
+  .title-box {
+    border: 2px solid #008cd9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .text-box {
+    border: 2px solid #008cd9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    max-width: 100%;
+    text-align: left;
+    height: 300px;
+  }
+
+  .input-box {
+    border: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    max-width: 100%;
+    width: 100%;
+    outline: none;
+    /* box-sizing: border-box; */
+    /* resize: vertical; */
+  }
+
+  
+  .publish-button {
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin-top: 5px;
+    font-size: 3xl;
+    font-weight: bold;
+    line-height: 2;
+    color: #fff;
+    white-space: nowrap;
+    border: 2px solid #008cd9;
+    border-radius: 15px;
+    background-color: #008cd9;
+    opacity: 0.8;
+    cursor: pointer;
+    float: right;
+  }
+
+  .figure-button {
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin-top: 5px;
+    line-height: 2;
+    color: #fff;
+    border: 0;
+    background-color: #fff;
+    opacity: 0.8;
+    cursor: pointer;
+    position: absolute;
+    bottom: 230px;
+    right: 150px;
+  }
+  

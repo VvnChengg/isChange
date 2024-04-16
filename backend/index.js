@@ -12,6 +12,8 @@ app.use(express.json());
 const chatRoutes = require("./src/routes/chat");
 const postRoutes = require("./src/routes/post");
 const tourRoutes = require("./src/routes/tour.js");
+const memberAuthRoutes = require("./src/routes/memberAuth");
+const memberRoutes = require("./src/routes/member");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -19,6 +21,8 @@ app.use(bodyParser.json());
 app.use("/api/chat", chatRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/tour", tourRoutes);
+app.use("/api/member-auth", memberAuthRoutes);
+app.use("/api/member", memberRoutes);
 
 // for test
 // const memberRoutes = require('./src/routes/test');
@@ -27,10 +31,6 @@ app.use("/api/tour", tourRoutes);
 // show member info: localhost:3000/api/members
 // const memberRoutes = require("./src/routes/test");
 // app.use("/api", memberRoutes);
-const memberAuthRoutes = require("./src/routes/memberAuth");
-app.use("/api/member-auth", memberAuthRoutes);
-const memberRoutes = require("./src/routes/member");
-app.use("/api/member", memberRoutes);
 
 const server = app.listen(process.env.PORT || 3000, () =>
   console.log(

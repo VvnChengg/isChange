@@ -9,21 +9,17 @@ require("dotenv").config(); // 加了這行就可以抓到 mailer
 
 // 使用者輸入信箱後，判斷是否是會員，回傳一個狀態（若是進入登入頁面，否則進入註冊）
 const LOR = async (req, res) => {
-  const email = req.body.email;
+  const { email } = req.query;
   // console.log(email);
   if (!email) {
     return res.status(400).json({ error: "Email cannot be empty" });
   }
   try {
     const existingUser = await MemberAuth.findOne({ email });
-    // console.log(existingUser);
-    if (existingUser) {
-      // If user exists
-      return res.json({ status: "success" });
-    } else {
-      // If user doesn't exist
-      return res.json({ status: "None" });
+    if (existingUser && existingUser.password) {
+      return res.status(200).json({ status: "success" });
     }
+    return res.status(404).json({ status: "None" });
   } catch (error) {
     return res.status(500).json({ error: "Internal server error" });
   }
@@ -53,30 +49,36 @@ const login = async (req, res) => {
     });
     // Check if user exists
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         status: "error",
         message: "Email不存在",
       });
+    } else if (!user.password) {
+      return res.status(404).json({
+        status: "error",
+        message: "請進行驗證碼驗證",
+      });
     }
+    // console.log(user);
     // Check if password correct
     const passwordMatch = await bcrypt.compare(data.password, user.password);
     if (passwordMatch) {
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
         expiresIn: "1h",
       });
-      res.cookie("token", token, { httpOnly: true });
+      res.cookie("token", token, { httpOnly: true, secure: true });
 
-      return res.json({
+      return res.status(200).json({
         status: "success",
         message: "登入成功",
         data: {
-          user_id: user._id,
+          user_id: user.user_id,
           email: user.email,
           access_token: token,
         },
       });
     } else {
-      return res.json({
+      return res.status(400).json({
         status: "error",
         message: "密碼錯誤",
       });
@@ -111,9 +113,7 @@ const registerMember = async (req, res) => {
 
   // create member and memberAuth in database
   if (!user) {
-    const member = await Member.create({ username: email.split("@")[0] });
     await MemberAuth.create({
-      user_id: member._id,
       email: email,
       verification_code: code,
       source: "credentials",
@@ -121,7 +121,7 @@ const registerMember = async (req, res) => {
   } else if (user && !user.password) {
     await MemberAuth.updateOne({ email }, { verification_code: code });
   } else {
-    return res.json({
+    return res.status(400).json({
       status: "error",
       message: "已成為會員，請登入",
     });
@@ -136,7 +136,7 @@ const registerMember = async (req, res) => {
       text: `Your verification code is: ${code}`,
     });
 
-    res.json({
+    res.status(200).json({
       status: "verified",
       message: "驗證碼已寄出",
     });
@@ -176,7 +176,7 @@ const verifyRegisterMember = async (req, res) => {
       { email },
       { is_verified: true }
     );
-    res.json({
+    res.status(200).json({
       status: "verified",
       message: "電子郵件驗證成功",
       // data: updatedUser,
@@ -187,46 +187,50 @@ const verifyRegisterMember = async (req, res) => {
   }
 };
 
+//檢查使用者名稱有無重複
+const checkUsername = async (req, res) => {
+  const { username, email } = req.query;
+  const m0 = await Member.findOne({ username: username });
+  if (!m0) {
+    return res.status(200).json({
+      status: "success",
+      message: "可使用此名稱",
+    });
+  }
+  return res.status(409).json({
+    status: "failed",
+    message: "使用者名稱已有人使用，請更換其他名稱",
+  });
+};
+
 //設定密碼、使用者名稱、交換學校名稱
 const verifiedMember = async (req, res) => {
   const { email, password, username, exchange_school_name } = req.body;
 
   try {
-    //檢查使用者名稱有無重複
-    const m0 = await Member.findOne({ username: username });
-    console.log(m0);
-    if (m0) {
-      return res.json({
-        status: "failed",
-        message: "使用者名稱已有人使用，請更換其他名稱",
-      });
-    }
     //設定密碼
     const hashedPassword = await hashPassword(password);
     const user = await MemberAuth.findOne({ email });
-
     if (user.password) {
-      return res.json({
+      return res.status(400).json({
         status: "failed",
         message: "使用者已設定過密碼，請登入",
         data: email,
       });
     } else if (user) {
       //未設定過密碼，設定member auth和member
+      const m = await Member.create({
+        username: username,
+        exchange_school_name: exchange_school_name,
+      });
+
       const ma = await MemberAuth.findOneAndUpdate(
         { email },
-        { password: hashedPassword },
+        { user_id: m._id, password: hashedPassword },
         { new: true }
       );
-      const m = await Member.findOneAndUpdate(
-        { _id: user.user_id },
-        {
-          username: username,
-          exchange_school_name: exchange_school_name,
-        },
-        { new: true }
-      );
-      return res.json({
+
+      return res.status(200).json({
         status: "success",
         message: "註冊成功！",
         data: m,
@@ -234,7 +238,7 @@ const verifiedMember = async (req, res) => {
     }
 
     // If user doesn't exist, return failed message
-    return res.json({
+    return res.status(404).json({
       status: "failed",
       message: "使用者不存在！",
       data: email,
@@ -250,17 +254,24 @@ const deleteTestMember = async (req, res) => {
   try {
     // Assuming MemberAuth is your Mongoose model
     const m = await MemberAuth.findOne({ email });
-    let memberId = m.user_id;
-    const deletedMemberAuth = await MemberAuth.deleteOne({ email });
-    const deletedMember = await Member.deleteOne({
-      _id: memberId,
-    });
-    console.log(`${deletedMember.deletedCount} member(s) deleted.`);
-    console.log(`${deletedMemberAuth.deletedCount} member(s) auth deleted.`);
+    if (m) {
+      let memberId = m.user_id;
+      const deletedMemberAuth = await MemberAuth.deleteOne({ email });
+      const deletedMember = await Member.deleteOne({
+        _id: memberId,
+      });
+      console.log(`${deletedMember.deletedCount} member(s) deleted.`);
+      console.log(`${deletedMemberAuth.deletedCount} member(s) auth deleted.`);
 
-    return res.json({
-      status: "success",
-      message: "Deleted successfully",
+      return res.status(200).json({
+        status: "success",
+        message: "Deleted successfully",
+        data: email,
+      });
+    }
+    return res.status(404).json({
+      status: "failed",
+      message: "no existing user",
       data: email,
     });
   } catch (error) {
@@ -274,6 +285,7 @@ module.exports = {
   login,
   registerMember,
   verifyRegisterMember,
+  checkUsername,
   verifiedMember,
   deleteTestMember,
 };

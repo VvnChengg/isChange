@@ -5,10 +5,9 @@ const Member = require("../models/member");
 // GET 確認聊天是否已存在
 const checkChat = async (req, res) => {
     try {
-        const { userId } = req.body.userId; // 使用者的 member._id, 如果是 object 就轉成 string
-        // const userId = "660bbad71dd21a48510f209c"; // test ok
-        const { receiver_id } = req.query; // 聊天對象的 id 放在 query 或 params 裡？待討論
-
+        const { receiver_id } = req.params;
+        const { userId } = req.body; // 使用者的 member._id, 如果是 object 就轉成 string
+        
         console.log(userId, receiver_id)
 
         const chat = await Chat.findOne({
@@ -40,9 +39,8 @@ const checkChat = async (req, res) => {
 // POST 建立聊天
 const createChat = async (req, res) => {
     try {
-        const userId = req.body.userId;
-        const receiver_id = req.body.receiver_id;
-        // const userId = "660bbad71dd21a48510f209c"; // for test 
+        const { userId, receiver_id } = req.body;
+        // const receiver_id = req.body.receiver_id;
         // const { receiver_id } = req.query; // test receiver_id 放在 query 裡
 
         console.log(userId, receiver_id)
@@ -86,8 +84,7 @@ const createChat = async (req, res) => {
 const getChatDetail = async (req, res) => {
     try {
         const { cid } = req.params;
-        const { userId } = req.body.userId; // 使用者的 member._id, 如果是 object 就轉成 string
-        // const userId = "660bbad71dd21a48510f209c"; // for test
+        const { userId } = req.body; // 使用者的 member._id, 如果是 object 就轉成 string
         const chat = await Chat.findById(cid);
 
         // 檢查 chat 是否存在
@@ -127,13 +124,22 @@ const getChatDetail = async (req, res) => {
 // GET 聊天列表 ok
 const getChatList = async (req, res) => {
     try {
-        const { userId } = req.body.userId;  // 使用者透過 token 或是某方式，抓自己的 member._id
-        // const userId = "660bbad71dd21a48510f209c"; // for test
-        //console.log(userId);
+        const userId = req.body.userId;  // 使用者透過 token 或是某方式，抓自己的 member._id
+        console.log(userId);
 
         // 直接從 user 的 chat_ids list 抓出聊天
         const user = await Member.findById(userId);
         const chatData = [];
+
+        console.log(user.chat_ids);
+
+        // 如果用戶沒有聊天，chats 回傳 null
+        if (user.chat_ids == null) {
+            res.status(200).json({
+                chats: null,
+                message: "You don't have any chat."
+            });
+        }
 
         // 一筆一筆挑出聊天來看
         for (const chatId of user.chat_ids) {

@@ -1,0 +1,105 @@
+/* styles/Register.css */
+
+.register-container {
+    width: 40%;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.register-form {
+    margin-top: 1rem;
+}
+
+.login-form__label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.login-form__input-group {
+    position: relative;
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.login-form__input {
+    width: 80%;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    background-color: transparent;
+  }
+  
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border-style: solid;
+    border-color: #E0F0FF;
+}
+
+.login-form__button {
+    background-color: #2E9EDC;
+    color: #fff;
+    border-style: solid;
+    border-color: #E0F0FF;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.login-form__button:hover {
+    background-color: #005ea6;
+}
+
+.login-form__button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.send-button.disabled {
+    background-color: #ccc;
+    color: #888;
+}
+
+.registered-text {
+    text-align: right;
+    color: red;
+    margin-left: auto;
+    white-space: nowrap;
+}
+  
+
+  .input-container:focus-within {
+    /* 在父元素获得焦点时应用的样式 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .login-form__input:focus {
+    outline: none; /* 取消输入框被聚焦时的外边框 */
+  }
+  
+.submit-container{
+    position: relative;
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.submit-container button {
+    background-color: #2E9EDC;
+    color: #fff;
+    border-style: solid;
+    border-color: #E0F0FF;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-left: auto; /* 將按鈕推到容器的右側 */
+}
