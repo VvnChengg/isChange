@@ -1,15 +1,16 @@
 import { TagWrapper } from './Tag-style.js';
+import { FormattedMessage } from 'react-intl';
 
 export default function Tag({ type }) {
-    const typeDict = {
-        trans: { color: '0071D9', text: '交易' },
-        tour: { color: '0086BF', text: '揪團' },
-        post: { color: '4DC0FF', text: '分享' }
+    const textDict = {
+        trans: { color: '0071D9', text: <FormattedMessage id='tag.trans' /> },
+        tour: { color: '0086BF', text: <FormattedMessage id='tag.tour' /> },
+        post: { color: '4DC0FF', text: <FormattedMessage id='tag.post' /> }
     };
 
     return (
-        <TagWrapper color={typeDict[type].color}>
-            {typeDict[type].text}
+        <TagWrapper type={type}>
+            {textDict[type].text}
         </TagWrapper>
     )
 }

@@ -9,7 +9,7 @@ export const HeaderWrapper = styled.div `
         left: 0;
         z-index: 1;
     
-    background: linear-gradient(360deg, #E0F0FF 0%, #FFFFFF 100%);
+    background: ${props => props.theme.main};
     box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.25);
     border-radius: 0px 0px 40px 40px;
 
@@ -29,43 +29,70 @@ export const HeaderTitle = styled.div `
     display: flex;
     align-items: center;
 
-    color: #008CD9;
+    color: ${props => props.theme.title};
+    text-shadow: 2px 2px 2px ${props => props.theme.shadow};
 
     cursor: pointer;
-`
 
-export const HeaderSearch = styled.input `
-    width: 30%;
-
-    border: 1px solid #008CD9;
-    background: white;
+    &:hover {
+        color: ${props => props.theme.active};
+        text-shadow: 
+            -2px -2px 0 ${props => props.theme.title},  
+            2px -2px 0 ${props => props.theme.title},
+            -2px 2px 0 ${props => props.theme.title},
+            2px 2px 0 ${props => props.theme.title},
+            4px 4px 4px ${props => props.theme.shadow};
+    }
 `
 
 export const HeaderButtonContainer = styled.div `
-    height: 20px;
+    height: 25px;
     
     position: absolute;
         right: 30px;
         bottom: 20px;
 
     display: flex;
-        gap: 5px;
+        gap: 1px;
         align-items: center;
 `
 
 export const HeaderButton = styled.div `
-    color: #008CD9;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+
+    color: ${props => props.theme.title};
     text-align: center;
+    font-weight: 500;
 
     cursor: pointer;
+
+    &:hover {
+        background: ${props => props.theme.title};
+        box-shadow: 2px 2px 2px ${props => props.theme.shadow};
+        color: ${props => props.theme.active};
+    }
 `
 
 export const HeaderIcon = styled.div `
-    width: 15px;
-    height: 15px;
+    height: 100%;
 
-    background-image: url('/icons/${props => props.src}.png');
-    background-size: cover;
+    padding: 4px;
+    border-radius: 5px;
 
     cursor: pointer;
+
+    & path {
+        fill: ${props => props.theme.title};
+    }
+
+    &:hover {
+        background: ${props => props.theme.title};
+        box-shadow: 2px 2px 2px ${props => props.theme.shadow};
+
+        & path {
+            fill: ${props => props.theme.active};
+        }
+    }
 `

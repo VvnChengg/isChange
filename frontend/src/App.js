@@ -1,7 +1,15 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { IntlProvider } from 'react-intl';
+import { useState } from 'react';
 
+/* translations */
+import translations from './translations';
+
+/* styles */
 import './styles/App.css';
 import './styles/global.css';
+import { lightTheme } from './styles/theme';
 
 /* pages */
 import Layout from './pages/layout';
@@ -31,35 +39,41 @@ import ShareToDelete from './pages/shareToDelete';
 import TourCreate from './pages/tourCreate';
 
 function App() {
+  const [language, setLanguage] = useState('en');
+
   return (
-    <Router>
-        <div className="App">
-          <Routes>
-            <Route path='/' element={<Layout />}>
-              <Route path='' element={<Home />} />
-              <Route path='login' element={<LoginForm />} />
-              <Route path='register' element={<Register />} />
-              <Route path='edit' element={<Edit />} />
-              <Route path='member' element={<View />} />   
-              <Route path='chat-list' element={<PrivateMessageList/>}/>
-              <Route path='chatroom/:chatid' element={<Chatroom/>} />
-              <Route path='testing' element={<StartPrivate/>} />
-              <Route path='post'>
-                <Route path='detail' element={<ShareDetail />} />
-                <Route path='create' element={<ShareCreate />} />
-                <Route path='published' element={<SharePublished />} />
-                <Route path='find' element={<ShareFind />} />
-                <Route path='to-edit' element={<ShareToEdit />} />
-                <Route path='edit' element={<ShareEdit />} />
-                <Route path='to-delete' element={<ShareToDelete />} />
-              </Route>
-              <Route path='tour'>
-                <Route path='create' element={<TourCreate />} />
-              </Route>
-            </Route>
-          </Routes>
-        </div>
-      </Router>
+    <IntlProvider locale={language} messages={translations[language]}>
+      <ThemeProvider theme={lightTheme}>
+        <Router>
+            <div className="App">
+              <Routes>
+                <Route path='/' element={<Layout language={language} setLanguage={setLanguage} />}>
+                  <Route path='' element={<Home />} />
+                  <Route path='login' element={<LoginForm />} />
+                  <Route path='register' element={<Register />} />
+                  <Route path='edit' element={<Edit />} />
+                  <Route path='member' element={<View />} />   
+                  <Route path='chat-list' element={<PrivateMessageList/>}/>
+                  <Route path='chatroom/:chatid' element={<Chatroom/>} />
+                  <Route path='testing' element={<StartPrivate/>} />
+                  <Route path='post'>
+                    <Route path='detail' element={<ShareDetail />} />
+                    <Route path='create' element={<ShareCreate />} />
+                    <Route path='published' element={<SharePublished />} />
+                    <Route path='find' element={<ShareFind />} />
+                    <Route path='to-edit' element={<ShareToEdit />} />
+                    <Route path='edit' element={<ShareEdit />} />
+                    <Route path='to-delete' element={<ShareToDelete />} />
+                  </Route>
+                  <Route path='tour'>
+                    <Route path='create' element={<TourCreate />} />
+                  </Route>
+                </Route>
+              </Routes>
+            </div>
+          </Router>
+        </ThemeProvider>
+      </IntlProvider>
   );
 }
 
