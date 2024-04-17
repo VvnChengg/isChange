@@ -15,18 +15,11 @@ const messageSchema = new Schema({
     content: {
         type: String,
         maxlength: 200,
-        required: true,
-        validate: {
-            validator: function(value) {
-                // 如果 message_type 是 'pic'，則確認 content 是圖片連結
-                if (this.message_type === 'pic') {
-                    return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(value);
-                }
-                // 否則返回 true（不進行驗證）
-                return true;
-            },
-            message: 'Invalid URL format'
-        }
+        default: null
+    },
+    photo: {
+        data: Buffer,
+        contentType: String,
     },
     sender_id: {
         type: Schema.Types.ObjectId,
