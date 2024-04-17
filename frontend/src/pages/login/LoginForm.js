@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
+import { useNavigate } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+
 import '../../styles/LoginForm.css';
+
 import LoginFormPwd from './LoginFormPwd'; // 匯入密碼表單元件
 import EmailInput from './EmailInput';
 import AuthButton from './AuthButtons';
+
 import { loginApi } from '../../api/loginApi';
 
 const LoginForm = () => {
@@ -56,13 +60,23 @@ const LoginForm = () => {
       {!showPasswordForm && (
         <>
           <div className={`login-form ${showPasswordForm ? 'hidden' : ''}`}>
-            <h2 className="login-form__title">登入或建立帳號</h2>
+            <h2 className="login-form__title">
+              <FormattedMessage id='login.title' />
+            </h2>
             <EmailInput email={email} handleEmailChange={handleEmailChange} />
-            <AuthButton handleAuth={handleUseEmailAuth} label="使用電子信箱登入" />
+            <FormattedMessage id='login.useEmailLogin'>
+              {msg =>
+                <AuthButton handleAuth={handleUseEmailAuth} label={msg} />
+              }
+            </FormattedMessage>
             <label className="login-form__label">
-              或
+            <FormattedMessage id='login.or' />
             </label>
-            <AuthButton handleAuth={handleUseGoogleAuth} label="使用 Google 帳號登入" />
+            <FormattedMessage id='login.useGoogleLogin'>
+              {msg => 
+                <AuthButton handleAuth={handleUseGoogleAuth} label={msg} />
+                }
+            </FormattedMessage>
           </div>
         </>
       )}
