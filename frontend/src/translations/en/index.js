@@ -12,6 +12,9 @@ const en = {
     'login.useEmailLogin': 'Use email to login',
     'login.useGoogleLogin': 'Use Google account to login',
     'login.or': 'or',
+
+    /* alert */
+    'alert.login': 'Please login',
 };
 
 export default en;

@@ -12,6 +12,9 @@ const zh = {
     'login.useEmailLogin': '使用電子信箱登入',
     'login.useGoogleLogin': '使用 Google 帳號登入',
     'login.or': '或',
+
+    /* alert */
+    'alert.login': '請先登入',
 };
 
 export default zh;
