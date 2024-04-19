@@ -1,32 +1,35 @@
-/* styles/LoginForm.css */
-.login-form {
+/* styles/LoginForm.module.css */
+.loginForm {
     width: 30%;
     margin: 2rem auto;
     padding: 1.5rem;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .login-form__title {
+}
+
+.loginForm__title {
     text-align: center;
     margin-top: 0;
     font-size: 1.2rem;
     font-weight: normal;
-  }
-  
-  .login-form__input-group {
+}
+
+.loginForm__inputGroup {
     margin-bottom: 1rem;
-  }
-  
-  .login-form__label {
     display: block;
+}
+
+.loginForm__label {
+    display: block;
+    padding: 0.5rem;
     font-weight: bold;
     margin-bottom: 0.25rem;
     font-size: 0.9rem;
-  }
-  
-  .login-form__input {
+    text-align: left;
+}
+
+.loginForm__input {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
@@ -34,23 +37,32 @@
     font-size: 0.9rem;
     border-style: solid;
     border-color: #E0F0FF;
-  }
-  
-  .login-form__button {
+}
+
+.loginForm__button {
     margin: 0 auto;
     display: block;
     width: 50%;
     padding: 0.5rem;
     margin-bottom: 0.5rem;
-    background-color: #2E9EDC;
-    color: #fff;
+    background-color: "#2E9EDC";
+    color: "#fff";
     border-style: solid;
-    border-color: #E0F0FF;
+    border-color: "#E0F0FF";
     border-radius: 10px;
     cursor: pointer;
     font-size: 0.9rem;
+}
+
+.loginForm__buttonHover {
+    background-color: "#005ea6";
+}
+
+@media screen and (max-width: 768px){
+  .loginForm {
+    width: 80%;
   }
-  
-  .login-form__button:hover {
-    background-color: #005ea6;
+  .loginForm__button {
+    white-space: normal;
   }
+}
