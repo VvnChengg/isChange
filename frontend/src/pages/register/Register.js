@@ -3,6 +3,7 @@ import React, { useState, Fragment, useEffect } from 'react';
 import '../../styles/Register.css';
 import { loginApi } from '../../api/loginApi';
 import { registerApi } from '../../api/registerApi';
+import {EmailRegisterInput, NormalRegisterInput} from './RegisterInputs';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -30,7 +31,7 @@ const Register = () => {
     // const [fileUploaded, setFileUploaded] = useState(false);
 
     const [userSchoolName, setUserSchoolname] = useState('');
-    // const [userSchoolNameError, setUserSchoolNameError] = useState(false);
+    const [userSchoolNameError, setUserSchoolNameError] = useState(false);
 
 
     // 處理輸入框的焦點
@@ -286,128 +287,76 @@ const Register = () => {
     return (
         <div className="register-container">
             <form className="register-form" onSubmit={handleSubmit}>
-                <label htmlFor="email" className="login-form__label">電子信箱</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={handleEmailChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="請輸入電子信箱"
-                            required
-                        />
-                        {emailRegistered && <span className="registered-text">已被註冊</span>}
-                    </div>
-                    <button
-                        type = "button"
-                        onClick={SentMail}
-                        className={`login-form__button send-button ${isSending ? 'disabled' : ''}`}
-                        disabled={isSending || verificationPass || (email.split('@').pop().includes('edu'))}
-                    >
-                        {isSending ? `再 ${countdown} 秒可以重新寄送` : (email.split('@').pop().includes('edu')) ? '註冊時無法使用學生帳號' : '寄送驗證信'}
-                    </button>
-                </div>
+                <EmailRegisterInput
+                isFocused={isFocused}
+                email={email}
+                handleEmailChange={handleEmailChange}
+                emailRegistered={emailRegistered}
+                SentMail={SentMail}
+                isSending={isSending}
+                countdown={countdown}
 
-                {showVerification && (
-                    <Fragment>
-                        <label htmlFor="verificationCode" className="login-form__label">驗證碼</label>
-                        <div className="login-form__input-group">
-                            <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                                <input
-                                    type="text"
-                                    id="verificationCode"
-                                    value={verificationCode}
-                                    onChange={handleVerificationCodeChange}
-                                    onFocus={handleInputFocus}
-                                    onBlur={handleInputBlur}
-                                    className="login-form__input"
-                                    placeholder="請輸入驗證碼"
-                                    required
-                                />
-                                {!verificationPass && <span className="registered-text"> {veriHint} </span>}
-                            </div>
-                            <button type="button" onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`}
-                                disabled={verificationPass}>
-                                {verificationPass ? `已驗證` : '驗證'}
-                            </button>
-                        </div>
-                    </Fragment>
-                )}
-                <label htmlFor="password-input" className="login-form__label">輸入密碼</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="password"
-                            id="password-input"
-                            value={passWord}
-                            onChange={handlePasswordChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="請輸入密碼"
-                            required
-                        />
-                        {!passWordRuleMatched && <span className="registered-text">密碼至少要8個字</span>}
-                    </div>
-                </div>
+                verificationPass={verificationPass}
+                showVerification={showVerification}
+                verificationCode={verificationCode}
+                handleVerificationCodeChange={handleVerificationCodeChange}
+                veriHint={veriHint}
+                checkVerification={checkVerification}
 
-                <label htmlFor="password-confirm-input" className="login-form__label">確認密碼</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="password"
-                            id="password-confirm-input"
-                            value={passWord_confirm}
-                            onChange={handlePasswordConfirmChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="再輸入密碼"
-                            required
-                        />
-                        {!isPassWordSame && <span className="registered-text">密碼不同</span>}
-                    </div>
-                </div>
+                handleInputFocus={handleInputFocus}
+                handleInputBlur={handleInputBlur}
+                />
+                
+                <NormalRegisterInput
+                hint="輸入密碼"
+                name="password-input"
+                type="password"
+                value={passWord}
+                onChange={handlePasswordChange}
+                className="login-form__input"
+                placeholder="請輸入密碼"
+                isFocused={isFocused}
+                errorHint="密碼至少要8個字"
+                isErrorCondition={!passWordRuleMatched}
+                />
 
-                <label htmlFor="username" className="login-form__label">使用者名稱</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="text"
-                            id="username"
-                            value={username}
-                            onChange={handleUserNameChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="請輸入使用者名稱"
-                            required
-                        />
-                        {usernameRegistered && <span className="registered-text">該名稱已被使用</span>}
-                    </div>
-                </div>
+                <NormalRegisterInput
+                hint="確認密碼"
+                name="password-confirm-input"
+                type="password"
+                value={passWord_confirm}
+                onChange={handlePasswordConfirmChange}
+                placeholder="再次輸入密碼"
+                isFocused={isFocused}
+                errorHint="密碼不同"
+                isErrorCondition={!isPassWordSame}
+                />
 
-                <label htmlFor="username" className="login-form__label">交換學校</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="text"
-                            id="userSchoolName"
-                            value={userSchoolName}
-                            onChange={handleUserSchoolNameChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="輸入交換學校"
-                            required
-                        />
-                        {/* {userSchoolNameError && <span className="registered-text">交換學校不可為空</span>} */}
-                    </div>
-                </div>
+                <NormalRegisterInput
+                hint="使用者名稱"
+                name="username-input"
+                type="text"
+                value={username}
+                onChange={handleUserNameChange}
+                placeholder="請輸入使用者名稱"
+                isFocused={isFocused}
+                errorHint="該名稱已被使用"
+                isErrorCondition={usernameRegistered}
+                />
+
+
+                <NormalRegisterInput
+                hint="交換學校"
+                name="school-input"
+                type="text"
+                value={userSchoolName}
+                onChange={handleUserSchoolNameChange}
+                placeholder="請輸入交換學校"
+                isFocused={isFocused}
+                errorHint="交換學校不可為空"
+                isErrorCondition={false}
+                />
+
                 {/* 這一區為學生證上傳, 但討論結果為暫時不需要,先註解 */}
                 {/* <label htmlFor="student-id" className="login-form__label">學生認證</label>
                 <div className="login-form__input-group">
