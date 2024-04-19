@@ -19,6 +19,11 @@ const en = {
 
     /* alert */
     'alert.login': 'Please login',
+
+    /* header */
+    'header.member': 'MemberInfo',
+    'header.logout': 'Logout',
+    'header.login': 'Login',
 };
 
 export default en;

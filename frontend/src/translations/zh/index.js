@@ -19,6 +19,11 @@ const zh = {
 
     /* alert */
     'alert.login': '請先登入',
+
+    /* header */
+    'header.member': '會員資訊',
+    'header.logout': '登出',
+    'header.login': '登入',
 };
 
 export default zh;
