@@ -11,7 +11,11 @@ const zh = {
     'login.inputEmail': '請輸入電子信箱',
     'login.useEmailLogin': '使用電子信箱登入',
     'login.useGoogleLogin': '使用 Google 帳號登入',
-    'login.or': '或',
+    'login.or': '其他方式登入',
+    'login.enterPassword': '請輸入密碼',
+    'login.password': '密碼',
+    'login.inputPassword': '請輸入密碼',
+    'login.login': '登入',
 
     /* alert */
     'alert.login': '請先登入',

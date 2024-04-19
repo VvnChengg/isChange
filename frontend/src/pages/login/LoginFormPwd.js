@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
-import '../../styles/LoginForm.css';
 import { loginApi } from '../../api/loginApi';
+import loginStyles from '../../styles/LoginForm.module.css';
+import { FormattedMessage } from 'react-intl';
+
 
 const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
   const [password, setPassword] = useState('');
@@ -24,23 +26,29 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
     }
   };
   return (
-    <div className="login-form">
-      <h2 className="login-form__title">請輸入密碼</h2>
-      <div className="login-form__input-group">
-        <label className="login-form__label">
-          密碼
+    <div className={loginStyles.loginForm}>
+      <h2 className={loginStyles.loginForm__title}><FormattedMessage id='login.enterPassword'/></h2>
+      <div className={loginStyles.loginForm__inputGroup}>
+        <label className={loginStyles.loginForm__label}>
+          <FormattedMessage id='login.password'/>
         </label>
-        <input
-          type="password" // 設置為密碼輸入框
-          id="password"
-          value={password} // 設置為你的密碼 state 變數
-          onChange={handlePasswordChange} // 設置密碼變化的事件處理函數
-          className="login-form__input" // 設置樣式類名
-          placeholder="請輸入密碼" // 設置密碼輸入框的占位符
-        />
+
+        <FormattedMessage id='login.inputPassword'>
+        {msg => 
+          <input
+            type="password" // 設置為密碼輸入框
+            id="password"
+            value={password} // 設置為你的密碼 state 變數
+            onChange={handlePasswordChange} // 設置密碼變化的事件處理函數
+            className={loginStyles.loginForm__input} // 設置樣式類名
+            placeholder={msg} // 設置密碼輸入框的占位符
+          />
+        }
+      </FormattedMessage>
+
       </div>
-      <button onClick={handleFormSubmit} className="login-form__button">
-        確認
+      <button onClick={handleFormSubmit} className={loginStyles.loginForm__button}>
+        <FormattedMessage id='login.login'/>
       </button>
     </div>
   );

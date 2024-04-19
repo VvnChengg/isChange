@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-
-import '../../styles/LoginForm.css';
+// import '../../styles/LoginForm.css';
+import loginStyles from '../../styles/LoginForm.module.css';
 
 import LoginFormPwd from './LoginFormPwd'; // 匯入密碼表單元件
 import EmailInput from './EmailInput';
@@ -59,8 +59,8 @@ const LoginForm = () => {
     <>
       {!showPasswordForm && (
         <>
-          <div className={`login-form ${showPasswordForm ? 'hidden' : ''}`}>
-            <h2 className="login-form__title">
+          <div className={`${loginStyles.loginForm} ${showPasswordForm ? 'hidden' : ''}`}>
+            <h2 className= {loginStyles.loginForm__title}>
               <FormattedMessage id='login.title' />
             </h2>
             <EmailInput email={email} handleEmailChange={handleEmailChange} />
@@ -69,9 +69,11 @@ const LoginForm = () => {
                 <AuthButton handleAuth={handleUseEmailAuth} label={msg} />
               }
             </FormattedMessage>
-            <label className="login-form__label">
+
+            <label className={loginStyles.loginForm__label}>
             <FormattedMessage id='login.or' />
             </label>
+
             <FormattedMessage id='login.useGoogleLogin'>
               {msg => 
                 <AuthButton handleAuth={handleUseGoogleAuth} label={msg} />

@@ -1,8 +1,9 @@
 import { FormattedMessage } from 'react-intl';
+import loginStyles from '../../styles/LoginForm.module.css';
 
 const EmailInput = ({ email, handleEmailChange }) => (
-  <div className="login-form__input-group">
-    <label htmlFor="email" className="login-form__label">
+  <div className={loginStyles.loginForm__inputGroup}>
+    <label htmlFor="email" className={loginStyles.loginForm__label}>
       <FormattedMessage id='email'/>
     </label>
     <FormattedMessage id='login.inputEmail'>
@@ -12,7 +13,7 @@ const EmailInput = ({ email, handleEmailChange }) => (
           id="email"
           value={email}
           onChange={handleEmailChange}
-          className="login-form__input"
+          className={loginStyles.loginForm__input}
           placeholder={msg}
         />
       }
