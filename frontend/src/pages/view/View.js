@@ -4,10 +4,11 @@ import ViewMemberSelfIntro from './ViewMemberSelfIntro';
 import ViewMemberPost from './ViewMemberPost';
 import ViewMemberInfo from './ViewMemberInfo';
 import { viewApi } from '../../api/viewApi';
+import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
 
 
 const View = () => {
-
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [school, setSchool] = useState('');
   const [photo, setPhoto] = useState('');
@@ -17,6 +18,13 @@ const View = () => {
   const getInfo = async () =>{
     // use viewApi.getMember to get member info
     const token =  localStorage.getItem('access_token');
+
+    // if no token, navigate to login page
+    if(!token){  
+      navigate('/login');
+      return;
+    };
+
     const memberInfo = await viewApi.getMember(token);
     // console.log(memberInfo);
 

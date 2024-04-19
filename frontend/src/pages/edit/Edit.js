@@ -5,8 +5,10 @@ import { BasicInfoEdit } from './BasicInfoDiv';
 import { SelfInfo } from './SelfInfo';
 import { ImageUploadDiv } from './ImageDiv';
 import { viewApi } from '../../api/viewApi';
+import { useNavigate } from 'react-router-dom';
 
 const Edit = () => {
+    const navigate = useNavigate();
     const [showPasswordDiv, setShowPasswordDiv] = useState(false);
     const [showBasicInfoDiv, setShowBasicInfoDiv] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -20,6 +22,13 @@ const Edit = () => {
     const getInfo = async () => {
         // use viewApi.getMember to get member info
         const token = localStorage.getItem('access_token');
+
+        // if no token, navigate to login page
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
         const memberInfo = await viewApi.getMember(token);
         // console.log(memberInfo);
 
