@@ -69,32 +69,6 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                     }
                 />
             )}
-
-            {/* {showVerification && (
-                <Fragment>
-                    <label htmlFor="verificationCode" className="login-form__label">驗證碼</label>
-                    <div className="login-form__input-group">
-                        <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                            <input
-                                type="text"
-                                id="verificationCode"
-                                value={verificationCode}
-                                onChange={handleVerificationCodeChange}
-                                onFocus={handleInputFocus}
-                                onBlur={handleInputBlur}
-                                className="login-form__input"
-                                placeholder="請輸入驗證碼"
-                                required
-                            />
-                            {!verificationPass && <span className="registered-text"> {veriHint} </span>}
-                        </div>
-                        <button type="button" onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`}
-                            disabled={verificationPass}>
-                            {verificationPass ? `已驗證` : '驗證'}
-                        </button>
-                    </div>
-                </Fragment>
-            )} */}
         </Fragment>
     );
 }

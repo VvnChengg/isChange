@@ -1,0 +1,61 @@
+.headerIcon {
+    position: relative; /* 將 HeaderIcon 的定位設置為相對 */
+}
+  
+.dropdownMenu {
+    position: absolute; /* 將 DropdownMenu 的定位設置為絕對 */
+    top: 100%; /* 將 DropdownMenu 放置在 HeaderIcon 的正下方 */
+    left: 50%; /* 將 DropdownMenu 放置在 HeaderIcon 的中間 */
+    transform: translateX(-50%); /* 使用 transform 來確保 DropdownMenu 正確對齊在 HeaderIcon 的中間 */
+    background-color: white; /* 將 DropdownMenu 的背景色設置為白色 */
+    width: auto;
+    border: 1px solid #ccc; /* 添加邊框 */
+    border-radius: 5px; /* 添加圓角 */
+}
+
+.dropdownMenu:empty {
+    border: none; /* 當下拉選單未打開時，移除邊框 */
+}
+  
+.dropdownMenu ul {
+    white-space: nowrap; /* 禁止文字換行 */
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 0px;
+    /* 將左側內間距設置為 0 */
+    unicode-bidi: isolate;
+}
+
+.dropdownMenu ul li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #ccc;/* 添加間隔線 */
+}
+    
+.dropdownMenu ul li:first-child{
+    border-top-left-radius: 5px;/* 添加第一個項目的左上角圓角 */
+    border-top-right-radius: 5px;/* 添加第一個項目的右上角圓角 */
+}
+
+.dropdownMenu ul li:last-child {
+    border-bottom: none; /* 移除最後一個項目的間隔線 */
+    border-bottom-left-radius: 5px; /* 添加最後一個項目的左下角圓角 */
+    border-bottom-right-radius: 5px; /* 添加最後一個項目的右下角圓角 */
+}
+
+.dropdownMenu ul li:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;/* 滑鼠在懸停時變為手形 */
+}
+
+@media screen and (max-width: 768px){
+    .dropdownMenu {
+        width: 50%;
+    }
+    
+}
