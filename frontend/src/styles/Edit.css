@@ -117,3 +117,12 @@ button:hover {
     border: 2px solid grey;
     overflow: hidden;
   }
+
+  @media screen and (max-width: 768px) {
+    .edit-container {
+      width: 80%;
+    }
+    .floating-div{
+        width: 80%;
+    }
+  }

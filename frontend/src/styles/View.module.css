@@ -100,3 +100,10 @@ footer {
   color: white;
   padding: 2px 5px;
 }
+
+
+@media screen and (max-width: 768px) {
+  .isChange {
+    width: 80%;
+  }
+}

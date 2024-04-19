@@ -65,6 +65,7 @@
     cursor: not-allowed;
 }
 
+
 .send-button.disabled {
     background-color: #ccc;
     color: #888;
@@ -102,4 +103,16 @@
     cursor: pointer;
     font-size: 0.9rem;
     margin-left: auto; /* 將按鈕推到容器的右側 */
+}
+
+@media screen and (max-width: 768px) {
+    .register-container {
+      width: 80%;
+    }
+    .input-container{
+        width: 100%;
+    }
+    .send-button{
+        white-space: normal;
+    }
 }
