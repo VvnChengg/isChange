@@ -111,9 +111,8 @@ const Edit = () => {
 
                             <FormattedMessage id='edit.changeUsernameandSchool'>
                                 {(text) => <Button
-                                    // style={{ width: '100%' }}
+                                    // style={{ height: '100%' }}
                                     onClick={() => setShowBasicInfoDiv(true)}
-                                    // text={intl.formatMessage({ id: 'login.login' })}
                                     text={text}
                                 />}
                             </FormattedMessage>

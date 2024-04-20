@@ -31,7 +31,7 @@ const zh = {
     'view.intro': '自我介紹',
 
     'edit.changePassword': '修改密碼',
-    'edit.changeUsernameandSchool': '修改名稱與學校',
+    'edit.changeUsernameandSchool': '修改其他資訊',
     'edit.changeBasicInfo': '修改基本資料',
     'edit.uploadImage': '上傳圖片',
     'edit.changeImage': '修改圖片',

@@ -119,9 +119,9 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                 {/* <button className={editStyles.actionButton} onClick={() => document.getElementById('fileInput').click()}>上傳圖片</button> */}
                 <FormattedMessage id='edit.uploadImage'>
                 {text => <Button
-                    style={{
-                        width: '100%',
-                    }}
+                    // style={{
+                    //     width: '100%',
+                    // }}
                     onClick={() => document.getElementById('fileInput').click()}
                     text={text}
                 />}

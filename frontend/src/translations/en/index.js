@@ -30,8 +30,8 @@ const en = {
     'view.past': 'Past posts',
     'view.intro': 'Introduction',
 
-    'edit.changePassword': 'Edit Password',
-    'edit.changeUsernameandSchool': 'Edit Username and School',
+    'edit.changePassword': 'Password',
+    'edit.changeUsernameandSchool': 'Other Information',
     'edit.changeBasicInfo': 'Edit Basic Information',
     'edit.uploadImage': 'Upload Image',
     'edit.changeImage': 'Edit Image',
