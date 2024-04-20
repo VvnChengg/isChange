@@ -1,6 +1,6 @@
 // Register.js這塊沒有組件化，之後有空再來改
 import React, { useState, Fragment, useEffect } from 'react';
-import '../../styles/Register.css';
+import registerStyles from '../../styles/Register.module.css';
 import { loginApi } from '../../api/loginApi';
 import { registerApi } from '../../api/registerApi';
 import {EmailRegisterInput, NormalRegisterInput} from './RegisterInputs';
@@ -285,8 +285,8 @@ const Register = () => {
     };
 
     return (
-        <div className="register-container">
-            <form className="register-form" onSubmit={handleSubmit}>
+        <div className={registerStyles.registerContainer}>
+            <form className={registerStyles.registerForm} onSubmit={handleSubmit}>
                 <EmailRegisterInput
                 isFocused={isFocused}
                 email={email}
@@ -313,7 +313,6 @@ const Register = () => {
                 type="password"
                 value={passWord}
                 onChange={handlePasswordChange}
-                className="login-form__input"
                 placeholder="請輸入密碼"
                 isFocused={isFocused}
                 errorHint="密碼至少要8個字"
@@ -374,8 +373,8 @@ const Register = () => {
                 </div> */}
 
                 <br />
-                <div className="submit-container">
-                    <button type="submit" disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName} className="login-form__button">
+                <div className={registerStyles.submitContainer}>
+                    <button type="submit" disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName} className={registerStyles.loginForm__button}>
                         {(!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName) ? '請檢查表單' : '送出表單'}
                     </button>
                 </div>

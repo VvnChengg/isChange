@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 import { editApi } from '../../api/editApi';
+import editStyles from '../../styles/Edit.module.css';
 
 // 匯入編輯大頭貼的元件
 export const ImageUploadDiv = ({photo, setPhoto}) => {
@@ -72,10 +73,10 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
 
     return (
         <Fragment>
-            <div className="section-heading">頭像編輯</div>
-            <div className="edit-button">
+            <div className={editStyles.sectionHeading}>頭像編輯</div>
+            <div className={editStyles.editButton}>
 
-                {modalIsOpen &&<div className='floating-div'>
+                {modalIsOpen &&<div className={editStyles.floatingDiv}>
                     {image && (
                         <AvatarEditor
                             ref={editorRef}
@@ -91,7 +92,7 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
                     <button onClick={handleSave}>裁剪</button>
                 </div>}
                 
-                <div className="profile-image">
+                <div className={editStyles.profileImage}>
                     <img src={image || "/icons/profile.png"} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src="/icons/profile.png"; }} />
                 </div>
 
@@ -102,7 +103,7 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
                     style={{ display: 'none' }}
                 />
 
-                <button onClick={() => document.getElementById('fileInput').click()}>上傳圖片</button>
+                <button className={editStyles.actionButton} onClick={() => document.getElementById('fileInput').click()}>上傳圖片</button>
             </div>
 
         </Fragment>

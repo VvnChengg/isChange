@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { editApi } from '../../api/editApi';
+import editStyles from '../../styles/Edit.module.css';
 
 // 編輯密碼的元件
 export const PassWordEdit = ({ showPasswordDiv,
@@ -158,12 +159,12 @@ export const PassWordEdit = ({ showPasswordDiv,
     return (
         <Fragment>
             {showPasswordDiv && (
-                <div className='floating-div'>
-                    <button onClick={handleClose} className="close-button">X</button>
-                    <form className="register-form" onSubmit={handleSubmitPassWord}>
-                        <label htmlFor="password-origin-input" className="login-form__label">輸入原密碼</label>
-                        <div className="login-form__input-group">
-                            <div className={`input-container ${isFocused ? 'focused' : ''}`}>
+                <div className={editStyles.floatingDiv}>
+                    <button onClick={handleClose} className={editStyles.closeButton}>X</button>
+                    <form className={editStyles.editFrom} onSubmit={handleSubmitPassWord}>
+                        <label htmlFor="password-origin-input" className={editStyles.editForm__label}>輸入原密碼</label>
+                        <div className={editStyles.editForm__inputGroup}>
+                            <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
                                 <input
                                     type="password"
                                     id="password-origin-input"
@@ -171,7 +172,7 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     onChange={handleOriginPassWordChange}
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
-                                    className="login-form__input"
+                                    className={editStyles.editForm__input}
                                     placeholder="請輸入原密碼"
                                     required
                                 />
@@ -179,9 +180,9 @@ export const PassWordEdit = ({ showPasswordDiv,
                             </div>
                         </div>
 
-                        <label htmlFor="password-input" className="login-form__label">輸入新密碼</label>
-                        <div className="login-form__input-group">
-                            <div className={`input-container ${isFocused ? 'focused' : ''}`}>
+                        <label htmlFor="password-input" className={editStyles.editForm__label}>輸入新密碼</label>
+                        <div className={editStyles.editForm__inputGroup}>
+                            <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
                                 <input
                                     type="password"
                                     id="password-input"
@@ -189,16 +190,16 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     onChange={handlePasswordChange}
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
-                                    className="login-form__input"
+                                    className={editStyles.editForm__input}
                                     placeholder="請輸入密碼"
                                     required
                                 />
-                                {!passWordRuleMatched && <span className="registered-text">密碼至少要8個字</span>}
+                                {!passWordRuleMatched && <span className={editStyles.registeredText}>密碼至少要8個字</span>}
                             </div>
                         </div>
-                        <label htmlFor="password-confirm-input" className="login-form__label">確認新密碼</label>
-                        <div className="login-form__input-group">
-                            <div className={`input-container ${isFocused ? 'focused' : ''}`}>
+                        <label htmlFor="password-confirm-input" className={editStyles.editForm__label}>確認新密碼</label>
+                        <div className={editStyles.editForm__inputGroup}>
+                            <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
                                 <input
                                     type="password"
                                     id="password-confirm-input"
@@ -206,14 +207,14 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     onChange={handlePasswordConfirmChange}
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
-                                    className="login-form__input"
+                                    className={editStyles.editForm__input}
                                     placeholder="再輸入密碼"
                                     required
                                 />
-                                {!isPassWordSame && <span className="registered-text">密碼不同</span>}
+                                {!isPassWordSame && <span className={editStyles.registeredText}>密碼不同</span>}
                             </div>
                         </div>
-                        <button type="submit" className="login-form__button" disabled={!isPassWordSame || !passWordRuleMatched}>
+                        <button type="submit" className={editStyles.actionButton} disabled={!isPassWordSame || !passWordRuleMatched}>
                             確認
                         </button>
                     </form>

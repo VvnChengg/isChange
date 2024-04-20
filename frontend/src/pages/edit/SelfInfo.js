@@ -1,5 +1,6 @@
 import react, { Fragment, useEffect } from 'react';
 import { editApi } from '../../api/editApi';
+import editStyles from '../../styles/Edit.module.css';
 
 // 編輯自我介紹的元件
 export const SelfInfo = ({setIntroText, introText}) => {
@@ -34,8 +35,8 @@ export const SelfInfo = ({setIntroText, introText}) => {
 
     return (
         <Fragment>
-            <div className="section-heading">自我介绍（限兩百字以內）</div>
-            <textarea onChange={ChangeIntro} value={introText} className="self-intro" placeholder="限兩百字以內"></textarea>
+            <div className={editStyles.sectionHeadin}>自我介绍（限兩百字以內）</div>
+            <textarea onChange={ChangeIntro} value={introText} className={editStyles.selfIntro} placeholder="限兩百字以內"></textarea>
             <button onClick={handleSubmitIntro}>儲存自我介紹</button>
         </Fragment>
     );

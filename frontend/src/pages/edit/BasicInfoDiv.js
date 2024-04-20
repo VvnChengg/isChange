@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { registerApi } from '../../api/registerApi';
 import { editApi } from '../../api/editApi';
+import editStyles from '../../styles/Edit.module.css';
 
 // 編輯基本資料的元件
 export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInputFocus, handleInputBlur, username, school }) => {
@@ -99,12 +100,12 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
     return (
         <Fragment>
             {showBasicInfo && (
-                <div className='floating-div'>
-                    <button onClick={handleClose} className="close-button">X</button>
+                <div className={editStyles.floatingDiv}>
+                    <button onClick={handleClose} className={editStyles.closeButton}>X</button>
                     <form className="register-form" onSubmit={handleSubmitBasicInfo}>
-                        <label htmlFor="username" className="login-form__label">使用者名稱</label>
-                        <div className="login-form__input-group">
-                            <div className={`input-container ${isFocused ? 'focused' : ''}`}>
+                        <label htmlFor="username" className={editStyles.loginForm__label}>使用者名稱</label>
+                        <div className={editStyles.editForm__inputGroup}>
+                            <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
                                 <input
                                     type="text"
                                     id="username"
@@ -112,17 +113,17 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                     onChange={handleUserNameChange}
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
-                                    className="login-form__input"
+                                    className={editStyles.editForm__input}
                                     placeholder="請輸入使用者名稱"
                                     required
                                 />
-                                {userNameRegistered && userName !== username && <span className="registered-text">該名稱已被使用</span>}
+                                {userNameRegistered && userName !== username && <span className={editStyles.registeredText}>該名稱已被使用</span>}
                             </div>
                         </div>
 
-                        <label htmlFor="userSchoolName" className="login-form__label">交換學校</label>
-                        <div className="login-form__input-group">
-                            <div className={`input-container ${isFocused ? 'focused' : ''}`}>
+                        <label htmlFor="userSchoolName" className={editStyles.loginForm__label}>交換學校</label>
+                        <div className={editStyles.editForm__inputGroup}>
+                            <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
                                 <input
                                     type="text"
                                     id="userSchoolName"
@@ -130,13 +131,13 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                     onChange={handleUserSchoolNameChange}
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
-                                    className="login-form__input"
+                                    className={editStyles.editForm__input}
                                     placeholder="輸入交換學校"
                                     required
                                 />
                             </div>
                         </div>
-                        <button type="submit" className="login-form__button" disabled={userName === username && userSchoolName === school}>
+                        <button type="submit" className={editStyles.actionButton} disabled={userName === username && userSchoolName === school}>
                             確認
                         </button>
                     </form>

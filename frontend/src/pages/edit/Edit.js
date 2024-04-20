@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../../styles/Edit.css';
+import editStyles from '../../styles/Edit.module.css';
 import { PassWordEdit } from './PassWordDiv';
 import { BasicInfoEdit } from './BasicInfoDiv';
 import { SelfInfo } from './SelfInfo';
@@ -84,18 +84,18 @@ const Edit = () => {
     }
 
     return (
-        <div className="edit-container">
-            <div className="edit-form">
-                <div className="section-1">
-                    <div className="section-1-left">
+        <div className={editStyles.editContainer}>
+            <div className={editStyles.editForm}>
+                <div className={editStyles.section1}>
+                    <div className={editStyles.section1Left}>
                         <ImageUploadDiv photo={photo} setPhoto={setPhoto} />
                     </div>
 
-                    <div className="section-1-right">
-                        <div className="section-heading">基本資料修改</div>
-                        <div className="action-buttons">
-                            <button onClick={() => setShowPasswordDiv(true)}>修改密碼</button>
-                            <button onClick={() => setShowBasicInfoDiv(true)}>修改名稱學校</button>
+                    <div className={editStyles.section1Right}>
+                        <div className={editStyles.sectionHeading}>基本資料修改</div>
+                        <div className={editStyles.actionButtonsDiv}>
+                            <button className={editStyles.actionButton} onClick={() => setShowPasswordDiv(true)}>修改密碼</button>
+                            <button className={editStyles.actionButton} onClick={() => setShowBasicInfoDiv(true)}>修改名稱學校</button>
                         </div>
                     </div>
 
@@ -118,7 +118,7 @@ const Edit = () => {
                     />
 
                 </div>
-                <div className="section-2">
+                <div className={editStyles.section2}>
                     <SelfInfo setIntroText={setIntroText} introText={introText} />
                 </div>
             </div>

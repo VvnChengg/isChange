@@ -1,21 +1,22 @@
 import { Fragment } from "react";
+import registerStyles from '../../styles/Register.module.css';
 
 export const NormalRegisterInput = ({ hint, name, type, value, placeholder, isFocused, isErrorCondition ,errorHint, onChange, isButtonPresent}) => {
     return (
         <Fragment>
-            <label htmlFor= {name} className="login-form__label">{hint}</label>
-            <div className="login-form__input-group">
-                <div className={`input-container ${isFocused ? 'focused' : ''}`}>
+            <label htmlFor= {name} className={registerStyles.loginForm__label}>{hint}</label>
+            <div className={registerStyles.loginForm__inputGroup}>
+                <div className={`${registerStyles.inputContainer} ${isFocused ? 'focused' : ''}`}>
                     <input
                         type={type}
                         id={name}
                         value={value}
                         onChange={onChange}
-                        className="login-form__input"
+                        className={registerStyles.loginForm__input}
                         placeholder={placeholder}
                         required
                     />
-                {isErrorCondition && <span className="registered-text">{errorHint}</span>}
+                {isErrorCondition && <span className={registerStyles.registeredText}>{errorHint}</span>}
                 </div>
                 {isButtonPresent && isButtonPresent}
             </div>
@@ -42,7 +43,7 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                     <button
                         type="button"
                         onClick={SentMail}
-                        className={`login-form__button send-button ${isSending ? 'disabled' : ''}`}
+                        className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${isSending ? registerStyles.disabled : ''}`}
                         disabled={isSending || verificationPass || (email.split('@').pop().includes('edu'))}
                     >
                         {isSending ? `再 ${countdown} 秒可以重新寄送` : (email.split('@').pop().includes('edu')) ? '註冊時無法使用學生帳號' : '寄送驗證信'}
@@ -62,7 +63,7 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                     errorHint = {veriHint}
                     onChange = {handleVerificationCodeChange}
                     isButtonPresent = {
-                        <button type="button" onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`}
+                        <button type="button" onClick={checkVerification} className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${verificationPass ?  registerStyles.disabled: ''}`}
                             disabled={verificationPass}>
                             {verificationPass ? `已驗證` : '驗證'}
                         </button>
