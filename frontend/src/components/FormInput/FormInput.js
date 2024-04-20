@@ -5,6 +5,7 @@ import {
     FormTextarea
 } from './FormInput-style.js';
 
+import { useIntl } from 'react-intl';
 import { DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
 
@@ -62,6 +63,7 @@ export function FormRange({title, placeholder, unit, range, setRange}) {
 }
 
 export function FormBudget({title, placeholder, currency, setCurrency, budget, setBudget}) {
+    const intl = useIntl();
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
@@ -76,7 +78,7 @@ export function FormBudget({title, placeholder, currency, setCurrency, budget, s
                 <FormTextInput
                     value={currency}
                     onChange={e => setCurrency(e.target.value)}
-                    placeholder='單位'
+                    placeholder={intl.formatMessage({ id: 'formInput.unit' })}
                     style={{ width: '50px', textAlign: 'right' }}
                 />
             </div>
@@ -85,6 +87,7 @@ export function FormBudget({title, placeholder, currency, setCurrency, budget, s
 }
 
 export function FormDate({title, setDate}) {
+    const intl = useIntl();
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
@@ -93,7 +96,8 @@ export function FormDate({title, setDate}) {
                     border: 'none',
                     padding: 0
                 }}
-                placeholder={['開始日期', '結束日期']}
+                placeholder={[intl.formatMessage({ id: 'formInput.startDate' }),
+                              intl.formatMessage({ id: 'formInput.endDate' })]}
                 onChange={setDate}
             />
         </FormTextBox>

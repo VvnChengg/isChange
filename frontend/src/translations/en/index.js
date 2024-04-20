@@ -1,12 +1,22 @@
 const en = {
     /* components */
+    'email': 'Email',
+
     'tag.trans': 'TRANS',
     'tag.tour': 'TOUR',
     'tag.post': 'SHARE',
 
-    'email': 'Email',
+    'formInput.unit': 'Unit',
+    'formInput.startDate': 'Start date',
+    'formInput.endDate': 'End date',
 
     /* pages */
+    'title': 'Title',
+    'inputTitle': 'What is your title?',
+    'textarea': 'Description',
+    'inputTextarea': 'Say something...',
+    'back': 'Back',
+
     'login.title': 'Login or Register',
     'login.inputEmail': 'Please enter your email',
     'login.useEmailLogin': 'Use email to login',
@@ -16,6 +26,18 @@ const en = {
     'login.password': 'Password',
     'login.inputPassword': 'Please enter your password',
     'login.login': 'Login',
+
+    'post.create': 'Create post',
+
+    'tour.destination': 'Destination',
+    'tour.inputDestination': 'Where to go?',
+    'tour.people': 'Range of people',
+    'tour.peopleUnit': 'People',
+    'tour.budget': 'Range of budget',
+    'tour.min': 'Min',
+    'tour.max': 'Max',
+    'tour.date': 'Date',
+    'tour.create': 'Create tour',
 
     /* alert */
     'alert.login': 'Please login',

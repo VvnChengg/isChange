@@ -1,13 +1,26 @@
-import React, {useEffect, useState} from "react";
-import "./shareCreate-style.css";
-// import { AiOutlineMail } from "https://esm.sh/react-icons/ai";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useIntl, FormattedMessage } from 'react-intl';
+
+import "./shareCreate-style.css";
+
+import {
+  FormInput,
+  FormRange,
+  FormBudget,
+  FormDate
+} from "../../components/FormInput";
+import Button from "../../components/Button";
+
+// import { AiOutlineMail } from "https://esm.sh/react-icons/ai";
 // import TextField from '@material-ui/core/TextField';
 import { api } from "../../api";
 
 
 export default function Share() {
+  const intl = useIntl();
   let navigate = useNavigate(); 
+
   const routeChange = () =>{ 
     let path = '/'; 
     navigate(path);
@@ -62,35 +75,34 @@ export default function Share() {
   return (
     <div className="container">
       <div className="content">
-        <div className="title-box">
-          <div className="text-xl text-neutral-500">標題</div>
-          <div>
-            <input className="input-box"
-              value={post.title}
-              onChange={(event) => setTitle(event.target.value)}
-              placeholder="標題是什麼咧～" />
-          </div>
-        </div>
-        <div className="text-box">
-          <div className="text-xl leading-7 text-neutral-500">
-            文字說明
-          </div>
-          <div>
-            <textarea 
-              className="input-box"
-              value={post.content}
-              onChange={(event) => setContent(event.target.value)}
-              placeholder="說些什麼吧！"
-              rows={9}
-            />
-          </div>
-          <button className="figure-button" onClick={() => routeChange()}><img
+        <FormInput
+          type='input'
+          title={intl.formatMessage({ id: 'title' })}
+          placeholder={intl.formatMessage({ id: 'inputTitle' })}
+          text={post.title}
+          setText={setTitle}
+        />
+        <FormInput
+          type='textarea'
+          title={intl.formatMessage({ id: 'textarea' })}
+          placeholder={intl.formatMessage({ id: 'inputTextarea' })}
+          text={post.content}
+          setText={setContent}
+        />
+        <button className="figure-button" onClick={() => routeChange()}><img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/3f570a0c69a52557b5a1cd2aabd09f0ea82824f62a802a9b9d432ad5b29bbd66?"
             // className="self-end aspect-square fill-sky-600 mt-[469px] w-[30px] max-md:mt-10"
           /></button>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <Button
+            text={intl.formatMessage({ id: 'back' })}
+          />
+          <Button
+            text={intl.formatMessage({ id: 'post.create' })}
+            onClick={() => onSubmit()}
+          />
         </div>
-        <button className="publish-button" onClick={() => onSubmit()}>發布貼文</button>
       </div>
     </div>
   );

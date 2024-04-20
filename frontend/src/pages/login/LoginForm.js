@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
+
 // import '../../styles/LoginForm.css';
 import loginStyles from '../../styles/LoginForm.module.css';
 
 import LoginFormPwd from './LoginFormPwd'; // 匯入密碼表單元件
 import EmailInput from './EmailInput';
-import AuthButton from './AuthButtons';
+import Button from "../../components/Button";
 
 import { loginApi } from '../../api/loginApi';
 
 const LoginForm = () => {
+  const intl = useIntl();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [showPasswordForm, setShowPasswordForm] = useState(false); // 狀態用於顯示/隱藏密碼表單
-  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -64,21 +68,22 @@ const LoginForm = () => {
               <FormattedMessage id='login.title' />
             </h2>
             <EmailInput email={email} handleEmailChange={handleEmailChange} />
-            <FormattedMessage id='login.useEmailLogin'>
-              {msg =>
-                <AuthButton handleAuth={handleUseEmailAuth} label={msg} />
-              }
-            </FormattedMessage>
+
+            <Button
+              style={{ width: '100%' }}
+              onClick={handleUseEmailAuth}
+              text={intl.formatMessage({ id: 'login.useEmailLogin' })}
+            />
 
             <label className={loginStyles.loginForm__label}>
-            <FormattedMessage id='login.or' />
+              <FormattedMessage id='login.or' />
             </label>
-
-            <FormattedMessage id='login.useGoogleLogin'>
-              {msg => 
-                <AuthButton handleAuth={handleUseGoogleAuth} label={msg} />
-                }
-            </FormattedMessage>
+            
+            <Button
+              style={{ width: '100%' }}
+              onClick={handleUseGoogleAuth}
+              text={intl.formatMessage({ id: 'login.useGoogleLogin' })}
+            />
           </div>
         </>
       )}

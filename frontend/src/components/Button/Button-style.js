@@ -10,9 +10,16 @@ export const ButtonWrapper = styled.div `
 
     border: none;
     border-radius: 15px;
-    background-color: #008cd9;
+    background-color: ${props => props.theme.main};
 
-    color: #fff;
+    color: ${props => props.theme.fill};
 
     cursor: pointer;
+
+    &:hover {
+        background-color: ${props => props.theme.fill};
+        color: ${props => props.theme.active};
+        border: solid 2px ${props => props.theme.active};
+        box-shadow: 2px 2px 2px ${props => props.theme.shadow};
+    }
 `

@@ -1,8 +1,8 @@
 import { ButtonWrapper } from './Button-style.js';
 
-export default function Button({text, onClick}) {
+export default function Button({style, text, onClick}) {
     return (
-        <ButtonWrapper onClick={onClick}>
+        <ButtonWrapper style={style} onClick={onClick}>
             {text}
         </ButtonWrapper>
     )

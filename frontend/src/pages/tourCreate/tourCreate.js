@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useIntl } from 'react-intl';
 
 import { api } from "../../api";
 
@@ -16,6 +17,8 @@ import {
 import Button from "../../components/Button";
 
 export default function TourCreate() {
+    const intl = useIntl();
+
     const [tour, setTour] = useState({
         event_title: '',
         destination: '',
@@ -100,47 +103,53 @@ export default function TourCreate() {
         <CreateContainer>
             <FormInput
                 type='input'
-                title='活動標題'
-                placeholder='標題是什麼咧～'
+                title={intl.formatMessage({ id: 'title' })}
+                placeholder={intl.formatMessage({ id: 'inputTitle' })}
                 text={tour.event_title}
                 setText={setTitle}
             />
             <FormInput
                 type='input'
-                title='目的地'
-                placeholder='想要去哪裡玩？'
+                title={intl.formatMessage({ id: 'tour.destination' })}
+                placeholder={intl.formatMessage({ id: 'tour.inputDestination' })}
                 text={tour.destination}
                 setText={setDestination}
             />
             <FormRange
-                title='徵求人數範圍'
-                placeholder={['最少', '最多']}
-                unit='人'
+                title={intl.formatMessage({ id: 'tour.people' })}
+                placeholder={[intl.formatMessage({ id: 'tour.min' }),
+                              intl.formatMessage({ id: 'tour.max' })]}
+                unit={intl.formatMessage({ id: 'tour.peopleUnit' })}
                 range={[tour.people_lb, tour.people_ub]}
                 setRange={setPeople}
             />
             <FormBudget
-                title='預算範圍'
-                placeholder={'最高'}
+                title={intl.formatMessage({ id: 'tour.budget' })}
+                placeholder={intl.formatMessage({ id: 'tour.max' })}
                 currency={tour.currency}
                 setCurrency={setCurrency}
                 budget={tour.budget}
                 setBudget={setBudget}
             />
             <FormDate
-                title='日期'
+                title={intl.formatMessage({ id: 'tour.date' })}
                 setDate={setDate}
             />
             <FormInput
                 type='textarea'
-                title='文字說明'
-                placeholder='說些什麼吧！'
+                title={intl.formatMessage({ id: 'textarea' })}
+                placeholder={intl.formatMessage({ id: 'inputTextarea' })}
                 text={tour.event_intro}
                 setText={setIntro}
             />
             <CreateButtonContainer>
-                <Button text='返回上頁' />
-                <Button text='創建活動' onClick={() => onSubmit()}/>
+                <Button
+                    text={intl.formatMessage({ id: 'back' })}
+                />
+                <Button
+                    text={intl.formatMessage({ id: 'tour.create' })}
+                    onClick={() => onSubmit()}
+                />
             </CreateButtonContainer>
         </CreateContainer>
     )
