@@ -1,34 +1,56 @@
 import React from 'react';
-import DropdownMenustyles from '../../styles/DropdownMenu.module.css';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
+import { Menu } from 'antd';
+
+function getItem(label, key, icon, children, type) {
+  return { key, icon, children, label, type };
+}
 
 function DropdownMenu({ isOpen, setIsOpen, token, navigate, logout }) {
-    const handleClick = (callback) => {
-      setIsOpen(false); // 關閉下拉選單
-      callback(); // 執行傳入的函數
-    };
-  
-    return (
-      <div className={DropdownMenustyles.dropdownMenu}>
-        {isOpen && token && (
-          <ul>
-            <li onClick={() => handleClick(() => navigate('/member'))}>
-                <FormattedMessage id='header.member'/>
-            </li>
-            <li onClick={() => handleClick(logout)}>
-                <FormattedMessage id='header.logout'/>
-            </li>
-          </ul>
-        )}
-        {isOpen && !token && (
-          <ul>
-            <li onClick={() => handleClick(() => navigate('/login'))}>
-                <FormattedMessage id='header.login'/>
-            </li>
-          </ul>
-        )}
-      </div>
-    );
-  }
+  const intl = useIntl();
+
+  const onClick = (e) => {
+    setIsOpen(false); // 關閉下拉選單
+
+    if (e.key === 'member')
+      navigate('/member');
+    else if (e.key === 'login')
+      navigate('/login');
+    else if (e.key === 'logout')
+      logout();
+  };
+
+  const loginItems = [
+    getItem(intl.formatMessage({ id: 'header.login' }), 'login'),
+  ];
+
+  const notLoginItems = [
+    getItem(intl.formatMessage({ id: 'header.member' }), 'member'),
+    { type: 'divider' },
+    getItem(intl.formatMessage({ id: 'header.logout' }), 'logout'),
+  ];
+
+  return (
+    <>
+      {isOpen &&
+        <Menu
+          onClick={onClick}
+          style={{
+            width: 200,
+            position: 'absolute',
+              top: '100%',
+            marginTop: 3,
+            transform: 'translateX(-50%)',
+            borderRadius: '5px',
+          }}
+          defaultSelectedKeys={['1']}
+          defaultOpenKeys={['sub1']}
+          mode="inline"
+          items={token === null ? loginItems : notLoginItems}
+        />
+      }
+    </>
+  );
+}
 export default DropdownMenu;
 

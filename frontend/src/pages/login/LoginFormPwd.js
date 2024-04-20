@@ -18,7 +18,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       // 調用 loginApi 中的 login 函數，傳入 email 和 password
       const data = await loginApi.login(email, password);
       if(data.status === "success") {
-        navigate('/member');
+        navigate('/');
       }
     } catch (error) {
       console.error(error);
