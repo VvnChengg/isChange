@@ -16,14 +16,18 @@ const View = () => {
 
   // 先讀取使用者資料
   const getInfo = async () =>{
+
+    // 判斷 token 是否過期
+    const now = new Date();
+    const expiryTime = localStorage.getItem('expiry_time');
+    if(now.getTime() > Number(expiryTime)){
+      localStorage.clear();
+      navigate('/login');
+      return
+    }
+
     // use viewApi.getMember to get member info
     const token =  localStorage.getItem('access_token');
-
-    // if no token, navigate to login page
-    if(!token){  
-      navigate('/login');
-      return;
-    };
 
     const memberInfo = await viewApi.getMember(token);
     // console.log(memberInfo);

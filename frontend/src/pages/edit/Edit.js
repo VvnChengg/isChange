@@ -22,6 +22,16 @@ const Edit = () => {
     const [photo, setPhoto] = useState('');
 
     const getInfo = async () => {
+        
+        // 判斷 token 是否過期
+        const now = new Date();
+        const expiryTime = localStorage.getItem('expiry_time');
+        if (now.getTime() > Number(expiryTime)) {
+            localStorage.clear();
+            navigate('/login');
+            return
+        }
+
         // use viewApi.getMember to get member info
         const token = localStorage.getItem('access_token');
 

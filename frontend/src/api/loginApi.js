@@ -36,9 +36,12 @@ export const loginApi = {
             if (res.data.status === 'success') {
                 // console.log('Save localStorage data');
                 // 如果登入成功，則將使用者資訊存儲到 localStorage 中
+                const now = new Date();
+                const expiryTime = now.getTime() + 3600000; // 設定token過期時間為 1 hour later    
                 localStorage.setItem('user_id', res.data.data.user_id);
                 localStorage.setItem('email', res.data.data.email);
                 localStorage.setItem('access_token', res.data.data.access_token);
+                localStorage.setItem('expiry_time', expiryTime.toString());
                 alert(`${res.data.message}`);
             }else{
                 // console.log('Failed to login: ' + res.data.message);
