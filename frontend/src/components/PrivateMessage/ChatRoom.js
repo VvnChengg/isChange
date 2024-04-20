@@ -3,8 +3,8 @@ import axios from 'axios';
 import  './ChatRoom.css';
 
 
-
 export default function ChatRoom({chatid}) {
+  let lastDate = null; // 追蹤上一條消息的日期
   //const hostname = 'http://localhost:3000/api';
   const hostname = process.env.REACT_APP_API_HOSTNAME;
   const [chatData, setChatData] = useState(null);
@@ -42,14 +42,28 @@ export default function ChatRoom({chatid}) {
           </div>
 
           {/* 渲染訊息 */}
-          {chatData.messages.map(message => (
-            <div className='private-message-message-container'>
-              <div className={`private-message-message-box ${message.sender_id === userId ? "private-message-own-message" : ""}`} key={message._id}>
-                <p className="private-message-message-content">{message.content}</p>
-                <p className="private-message-timestamp">{new Date(message.timestamp).toLocaleString()}</p>
+          {chatData.messages.map(message => {
+            const messageDate = new Date(message.timestamp);
+            const formattedDate = `${messageDate.getFullYear()}/${(messageDate.getMonth() + 1).toString().padStart(2, '0')}/${messageDate.getDate().toString().padStart(2, '0')}`;
+            const formattedHours = messageDate.getHours().toString().padStart(2, '0');
+            const formattedMinutes = messageDate.getMinutes().toString().padStart(2, '0');
+            const showDate =  formattedDate !== lastDate;
+            lastDate = formattedDate; // 更新上一條消息的日期
+
+            return (
+              <div className='private-message-message-container' key={message._id}>
+                {showDate && (
+                  <div className="private-message-date-container">
+                    <p className="private-message-date">{formattedDate}</p>
+                  </div>
+                )}
+                <div className={`private-message-message-box ${message.sender_id === userId ? "private-message-own-message" : ""}`}>
+                  <p className="private-message-message-content">{message.content}</p>
+                  <p className="private-message-time">{formattedHours}:{formattedMinutes}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

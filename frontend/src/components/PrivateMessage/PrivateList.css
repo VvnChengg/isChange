@@ -1,41 +1,66 @@
 .private-message-container {
-  position: fixed; /* 使用絕對定位 */
-  top: 100px; /* 距離頂部 100 像素 */
-  bottom: 100px;
-  left: 50%; /* 水平居中 */
-  transform: translateX(-50%); /* 水平居中 */
-  width: 600px; /* 固定寬度為 600px */
-  max-height: 2000px; 
-  justify-content: flex-start;
+  position: fixed;
+  top: 16%; /* 相對於父元素，距離頂部10% */
+  bottom: 10%; /* 相對於父元素，距離底部10% */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%; 
+  max-height: 100vh; /* 更改最大高度 */
 }
 
 
 .private-message-chat-room-title {
+    top: 2%; /* 相對於父元素，距離頂部 */
     color: #008CD9;
+    font-size: 6vw;
 }
   
 .private-message-chat-list-table {
   border-collapse: collapse;
   border: 1px solid #008CD9;
-  width: 500px;
+  width: 100%;
   overflow: auto;
   border-radius: 20px ; 
 }
 
-.private-message-chat-time, .private-message-chat-status {
-  font-size: 12px;
-  color: #999;
-  text-align: right; 
+.private-message-a-chat {
+  height: 10vhx;
+  width: 80vhx;
 }
 
 .private-message-bottom {
   border-bottom: 1px solid #008CD9;
 }
 
-.private-message-chat-name {
-  color: #008CD9;
+.private-message-chat-time,
+.private-message-chat-status {
+  font-size: 2vw;
+  color: #999;
+  text-align: right;
+  width: 20%;
 }
 
-.private-message-a-chat {
-  height: 60px;
+
+.private-message-chat-time{
+  vertical-align: top; 
+}
+
+.private-message-chat-status {
+  vertical-align: bottom; 
+}
+
+
+.private-message-chat-name {
+  color: #008CD9;
+  font-size: 4vw;
+  vertical-align: top; 
+  width: 60%;
+}
+
+
+.private-message-chat-text{
+  font-size: 4vw;
+  vertical-align: bottom; 
+  overflow: hidden; 
+  width: 60%;
 }

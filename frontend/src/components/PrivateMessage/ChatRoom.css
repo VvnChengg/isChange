@@ -3,42 +3,54 @@
 /* 整個聊天室容器 */
 .private-message-chat-room-container {
     position: fixed; /* 使用絕對定位 */
-    top: 100px; /* 距離頂部 100 像素 */
-    bottom: 200px;
+    top: 16%; /* 距離頂部 100 像素 */
+    bottom: 10%;
     left: 50%; /* 水平居中 */
     transform: translateX(-50%); /* 水平居中 */
-    width: 600px; /* 固定寬度為 600px */
-    max-height: 2000px; 
-    padding: 20px;
+    width: 60%; /* 固定寬度為 60% */
+    max-height: 100vh; 
+    padding: 2%;
     box-sizing: border-box; /* 盒模型設定為邊框盒 */
     border: 2px solid #008CD9; /* 添加 2 像素寬度的實線邊框，顏色為 #008CD9 */
     overflow-y: auto; /* 添加垂直滾動條 */
   }
   
-
-
     
 
 /* 單個訊息框 */
 .private-message-message-container {
     display: block ; /* 將每個訊息設置為區塊元素，確保每個訊息都在新的一行上 */
+    flex-direction: column;
     width: 100%; /* 寬度佔滿父元素 */
     clear: both; /* 確保訊息框不會浮動到浮動元素旁邊 */
-    margin-bottom: 15px; /* 設置底部間距 */
+    margin-bottom: 2%; /* 設置底部間距 */
 }
 
-
+.private-message-timestamp-container {
+  margin-top: 2%; /* 添加一個上邊距，避免與 .private-message-message-box 重疊 */
+}
 
 /* 訊息時間戳 */
-.private-message-timestamp {
-font-size: 0.8rem;
+.private-message-date {
+font-size: 2vw;
 color: #888;
+text-align: center;
+width: 100%;
+margin-bottom: 1%; 
 }
+
+.private-message-time {
+  font-size: 2vw;
+  color: #888;
+  width: 100%;
+  margin-bottom: 1%;
+  text-align: right; 
+  }
 
 .private-message-message-box {
     display: inline-block; /* 將元素設置為內聯塊，使其大小根據內容自動調整 */
-    margin-bottom: 15px;
-    padding: 10px;
+    margin-bottom: 2%;
+    padding: 2%;
     border-radius: 8px;
     overflow-wrap: break-word; /* 超出寬度時自動換行 */
     word-wrap: break-word;
@@ -51,6 +63,7 @@ color: #888;
   background-color: #4629F2;
   color: white;
   float: right;
+  font-size: 4vw;
 }
 
 /* 別人發送的訊息靠左 */
@@ -59,24 +72,26 @@ color: #888;
   color: black;
   text-align: left;
   display: block;
-  float: left;
+  float: left;  
+  font-size: 4vw;
 }
 
 .private-message-chat-header{
   border-bottom: 2px solid #008CD9;
   display: flex; 
   align-items: baseline;
+  height: 10%; 
+  margin-bottom: 4%; /* 添加 下邊距 */
 }
 
 .private-message-photo {
-  width: 50px; 
-  height: 50px; 
+  height: 100%; 
 }
 
 
 .private-message-name {
   text-align: left;
-  font-size: 24px;
   margin-left: 10px;
   color: #008CD9;
+  font-size: 4vw;
 }
