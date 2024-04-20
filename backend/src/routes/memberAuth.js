@@ -12,6 +12,7 @@ router.post(
 );
 router.get("/register/checkuser", memberAuthController.checkUsername);
 router.patch("/register", memberAuthController.verifiedMember);
+router.patch("/forget-pwd", memberAuthController.forgetPwd);
 router.delete("/delete", memberAuthController.deleteTestMember); //後端測試用
 
 module.exports = router;
