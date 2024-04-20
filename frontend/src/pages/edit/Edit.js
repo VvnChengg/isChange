@@ -7,6 +7,7 @@ import { ImageUploadDiv } from './ImageDiv';
 import { viewApi } from '../../api/viewApi';
 import { useNavigate } from 'react-router-dom';
 import Button from "../../components/Button";
+import { FormattedMessage } from 'react-intl';
 
 const Edit = () => {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ const Edit = () => {
     useEffect(() => {
         getInfo();
     }, []);
-    
+
 
 
     // 處理輸入框的焦點
@@ -67,7 +68,7 @@ const Edit = () => {
     }
 
     const handleSubmitImage = () => {
-        console.log('上傳圖片:', photo);
+        // console.log('上傳圖片:', photo);
     }
 
     const handleSubmitIntro = () => {
@@ -75,7 +76,7 @@ const Edit = () => {
             alert('自我介紹只能少於200字');
             return;
         }
-        console.log('表單已提交:', { introText });
+        // console.log('表單已提交:', { introText });
 
     }
 
@@ -89,27 +90,33 @@ const Edit = () => {
             <div className={editStyles.editForm}>
                 <div className={editStyles.section1}>
                     <div className={editStyles.section1Left}>
-                        <ImageUploadDiv 
-                        photo={photo} 
-                        setPhoto={setPhoto} />
+                        <ImageUploadDiv
+                            photo={photo}
+                            setPhoto={setPhoto} />
                     </div>
 
                     <div className={editStyles.section1Right}>
-                        <div className={editStyles.sectionHeading}>基本資料修改</div>
-                        <div className={editStyles.actionButtonsDiv}>
-                        <Button
-                            style={{ marginBottom: '20px' }}
-                            onClick={() => setShowPasswordDiv(true)}
-                            // text={intl.formatMessage({ id: 'login.login' })}
-                            text="修改密碼"
-                        />
+                        <div className={editStyles.sectionHeading}>
+                            <FormattedMessage id='edit.changeBasicInfo'/>
 
-                        <Button
-                            // style={{ width: '100%' }}
-                            onClick={() => setShowBasicInfoDiv(true)}
-                            // text={intl.formatMessage({ id: 'login.login' })}
-                            text="修改名稱學校"
-                        />
+                        </div>
+                        <div className={editStyles.actionButtonsDiv}>
+                            <FormattedMessage id='edit.changePassword'>
+                                {(text) => <Button
+                                    style={{ marginBottom: '20px' }}
+                                    onClick={() => setShowPasswordDiv(true)}
+                                    text={text}
+                                />}
+                            </FormattedMessage>
+
+                            <FormattedMessage id='edit.changeUsernameandSchool'>
+                                {(text) => <Button
+                                    // style={{ width: '100%' }}
+                                    onClick={() => setShowBasicInfoDiv(true)}
+                                    // text={intl.formatMessage({ id: 'login.login' })}
+                                    text={text}
+                                />}
+                            </FormattedMessage>
                         </div>
                     </div>
 

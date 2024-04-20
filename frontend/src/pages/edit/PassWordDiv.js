@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
 import Button from "../../components/Button";
+import { FormattedMessage } from 'react-intl';
 
 // 編輯密碼的元件
 export const PassWordEdit = ({ showPasswordDiv,
@@ -163,10 +164,13 @@ export const PassWordEdit = ({ showPasswordDiv,
                 <div className={editStyles.floatingDiv}>
                     <button onClick={handleClose} className={editStyles.closeButton}>X</button>
                     <form className={editStyles.editFrom}>
-                        <label htmlFor="password-origin-input" className={editStyles.editForm__label}>輸入原密碼</label>
+                        <label htmlFor="password-origin-input" className={editStyles.editForm__label}>
+                            <FormattedMessage id="edit.inputOriginPassWord" />
+                        </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <input
+                                <FormattedMessage id="edit.pleaseInputOriginPassWord">
+                                    {(text) => <input
                                     type="password"
                                     id="password-origin-input"
                                     value={OriginPassWord}
@@ -174,17 +178,20 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
                                     className={editStyles.editForm__input}
-                                    placeholder="請輸入原密碼"
-                                    required
-                                />
-                                {/* {!passWordRuleMatched && <span className="registered-text">密碼須符合...條件</span>} */}
+                                    placeholder={text}
+                                    required/>}
+                                </FormattedMessage>
+                                {/* {!passWordRuleMatched && <span className={editStyles.registeredText}>密碼須符合...條件</span>} */}
                             </div>
                         </div>
 
-                        <label htmlFor="password-input" className={editStyles.editForm__label}>輸入新密碼</label>
+                        <label htmlFor="password-input" className={editStyles.editForm__label}>
+                            <FormattedMessage id="edit.newPassword" />
+                        </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <input
+                                <FormattedMessage id="edit.pleaseInputNewPassWord">
+                                    {(text) => <input
                                     type="password"
                                     id="password-input"
                                     value={passWord}
@@ -192,16 +199,21 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
                                     className={editStyles.editForm__input}
-                                    placeholder="請輸入密碼"
-                                    required
-                                />
-                                {!passWordRuleMatched && <span className={editStyles.registeredText}>密碼至少要8個字</span>}
+                                    placeholder={text}
+                                    required/>}
+                                </FormattedMessage>
+                                {!passWordRuleMatched && <span className={editStyles.registeredText}>
+                                    <FormattedMessage id="edit.passwordRuleNottMatch" />
+                                </span>}
                             </div>
                         </div>
-                        <label htmlFor="password-confirm-input" className={editStyles.editForm__label}>確認新密碼</label>
+                        <label htmlFor="password-confirm-input" className={editStyles.editForm__label}>
+                            <FormattedMessage id="edit.confirmNewPassword" />
+                        </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <input
+                                <FormattedMessage id="edit.pleaseInputYourConfirmPassword">
+                                    {(text) => <input
                                     type="password"
                                     id="password-confirm-input"
                                     value={passWord_confirm}
@@ -209,10 +221,12 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
                                     className={editStyles.editForm__input}
-                                    placeholder="再輸入密碼"
-                                    required
-                                />
-                                {!isPassWordSame && <span className={editStyles.registeredText}>密碼不同</span>}
+                                    placeholder={text}
+                                    required/>}
+                                </FormattedMessage>
+                                {!isPassWordSame && <span className={editStyles.registeredText}>
+                                    <FormattedMessage id="edit.passwordNotMatch" />
+                                </span>}
                             </div>
                         </div>
                         {/* <button type="submit" className={editStyles.actionButton} disabled={!isPassWordSame || !passWordRuleMatched}>
@@ -220,7 +234,8 @@ export const PassWordEdit = ({ showPasswordDiv,
                         </button> */}
                         
 
-                        <Button
+                        <FormattedMessage id='edit.confirm'>
+                        {(text) => <Button
                             style={{
                                 width: '100%',
                                 backgroundColor: (!isPassWordSame || !passWordRuleMatched) ? '#ccc' : '',
@@ -228,9 +243,8 @@ export const PassWordEdit = ({ showPasswordDiv,
                                 cursor: (!isPassWordSame || !passWordRuleMatched) ? 'not-allowed' : 'default',
                             }}
                             onClick={(!isPassWordSame || !passWordRuleMatched) ? undefined : handleSubmitPassWord}
-                            text={"確認"}
-                        />
-
+                            text={text}/>}
+                        </FormattedMessage>
                     </form>
                 </div>
             )}

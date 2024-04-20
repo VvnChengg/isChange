@@ -2,6 +2,7 @@ import react, { Fragment, useEffect } from 'react';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
 import Button from "../../components/Button";
+import { FormattedMessage } from 'react-intl';
 
 // 編輯自我介紹的元件
 export const SelfInfo = ({setIntroText, introText}) => {
@@ -36,14 +37,20 @@ export const SelfInfo = ({setIntroText, introText}) => {
 
     return (
         <Fragment>
-            <div className={editStyles.sectionHeading}> 自我介绍（限兩百字以內）</div>
-            <textarea onChange={ChangeIntro} value={introText} className={editStyles.selfIntro} placeholder="限兩百字以內"></textarea>
+            <div className={editStyles.sectionHeading}> 
+                <FormattedMessage id="edit.intro" />
+            </div>
+            <FormattedMessage id="edit.introRule">
+            {text=> <textarea onChange={ChangeIntro} value={introText} className={editStyles.selfIntro} placeholder={text}/> }
+            </FormattedMessage>
             {/* <button onClick={handleSubmitIntro}>儲存自我介紹</button> */}
-            <Button
+
+            <FormattedMessage id="edit.saveIntro">
+            {text=> <Button
                 style = {{width: "100%", marginTop: "10px"}}
                 onClick={handleSubmitIntro} 
-                text="儲存自我介紹" 
-            />
+                text={text}/>}
+            </FormattedMessage>
         </Fragment>
     );
 };

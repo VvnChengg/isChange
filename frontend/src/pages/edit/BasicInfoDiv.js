@@ -2,8 +2,8 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { registerApi } from '../../api/registerApi';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
-import { useIntl } from 'react-intl';
 import Button from "../../components/Button";
+import { FormattedMessage } from 'react-intl';
 
 // 編輯基本資料的元件
 export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInputFocus, handleInputBlur, username, school }) => {
@@ -104,29 +104,38 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
             {showBasicInfo && (
                 <div className={editStyles.floatingDiv}>
                     <button onClick={handleClose} className={editStyles.closeButton}>X</button>
-                    <form className="register-form">
-                        <label htmlFor="username" className={editStyles.loginForm__label}>使用者名稱</label>
+                    <form className={editStyles.registerForm}>
+                        <label htmlFor="username" className={editStyles.loginForm__label}>
+                            <FormattedMessage id="edit.username" />
+                        </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <input
-                                    type="text"
-                                    id="username"
-                                    value={userName}
-                                    onChange={handleUserNameChange}
-                                    onFocus={handleInputFocus}
-                                    onBlur={handleInputBlur}
-                                    className={editStyles.editForm__input}
-                                    placeholder="請輸入使用者名稱"
-                                    required
-                                />
-                                {userNameRegistered && userName !== username && <span className={editStyles.registeredText}>該名稱已被使用</span>}
+                                <FormattedMessage id="edit.pleaseEnterUserName">
+                                    {(text) =><input
+                                        type="text"
+                                        id="username"
+                                        value={userName}
+                                        onChange={handleUserNameChange}
+                                        onFocus={handleInputFocus}
+                                        onBlur={handleInputBlur}
+                                        className={editStyles.editForm__input}
+                                        placeholder={text}
+                                        required
+                                    />}
+                                </FormattedMessage>
+                                {userNameRegistered && userName !== username && <span className={editStyles.registeredText}>
+                                    <FormattedMessage id="edit.usernameRegistered" />
+                                    </span>}
                             </div>
                         </div>
 
-                        <label htmlFor="userSchoolName" className={editStyles.loginForm__label}>交換學校</label>
+                        <label htmlFor="userSchoolName" className={editStyles.loginForm__label}>
+                            <FormattedMessage id="edit.schoolName" />
+                        </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <input
+                                <FormattedMessage id="edit.pleaseEnterSchoolName">
+                                    {(text) => <input
                                     type="text"
                                     id="userSchoolName"
                                     value={userSchoolName}
@@ -134,15 +143,16 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                     onFocus={handleInputFocus}
                                     onBlur={handleInputBlur}
                                     className={editStyles.editForm__input}
-                                    placeholder="輸入交換學校"
-                                    required
-                                />
+                                    placeholder={text}
+                                    required/>}
+                                </FormattedMessage>
                             </div>
                         </div>
                         {/* <button type="submit" className={editStyles.actionButton} disabled={userName === username && userSchoolName === school}>
                             確認
                         </button> */}
-                        <Button
+                        <FormattedMessage id='edit.confirm'>
+                        {(text) => <Button
                             style={{
                                 width: '100%',
                                 backgroundColor: (userName === username && userSchoolName === school) ? '#ccc' : '',
@@ -150,9 +160,8 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                 cursor: (userName === username && userSchoolName === school) ? 'not-allowed' : 'default',
                             }}
                             onClick={(userName === username && userSchoolName === school) ? undefined : handleSubmitBasicInfo}
-                            // text={intl.formatMessage({ id: 'login.login' })}
-                            text={"確認"}
-                        />
+                            text={text}/>}
+                        </FormattedMessage>
 
                     </form>
                 </div>

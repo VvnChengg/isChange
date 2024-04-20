@@ -3,6 +3,7 @@ import AvatarEditor from 'react-avatar-editor';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
 import Button from "../../components/Button";
+import { FormattedMessage } from 'react-intl';
 
 // 匯入編輯大頭貼的元件
 export const ImageUploadDiv = ({ photo, setPhoto }) => {
@@ -74,7 +75,9 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
 
     return (
         <Fragment>
-            <div className={editStyles.sectionHeading}>頭像編輯</div>
+            <div className={editStyles.sectionHeading}>
+                <FormattedMessage id="edit.changeImage" />    
+            </div>
             <div className={editStyles.editButton}>
 
                 {modalIsOpen && <div className={editStyles.floatingDiv}>
@@ -90,14 +93,15 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                                 scale={1.2}
                             />
                         </div>)}
-
-                    <Button
-                        style={{
-                            width: '100%',
-                        }}
-                        onClick={handleSave}
-                        text={"裁減"}
-                    />
+                    <FormattedMessage id='edit.cutImage'>
+                        {(text) => <Button
+                            style={{
+                                width: '100%',
+                            }}
+                            onClick={handleSave}
+                            text={text}
+                        />}
+                    </FormattedMessage>
 
                 </div>}
 
@@ -113,13 +117,16 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                 />
 
                 {/* <button className={editStyles.actionButton} onClick={() => document.getElementById('fileInput').click()}>上傳圖片</button> */}
-                <Button
+                <FormattedMessage id='edit.uploadImage'>
+                {text => <Button
                     style={{
                         width: '100%',
                     }}
                     onClick={() => document.getElementById('fileInput').click()}
-                    text={"上傳圖片"}
-                />
+                    text={text}
+                />}
+                </FormattedMessage>
+
             </div>
 
         </Fragment>
