@@ -27,6 +27,9 @@ const zh = {
     'login.inputPassword': '請輸入密碼',
     'login.login': '登入',
 
+    'view.past': '過往發文紀錄',
+    'view.intro': '自我介紹',
+
     'post.create': '創建貼文',
 
     'tour.destination': '目的地',

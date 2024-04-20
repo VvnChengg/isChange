@@ -27,6 +27,9 @@ const en = {
     'login.inputPassword': 'Please enter your password',
     'login.login': 'Login',
 
+    'view.past': 'Past posts',
+    'view.intro': 'Introduction',
+
     'post.create': 'Create post',
 
     'tour.destination': 'Destination',
