@@ -2,9 +2,10 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
+import Button from "../../components/Button";
 
 // 匯入編輯大頭貼的元件
-export const ImageUploadDiv = ({photo, setPhoto}) => {
+export const ImageUploadDiv = ({ photo, setPhoto }) => {
     const editorRef = useRef(null);
     const [image, setImage] = useState('/icons/profile.png');
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -19,7 +20,7 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
         setImage(URL.createObjectURL(file));
         setModalIsOpen(true);
     };
-    
+
     // 儲存圖片
     const handleSave = async () => {
         if (editorRef.current) {
@@ -41,11 +42,11 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
                     const token = localStorage.getItem('access_token');
                     const data = await editApi.editImage(formData, token);
                     console.log(data);
-                    if(data.status === 'success'){
+                    if (data.status === 'success') {
                         // console.log("更新後的圖片"+data.data.photo);
                         alert('更新成功');
                     }
-                } catch(error) {
+                } catch (error) {
                     // console.error(error);
                     alert('更新失敗');
                 }
@@ -58,15 +59,15 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
     function dataURLtoFile(dataurl, filename) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-        while(n--){
+        while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
         }
-        return new File([u8arr], filename, {type:mime});
+        return new File([u8arr], filename, { type: mime });
     }
-    
+
     useEffect(() => {
         setImage(photo);
-        console.log(photo);
+        // console.log(photo);
     }, [photo]);
 
 
@@ -76,24 +77,32 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
             <div className={editStyles.sectionHeading}>頭像編輯</div>
             <div className={editStyles.editButton}>
 
-                {modalIsOpen &&<div className={editStyles.floatingDiv}>
+                {modalIsOpen && <div className={editStyles.floatingDiv}>
                     {image && (
-                        <AvatarEditor
-                            ref={editorRef}
-                            image={image}
-                            width={136}
-                            height={136}
-                            border={50}
-                            borderRadius={68}
-                            scale={1.2}
-                        />
-                    )}
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', margin:'5%' }}>
+                            <AvatarEditor
+                                ref={editorRef}
+                                image={image}
+                                width={136}
+                                height={136}
+                                border={50}
+                                borderRadius={68}
+                                scale={1.2}
+                            />
+                        </div>)}
 
-                    <button onClick={handleSave}>裁剪</button>
+                    <Button
+                        style={{
+                            width: '100%',
+                        }}
+                        onClick={handleSave}
+                        text={"裁減"}
+                    />
+
                 </div>}
-                
+
                 <div className={editStyles.profileImage}>
-                    <img src={image || "/icons/profile.png"} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src="/icons/profile.png"; }} />
+                    <img src={image || "/icons/profile.png"} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src = "/icons/profile.png"; }} />
                 </div>
 
                 <input
@@ -103,7 +112,14 @@ export const ImageUploadDiv = ({photo, setPhoto}) => {
                     style={{ display: 'none' }}
                 />
 
-                <button className={editStyles.actionButton} onClick={() => document.getElementById('fileInput').click()}>上傳圖片</button>
+                {/* <button className={editStyles.actionButton} onClick={() => document.getElementById('fileInput').click()}>上傳圖片</button> */}
+                <Button
+                    style={{
+                        width: '100%',
+                    }}
+                    onClick={() => document.getElementById('fileInput').click()}
+                    text={"上傳圖片"}
+                />
             </div>
 
         </Fragment>

@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { registerApi } from '../../api/registerApi';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
+import { useIntl } from 'react-intl';
+import Button from "../../components/Button";
 
 // 編輯基本資料的元件
 export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInputFocus, handleInputBlur, username, school }) => {
@@ -54,7 +56,7 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
             }        
         } catch(error) {
             if (error.response) {
-                console.log(error.response.data);
+                // console.log(error.response.data);
                 // error.response.data 將會是你的錯誤訊息物件，例如：
                 // { status: "failed", message: "使用者名稱已有人使用，請更換其他名稱" }
                 if (error.response.data.status === 'failed') {
@@ -63,11 +65,11 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                     setUserNameRegistered(false);
                 }
             } else if (error.request) {
-                console.error('No response was received', error.request);
+                // console.error('No response was received', error.request);
             } else {
-                console.error('Error setting up the request', error.message);
+                // console.error('Error setting up the request', error.message);
             }
-            console.error('Error config:', error.config);
+            // console.error('Error config:', error.config);
         };
     }
 
@@ -92,7 +94,7 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                 handleClose();
             }
         }catch(error){
-            console.error(error);
+            // console.error(error);
             alert('更新失敗');
         }
     }
@@ -102,7 +104,7 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
             {showBasicInfo && (
                 <div className={editStyles.floatingDiv}>
                     <button onClick={handleClose} className={editStyles.closeButton}>X</button>
-                    <form className="register-form" onSubmit={handleSubmitBasicInfo}>
+                    <form className="register-form">
                         <label htmlFor="username" className={editStyles.loginForm__label}>使用者名稱</label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
@@ -137,9 +139,21 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                 />
                             </div>
                         </div>
-                        <button type="submit" className={editStyles.actionButton} disabled={userName === username && userSchoolName === school}>
+                        {/* <button type="submit" className={editStyles.actionButton} disabled={userName === username && userSchoolName === school}>
                             確認
-                        </button>
+                        </button> */}
+                        <Button
+                            style={{
+                                width: '100%',
+                                backgroundColor: (userName === username && userSchoolName === school) ? '#ccc' : '',
+                                color: (userName === username && userSchoolName === school) ? '#888' : '',
+                                cursor: (userName === username && userSchoolName === school) ? 'not-allowed' : 'default',
+                            }}
+                            onClick={(userName === username && userSchoolName === school) ? undefined : handleSubmitBasicInfo}
+                            // text={intl.formatMessage({ id: 'login.login' })}
+                            text={"確認"}
+                        />
+
                     </form>
                 </div>
             )}

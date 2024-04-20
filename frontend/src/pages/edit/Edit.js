@@ -6,6 +6,7 @@ import { SelfInfo } from './SelfInfo';
 import { ImageUploadDiv } from './ImageDiv';
 import { viewApi } from '../../api/viewApi';
 import { useNavigate } from 'react-router-dom';
+import Button from "../../components/Button";
 
 const Edit = () => {
     const navigate = useNavigate();
@@ -88,14 +89,27 @@ const Edit = () => {
             <div className={editStyles.editForm}>
                 <div className={editStyles.section1}>
                     <div className={editStyles.section1Left}>
-                        <ImageUploadDiv photo={photo} setPhoto={setPhoto} />
+                        <ImageUploadDiv 
+                        photo={photo} 
+                        setPhoto={setPhoto} />
                     </div>
 
                     <div className={editStyles.section1Right}>
                         <div className={editStyles.sectionHeading}>基本資料修改</div>
                         <div className={editStyles.actionButtonsDiv}>
-                            <button className={editStyles.actionButton} onClick={() => setShowPasswordDiv(true)}>修改密碼</button>
-                            <button className={editStyles.actionButton} onClick={() => setShowBasicInfoDiv(true)}>修改名稱學校</button>
+                        <Button
+                            style={{ marginBottom: '20px' }}
+                            onClick={() => setShowPasswordDiv(true)}
+                            // text={intl.formatMessage({ id: 'login.login' })}
+                            text="修改密碼"
+                        />
+
+                        <Button
+                            // style={{ width: '100%' }}
+                            onClick={() => setShowBasicInfoDiv(true)}
+                            // text={intl.formatMessage({ id: 'login.login' })}
+                            text="修改名稱學校"
+                        />
                         </div>
                     </div>
 

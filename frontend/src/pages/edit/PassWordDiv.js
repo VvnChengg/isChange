@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
+import Button from "../../components/Button";
 
 // 編輯密碼的元件
 export const PassWordEdit = ({ showPasswordDiv,
@@ -140,7 +141,7 @@ export const PassWordEdit = ({ showPasswordDiv,
 
     const handleSubmitPassWord = async (e) => {
         e.preventDefault();
-        console.log('表單已提交:', { OriginPassWord, passWord, passWord_confirm });
+        // console.log('表單已提交:', { OriginPassWord, passWord, passWord_confirm });
 
         try{
             const token = localStorage.getItem('access_token');
@@ -150,7 +151,7 @@ export const PassWordEdit = ({ showPasswordDiv,
                 handleClose();
             }
         }catch(error){
-            console.error(error);
+            // console.error(error);
             alert('更新失敗');
         }
 
@@ -161,7 +162,7 @@ export const PassWordEdit = ({ showPasswordDiv,
             {showPasswordDiv && (
                 <div className={editStyles.floatingDiv}>
                     <button onClick={handleClose} className={editStyles.closeButton}>X</button>
-                    <form className={editStyles.editFrom} onSubmit={handleSubmitPassWord}>
+                    <form className={editStyles.editFrom}>
                         <label htmlFor="password-origin-input" className={editStyles.editForm__label}>輸入原密碼</label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
@@ -214,9 +215,22 @@ export const PassWordEdit = ({ showPasswordDiv,
                                 {!isPassWordSame && <span className={editStyles.registeredText}>密碼不同</span>}
                             </div>
                         </div>
-                        <button type="submit" className={editStyles.actionButton} disabled={!isPassWordSame || !passWordRuleMatched}>
+                        {/* <button type="submit" className={editStyles.actionButton} disabled={!isPassWordSame || !passWordRuleMatched}>
                             確認
-                        </button>
+                        </button> */}
+                        
+
+                        <Button
+                            style={{
+                                width: '100%',
+                                backgroundColor: (!isPassWordSame || !passWordRuleMatched) ? '#ccc' : '',
+                                color: (!isPassWordSame || !passWordRuleMatched) ? '#888' : '',
+                                cursor: (!isPassWordSame || !passWordRuleMatched) ? 'not-allowed' : 'default',
+                            }}
+                            onClick={(!isPassWordSame || !passWordRuleMatched) ? undefined : handleSubmitPassWord}
+                            text={"確認"}
+                        />
+
                     </form>
                 </div>
             )}
