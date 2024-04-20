@@ -15,11 +15,11 @@ export const editApi = {
             }
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 throw err
             });
     },
@@ -35,11 +35,11 @@ export const editApi = {
             }
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 throw err
             });
     },
@@ -54,18 +54,16 @@ export const editApi = {
             }
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 throw err
             });
     },
 
     editImage: (formData, token) => {
-        console.log("formData", formData);
-        console.log("token", token);
         return axios.patch(`${hostname}/member/edit-page`,
             formData, {
 
@@ -75,11 +73,11 @@ export const editApi = {
             }
         }, )
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 throw err
             });
     }

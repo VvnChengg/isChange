@@ -62,10 +62,13 @@ export const registerApi = {
             exchange_school_name: exchange_school_name
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                // console.log(err)
+                return err
+            });
     },
 
 };
