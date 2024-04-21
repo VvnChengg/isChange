@@ -15,6 +15,9 @@ const showMember = async (req, res) => {
     const user = await Member.findOne({
       _id: userId,
     });
+    const user_auth = await MemberAuth.findOne({
+      user_id: user._id,
+    });
 
     if (!user) {
       // console.log(`Member not found with ID: ${userId}`);
@@ -34,6 +37,7 @@ const showMember = async (req, res) => {
       intro: user.intro,
       photo: photoBase64,
       exchange_school_name: user.exchange_school_name,
+      student_verification: user_auth.student_verification,
     };
 
     return res.status(200).json(resData);
@@ -166,6 +170,9 @@ const showMemberDetail = async (req, res) => {
   }
   try {
     const observed_user = await Member.findOne({ username: observed_username });
+    const observed_user_auth = await MemberAuth.findOne({
+      user_id: observed_user._id,
+    });
     if (!observed_user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -183,6 +190,7 @@ const showMemberDetail = async (req, res) => {
       intro: observed_user.intro,
       photo: photoBase64,
       exchange_school_name: observed_user.exchange_school_name,
+      student_verification: observed_user_auth.student_verification,
     };
 
     return res.status(200).json(resData);
