@@ -7,7 +7,7 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.get("/edit-page", validateToken, memberController.showMember);
+router.get("/edit-page", validateToken, memberController.showMember); //顯示個人資料
 router.patch(
   "/edit-page",
   upload.single("image"),
