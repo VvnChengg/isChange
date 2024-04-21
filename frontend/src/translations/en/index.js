@@ -90,6 +90,10 @@ const en = {
     'header.member': 'MemberInfo',
     'header.logout': 'Logout',
     'header.login': 'Login',
+
+    /* hooks */
+    'token.pleaseLogIn': 'Please login first',
+    'token.Expiry': 'Login expired, please login again',
 };
 
 export default en;

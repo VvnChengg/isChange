@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { IntlProvider } from 'react-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /* translations */
 import translations from './translations';
@@ -39,7 +39,11 @@ import ShareToDelete from './pages/shareToDelete';
 import TourCreate from './pages/tourCreate';
 
 function App() {
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
 
   return (
     <IntlProvider locale={language} messages={translations[language]}>

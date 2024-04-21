@@ -91,6 +91,10 @@ const zh = {
     'header.member': '會員資訊',
     'header.logout': '登出',
     'header.login': '登入',
+
+    /* hooks */
+    'token.pleaseLogIn': '請先登入',
+    'token.Expiry': '登入逾期，請重新登入',
 };
 
 export default zh;

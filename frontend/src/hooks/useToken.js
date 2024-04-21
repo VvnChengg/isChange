@@ -1,17 +1,19 @@
 // useToken.js
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 
 export const useToken = () => {
     const [token, setToken] = useState(null);
     const navigate = useNavigate();
+    const intl = useIntl();
 
     useEffect(() => {
         const storedToken = localStorage.getItem('access_token');
 
         // 判斷是否有token，若無則導向登入頁面
         if (!storedToken) {
-            alert('請先登入');
+            alert(intl.formatMessage({ id: 'token.pleaseLogIn' }));
             navigate('/login');
             return;
         }
@@ -20,7 +22,7 @@ export const useToken = () => {
         const now = new Date();
         const expiryTime = localStorage.getItem('expiry_time');
         if (now.getTime() > Number(expiryTime)) {
-            alert('登入逾時，請重新登入');
+            alert(intl.formatMessage({ id: 'token.Expiry' }));
             localStorage.clear();
             navigate('/login');
             return
