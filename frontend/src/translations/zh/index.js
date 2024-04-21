@@ -10,6 +10,20 @@ const zh = {
     'formInput.startDate': '開始日期',
     'formInput.endDate': '結束日期',
 
+    'msgPopUp.titleforStart': '開啟私訊',
+    'msgPopUp.titleforAccept': '接受私訊',
+    "msg.sendPrivateInvite": "您將對 {other_name} 發出私訊邀請。若對方也同意，私訊對話將開始。在對話過程中，請確保您的個人資訊安全並遵守相關法規，並請遵循以下規則：",
+    "msg.acceptPrivateInvite": "您將接受來自 {other_name} 的私訊邀請。在對話過程中，請確保您的個人資訊安全並遵守相關法規，並請遵循以下規則：",
+    "msg.usageRules": "<使用規範>",
+    "msg.disclaimerClause": "私訊內容屬於用戶個人行爲，官方不會干預私訊的對話內容，若不慎透露個資而導致個資外洩等情事，官方並不負任何責任。",
+    "msg.strictProhibition": "嚴格禁止下列（但不限於）違法行為，對方若有違反可向官方檢舉，官方將協助後續的法律途徑。",
+    "msg.prohibitedList.pornography": "傳遞任何形式的色情或騷擾言論。",
+    "msg.prohibitedList.violence": "傳遞涉及暴力或威脅恐嚇的言論。",
+    "msg.prohibitedList.scam": "進行網路詐騙。",
+    "msg.agreementLabel": " 我了解使用規範及可能的風險",
+    "msg.confirmButton": "確認",
+    "msg.rejectButton": "拒絕",
+
     /* pages */
     'title': '標題',
     'inputTitle': '標題是什麼咧～',

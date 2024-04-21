@@ -28,7 +28,11 @@ const StartPrivate = () => {
     // console.log(userId)
     const token = window.localStorage.getItem('access_token');
     // 發送 API 請求
-    axios.get(`${hostname}/chat/check/660bbad71dd21a48510f209c` ,{headers: {
+  //   axios.get(`${hostname}/chat/check/{receiver_id}` ,{headers: {
+  //     'Authorization':  `Bearer ${token}`
+  // }})
+  // to test popup 9c-5c
+    axios.get(`${hostname}/chat/check/660bbad71dd21a48510f205c` ,{headers: {
       'Authorization':  `Bearer ${token}`
   }})
     .then(response => {
@@ -51,7 +55,8 @@ const StartPrivate = () => {
   return (
     <div>
       <StartPrivateButton onClick={togglePopup} />
-      <Popup receiver={'660bbad71dd21a4850f209c'} receiver_name={'testing'} isOpen={isOpen} onClose={togglePopup} />
+      {/* <Popup other_id={receiver_id} other_name={'receiver_name'} isOpen={isOpen} onClose={togglePopup} direction ={'Invite'} /> */}
+      <Popup other_id={'660bbad71dd21a4850f209c'} other_name={'testing'} isOpen={isOpen} onClose={togglePopup} direction ={'Invite'} />
     </div>
   );
 };
