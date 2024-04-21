@@ -36,7 +36,7 @@ const getUserLocation = (req, res) => {
 
 // 取得附近文章、揪團、商品
 const findNearbyUsers = (req, res) => {
-  const { type, longitude, latitude } = req.body; // type: event, article, product
+  const { type, longitude, latitude, radius } = req.body; // type: event, article, product
 
   if (!longitude || !latitude) {
     return res
@@ -48,7 +48,7 @@ const findNearbyUsers = (req, res) => {
     const options = {
       destination: {
         $geoWithin: {
-          $centerSphere: [[longitude, latitude], 15 / 3963.2],
+          $centerSphere: [[longitude, latitude], radius / 3963.2],
         },
       },
     };
@@ -67,7 +67,7 @@ const findNearbyUsers = (req, res) => {
     const options = {
       article_region: {
         $geoWithin: {
-          $centerSphere: [[longitude, latitude], 15 / 3963.2],
+          $centerSphere: [[longitude, latitude], radius / 3963.2],
         },
       },
     };
@@ -86,7 +86,7 @@ const findNearbyUsers = (req, res) => {
     const options = {
       transaction_region: {
         $geoWithin: {
-          $centerSphere: [[longitude, latitude], 15 / 3963.2],
+          $centerSphere: [[longitude, latitude], radius / 3963.2],
         },
       },
     };
