@@ -17,6 +17,15 @@ const View = () => {
   // 先讀取使用者資料
   const getInfo = async () =>{
 
+    // use viewApi.getMember to get member info
+    const token =  localStorage.getItem('access_token');
+
+    // 判斷是否有token，若無則導向登入頁面
+    if(!token){
+      navigate('/login');
+      return;
+    }
+    
     // 判斷 token 是否過期
     const now = new Date();
     const expiryTime = localStorage.getItem('expiry_time');
@@ -26,8 +35,6 @@ const View = () => {
       return
     }
 
-    // use viewApi.getMember to get member info
-    const token =  localStorage.getItem('access_token');
 
     const memberInfo = await viewApi.getMember(token);
     // console.log(memberInfo);
