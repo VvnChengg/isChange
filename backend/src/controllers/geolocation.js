@@ -6,7 +6,6 @@ const Member = require("../models/member");
 const http = require("http");
 const socketIo = require("socket.io");
 const gpsd = require("node-gpsd");
-const article = require("../models/article");
 
 // 在使用者同意後，取得使用者位置
 const io = socketIo(server);
@@ -35,7 +34,7 @@ const getUserLocation = (req, res) => {
 };
 
 // 取得附近文章、揪團、商品
-const findNearbyUsers = (req, res) => {
+const findNearby = (req, res) => {
   const { type, longitude, latitude, radius } = req.body; // type: event, article, product
 
   if (!longitude || !latitude) {
@@ -104,4 +103,4 @@ const findNearbyUsers = (req, res) => {
   }
 };
 
-module.exports = {};
+module.exports = { getUserLocation, findNearby };
