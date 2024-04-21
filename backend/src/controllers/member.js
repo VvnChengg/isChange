@@ -270,5 +270,6 @@ module.exports = {
   showMember,
   modifyMember,
   showMemberDetail,
+  studentVerification,
   deleteTestMember,
 };
