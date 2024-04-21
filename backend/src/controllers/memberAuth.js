@@ -113,18 +113,15 @@ const registerMember = async (req, res) => {
 
   // create member and memberAuth in database
   if (!user) {
+    //註冊
     await MemberAuth.create({
       email: email,
       verification_code: code,
       source: "credentials",
     });
-  } else if (user && !user.password) {
-    await MemberAuth.updateOne({ email }, { verification_code: code });
   } else {
-    return res.status(400).json({
-      status: "error",
-      message: "已成為會員，請登入",
-    });
+    //忘記密碼
+    await MemberAuth.updateOne({ email }, { verification_code: code });
   }
 
   // send email
@@ -249,6 +246,28 @@ const verifiedMember = async (req, res) => {
   }
 };
 
+const forgetPwd = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    // hash password
+    const hashedPassword = await hashPassword(password);
+    // reset password
+    const user = await MemberAuth.findOneAndUpdate(
+      { email },
+      { password: hashedPassword }
+    );
+    return res.status(200).json({
+      status: "success",
+      message: "密碼已重設",
+      data: user.email,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ status: "failed", message: "重設失敗，請稍後再試" });
+  }
+};
+
 const deleteTestMember = async (req, res) => {
   const { email } = req.body; // Extract email from request body
   try {
@@ -287,5 +306,6 @@ module.exports = {
   verifyRegisterMember,
   checkUsername,
   verifiedMember,
+  forgetPwd,
   deleteTestMember,
 };
