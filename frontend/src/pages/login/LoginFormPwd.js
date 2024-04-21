@@ -26,7 +26,12 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       }
     } catch (error) {
       // console.error(error);
-      alert(`${error.response.data.message}`);
+      const error_msg = error.response.data.message;
+      if (error_msg === "密碼錯誤") {
+        alert(`${intl.formatMessage({ id: 'login.wrongPassword' })}`);
+      } else {
+        alert(`${error.response.data.message}`);
+      }
     }
   };
   return (

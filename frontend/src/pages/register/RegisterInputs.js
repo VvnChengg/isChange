@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import registerStyles from '../../styles/Register.module.css';
+import { useIntl } from "react-intl";
 
 export const NormalRegisterInput = ({ hint, name, type, value, placeholder, isFocused, isErrorCondition ,errorHint, onChange, isButtonPresent}) => {
     return (
@@ -27,17 +28,18 @@ export const NormalRegisterInput = ({ hint, name, type, value, placeholder, isFo
 export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handleInputFocus, handleInputBlur,
     emailRegistered, SentMail, isSending, countdown, verificationPass,
     showVerification, verificationCode, handleVerificationCodeChange, veriHint, checkVerification }) => {
-    return (
+    const intl = useIntl();
+        return (
         <Fragment>
             <NormalRegisterInput
-                hint = "電子信箱"
+                hint = {intl.formatMessage({ id: 'register.email' })}
                 name = "email"
                 type = "email"
                 value = {email}
-                placeholder = "請輸入電子信箱"
+                placeholder = {intl.formatMessage({ id: 'register.pleaseInputEmail' })}
                 isFocused = {isFocused}
                 isErrorCondition = {emailRegistered}
-                errorHint = "已被註冊"
+                errorHint = {intl.formatMessage({ id: 'register.emailRegisteredHint' })}
                 onChange = {handleEmailChange}
                 isButtonPresent = {
                     <button
@@ -46,18 +48,23 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                         className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${isSending ? registerStyles.disabled : ''}`}
                         disabled={isSending || verificationPass || (email.split('@').pop().includes('edu'))}
                     >
-                        {isSending ? `再 ${countdown} 秒可以重新寄送` : (email.split('@').pop().includes('edu')) ? '註冊時無法使用學生帳號' : '寄送驗證信'}
+                       {isSending ? 
+                        intl.formatMessage({ id: 'register.countdown' }, { countdown }) : 
+                        (email.split('@').pop().includes('edu')) ? 
+                            intl.formatMessage({ id: 'register.noStudentAccount' }) : 
+                            intl.formatMessage({ id: 'register.sendVerification' })
+                        }
                     </button>
                 }
             />
             
             {showVerification && (
                 <NormalRegisterInput
-                    hint = "驗證碼"
+                    hint = {intl.formatMessage({ id: 'register.verificationCode' })}
                     name = "verificationCode"
                     type = "text"
                     value = {verificationCode}
-                    placeholder = "請輸入驗證碼"
+                    placeholder = {intl.formatMessage({ id: 'register.pleaseInputVerificationCode' })}
                     isFocused = {isFocused}
                     isErrorCondition = {!verificationPass}
                     errorHint = {veriHint}
@@ -65,7 +72,10 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                     isButtonPresent = {
                         <button type="button" onClick={checkVerification} className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${verificationPass ?  registerStyles.disabled: ''}`}
                             disabled={verificationPass}>
-                            {verificationPass ? `已驗證` : '驗證'}
+                            {verificationPass ?
+                                intl.formatMessage({ id: 'register.verifiedCondition' }) :
+                                intl.formatMessage({ id: 'register.unverifiedCondition' })
+                            }
                         </button>
                     }
                 />
