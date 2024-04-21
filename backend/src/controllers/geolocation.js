@@ -7,6 +7,7 @@ require("dotenv").config(); // 加了這行就可以抓到 ipdata api key
 const http = require("http");
 const socketIo = require("socket.io");
 const gpsd = require("node-gpsd");
+const article = require("../models/article");
 
 // 法一:在使用者同意後，後端監聽，取得使用者位置
 const io = socketIo(server);
