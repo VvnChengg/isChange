@@ -10,12 +10,12 @@ import { useNavigate } from "react-router-dom";
 
 
 
-
+// 把按鈕跟 popup 混合
 const StartPrivate = () => {
   const navigate = useNavigate();
   // 需要 receiver_id 及 receiver_name
-  const receiver_id = "example2";
-  const receiver_name = 'WW'
+  //const receiver_id = ;
+  //const receiver_name = ;
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -39,9 +39,9 @@ const StartPrivate = () => {
         console.error('API 請求失敗:', error);
       });
   }, []);
-  console.log(ischatId)
+  //console.log(ischatId)
   const togglePopup = () => {
-    if (ischatId === null) { // 檢查是否為空
+    if (ischatId === null) { // 檢查是否已有chat
       setIsOpen(!isOpen);
     } else {
       navigate("/chatroom/"+ischatId);
@@ -51,7 +51,7 @@ const StartPrivate = () => {
   return (
     <div>
       <StartPrivateButton onClick={togglePopup} />
-      <Popup receiver={'660bbad71dd21a48510f209c'} receiver_name={'testing'} isOpen={isOpen} onClose={togglePopup} />
+      <Popup receiver={'660bbad71dd21a4850f209c'} receiver_name={'testing'} isOpen={isOpen} onClose={togglePopup} />
     </div>
   );
 };
