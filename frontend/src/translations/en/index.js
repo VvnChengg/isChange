@@ -23,6 +23,9 @@ const en = {
     "msg.agreementLabel": " I understand the usage guidelines and potential risks",
     "msg.confirmButton": "Confirm",
     "msg.rejectButton": "Reject",
+    "msg.chatRoomTitle": "Chat Room",
+    "msg.userNotEntered": "No message now!",
+    "msg.stranger":"Stranger!!",
 
     /* pages */
     'title': 'Title',

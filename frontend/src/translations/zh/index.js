@@ -23,6 +23,10 @@ const zh = {
     "msg.agreementLabel": " 我了解使用規範及可能的風險",
     "msg.confirmButton": "確認",
     "msg.rejectButton": "拒絕",
+    "msg.chatRoomTitle": "聊天室",
+    "msg.userNotEntered": "使用者尚未輸入信息",
+    "msg.stranger":"陌生!!",
+
 
     /* pages */
     'title': '標題',

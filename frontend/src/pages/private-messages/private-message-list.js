@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+// PrivateMessageList.js
+
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-
 import PrivateList from "../../components/PrivateMessage/PrivateList";
 
 export default function PrivateMessageList() {
@@ -17,6 +18,8 @@ export default function PrivateMessageList() {
     }, []);
 
     return (
-        <div><PrivateList/></div>
-    )
+        <div>
+            <PrivateList />
+        </div>
+    );
 }
