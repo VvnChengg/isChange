@@ -8,14 +8,8 @@ const articleSchema = new Schema({
         maxlength: 30
     },
     article_pic: {
-        type: String,
-        validate: {
-            validator: function (v) {
-                // 检查是否为合法的 URL 格式
-                return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v);
-            },
-            message: 'Invalid URL format'
-        }
+        data: Buffer,
+        contentType: String,
     },
     post_date: {
         type: Date,

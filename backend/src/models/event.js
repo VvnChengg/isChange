@@ -7,6 +7,10 @@ const eventSchema = new Schema({
         maxlength: 15,
         required: true
     },
+    event_pic:{
+        data: Buffer,
+        contentType: String,
+    },
     destination: {
         type: String,
         maxlength: 20,
