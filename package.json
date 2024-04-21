@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@material-ui/core": "^4.12.4",
-    "create-react-app": "^5.0.1"
+    "create-react-app": "^5.0.1",
+    "node-gpsd": "^0.3.4",
+    "socket.io": "^4.7.5"
   }
 }
