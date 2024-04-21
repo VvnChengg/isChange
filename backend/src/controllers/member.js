@@ -211,6 +211,35 @@ const hashPassword = async (password) => {
   }
 };
 
+//學生認證
+const studentVerification = async (req, res) => {
+  const { userId, exchange_school_email } = req.body;
+  try {
+    const user = await MemberAuth.findOne({ user_id: userId });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const updatedUserAuth = await MemberAuth.findOneAndUpdate(
+      { user_id: userId },
+      { $set: { student_verification: true } },
+      { new: true }
+    );
+    const updatedUser = await Member.findOneAndUpdate(
+      { _id: userId },
+      { $set: { exchange_school_email: exchange_school_email } },
+      { new: true }
+    );
+    return res.status(200).json({
+      status: "success",
+      message: "學生身分認證成功",
+      data: updatedUserAuth,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "認證失敗，請稍後再試" });
+  }
+};
+
 //刪除會員資料（Member, for internal testing）
 const deleteTestMember = async (req, res) => {
   const { username } = req.body; // Extract email from request body
