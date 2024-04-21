@@ -25,7 +25,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
         navigate('/');
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       alert(`${error.response.data.message}`);
     }
   };
