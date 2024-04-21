@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const locationSchema = new Schema({
+const geolocationSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
     ref: "Member",
@@ -11,5 +11,6 @@ const locationSchema = new Schema({
     coordinates: [Number],
   },
 });
+geolocationSchema.index({ location: "2dsphere" }); // Ensure index for geospatial queries
 
-module.exports = mongoose.model("Geolocation", locationSchema);
+module.exports = mongoose.model("Geolocation", geolocationSchema);
