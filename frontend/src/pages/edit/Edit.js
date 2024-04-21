@@ -5,12 +5,11 @@ import { BasicInfoEdit } from './BasicInfoDiv';
 import { SelfInfo } from './SelfInfo';
 import { ImageUploadDiv } from './ImageDiv';
 import { viewApi } from '../../api/viewApi';
-import { useNavigate } from 'react-router-dom';
 import Button from "../../components/Button";
 import { FormattedMessage } from 'react-intl';
+import { useToken } from '../../hooks/useToken';
 
 const Edit = () => {
-    const navigate = useNavigate();
     const [showPasswordDiv, setShowPasswordDiv] = useState(false);
     const [showBasicInfoDiv, setShowBasicInfoDiv] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -20,29 +19,10 @@ const Edit = () => {
     const [username, setUsername] = useState('');
     const [school, setSchool] = useState('');
     const [photo, setPhoto] = useState('');
+    const token = useToken();
 
     const getInfo = async () => {
-        
-        // 判斷 token 是否過期
-        const now = new Date();
-        const expiryTime = localStorage.getItem('expiry_time');
-        if (now.getTime() > Number(expiryTime)) {
-            localStorage.clear();
-            navigate('/login');
-            return
-        }
-
-        // use viewApi.getMember to get member info
-        const token = localStorage.getItem('access_token');
-
-        // if no token, navigate to login page
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-
         const memberInfo = await viewApi.getMember(token);
-        // console.log(memberInfo);
 
         setUsername(memberInfo.username);
         setSchool(memberInfo.exchange_school_name);
@@ -52,8 +32,12 @@ const Edit = () => {
     }
 
     useEffect(() => {
-        getInfo();
-    }, []);
+
+        if(token){
+            getInfo();
+        }
+
+    }, [token]);
 
 
 

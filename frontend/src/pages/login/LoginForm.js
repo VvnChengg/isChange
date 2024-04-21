@@ -26,10 +26,10 @@ const LoginForm = () => {
   const getUserInfoFromDatabase = async (email) => {
     try {
       const data = await loginApi.login_or_register(email);
-      console.log(data);
+      // console.log(data);
       if (data && data.error) {
         // Handle error in data
-        console.error('Error in data:', data.error);
+        // console.error('Error in data:', data.error);
       } else {
         setShowPasswordForm(true);
       }
@@ -43,7 +43,7 @@ const LoginForm = () => {
         navigate('/register');
 
       } else {
-        console.error('Error getting user info:', error);
+        // console.error('Error getting user info:', error);
       }
       
       // navigate('/register'); //因為現在可以判斷成功登入，但找不到使用者會噴錯，有點偷吃步但之後應該要改掉
