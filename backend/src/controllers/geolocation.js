@@ -1,6 +1,7 @@
 const Event = require("../models/event");
 const Article = require("../models/article");
 const Product = require("../models/product");
+const Member = require("../models/member");
 
 const http = require("http");
 const socketIo = require("socket.io");
@@ -12,7 +13,11 @@ const io = socketIo(server);
 const daemon = new gpsd.Listener();
 
 const getUserLocation = (req, res) => {
-  const { agreeLocation } = req.body;
+  const { userId } = req.body;
+
+  const user = Member.findOne({ _id: userId });
+  const agreeLocation = user.agree_location;
+
   if (agreeLocation) {
     // 在後端監聽位置資訊，並且傳送到前端
     daemon.on("TPV", (data) => {
