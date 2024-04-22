@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
 
 // 編輯密碼的元件
@@ -164,15 +164,15 @@ export const PassWordEdit = ({ showPasswordDiv,
                 <div className={editStyles.floatingDiv}>
                     <button onClick={handleClose} className={editStyles.closeButton}>X</button>
                     <form className={editStyles.editFrom}>
-                        <label htmlFor="password-origin-input" className={editStyles.editForm__label}>
-                            <FormattedMessage id="edit.inputOriginPassWord" />
+                        <label htmlFor='password-origin-input' className={editStyles.editForm__label}>
+                            <FormattedMessage id='edit.inputOriginPassWord' />
                         </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <FormattedMessage id="edit.pleaseInputOriginPassWord">
+                                <FormattedMessage id='edit.pleaseInputOriginPassWord'>
                                     {(text) => <input
-                                    type="password"
-                                    id="password-origin-input"
+                                    type='password'
+                                    id='password-origin-input'
                                     value={OriginPassWord}
                                     onChange={handleOriginPassWordChange}
                                     onFocus={handleInputFocus}
@@ -185,15 +185,15 @@ export const PassWordEdit = ({ showPasswordDiv,
                             </div>
                         </div>
 
-                        <label htmlFor="password-input" className={editStyles.editForm__label}>
-                            <FormattedMessage id="edit.newPassword" />
+                        <label htmlFor='password-input' className={editStyles.editForm__label}>
+                            <FormattedMessage id='edit.newPassword' />
                         </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <FormattedMessage id="edit.pleaseInputNewPassWord">
+                                <FormattedMessage id='edit.pleaseInputNewPassWord'>
                                     {(text) => <input
-                                    type="password"
-                                    id="password-input"
+                                    type='password'
+                                    id='password-input'
                                     value={passWord}
                                     onChange={handlePasswordChange}
                                     onFocus={handleInputFocus}
@@ -203,19 +203,19 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     required/>}
                                 </FormattedMessage>
                                 {!passWordRuleMatched && <span className={editStyles.registeredText}>
-                                    <FormattedMessage id="edit.passwordRuleNottMatch" />
+                                    <FormattedMessage id='edit.passwordRuleNottMatch' />
                                 </span>}
                             </div>
                         </div>
-                        <label htmlFor="password-confirm-input" className={editStyles.editForm__label}>
-                            <FormattedMessage id="edit.confirmNewPassword" />
+                        <label htmlFor='password-confirm-input' className={editStyles.editForm__label}>
+                            <FormattedMessage id='edit.confirmNewPassword' />
                         </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <FormattedMessage id="edit.pleaseInputYourConfirmPassword">
+                                <FormattedMessage id='edit.pleaseInputYourConfirmPassword'>
                                     {(text) => <input
-                                    type="password"
-                                    id="password-confirm-input"
+                                    type='password'
+                                    id='password-confirm-input'
                                     value={passWord_confirm}
                                     onChange={handlePasswordConfirmChange}
                                     onFocus={handleInputFocus}
@@ -225,11 +225,11 @@ export const PassWordEdit = ({ showPasswordDiv,
                                     required/>}
                                 </FormattedMessage>
                                 {!isPassWordSame && <span className={editStyles.registeredText}>
-                                    <FormattedMessage id="edit.passwordNotMatch" />
+                                    <FormattedMessage id='edit.passwordNotMatch' />
                                 </span>}
                             </div>
                         </div>
-                        {/* <button type="submit" className={editStyles.actionButton} disabled={!isPassWordSame || !passWordRuleMatched}>
+                        {/* <button type='submit' className={editStyles.actionButton} disabled={!isPassWordSame || !passWordRuleMatched}>
                             確認
                         </button> */}
                         

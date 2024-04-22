@@ -5,7 +5,7 @@ import { BasicInfoEdit } from './BasicInfoDiv';
 import { SelfInfo } from './SelfInfo';
 import { ImageUploadDiv } from './ImageDiv';
 import { viewApi } from '../../api/viewApi';
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
 import { useToken } from '../../hooks/useToken';
 
@@ -28,7 +28,7 @@ const Edit = () => {
         setSchool(memberInfo.exchange_school_name);
         setPhoto(memberInfo.photo);
         setIntroText(memberInfo.intro);
-        // console.log("photo:"+memberInfo.photo);
+        // console.log('photo:'+memberInfo.photo);
     }
 
     useEffect(() => {

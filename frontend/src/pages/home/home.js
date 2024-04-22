@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { api } from "../../api";
+import { api } from '../../api';
 
-import { PostContainer } from "./home-style";
+import { PostContainer } from './home-style';
 
-import Post from "../../components/Post";
+import Post from '../../components/Post';
 
 export default function Home() {
     const [posts, setPosts] = useState([]);

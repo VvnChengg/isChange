@@ -9,9 +9,9 @@ export default function ChatRoom({ chatData, userId }) {
   return (
     <div>
       {chatData && (
-        <div className="private-message-chat-room-container">
-          <div className="private-message-chat-header">
-            <img className='private-message-photo' src={chatData.chat_to_photo || "/icons/profile.png"} alt="Avatar" onError={(e) => { e.target.onerror = null; e.target.src="/icons/profile.png"; }}/>
+        <div className='private-message-chat-room-container'>
+          <div className='private-message-chat-header'>
+            <img className='private-message-photo' src={chatData.chat_to_photo || '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }}/>
             <p className='private-message-name'>{chatData.chat_to_username}</p>
           </div>
 
@@ -26,13 +26,13 @@ export default function ChatRoom({ chatData, userId }) {
             return (
               <div className='private-message-message-container' key={message._id}>
                 {showDate && (
-                  <div className="private-message-date-container">
-                    <p className="private-message-date">{formattedDate}</p>
+                  <div className='private-message-date-container'>
+                    <p className='private-message-date'>{formattedDate}</p>
                   </div>
                 )}
-                <div className={`private-message-message-box ${message.sender_id === userId ? "private-message-own-message" : ""}`}>
-                  <p className="private-message-message-content">{message.content}</p>
-                  <p className="private-message-time">{formattedHours}:{formattedMinutes}</p>
+                <div className={`private-message-message-box ${message.sender_id === userId ? 'private-message-own-message' : ''}`}>
+                  <p className='private-message-message-content'>{message.content}</p>
+                  <p className='private-message-time'>{formattedHours}:{formattedMinutes}</p>
                 </div>
               </div>
             );

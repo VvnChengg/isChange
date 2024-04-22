@@ -27,7 +27,7 @@ function PrivateList() {
 
   return (
     <div>
-      <div className="chatRoomListContainer">
+      <div className='chatRoomListContainer'>
         <ChatRoomList rooms={rooms} />
       </div>
     </div>

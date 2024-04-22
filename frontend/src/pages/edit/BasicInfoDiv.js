@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { registerApi } from '../../api/registerApi';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
 
 // 編輯基本資料的元件
@@ -58,7 +58,7 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
             if (error.response) {
                 // console.log(error.response.data);
                 // error.response.data 將會是你的錯誤訊息物件，例如：
-                // { status: "failed", message: "使用者名稱已有人使用，請更換其他名稱" }
+                // { status: 'failed', message: '使用者名稱已有人使用，請更換其他名稱' }
                 if (error.response.data.status === 'failed') {
                     setUserNameRegistered(true);
                 } else {
@@ -105,15 +105,15 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                 <div className={editStyles.floatingDiv}>
                     <button onClick={handleClose} className={editStyles.closeButton}>X</button>
                     <form className={editStyles.registerForm}>
-                        <label htmlFor="username" className={editStyles.loginForm__label}>
-                            <FormattedMessage id="edit.username" />
+                        <label htmlFor='username' className={editStyles.loginForm__label}>
+                            <FormattedMessage id='edit.username' />
                         </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <FormattedMessage id="edit.pleaseEnterUserName">
+                                <FormattedMessage id='edit.pleaseEnterUserName'>
                                     {(text) =><input
-                                        type="text"
-                                        id="username"
+                                        type='text'
+                                        id='username'
                                         value={userName}
                                         onChange={handleUserNameChange}
                                         onFocus={handleInputFocus}
@@ -124,20 +124,20 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                     />}
                                 </FormattedMessage>
                                 {userNameRegistered && userName !== username && <span className={editStyles.registeredText}>
-                                    <FormattedMessage id="edit.usernameRegistered" />
+                                    <FormattedMessage id='edit.usernameRegistered' />
                                     </span>}
                             </div>
                         </div>
 
-                        <label htmlFor="userSchoolName" className={editStyles.loginForm__label}>
-                            <FormattedMessage id="edit.schoolName" />
+                        <label htmlFor='userSchoolName' className={editStyles.loginForm__label}>
+                            <FormattedMessage id='edit.schoolName' />
                         </label>
                         <div className={editStyles.editForm__inputGroup}>
                             <div className={`${editStyles.editForm__InputContainer} ${isFocused ? 'focused' : ''}`}>
-                                <FormattedMessage id="edit.pleaseEnterSchoolName">
+                                <FormattedMessage id='edit.pleaseEnterSchoolName'>
                                     {(text) => <input
-                                    type="text"
-                                    id="userSchoolName"
+                                    type='text'
+                                    id='userSchoolName'
                                     value={userSchoolName}
                                     onChange={handleUserSchoolNameChange}
                                     onFocus={handleInputFocus}
@@ -148,7 +148,7 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
                                 </FormattedMessage>
                             </div>
                         </div>
-                        {/* <button type="submit" className={editStyles.actionButton} disabled={userName === username && userSchoolName === school}>
+                        {/* <button type='submit' className={editStyles.actionButton} disabled={userName === username && userSchoolName === school}>
                             確認
                         </button> */}
                         <FormattedMessage id='edit.confirm'>

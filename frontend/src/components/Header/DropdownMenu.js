@@ -45,7 +45,7 @@ function DropdownMenu({ isOpen, setIsOpen, token, navigate, logout }) {
           }}
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['sub1']}
-          mode="inline"
+          mode='inline'
           items={token === null ? loginItems : notLoginItems}
         />
       }

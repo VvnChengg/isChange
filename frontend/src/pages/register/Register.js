@@ -239,7 +239,7 @@ const Register = () => {
             if (error.response) {
                 // console.log(error.response.data);
                 // error.response.data 將會是你的錯誤訊息物件，例如：
-                // { status: "failed", message: "使用者名稱已有人使用，請更換其他名稱" }
+                // { status: 'failed', message: '使用者名稱已有人使用，請更換其他名稱' }
                 if (error.response.data.status === 'failed') {
                     setUsernameRegistered(true);
                 } else {
@@ -321,8 +321,8 @@ const Register = () => {
                 
                 <NormalRegisterInput
                 hint={intl.formatMessage({ id: 'register.passwordHint' })}
-                name="password-input"
-                type="password"
+                name='password-input'
+                type='password'
                 value={passWord}
                 onChange={handlePasswordChange}
                 placeholder={intl.formatMessage({ id: 'register.pleasePasswordHint' })}
@@ -333,8 +333,8 @@ const Register = () => {
 
                 <NormalRegisterInput
                 hint={intl.formatMessage({ id: 'register.confirmPassword' })}
-                name="password-confirm-input"
-                type="password"
+                name='password-confirm-input'
+                type='password'
                 value={passWord_confirm}
                 onChange={handlePasswordConfirmChange}
                 placeholder={intl.formatMessage({ id: 'register.pleaseConfirmPassword' })}
@@ -345,8 +345,8 @@ const Register = () => {
 
                 <NormalRegisterInput
                 hint={intl.formatMessage({ id: 'register.username' })}
-                name="username-input"
-                type="text"
+                name='username-input'
+                type='text'
                 value={username}
                 onChange={handleUserNameChange}
                 placeholder={intl.formatMessage({ id: 'register.pleaseEnterUserName' })}
@@ -358,35 +358,35 @@ const Register = () => {
 
                 <NormalRegisterInput
                 hint={intl.formatMessage({ id: 'register.schoolName' })}
-                name="school-input"
-                type="text"
+                name='school-input'
+                type='text'
                 value={userSchoolName}
                 onChange={handleUserSchoolNameChange}
                 placeholder={intl.formatMessage({ id: 'register.pleaseEnterSchoolName' })}
                 isFocused={isFocused}
-                errorHint="交換學校不可為空"
+                errorHint='交換學校不可為空'
                 isErrorCondition={false}
                 />
 
                 {/* 這一區為學生證上傳, 但討論結果為暫時不需要,先註解 */}
-                {/* <label htmlFor="student-id" className="login-form__label">學生認證</label>
-                <div className="login-form__input-group">
+                {/* <label htmlFor='student-id' className='login-form__label'>學生認證</label>
+                <div className='login-form__input-group'>
                     <div className={`input-container ${isFocused ? 'focused' : ''}`}>
                         <input
-                            type="file"
-                            id="student-id"
+                            type='file'
+                            id='student-id'
                             onChange={handleFileUpload}
                             onFocus={handleInputFocus}
                             onBlur={handleInputBlur}
-                            className="login-form__input"
+                            className='login-form__input'
                         />
-                        {fileUploaded && <span className="registered-text">檔案已上傳</span>}
+                        {fileUploaded && <span className='registered-text'>檔案已上傳</span>}
                     </div>
                 </div> */}
 
                 <br />
                 <div className={registerStyles.submitContainer}>
-                    <button type="submit" disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName} className={registerStyles.loginForm__button}>
+                    <button type='submit' disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName} className={registerStyles.loginForm__button}>
                         {(!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName) ? 
                         intl.formatMessage({ id: 'register.checkForm' }) : 
                         intl.formatMessage({ id: 'register.sendForm' })

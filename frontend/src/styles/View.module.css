@@ -42,7 +42,7 @@ footer {
 }
 
 .selfIntro::before {
-  content: "";
+  content: '';
   display: block;
   height: 20px;
   /* Adjust this value to match the height of your label */

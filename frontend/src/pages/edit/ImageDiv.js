@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import AvatarEditor from 'react-avatar-editor';
 import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
 
 // 匯入編輯大頭貼的元件
@@ -44,7 +44,7 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                     const data = await editApi.editImage(formData, token);
                     console.log(data);
                     if (data.status === 'success') {
-                        // console.log("更新後的圖片"+data.data.photo);
+                        // console.log('更新後的圖片'+data.data.photo);
                         alert('更新成功');
                     }
                 } catch (error) {
@@ -76,7 +76,7 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
     return (
         <Fragment>
             <div className={editStyles.sectionHeading}>
-                <FormattedMessage id="edit.changeImage" />    
+                <FormattedMessage id='edit.changeImage' />    
             </div>
             <div className={editStyles.editButton}>
 
@@ -106,12 +106,12 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                 </div>}
 
                 <div className={editStyles.profileImage}>
-                    <img src={image || "/icons/profile.png"} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src = "/icons/profile.png"; }} />
+                    <img src={image || '/icons/profile.png'} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src = '/icons/profile.png'; }} />
                 </div>
 
                 <input
-                    type="file"
-                    id="fileInput"
+                    type='file'
+                    id='fileInput'
                     onChange={handleFileChange}
                     style={{ display: 'none' }}
                 />

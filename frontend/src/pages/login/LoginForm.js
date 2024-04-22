@@ -8,7 +8,7 @@ import loginStyles from '../../styles/LoginForm.module.css';
 
 import LoginFormPwd from './LoginFormPwd'; // 匯入密碼表單元件
 import EmailInput from './EmailInput';
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 
 import { loginApi } from '../../api/loginApi';
 

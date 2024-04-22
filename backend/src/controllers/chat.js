@@ -1,6 +1,6 @@
-const Chat = require("../models/chat");
-const Message = require("../models/message");
-const Member = require("../models/member");
+const Chat = require('../models/chat');
+const Message = require('../models/message');
+const Member = require('../models/member');
 
 // GET 確認聊天是否已存在
 const checkChat = async (req, res) => {
@@ -22,12 +22,12 @@ const checkChat = async (req, res) => {
         if (!chat) {
             return res.status(200).json({
                 chat_id: null,
-                message: "No chat found."
+                message: 'No chat found.'
             });
         } else {
             return res.status(200).json({
                 chat_id: chat._id,
-                message: "Chat found."
+                message: 'Chat found.'
             });
         }
     } catch (error) {
@@ -44,7 +44,7 @@ const createChat = async (req, res) => {
 
         // for 0416 demo
         const { userId } = req.body;
-        const receiver_id = "660bbad71dd21a48510f209c";
+        const receiver_id = '660bbad71dd21a48510f209c';
 
         console.log(userId, receiver_id)
 
@@ -92,12 +92,12 @@ const getChatDetail = async (req, res) => {
 
         // 檢查 chat 是否存在
         if (!chat) {
-            return res.status(404).json({ error: "This chat doesn't exist." });
+            return res.status(404).json({ error: 'This chat doesn't exist.' });
         }
 
         // 檢查使用者是不是聊天成員
         if (userId != chat.first_person.toString() && userId != chat.second_person.toString()) {
-            return res.status(400).json({ error: "You are not one of members in this chat." });
+            return res.status(400).json({ error: 'You are not one of members in this chat.' });
         }
 
         // 聊天對象的 id
@@ -118,7 +118,7 @@ const getChatDetail = async (req, res) => {
         if (member.photo && member.photo.contentType) {
             photoBase64 = `data:${
                 member.photo.contentType
-            };base64,${member.photo.data.toString("base64")}`;
+            };base64,${member.photo.data.toString('base64')}`;
         }
 
         res.status(200).json({
@@ -148,7 +148,7 @@ const getChatList = async (req, res) => {
         if (user.chat_ids == null) {
             res.status(200).json({
                 chats: null,
-                message: "You don't have any chat."
+                message: 'You don't have any chat.'
             });
         }
 
@@ -171,7 +171,7 @@ const getChatList = async (req, res) => {
             if (member.photo && member.photo.contentType) {
                 photoBase64 = `data:${
                     member.photo.contentType
-                };base64,${member.photo.data.toString("base64")}`;
+                };base64,${member.photo.data.toString('base64')}`;
             }
 
             // 將資料添加到 chatData 中
@@ -206,9 +206,9 @@ const sendMessage = async (req, res) => {
 
         console.log(typeof (content));
 
-        let msg_type = "text";
-        if (typeof (content) != "text") {
-            msg_type = "pic";
+        let msg_type = 'text';
+        if (typeof (content) != 'text') {
+            msg_type = 'pic';
         }
 
         // 找出聊天，先確認傳送者是否屬於這則聊天

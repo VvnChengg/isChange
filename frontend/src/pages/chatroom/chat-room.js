@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import ChatRoom from "../../components/PrivateMessage/ChatRoom";
+import ChatRoom from '../../components/PrivateMessage/ChatRoom';
 
 export default function Chatroom() {
     const { chatid } = useParams();

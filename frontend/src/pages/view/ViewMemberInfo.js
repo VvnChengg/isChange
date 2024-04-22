@@ -21,7 +21,7 @@ const ViewMemberInfo = ({photo, username, school}) => {
   return (
     <div className={viewStyles.profile}>
       <div className={viewStyles.profileLeft}>
-        <img src={image || "/icons/profile.png"} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src="/icons/profile.png"; }} />
+        <img src={image || '/icons/profile.png'} alt='Profile' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} />
         <p>{username}</p>
         <p>{school}</p>
       </div>

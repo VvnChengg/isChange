@@ -3,7 +3,7 @@ import axios from 'axios';
 import StartPrivateButton from './StartPrivateButton';
 import Popup from './Popup'
 import './StartPrivate.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 // 需要 receiver_id 及 receiver_name
 
 
@@ -19,7 +19,7 @@ const StartPrivate = () => {
 
 
   const [isOpen, setIsOpen] = useState(false);
-  const [ischatId, setchatId] = useState("");
+  const [ischatId, setchatId] = useState('');
 
   const hostname = process.env.REACT_APP_API_HOSTNAME;
   
@@ -48,7 +48,7 @@ const StartPrivate = () => {
     if (ischatId === null) { // 檢查是否已有chat
       setIsOpen(!isOpen);
     } else {
-      navigate("/chatroom/"+ischatId);
+      navigate('/chatroom/'+ischatId);
     }
   };
 

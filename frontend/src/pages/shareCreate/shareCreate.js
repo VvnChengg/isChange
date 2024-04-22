@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useIntl, FormattedMessage } from 'react-intl';
 
-import "./shareCreate-style.css";
+import './shareCreate-style.css';
 
 import {
   FormInput,
   FormRange,
   FormBudget,
   FormDate
-} from "../../components/FormInput";
-import Button from "../../components/Button";
+} from '../../components/FormInput';
+import Button from '../../components/Button';
 
-// import { AiOutlineMail } from "https://esm.sh/react-icons/ai";
+// import { AiOutlineMail } from 'https://esm.sh/react-icons/ai';
 // import TextField from '@material-ui/core/TextField';
-import { api } from "../../api";
+import { api } from '../../api';
 
 
 export default function Share() {
@@ -73,8 +73,8 @@ export default function Share() {
   }
 
   return (
-    <div className="container">
-      <div className="content">
+    <div className='container'>
+      <div className='content'>
         <FormInput
           type='input'
           title={intl.formatMessage({ id: 'title' })}
@@ -89,10 +89,10 @@ export default function Share() {
           text={post.content}
           setText={setContent}
         />
-        <button className="figure-button" onClick={() => routeChange()}><img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/3f570a0c69a52557b5a1cd2aabd09f0ea82824f62a802a9b9d432ad5b29bbd66?"
-            // className="self-end aspect-square fill-sky-600 mt-[469px] w-[30px] max-md:mt-10"
+        <button className='figure-button' onClick={() => routeChange()}><img
+            loading='lazy'
+            src='https://cdn.builder.io/api/v1/image/assets/TEMP/3f570a0c69a52557b5a1cd2aabd09f0ea82824f62a802a9b9d432ad5b29bbd66?'
+            // className='self-end aspect-square fill-sky-600 mt-[469px] w-[30px] max-md:mt-10'
           /></button>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <Button

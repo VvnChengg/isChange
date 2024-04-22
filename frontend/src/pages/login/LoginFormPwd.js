@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
 import { loginApi } from '../../api/loginApi';
 import loginStyles from '../../styles/LoginForm.module.css';
 import { FormattedMessage } from 'react-intl';
-import Button from "../../components/Button";
+import Button from '../../components/Button';
 import { useIntl } from 'react-intl';
 
 
@@ -21,13 +21,13 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
     try {
       // 調用 loginApi 中的 login 函數，傳入 email 和 password
       const data = await loginApi.login(email, password);
-      if (data.status === "success") {
+      if (data.status === 'success') {
         navigate('/');
       }
     } catch (error) {
       // console.error(error);
       const error_msg = error.response.data.message;
-      if (error_msg === "密碼錯誤") {
+      if (error_msg === '密碼錯誤') {
         alert(`${intl.formatMessage({ id: 'login.wrongPassword' })}`);
       } else {
         alert(`${error.response.data.message}`);
@@ -45,8 +45,8 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
         <FormattedMessage id='login.inputPassword'>
           {msg =>
             <input
-              type="password" // 設置為密碼輸入框
-              id="password"
+              type='password' // 設置為密碼輸入框
+              id='password'
               value={password} // 設置為你的密碼 state 變數
               onChange={handlePasswordChange} // 設置密碼變化的事件處理函數
               className={loginStyles.loginForm__input} // 設置樣式類名

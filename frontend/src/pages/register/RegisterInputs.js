@@ -1,6 +1,6 @@
-import { Fragment } from "react";
+import { Fragment } from 'react';
 import registerStyles from '../../styles/Register.module.css';
-import { useIntl } from "react-intl";
+import { useIntl } from 'react-intl';
 
 export const NormalRegisterInput = ({ hint, name, type, value, placeholder, isFocused, isErrorCondition ,errorHint, onChange, isButtonPresent}) => {
     return (
@@ -33,8 +33,8 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
         <Fragment>
             <NormalRegisterInput
                 hint = {intl.formatMessage({ id: 'register.email' })}
-                name = "email"
-                type = "email"
+                name = 'email'
+                type = 'email'
                 value = {email}
                 placeholder = {intl.formatMessage({ id: 'register.pleaseInputEmail' })}
                 isFocused = {isFocused}
@@ -43,7 +43,7 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                 onChange = {handleEmailChange}
                 isButtonPresent = {
                     <button
-                        type="button"
+                        type='button'
                         onClick={SentMail}
                         className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${isSending ? registerStyles.disabled : ''}`}
                         disabled={isSending || verificationPass || (email.split('@').pop().includes('edu'))}
@@ -61,8 +61,8 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
             {showVerification && (
                 <NormalRegisterInput
                     hint = {intl.formatMessage({ id: 'register.verificationCode' })}
-                    name = "verificationCode"
-                    type = "text"
+                    name = 'verificationCode'
+                    type = 'text'
                     value = {verificationCode}
                     placeholder = {intl.formatMessage({ id: 'register.pleaseInputVerificationCode' })}
                     isFocused = {isFocused}
@@ -70,7 +70,7 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                     errorHint = {veriHint}
                     onChange = {handleVerificationCodeChange}
                     isButtonPresent = {
-                        <button type="button" onClick={checkVerification} className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${verificationPass ?  registerStyles.disabled: ''}`}
+                        <button type='button' onClick={checkVerification} className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${verificationPass ?  registerStyles.disabled: ''}`}
                             disabled={verificationPass}>
                             {verificationPass ?
                                 intl.formatMessage({ id: 'register.verifiedCondition' }) :

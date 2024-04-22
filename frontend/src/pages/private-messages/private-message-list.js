@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-import PrivateList from "../../components/PrivateMessage/PrivateList";
+import PrivateList from '../../components/PrivateMessage/PrivateList';
 
 export default function PrivateMessageList() {
     const intl = useIntl();

@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { api } from "../../api";
+import { api } from '../../api';
 
 import {
     CreateContainer,
     CreateButtonContainer
-} from "./tourCreate-style";
+} from './tourCreate-style';
 
 import {
     FormInput,
     FormRange,
     FormBudget,
     FormDate
-} from "../../components/FormInput";
-import Button from "../../components/Button";
+} from '../../components/FormInput';
+import Button from '../../components/Button';
 
 export default function TourCreate() {
     const intl = useIntl();
