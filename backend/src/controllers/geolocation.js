@@ -138,6 +138,29 @@ const findNearby = (req, res) => {
         .status(500)
         .json({ error: `An error occurred while finding ${type}s` });
     });
+
+  //法二:使用aggregate，依距離排序
+  // model
+  //   .aggregate([
+  //     {
+  //       $geoNear: {
+  //         near: { type: "Point", coordinates: [longitude, latitude] },
+  //         distanceField: "dist.calculated",
+  //         maxDistance: radius,
+  //         spherical: true,
+  //       },
+  //     },
+  //     { $match: options },
+  //   ])
+  //   .exec((err, data) => {
+  //     if (err) {
+  //       console.error(`Error finding ${type}s:`, err);
+  //       return res
+  //         .status(500)
+  //         .json({ error: `An error occurred while finding ${type}s` });
+  //     }
+  //     res.json(data);
+  //   });
 };
 
 module.exports = {
