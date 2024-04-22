@@ -84,6 +84,7 @@ const zh = {
 
     'edit.changePassword': '修改密碼',
     'edit.changeUsernameandSchool': '修改其他資訊',
+    'edit.studentVeri': '學生驗證',
     'edit.changeBasicInfo': '修改基本資料',
     'edit.uploadImage': '上傳圖片',
     'edit.changeImage': '修改圖片',
@@ -105,6 +106,12 @@ const zh = {
     'edit.intro': '自我介紹 (最多200字)',
     'edit.introRule': '自我介紹最多200字',
     'edit.saveIntro': '儲存自我介紹',
+    'edit.saveIntroSuccess': '儲存自我介紹成功',
+    'edit.saveIntroFail': '儲存自我介紹失敗',
+    'edit.pleaseEnterSchoolEmail': '請輸入edu信箱帳號',
+    'edit.schoolEmail': '學校信箱',
+    'edit.pleaseEnterVeriCode': '請輸入驗證碼',
+    'edit.veriCode': '驗證碼',
 
     'post.create': '創建貼文',
 

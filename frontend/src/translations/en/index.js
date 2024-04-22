@@ -83,6 +83,7 @@ const en = {
 
     'edit.changePassword': 'Password',
     'edit.changeUsernameandSchool': 'Other Information',
+    'edit.studentVeri': 'Student Verification',
     'edit.changeBasicInfo': 'Edit Basic Information',
     'edit.uploadImage': 'Upload Image',
     'edit.changeImage': 'Edit Image',
@@ -104,6 +105,12 @@ const en = {
     'edit.intro': 'Self Introduction (max 200 characters)',
     'edit.introRule': 'Introduction should be less than 200 characters',
     'edit.saveIntro': 'Save Self Introduction',
+    'edit.saveIntroSuccess': 'Save self introduction successfully',
+    'edit.saveIntroFail': 'Save self introduction failed',
+    'edit.pleaseEnterSchoolEmail': 'Please enter your edu email',
+    'edit.schoolEmail': 'School Email',
+    'edit.pleaseEnterVeriCode': 'Please enter verification code',
+    'edit.veriCode': 'Verification Code',
 
     'post.create': 'Create post',
 

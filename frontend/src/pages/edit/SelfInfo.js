@@ -3,10 +3,11 @@ import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
 import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 // 編輯自我介紹的元件
 export const SelfInfo = ({setIntroText, introText}) => {
-    
+    const intl = useIntl();
     const ChangeIntro = (e) => {
         setIntroText(e.target.value);
     }
@@ -19,7 +20,7 @@ export const SelfInfo = ({setIntroText, introText}) => {
     const handleSubmitIntro = async() => {
         // console.log('儲存自我介紹:', introText);
         if (introText.length > 200) {
-            alert('自我介紹超過兩百字');
+            alert(`${intl.formatMessage({ id: 'edit.introRule' })}`);
             return;
         }
 
@@ -27,11 +28,12 @@ export const SelfInfo = ({setIntroText, introText}) => {
             const token = localStorage.getItem('access_token');
             const data = await editApi.editIntro(introText, token);
             if(data.status === 'success'){
-                alert('儲存自我介紹成功');
+                alert(`${intl.formatMessage({ id: 'edit.saveIntroSuccess' })}`);
+                // alert('儲存自我介紹成功');
             }
         }catch(error){
             // console.error(error);
-            alert('更新失敗');
+            alert(`${intl.formatMessage({ id: 'edit.saveIntroFail' })}`);
         }
     }
 
