@@ -71,7 +71,7 @@ const geoip = require("node-geolocation");
 
 const getIpLocation2 = async (req, res) => {
   const ip = req.ip;
-  const location = geoip.getLocation("8.8.8.8");
+  const location = geoip.getLocation(ip);
   if (!location) {
     res.status(404).json({ error: "Location not found" });
   }
@@ -90,64 +90,54 @@ const findNearby = (req, res) => {
       .json({ error: "Longitude and latitude are required" });
   }
 
-  if (type == "event") {
-    const options = {
-      destination: {
-        $geoWithin: {
-          $centerSphere: [[longitude, latitude], radius / 3963.2],
-        },
+  const constructOptions = (locationField) => ({
+    // Use $geoWithin when you need to select documents within a specific area, regardless of their order.
+    [locationField]: {
+      $geoWithin: {
+        $centerSphere: [[longitude, latitude], radius / 3963.2],
       },
-    };
+    },
+    // Use $nearSphere when you want to find documents sorted by their distance from a point.
+    // [locationField]: {
+    //   $nearSphere: {
+    //     $geometry: [[longitude, latitude], $ maxDistance: radius],
+    //   },
+    // },
+  });
 
-    Event.find(options)
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((error) => {
-        console.error("Error finding events:", error);
-        res
-          .status(500)
-          .json({ error: "An error occurred while finding events" });
-      });
-  } else if (type == "article") {
-    const options = {
-      article_region: {
-        $geoWithin: {
-          $centerSphere: [[longitude, latitude], radius / 3963.2],
-        },
-      },
-    };
+  let model;
+  let locationField;
 
-    Article.find(options)
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((error) => {
-        console.error("Error finding articles:", error);
-        res
-          .status(500)
-          .json({ error: "An error occurred while finding articles" });
-      });
-  } else if (type == "product") {
-    const options = {
-      transaction_region: {
-        $geoWithin: {
-          $centerSphere: [[longitude, latitude], radius / 3963.2],
-        },
-      },
-    };
-
-    Product.find(options)
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((error) => {
-        console.error("Error finding products:", error);
-        res
-          .status(500)
-          .json({ error: "An error occurred while finding products" });
-      });
+  switch (type) {
+    case "event":
+      model = Event;
+      locationField = "destination";
+      break;
+    case "article":
+      model = Article;
+      locationField = "article_region";
+      break;
+    case "product":
+      model = Product;
+      locationField = "transaction_region";
+      break;
+    default:
+      return res.status(400).json({ error: "Invalid type" });
   }
+
+  const options = constructOptions(locationField);
+
+  model
+    .find(options)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      console.error(`Error finding ${type}s:`, error);
+      res
+        .status(500)
+        .json({ error: `An error occurred while finding ${type}s` });
+    });
 };
 
 module.exports = {
