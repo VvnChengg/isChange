@@ -7,14 +7,14 @@ const http = require("http");
 const socketIo = require("socket.io");
 const gpsd = require("node-gpsd");
 
-// 在使用者同意後，取得使用者位置
+// 法一:在使用者同意後，後端監聽，取得使用者位置
 const io = socketIo(server);
 const daemon = new gpsd.Listener();
 
-const getUserLocation = (req, res) => {
+const getUserLocation = async (req, res) => {
   const { userId } = req.body;
 
-  const user = Member.findOne({ _id: userId });
+  const user = await Member.findOne({ _id: userId });
   const agreeLocation = user.agree_location;
 
   if (agreeLocation) {
@@ -31,6 +31,53 @@ const getUserLocation = (req, res) => {
   } else {
     daemon.removeAllListeners("TPV");
   }
+};
+
+// 法二:在使用者同意後，透過request header的ip address取得使用者位置
+// https://hackernoon.com/how-to-find-location-using-ip-address-in-nodejs
+const { SuperfaceClient } = require("@superfaceai/one-sdk");
+const sdk = new SuperfaceClient();
+app.set("trust proxy", true);
+
+const getIpLocation1 = async (req, res) => {
+  const ip = req.ip;
+  const profile = await sdk.getProfile("address/ip-geolocation@1.0.1");
+  const result = await profile.getUseCase("IpGeolocation").perform(
+    {
+      ipAddress: ip,
+    },
+    {
+      provider: "ipdata",
+      security: {
+        apikey: {
+          apikey: "",
+        },
+      },
+    }
+  );
+
+  try {
+    const data = result.unwrap();
+    return res
+      .status(500)
+      .json({ longitude: data.longitude, latitude: data.latitude });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// 法三:在使用者同意後，透過request header的ip address取得使用者位置
+const geoip = require("node-geolocation");
+
+const getIpLocation2 = async (req, res) => {
+  const ip = req.ip;
+  const location = geoip.getLocation("8.8.8.8");
+  if (!location) {
+    res.status(404).json({ error: "Location not found" });
+  }
+  res
+    .status(200)
+    .json({ longitude: location.longitude, latitude: location.latitude });
 };
 
 // 取得附近文章、揪團、商品
@@ -103,4 +150,9 @@ const findNearby = (req, res) => {
   }
 };
 
-module.exports = { getUserLocation, findNearby };
+module.exports = {
+  getUserLocation,
+  getIpLocation1,
+  getIpLocation2,
+  findNearby,
+};
