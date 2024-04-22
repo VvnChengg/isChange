@@ -2,6 +2,7 @@ const Event = require("../models/event");
 const Article = require("../models/article");
 const Product = require("../models/product");
 const Member = require("../models/member");
+require("dotenv").config(); // 加了這行就可以抓到 ipdata api key
 
 const http = require("http");
 const socketIo = require("socket.io");
@@ -50,7 +51,7 @@ const getIpLocation1 = async (req, res) => {
       provider: "ipdata",
       security: {
         apikey: {
-          apikey: "",
+          apikey: process.env.IPDATA_API_KEY,
         },
       },
     }
@@ -70,14 +71,21 @@ const getIpLocation1 = async (req, res) => {
 const geoip = require("node-geolocation");
 
 const getIpLocation2 = async (req, res) => {
-  const ip = req.ip;
-  const location = geoip.getLocation(ip);
-  if (!location) {
-    res.status(404).json({ error: "Location not found" });
+  try {
+    const ip = req.ip;
+    const location = geoip.getLocation(ip);
+    if (!location) {
+      res.status(404).json({ error: "Location not found" });
+    }
+    res
+      .status(200)
+      .json({ longitude: location.longitude, latitude: location.latitude });
+  } catch (error) {
+    console.error("Error getting IP location:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while getting IP location" });
   }
-  res
-    .status(200)
-    .json({ longitude: location.longitude, latitude: location.latitude });
 };
 
 // 取得附近文章、揪團、商品
