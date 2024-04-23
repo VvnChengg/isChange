@@ -1,6 +1,8 @@
 const Member = require("../models/member");
 const MemberAuth = require("../models/member-auth");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
+const randomstring = require("randomstring");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
@@ -211,40 +213,96 @@ const hashPassword = async (password) => {
   }
 };
 
+//透過這個email發送驗證碼
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.NODEMAILER_USER,
+    pass: process.env.NODEMAILER_PASSWORD,
+  },
+});
+
+//學校信箱寄驗證碼
+const studentVerificationCode = async (req, res) => {
+  const { userId, exchange_school_email } = req.body;
+
+  // 檢查信箱是否已被使用
+  const user = await Member.findOne({
+    exchange_school_email: exchange_school_email,
+  });
+  if (user) {
+    return res.status(400).json({ error: "Email已被使用" });
+  }
+
+  // Generate a random verification code
+  const code = randomstring.generate({
+    length: 6,
+    charset: "numeric",
+  });
+
+  const user_auth = await MemberAuth.findOne({ user_id: userId });
+
+  if (user_auth.student_verification) {
+    res
+      .status(400)
+      .json({ status: "failed", message: "已完成認證，無法再次認證" });
+  } else {
+    await Member.updateOne(
+      { _id: userId },
+      { exchange_school_email: exchange_school_email, verification_code: code }
+    );
+  }
+
+  // send email
+  try {
+    await transporter.sendMail({
+      from: process.env.NODEMAILER_USER,
+      to: exchange_school_email,
+      subject: "isChange Student Verification Code",
+      text: `Your student verification code is: ${code}`,
+    });
+
+    res.status(200).json({
+      status: "verified",
+      message: "驗證碼已寄出",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "驗證碼寄送失敗，請稍後再試",
+    });
+  }
+};
+
 //學生認證
 const studentVerification = async (req, res) => {
-  const { userId, exchange_school_email } = req.body;
+  const { userId, exchange_school_email, verification_code } = req.body;
+
   try {
-    //檢查是否已經認證
-    const user_auth = await MemberAuth.findOne({ user_id: userId });
-    if (!user_auth) {
-      return res.status(404).json({ error: "User not found" });
-    } else if (user_auth.student_verification) {
-      return res.status(400).json({ error: "已完成認證，無法再次認證" });
+    //檢查驗證碼
+    const user = await Member.findOne({ exchange_school_email });
+    if (user.verification_code !== verification_code) {
+      //驗證碼錯誤
+      return res.status(400).json({
+        status: "error",
+        message: "電子郵件驗證失敗，請確認您的驗證碼是否正確",
+      });
+    } else {
+      //驗證碼正確
+      const updatedUserAuth = await MemberAuth.findOneAndUpdate(
+        { user_id: userId },
+        { $set: { student_verification: true } },
+        { new: true }
+      );
+      return res.status(200).json({
+        status: "success",
+        message: "學生身分認證成功",
+        data: updatedUserAuth,
+      });
     }
-    // 檢查信箱是否已被使用
-    const user = await Member.findOne({
-      exchange_school_email: exchange_school_email,
-    });
-    if (user && user._id != userId) {
-      return res.status(400).json({ error: "Email已被使用" });
-    }
-    //更新認證資料
-    const updatedUserAuth = await MemberAuth.findOneAndUpdate(
-      { user_id: userId },
-      { $set: { student_verification: true } },
-      { new: true }
-    );
-    const updatedUser = await Member.findOneAndUpdate(
-      { _id: userId },
-      { $set: { exchange_school_email: exchange_school_email } },
-      { new: true }
-    );
-    return res.status(200).json({
-      status: "success",
-      message: "學生身分認證成功",
-      data: updatedUserAuth,
-    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "認證失敗，請稍後再試" });
@@ -281,6 +339,7 @@ module.exports = {
   showMember,
   modifyMember,
   showMemberDetail,
+  studentVerificationCode,
   studentVerification,
   deleteTestMember,
 };

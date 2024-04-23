@@ -36,6 +36,10 @@ const memberSchema = new Schema({
     unique: true,
     match: /^\S+@\S+\.\S+$/, // 驗證 email 格式
   },
+  verification_code: {
+    type: String,
+    maxlength: 6,
+  },
   region: {
     type: String,
     // required: true,
