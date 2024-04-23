@@ -215,6 +215,7 @@ const hashPassword = async (password) => {
 const studentVerification = async (req, res) => {
   const { userId, exchange_school_email } = req.body;
   try {
+    //檢查是否已經認證
     const user_auth = await MemberAuth.findOne({ user_id: userId });
     const user = await Member.findOne({
       exchange_school_email: exchange_school_email,
@@ -228,7 +229,7 @@ const studentVerification = async (req, res) => {
     } else if (user && user._id != userId) {
       return res.status(400).json({ error: "Email已被使用" });
     }
-
+    //更新認證資料
     const updatedUserAuth = await MemberAuth.findOneAndUpdate(
       { user_id: userId },
       { $set: { student_verification: true } },
@@ -280,6 +281,7 @@ module.exports = {
   showMember,
   modifyMember,
   showMemberDetail,
+  studentVerification,
   studentVerification,
   deleteTestMember,
 };
