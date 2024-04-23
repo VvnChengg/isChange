@@ -215,20 +215,21 @@ const hashPassword = async (password) => {
 const studentVerification = async (req, res) => {
   const { userId, exchange_school_email } = req.body;
   try {
+    //檢查是否已經認證
     const user_auth = await MemberAuth.findOne({ user_id: userId });
+    if (!user_auth) {
+      return res.status(404).json({ error: "User not found" });
+    } else if (user_auth.student_verification) {
+      return res.status(400).json({ error: "已完成認證，無法再次認證" });
+    }
+    // 檢查信箱是否已被使用
     const user = await Member.findOne({
       exchange_school_email: exchange_school_email,
     });
-
-    if (!user_auth) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    if (user_auth.student_verification) {
-      return res.status(400).json({ error: "已完成認證，無法再次認證" });
-    } else if (user && user._id != userId) {
+    if (user && user._id != userId) {
       return res.status(400).json({ error: "Email已被使用" });
     }
-
+    //更新認證資料
     const updatedUserAuth = await MemberAuth.findOneAndUpdate(
       { user_id: userId },
       { $set: { student_verification: true } },
