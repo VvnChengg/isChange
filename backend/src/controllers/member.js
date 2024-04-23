@@ -221,6 +221,12 @@ const studentVerification = async (req, res) => {
     });
 
     if (!user_auth) {
+    const user_auth = await MemberAuth.findOne({ user_id: userId });
+    const user = await Member.findOne({
+      exchange_school_email: exchange_school_email,
+    });
+
+    if (!user_auth) {
       return res.status(404).json({ error: "User not found" });
     }
     if (user_auth.student_verification) {
