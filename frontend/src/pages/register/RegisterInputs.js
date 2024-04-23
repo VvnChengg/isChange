@@ -26,7 +26,7 @@ export const NormalRegisterInput = ({ hint, name, type, value, placeholder, isFo
 }
 
 export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handleInputFocus, handleInputBlur,
-    emailRegistered, SentMail, isSending, countdown, verificationPass,
+    emailRegistered, checkAndSendMail, isSending, countdown, verificationPass,
     showVerification, verificationCode, handleVerificationCodeChange, veriHint, checkVerification }) => {
     const intl = useIntl();
         return (
@@ -44,7 +44,7 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                 isButtonPresent = {
                     <button
                         type='button'
-                        onClick={SentMail}
+                        onClick={checkAndSendMail}
                         className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${isSending ? registerStyles.disabled : ''}`}
                         disabled={isSending || verificationPass || (email.split('@').pop().includes('edu'))}
                     >

@@ -54,7 +54,7 @@ const Register = () => {
         // false => 尚未被註冊
         try {
             const data = await loginApi.login_or_register(email);
-            console.log(data);
+            // console.log(data);
             if (data === 1) {
                 return true;
             } else {
@@ -64,7 +64,7 @@ const Register = () => {
             }
         } catch (error) {
             // Handle error
-            console.error('Error getting user info:', error);
+            // console.error('Error getting user info:', error);
             return false;
         }
     };
@@ -74,7 +74,7 @@ const Register = () => {
     };
 
 
-    const SentMail = async () => {
+    const checkAndSendMail = async () => {
         // 檢查此email是否已被註冊
         let registered = await checkEmailInDatabase(email);
         setEmailRegistered(registered);
@@ -304,7 +304,7 @@ const Register = () => {
                 email={email}
                 handleEmailChange={handleEmailChange}
                 emailRegistered={emailRegistered}
-                SentMail={SentMail}
+                checkAndSendMail={checkAndSendMail}
                 isSending={isSending}
                 countdown={countdown}
 
