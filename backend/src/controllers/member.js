@@ -216,16 +216,19 @@ const studentVerification = async (req, res) => {
   const { userId, exchange_school_email } = req.body;
   try {
     const user_auth = await MemberAuth.findOne({ user_id: userId });
-    const user = await MemberAuth.findOne({
+    const user = await Member.findOne({
       exchange_school_email: exchange_school_email,
     });
 
     if (!user_auth) {
       return res.status(404).json({ error: "User not found" });
     }
-    if (user) {
+    if (user_auth.student_verification) {
+      return res.status(400).json({ error: "已完成認證，無法再次認證" });
+    } else if (user && user._id != userId) {
       return res.status(400).json({ error: "Email已被使用" });
     }
+
     const updatedUserAuth = await MemberAuth.findOneAndUpdate(
       { user_id: userId },
       { $set: { student_verification: true } },
