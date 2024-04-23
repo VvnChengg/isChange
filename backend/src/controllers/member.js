@@ -282,6 +282,5 @@ module.exports = {
   modifyMember,
   showMemberDetail,
   studentVerification,
-  studentVerification,
   deleteTestMember,
 };
