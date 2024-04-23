@@ -215,9 +215,16 @@ const hashPassword = async (password) => {
 const studentVerification = async (req, res) => {
   const { userId, exchange_school_email } = req.body;
   try {
-    const user = await MemberAuth.findOne({ user_id: userId });
-    if (!user) {
+    const user_auth = await MemberAuth.findOne({ user_id: userId });
+    const user = await MemberAuth.findOne({
+      exchange_school_email: exchange_school_email,
+    });
+
+    if (!user_auth) {
       return res.status(404).json({ error: "User not found" });
+    }
+    if (user) {
+      return res.status(400).json({ error: "Email已被使用" });
     }
     const updatedUserAuth = await MemberAuth.findOneAndUpdate(
       { user_id: userId },
@@ -270,5 +277,6 @@ module.exports = {
   showMember,
   modifyMember,
   showMemberDetail,
+  studentVerification,
   deleteTestMember,
 };
