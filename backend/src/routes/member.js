@@ -14,6 +14,7 @@ router.patch(
   validateToken,
   memberController.modifyMember
 );
+router.patch("/stud-ver", validateToken, memberController.studentVerification);
 router.get("/:uid", memberController.showMemberDetail); //非會員也可以查看資料
 router.delete("/delete", memberController.deleteTestMember); //後端測試用
 
