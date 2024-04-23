@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import viewStyles from '../../styles/View.module.css';
 import ViewMemberSelfIntro from './ViewMemberSelfIntro';
 import ViewMemberPost from './ViewMemberPost';
 import ViewMemberInfo from './ViewMemberInfo';
+
 import { viewApi } from '../../api/viewApi';
 import { useToken } from '../../hooks/useToken';
 
 
-const View = () => {
+export const ViewWithoutUid = () => {
   const [username, setUsername] = useState('');
   const [school, setSchool] = useState('');
   const [photo, setPhoto] = useState('');
@@ -40,4 +43,35 @@ const View = () => {
   );
 };
 
-export default View;
+export const ViewWithUid = () => {
+  const [username, setUsername] = useState('');
+  const [school, setSchool] = useState('');
+  const [photo, setPhoto] = useState('');
+  const [intro, setIntro] = useState('');
+  const { uid } = useParams();
+
+  // 先讀取使用者資料
+  const getOtherMemberInfo = async () =>{
+    const memberInfo = await viewApi.getOtherMember(uid);
+    // console.log(memberInfo);
+
+    setUsername(memberInfo.username);
+    setSchool(memberInfo.exchange_school_name);
+    setPhoto(memberInfo.photo);
+    setIntro(memberInfo.intro);
+  }
+
+  useEffect(() => {
+    if(uid){
+      getOtherMemberInfo();
+    }
+  }, [uid]);
+
+  return (
+    <div className={viewStyles.isChange}>
+      <ViewMemberInfo photo={photo} username={username} school={school} uid={uid}/>
+      <ViewMemberSelfIntro intro={intro}/>
+      <ViewMemberPost />
+    </div>
+  );
+}

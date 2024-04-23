@@ -4,15 +4,24 @@ import { EditProfileButton } from './View-style';
 import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
 
 // 包含使用者的大頭貼、使用者名稱、學校名稱
-const ViewMemberInfo = ({photo, username, school}) => {
+const ViewMemberInfo = ({photo, username, school, student_veri, uid}) => {
   const [image, setImage] = useState('/icons/profile.png');
   const navigate = useNavigate();
+  const [showEditImage, setShowEditImage] = useState('');
 
   useEffect(() => {
     if(photo){
       setImage(photo);
     }
   }, [photo]);
+
+  useEffect(() => {
+    if(uid){
+      setShowEditImage(false);
+    }else{
+      setShowEditImage(true);
+    }
+  }, [uid]);
 
   function handleEditProfileClick(){
       navigate('/edit');
@@ -26,7 +35,7 @@ const ViewMemberInfo = ({photo, username, school}) => {
         <p>{school}</p>
       </div>
       <div className={viewStyles.profileRight}>
-        <EditProfileButton className={viewStyles.viewbutton} onClick={handleEditProfileClick}/>
+        {showEditImage && <EditProfileButton className={viewStyles.viewbutton} onClick={handleEditProfileClick}/>}
       </div>
     </div>
   );
