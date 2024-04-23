@@ -1,17 +1,23 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import editStyles from '../../styles/Edit.module.css';
+import { FormattedMessage } from 'react-intl';
+
+
 import { PassWordEdit } from './PassWordDiv';
 import { BasicInfoEdit } from './BasicInfoDiv';
 import { SelfInfo } from './SelfInfo';
-import { ImageUploadDiv } from './ImageDiv';
+import { ImageUploadDiv } from './ImageDiv'
+import { StudentVeri } from './StudentVeri';
+
 import { viewApi } from '../../api/viewApi';
-import Button from '../../components/Button';
-import { FormattedMessage } from 'react-intl';
 import { useToken } from '../../hooks/useToken';
+import Button from '../../components/Button';
 
 const Edit = () => {
     const [showPasswordDiv, setShowPasswordDiv] = useState(false);
     const [showBasicInfoDiv, setShowBasicInfoDiv] = useState(false);
+    const [showStudentVeri, setShowStudentVeri] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
     const [introText, setIntroText] = useState('');
@@ -51,7 +57,6 @@ const Edit = () => {
     };
 
 
-
     const handleShowBasicInfoDivClose = () => {
         setShowBasicInfoDiv(false);
     }
@@ -61,23 +66,11 @@ const Edit = () => {
         setShowPasswordDiv(false);
     }
 
-    const handleSubmitImage = () => {
-        // console.log('上傳圖片:', photo);
+    const handleStudentVeriDivClose = () => {
+        setShowStudentVeri(false);
     }
 
-    const handleSubmitIntro = () => {
-        if (introText.length > 200) {
-            alert('自我介紹只能少於200字');
-            return;
-        }
-        // console.log('表單已提交:', { introText });
 
-    }
-
-    const handleSubmitStore = () => {
-        handleSubmitIntro()
-        // handleSubmitImage()
-    }
 
     return (
         <div className={editStyles.editContainer}>
@@ -97,7 +90,7 @@ const Edit = () => {
                         <div className={editStyles.actionButtonsDiv}>
                             <FormattedMessage id='edit.changePassword'>
                                 {(text) => <Button
-                                    style={{ marginBottom: '20px' }}
+                                    style={{ marginBottom: '5%' }}
                                     onClick={() => setShowPasswordDiv(true)}
                                     text={text}
                                 />}
@@ -105,12 +98,21 @@ const Edit = () => {
 
                             <FormattedMessage id='edit.changeUsernameandSchool'>
                                 {(text) => <Button
-                                    // style={{ height: '100%' }}
+                                    style={{ marginBottom: '5%' }}
                                     onClick={() => setShowBasicInfoDiv(true)}
                                     text={text}
                                 />}
                             </FormattedMessage>
+
+                            <FormattedMessage id='edit.studentVeri'>
+                                {(text) => <Button
+                                    style={{ marginBottom: '5%' }}
+                                    onClick={() => setShowStudentVeri(true)}
+                                    text={text}
+                                />}
+                            </FormattedMessage>
                         </div>
+
                     </div>
 
                     <BasicInfoEdit
@@ -126,6 +128,14 @@ const Edit = () => {
                     <PassWordEdit
                         showPasswordDiv={showPasswordDiv}
                         handleClose={handlePassWordDivClose}
+                        isFocused={isFocused}
+                        handleInputFocus={handleInputFocus}
+                        handleInputBlur={handleInputBlur}
+                    />
+
+                    <StudentVeri
+                        showStudentVeri={showStudentVeri}
+                        handleClose={handleStudentVeriDivClose}
                         isFocused={isFocused}
                         handleInputFocus={handleInputFocus}
                         handleInputBlur={handleInputBlur}
