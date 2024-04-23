@@ -15,6 +15,7 @@ export const ViewWithoutUid = () => {
   const [school, setSchool] = useState('');
   const [photo, setPhoto] = useState('');
   const [intro, setIntro] = useState('');
+  const [student_veri, setStudentVeri] = useState(false);
   const token = useToken();
 
   // 先讀取使用者資料
@@ -26,6 +27,7 @@ export const ViewWithoutUid = () => {
     setSchool(memberInfo.exchange_school_name);
     setPhoto(memberInfo.photo);
     setIntro(memberInfo.intro);
+    setStudentVeri(memberInfo.student_verification);
   }
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export const ViewWithoutUid = () => {
 
   return (
     <div className={viewStyles.isChange}>
-      <ViewMemberInfo photo={photo} username={username} school={school}/>
+      <ViewMemberInfo photo={photo} username={username} school={school} student_veri={student_veri}/>
       <ViewMemberSelfIntro intro={intro}/>
       <ViewMemberPost />
     </div>
@@ -48,6 +50,7 @@ export const ViewWithUid = () => {
   const [school, setSchool] = useState('');
   const [photo, setPhoto] = useState('');
   const [intro, setIntro] = useState('');
+  const [student_veri, setStudentVeri] = useState(false);
   const { uid } = useParams();
 
   // 先讀取使用者資料
@@ -59,6 +62,7 @@ export const ViewWithUid = () => {
     setSchool(memberInfo.exchange_school_name);
     setPhoto(memberInfo.photo);
     setIntro(memberInfo.intro);
+    setStudentVeri(memberInfo.student_verification);
   }
 
   useEffect(() => {
@@ -69,7 +73,7 @@ export const ViewWithUid = () => {
 
   return (
     <div className={viewStyles.isChange}>
-      <ViewMemberInfo photo={photo} username={username} school={school} uid={uid}/>
+      <ViewMemberInfo photo={photo} username={username} school={school} student_veri={student_veri} uid={uid}/>
       <ViewMemberSelfIntro intro={intro}/>
       <ViewMemberPost />
     </div>
