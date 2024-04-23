@@ -81,6 +81,10 @@ const zh = {
 
     'view.past': '過往發文紀錄',
     'view.intro': '自我介紹',
+    'view.studentVerified': '已驗證學生身份',
+    'view.studentUnverified': '未驗證學生身份',
+    'view.publishedArticles': '已發佈文章',
+    'view.sendPrivateMessage': '私訊',
 
     'edit.changePassword': '修改密碼',
     'edit.changeUsernameandSchool': '修改其他資訊',
@@ -109,9 +113,13 @@ const zh = {
     'edit.saveIntroSuccess': '儲存自我介紹成功',
     'edit.saveIntroFail': '儲存自我介紹失敗',
     'edit.pleaseEnterSchoolEmail': '請輸入edu信箱帳號',
-    'edit.schoolEmail': '學校信箱',
+    'edit.schoolEmail': '交換學校信箱',
+    'edit.schoolEmailRegistered': '此學生信箱已被註冊',
+    'edit.resendMail': '錯誤訊息，請再次驗證您的電子信箱',
     'edit.pleaseEnterVeriCode': '請輸入驗證碼',
     'edit.veriCode': '驗證碼',
+    'edit.sendVerification': '寄送驗證碼',
+    'edit.confirmCode': '確認',
 
     'post.create': '創建貼文',
 
