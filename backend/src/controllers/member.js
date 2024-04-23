@@ -251,7 +251,12 @@ const studentVerificationCode = async (req, res) => {
   } else {
     await Member.updateOne(
       { _id: userId },
-      { exchange_school_email: exchange_school_email, verification_code: code }
+      {
+        $set: {
+          exchange_school_email: exchange_school_email,
+          verification_code: code,
+        },
+      }
     );
   }
 
