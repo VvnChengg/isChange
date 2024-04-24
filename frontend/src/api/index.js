@@ -21,7 +21,10 @@ export const api = {
           const token = window.localStorage.getItem('access_token');
 
           return (
-              axios.post(hostname + '/post/create', { post }, {
+              axios.post(hostname + '/post/create', { 
+                title: post.title,
+                content: post.content
+               }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -29,6 +32,23 @@ export const api = {
             .then(res => res.data)
             .catch(err => console.log(err))
         )
+    },
+    deleteUserPost: (pID) => {
+        const token = window.localStorage.getItem('access_token');
+        return axios.delete(`${hostname}/post/${pID}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                console.log(pID);
+                console.log(res.data.message);
+                alert(`${res.data.message}`);
+                return res.data;
+            })
+            .catch(err => {
+                throw err;
+            });
     },
     createTour: (tour) => {
         const token = window.localStorage.getItem('access_token');
