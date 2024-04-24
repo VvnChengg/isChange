@@ -232,7 +232,7 @@ const studentVerificationCode = async (req, res) => {
   const user = await Member.findOne({
     exchange_school_email: exchange_school_email,
   });
-  if (user) {
+  if (user && user._id != userId) {
     return res.status(400).json({ error: "Email已被使用" });
   }
 
