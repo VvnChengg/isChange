@@ -19,7 +19,7 @@ import Home from './pages/home';
 import LoginForm from './pages/login';
 import Register from './pages/register';
 import Edit from './pages/edit';
-import View from './pages/view';
+import {ViewWithUid, ViewWithoutUid} from './pages/view';
 
 // chat
 import PrivateMessageList from './pages/private-messages';
@@ -56,7 +56,8 @@ function App() {
                   <Route path='login' element={<LoginForm />} />
                   <Route path='register' element={<Register />} />
                   <Route path='edit' element={<Edit />} />
-                  <Route path='member' element={<View />} />   
+                  <Route path='member' element={<ViewWithoutUid />} />
+                  <Route path='member/:uid' element={<ViewWithUid />} />
                   <Route path='chat-list' element={<PrivateMessageList/>}/>
                   <Route path='chatroom/:chatid' element={<Chatroom/>} />
                   <Route path='testing' element={<StartPrivate/>} />

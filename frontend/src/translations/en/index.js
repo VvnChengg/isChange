@@ -80,6 +80,10 @@ const en = {
 
     'view.past': 'Past posts',
     'view.intro': 'Introduction',
+    'view.studentVerified': 'Verified Student',
+    'view.studentUnverified': 'Unverified Student',
+    'view.publishedArticles': 'Published Articles',
+    'view.sendPrivateMessage': 'Private Message',
 
     'edit.changePassword': 'Password',
     'edit.changeUsernameandSchool': 'Other Information',
@@ -108,9 +112,13 @@ const en = {
     'edit.saveIntroSuccess': 'Save self introduction successfully',
     'edit.saveIntroFail': 'Save self introduction failed',
     'edit.pleaseEnterSchoolEmail': 'Please enter your edu email',
-    'edit.schoolEmail': 'School Email',
+    'edit.schoolEmail': 'Exchange School Email',
+    'edit.schoolEmailRegistered': 'This school email has already been registered',
+    'edit.resendMail': 'Error message, please verify your email again',
     'edit.pleaseEnterVeriCode': 'Please enter verification code',
     'edit.veriCode': 'Verification Code',
+    'edit.sendVerification': 'Send Code',
+    'edit.confirmCode': 'Confirm',
 
     'post.create': 'Create post',
 

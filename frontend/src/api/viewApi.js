@@ -17,4 +17,17 @@ export const viewApi = {
             return err
         });
     },
+
+    // 取得其他會員資料
+    getOtherMember: (user_id) => {
+        return axios.get(`${hostname}/member/${user_id}`)
+        .then(res => {
+            // console.log(res);
+            return res.data
+        })
+        .catch(err => {
+            // console.log(err)
+            return err
+        });
+    }
 }

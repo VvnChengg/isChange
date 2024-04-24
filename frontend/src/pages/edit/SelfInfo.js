@@ -29,7 +29,6 @@ export const SelfInfo = ({setIntroText, introText}) => {
             const data = await editApi.editIntro(introText, token);
             if(data.status === 'success'){
                 alert(`${intl.formatMessage({ id: 'edit.saveIntroSuccess' })}`);
-                // alert('儲存自我介紹成功');
             }
         }catch(error){
             // console.error(error);
