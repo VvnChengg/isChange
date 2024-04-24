@@ -232,7 +232,7 @@ const studentVerificationCode = async (req, res) => {
   const user = await Member.findOne({
     exchange_school_email: exchange_school_email,
   });
-  if (user && user._id != userId) {
+  if (user && !user._id == userId) {
     return res.status(400).json({ error: "Email已被使用" });
   }
 
@@ -245,7 +245,7 @@ const studentVerificationCode = async (req, res) => {
   const user_auth = await MemberAuth.findOne({ user_id: userId });
 
   if (user_auth.student_verification) {
-    res
+    return res
       .status(400)
       .json({ status: "failed", message: "已完成認證，無法再次認證" });
   } else {
