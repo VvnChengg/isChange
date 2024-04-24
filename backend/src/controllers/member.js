@@ -269,13 +269,13 @@ const studentVerificationCode = async (req, res) => {
       text: `Your student verification code is: ${code}`,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "verified",
       message: "驗證碼已寄出",
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "驗證碼寄送失敗，請稍後再試",
     });
