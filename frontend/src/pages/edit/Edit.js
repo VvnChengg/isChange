@@ -25,6 +25,7 @@ const Edit = () => {
     const [username, setUsername] = useState('');
     const [school, setSchool] = useState('');
     const [photo, setPhoto] = useState('');
+    const [studentVeriStatus, setStudentVeriStatus] = useState(false);
     const token = useToken();
 
     const getInfo = async () => {
@@ -34,6 +35,7 @@ const Edit = () => {
         setSchool(memberInfo.exchange_school_name);
         setPhoto(memberInfo.photo);
         setIntroText(memberInfo.intro);
+        setStudentVeriStatus(memberInfo.student_verification);
         // console.log('photo:'+memberInfo.photo);
     }
 
@@ -44,8 +46,6 @@ const Edit = () => {
         }
 
     }, [token]);
-
-
 
     // 處理輸入框的焦點
     const handleInputFocus = () => {
@@ -69,7 +69,6 @@ const Edit = () => {
     const handleStudentVeriDivClose = () => {
         setShowStudentVeri(false);
     }
-
 
 
     return (
@@ -104,10 +103,15 @@ const Edit = () => {
                                 />}
                             </FormattedMessage>
 
-                            <FormattedMessage id='edit.studentVeri'>
+                            <FormattedMessage id={studentVeriStatus? 'edit.studentVerified' : 'edit.studentVeri'}>
                                 {(text) => <Button
-                                    style={{ marginBottom: '5%' }}
-                                    onClick={() => setShowStudentVeri(true)}
+                                    style={{ marginBottom: '5%',
+                                    backgroundColor: studentVeriStatus ? '#ccc' : '',
+                                    color: studentVeriStatus ? '#888' : '',
+                                    cursor: studentVeriStatus ? 'not-allowed' : 'default',
+                                    }}
+                                    onClick={studentVeriStatus? undefined : () => setShowStudentVeri(true)}
+                                    // onClick={() => setShowStudentVeri(true)}
                                     text={text}
                                 />}
                             </FormattedMessage>
@@ -123,6 +127,7 @@ const Edit = () => {
                         handleInputBlur={handleInputBlur}
                         username={username}
                         school={school}
+                        setStudentVeriStatus={setStudentVeriStatus}
                     />
 
                     <PassWordEdit
