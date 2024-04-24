@@ -42,7 +42,7 @@ export const loginApi = {
                 localStorage.setItem('email', res.data.data.email);
                 localStorage.setItem('access_token', res.data.data.access_token);
                 localStorage.setItem('expiry_time', expiryTime.toString());
-                alert(`${res.data.message}`);
+                return res.data;
             }else{
                 // console.log('Failed to login: ' + res.data.message);
                 alert(`${res.data.message}`);
