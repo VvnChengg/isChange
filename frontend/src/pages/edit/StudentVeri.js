@@ -5,9 +5,11 @@ import editStyles from '../../styles/Edit.module.css';
 import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
 import { useIntl } from 'react-intl';
+import { useToken } from '../../hooks/useToken';
+
 
 // 編輯基本資料的元件
-export const StudentVeri = ({ showStudentVeri, handleClose, isFocused, handleInputFocus, handleInputBlur}) => {
+export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose, isFocused, handleInputFocus, handleInputBlur}) => {
     const intl = useIntl();
     const [schoolEmail, setSchoolEmail] = useState('');
     const [schoolEmailRegistered, setSchoolEmailRegistered] = useState(null);
@@ -15,6 +17,7 @@ export const StudentVeri = ({ showStudentVeri, handleClose, isFocused, handleInp
     const [isSending, setIsSending] = useState(false);
     const [countdown, setCountdown] = useState(45);
     const [showVerification, setShowVerification] = useState(false);
+    const token = useToken();
 
 
 
@@ -25,28 +28,16 @@ export const StudentVeri = ({ showStudentVeri, handleClose, isFocused, handleInp
     const handleVeriCodeChange = (e) => {
         setVeriCode(e.target.value);
     }
-
+    
+    // 在這裡寄送驗證信
     const checkAndSendSchoolEmail = async () => {
-        // 檢查此email是否已被註冊
-        // let registered = await checkEmailInDatabase(schoolEmail);
-        let registered = false;
-        setSchoolEmailRegistered(registered);
-
-        //若已被註冊則不寄送，並彈出視窗
-        if (registered) {
-            alert(`${intl.formatMessage({ id: 'edit.schoolEmailRegistered' })}`);
-        } else if(registered === false){
-            sendMail(schoolEmail);
-            // console.log('寄送驗證信:', email);
+        if (!schoolEmail.split('@').pop().includes('edu')){
+            alert(`${intl.formatMessage({ id: 'edit.notStudentEmail' })}`);
+            return;
         }
 
-    }
-    
-    const sendMail = async (schoolEmail) => {
-        // 在這裡寄送驗證信
         try {
-            // const data = await editApi.sendSchoolEmail(schoolEmail);
-            const data = [];
+            const data = await editApi.editStudentVeriSendCode(schoolEmail, token);
             if (data.status === 'verified') {
                 setIsSending(true);
                 setShowVerification(true);
@@ -60,16 +51,16 @@ export const StudentVeri = ({ showStudentVeri, handleClose, isFocused, handleInp
                     setIsSending(false);
                     clearInterval(intervalId);
                 }, 45000);
-                alert(`${data.message}`);
+
+                alert(`${intl.formatMessage({ id: 'edit.sentVerification' })}`);
                 return true;
-            } else {
-                alert(`${data.message}`);
-                return false;
             }
         } catch (error) {
-            // console.error('Error getting user info:', error);
-            alert(`${intl.formatMessage({ id: 'edit.resendMail' })}`);
-            // alert(`'錯誤訊息，請重新驗證'`);
+            if (error.response.data.error === 'Email已被使用') {
+                alert(`${intl.formatMessage({ id: 'edit.schoolEmailRegistered' })}`);
+            }else{
+                alert(`${intl.formatMessage({ id: 'edit.resendMail' })}`);
+            }
         }
     }
 
@@ -80,9 +71,22 @@ export const StudentVeri = ({ showStudentVeri, handleClose, isFocused, handleInp
         }
     }, [countdown]);
 
+    // 確認驗證碼
     const handleConfirmVeriCode = async () => {
+        try{
+            const data = await editApi.editStudentVeri(schoolEmail, veriCode, token);
+            if(data.status === 'success'){
+                alert(`${intl.formatMessage({ id: 'edit.studentVeriSuccess' })}`);
+                handleClose();
+                setStudentVeriStatus(true);
+                window.location.reload();
+            }
 
+        } catch (error) {
+            alert(`${intl.formatMessage({ id: 'edit.reVeriCode' })}`);
+        }
     }
+
 
 
 
@@ -112,9 +116,14 @@ export const StudentVeri = ({ showStudentVeri, handleClose, isFocused, handleInp
                                 </FormattedMessage>
                             </div>
                             <Button
-                                style={ {whiteSpace:'nowrap'} }
-                                onClick={checkAndSendSchoolEmail}
-                                text={<FormattedMessage id='edit.sendVerification' />}
+                                style={ { 
+                                backgroundColor: (!schoolEmail || isSending) ? '#ccc' : '',
+                                color: (!schoolEmail || isSending) ? '#888' : '',
+                                cursor: (!schoolEmail || isSending) ? 'not-allowed' : 'default',
+                                height: 'auto'
+                            } }
+                                onClick={(!schoolEmail || isSending)?  undefined : checkAndSendSchoolEmail}
+                                text={isSending? <FormattedMessage id='edit.sendingVeri' values={{ countdown: countdown }} /> : <FormattedMessage id='edit.sendVerification' />}
                             />
                         </div>
 

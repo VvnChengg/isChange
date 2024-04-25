@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import { api } from '../../api';
@@ -6,7 +6,7 @@ import { api } from '../../api';
 import {
     CreateContainer,
     CreateButtonContainer
-} from './tourCreate-style';
+} from './tourEdit-style';
 
 import TourForm from '../../components/TourForm';
 import Button from '../../components/Button';
@@ -26,18 +26,23 @@ export default function TourCreate() {
         event_intro: '',
     })
 
+    useEffect(() => {
+        // api: get tour detail & setTour
+    })
+
     function onSubmit() {
         console.log(tour);
 
-        api.createTour(tour)
-        .then(res => {
-            console.log(res);
-            alert(res.message);
-        })
-        .catch(err => {
-            console.log(err);
-            alert(err.message);
-        });
+        // api: edit tour
+        // api.createTour(tour)
+        // .then(res => {
+        //     console.log(res);
+        //     alert(res.message);
+        // })
+        // .catch(err => {
+        //     console.log(err);
+        //     alert(err.message);
+        // });
     }
 
     return (
@@ -49,7 +54,7 @@ export default function TourCreate() {
                     secondary={true}
                 />
                 <Button
-                    text={intl.formatMessage({ id: 'tour.create' })}
+                    text={intl.formatMessage({ id: 'tour.edit' })}
                     onClick={() => onSubmit()}
                 />
             </CreateButtonContainer>

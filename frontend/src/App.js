@@ -34,9 +34,15 @@ import ShareFind from './pages/shareFind';
 import ShareToEdit from './pages/shareToEdit';
 import ShareEdit from './pages/shareEdit';
 import ShareToDelete from './pages/shareToDelete';
+import SelfPost from './pages/allSelfPost/selfPost';
 
 // tour
 import TourCreate from './pages/tourCreate';
+import TourEdit from './pages/tourEdit';
+
+// trans
+import TransCreate from './pages/transCreate';
+import TransEdit from './pages/transEdit';
 
 function App() {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
@@ -69,9 +75,15 @@ function App() {
                     <Route path='to-edit' element={<ShareToEdit />} />
                     <Route path='edit' element={<ShareEdit />} />
                     <Route path='to-delete' element={<ShareToDelete />} />
+                    <Route path='self' element={<SelfPost />} />
                   </Route>
                   <Route path='tour'>
                     <Route path='create' element={<TourCreate />} />
+                    <Route path='edit' element={<TourEdit />} />
+                  </Route>
+                  <Route path='trans'>
+                    <Route path='create' element={<TransCreate />} />
+                    <Route path='edit' element={<TransEdit />} />
                   </Route>
                 </Route>
               </Routes>
