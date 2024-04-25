@@ -138,6 +138,7 @@ const en = {
     'tour.max': 'Max',
     'tour.date': 'Date',
     'tour.create': 'Create tour',
+    'tour.edit': 'Edit tour',
 
     'trans.type': 'Type',
     'trans.sell': 'Sell',

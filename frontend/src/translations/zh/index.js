@@ -134,11 +134,12 @@ const zh = {
     'tour.inputDestination': '想要去哪裡玩？',
     'tour.people': '徵求人數範圍',
     'tour.peopleUnit': '人',
-    'trans.budget': '預算範圍',
+    'tour.budget': '預算範圍',
     'tour.min': '最少',
     'tour.max': '最多',
     'tour.date': '日期',
     'tour.create': '創建揪團',
+    'tour.edit': '編輯揪團',
 
     'trans.type': '交易類別',
     'trans.sell': '賣出',
