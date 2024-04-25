@@ -29,7 +29,10 @@ export const api = {
                     'Authorization': `Bearer ${token}`
                 }
             })
-            .then(res => res.data)
+            .then(res => {
+                alert(`創建成功！`);
+                return res.data;
+            })
             .catch(err => console.log(err))
         )
     },

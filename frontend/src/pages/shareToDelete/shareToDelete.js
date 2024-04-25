@@ -29,11 +29,11 @@ export default function MyComponent() {
   };
 
   function onDelete() {
-    var r=window.confirm("你真的真的要刪掉他嗎");
+    var r=window.confirm('你真的真的要刪掉他嗎');
     if (r==true){
-        api.deleteUserPost('6628747c92b76a7e7f4b7d36')
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+      api.deleteUserPost('662876d392b76a7e7f4b7d40')
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
     }
   };
 
