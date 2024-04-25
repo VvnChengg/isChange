@@ -39,6 +39,10 @@ import SelfPost from './pages/allSelfPost/selfPost';
 // tour
 import TourCreate from './pages/tourCreate';
 
+// trans
+import TransCreate from './pages/transCreate';
+import TransEdit from './pages/transEdit';
+
 function App() {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
 
@@ -74,6 +78,10 @@ function App() {
                   </Route>
                   <Route path='tour'>
                     <Route path='create' element={<TourCreate />} />
+                  </Route>
+                  <Route path='trans'>
+                    <Route path='create' element={<TransCreate />} />
+                    <Route path='edit' element={<TransEdit />} />
                   </Route>
                 </Route>
               </Routes>

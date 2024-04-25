@@ -6,7 +6,7 @@ import {
 } from './FormInput-style.js';
 
 import { useIntl } from 'react-intl';
-import { DatePicker } from 'antd';
+import { Radio, DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
 
 export function FormInput({type, title, placeholder, text, setText}) {
@@ -99,6 +99,20 @@ export function FormDate({title, setDate}) {
                 placeholder={[intl.formatMessage({ id: 'formInput.startDate' }),
                               intl.formatMessage({ id: 'formInput.endDate' })]}
                 onChange={setDate}
+            />
+        </FormTextBox>
+    )
+}
+
+export function FormCheck({title, options, onChange}) {
+    return (
+        <FormTextBox>
+            <FormTextTitle>{title}</FormTextTitle>
+            <Radio.Group
+                style={{ textAlign: 'left' }}
+                options={options}
+                defaultValue={options[0].value}
+                onChange={onChange}
             />
         </FormTextBox>
     )

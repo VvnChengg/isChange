@@ -139,6 +139,18 @@ const en = {
     'tour.date': 'Date',
     'tour.create': 'Create tour',
 
+    'trans.type': 'Type',
+    'trans.sell': 'Sell',
+    'trans.buy': 'Buy',
+    'trans.lend': 'Lend',
+    'trans.rent': 'Rent',
+    'trans.price': 'Price',
+    'trans.min': 'Min',
+    'trans.max': 'Max',
+    'trans.date': 'Rent date',
+    'trans.create': 'Create product',
+    'trans.edit': 'Edit product',
+
     /* alert */
     'alert.login': 'Please login',
 
