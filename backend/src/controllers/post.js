@@ -85,20 +85,16 @@ const getAllPosts = async (req, res, next) => {
 
 const getPostDetail = async (req, res, next) => {
     const { pid } = req.params;
-    // const {userId} = req.body;
     let article;
     try{
-        article = await Article.findOne({_id:pid, status:"complete"},);
+        article = await Article.findOne({_id:pid},);
         if(!article){
-            return res.status(404).json({message:"找不到此文章"});
+            return res.status(404).json({message:"文章不存在"});
         }
-        // console.log(article);
-        // console.log(article.creator_id, userId, JSON.stringify(article.creator_id)===JSON.stringify(userId));
-        // console.log(article.status==="draft");
-        // if(JSON.stringify(article.creator_id)!=JSON.stringify(userId) && article.status==="draft" ){
-        //     return res.status(401).json({message:"文章尚未發布"});
-        // }
     }catch(error){
+        if(error.name === "CastError"){
+            return res.status(400).json({message:"pid 無法轉換成 ObjectId"});
+        }
         return res.status(400).json({message:error});
     }
     return res.status(200).json({article});
