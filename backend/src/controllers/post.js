@@ -43,7 +43,6 @@ const getAllPosts = async (req, res, next) => {
                 end_time: event.end_time,
                 people_lb: event.people_lb,
                 people_ub: event.people_ub,
-                creator_id: event.creator_id,
                 status: event.status
             };
             result.push(item);
@@ -52,7 +51,7 @@ const getAllPosts = async (req, res, next) => {
         // 抽取商品需要的資訊並統一格式
         products.forEach(product => {
             const item = {
-                _id:product._id,
+                _id: product._id,
                 title: product.product_title,
                 content: product.description,
                 type: "trans",
@@ -77,8 +76,8 @@ const getAllPosts = async (req, res, next) => {
     } catch (err) {
         return next(err);
     }
-    if (!articles && !events && !products) {
-        return res.status(500).json({ message: err.message });
+    if (result.length<=0) {
+        return res.status(500).json({ message: "資料庫中無任何內容" });
     }
     return res.status(200).json({ result });
 };
@@ -86,41 +85,84 @@ const getAllPosts = async (req, res, next) => {
 const getPostDetail = async (req, res, next) => {
     const { pid } = req.params;
     let article;
-    try{
-        article = await Article.findOne({_id:pid},);
-        if(!article){
-            return res.status(404).json({message:"文章不存在"});
+    try {
+        article = await Article.findOne({ _id: pid },);
+        if (!article) {
+            return res.status(404).json({ message: "文章不存在" });
         }
-    }catch(error){
-        if(error.name === "CastError"){
-            return res.status(400).json({message:"pid 無法轉換成 ObjectId"});
+    } catch (error) {
+        if (error.name === "CastError") {
+            return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
         }
-        return res.status(400).json({message:error});
+        return res.status(400).json({ message: error });
     }
-    return res.status(200).json({article});
+    return res.status(200).json({ article });
 };
 
 const getUserPosts = async (req, res, next) => {
-    let articles;
+    let articles, events, products;
     let result = [];
     const searchId = req.params.uid;
-    const uId = req.body.userId;
+    // const uId = req.body.userId;
     try {
-        // 若查看的不是自己的文章，只能看到已發佈的文章(狀態:complete)
-        if (uId == searchId) {
-            articles = await Article.find({ creator_id: searchId },);
-        } else {
-            articles = await Article.find({ creator_id: searchId, status: "complete" },);
-        }
+        // 因為取消"草稿"狀態，所以不會有差別了 -> 若查看的不是自己的文章，只能看到已發佈的文章(狀態:complete)
+        // if (uId == searchId) {
+        //     articles = await Article.find({ creator_id: searchId },);
+        // } else {
+        //     articles = await Article.find({ creator_id: searchId, status: "complete" },);
+        // }
+        articles = await Article.find({ creator_id: searchId });
+        events = await Event.find({ creator_id: searchId });
+        products = await Product.find({ creator_id: searchId });
+        console.log(products);
         // 抽取文章需要的資訊並統一格式
         articles.forEach(article => {
             const item = {
+                _id: article._id,
                 title: article.article_title,
                 content: article.content,
-                type: "article",
-                status: article.status,
+                type: "post",
                 coverPhoto: article.article_pic,
+                location: article.article_region,
                 datetime: article.post_date
+            };
+            result.push(item);
+        });
+
+        events.forEach(event => {
+            const item = {
+                _id: event._id,
+                title: event.event_title,
+                content: event.event_intro,
+                type: "tour",
+                location: event.destination,
+                datetime: event.start_time,
+                currency: event.currency,
+                budget: event.budget,
+                end_time: event.end_time,
+                people_lb: event.people_lb,
+                people_ub: event.people_ub,
+                status: event.status
+            };
+            result.push(item);
+        });
+
+        // 抽取商品需要的資訊並統一格式
+        products.forEach(product => {
+            const item = {
+                _id: product._id,
+                title: product.product_title,
+                content: product.description,
+                type: "trans",
+                coverPhoto: product.product_pic,
+                location: product.transaction_region,
+                datetime: product.post_time,
+                currency: product.currency,
+                price: product.price,
+                product_type: product.product_type,
+                period: product.period,
+                status: product.status,
+                transaction_way: product.transaction_way
             };
             result.push(item);
         });
@@ -133,8 +175,8 @@ const getUserPosts = async (req, res, next) => {
     } catch (err) {
         return next(err);
     }
-    if (!articles) {
-        return res.status(500).json({ message: "尚未發文" });
+    if (result.length<=0) {
+        return res.status(500).json({ message: "使用者無創建任何內容" });
     }
     return res.status(200).json({ result });
 };

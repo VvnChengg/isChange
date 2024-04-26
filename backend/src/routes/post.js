@@ -7,7 +7,7 @@ var { getAllPosts, getUserPosts, createPost, updatePost, deletePost, getPostDeta
 
 // 指定route對應的controller
 router.get('/all', getAllPosts);
-router.get('/:uid', validateToken,getUserPosts);
+router.get('/:uid',getUserPosts);
 router.post('/create', validateToken, createPost);
 router.put('/:pid', validateToken, updatePost);
 // router.put('/:pid', updatePost);
