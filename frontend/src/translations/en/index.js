@@ -27,6 +27,10 @@ const en = {
     'msg.userNotEntered': 'No message now!',
     'msg.stranger':'Stranger!!',
 
+    'selfpost.edit':'Edit',
+    'selfpost.delete':'Delete',
+
+
     /* pages */
     'title': 'Title',
     'inputTitle': 'What is your title?',
@@ -139,6 +143,7 @@ const en = {
     'tour.date': 'Date',
     'tour.create': 'Create tour',
     'tour.edit': 'Edit tour',
+    'tour.message': 'Contact team lead',
 
     'trans.type': 'Type',
     'trans.sell': 'Sell',

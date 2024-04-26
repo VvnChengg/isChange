@@ -27,6 +27,10 @@ const zh = {
     'msg.userNotEntered': '使用者尚未輸入信息',
     'msg.stranger':'陌生!!',
 
+    'selfpost.edit':'編輯',
+    'selfpost.delete':'刪除',
+
+
 
     /* pages */
     'title': '標題',
@@ -140,6 +144,7 @@ const zh = {
     'tour.date': '日期',
     'tour.create': '創建揪團',
     'tour.edit': '編輯揪團',
+    'tour.message': '私訊主揪',
 
     'trans.type': '交易類別',
     'trans.sell': '賣出',
