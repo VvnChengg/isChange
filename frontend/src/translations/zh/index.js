@@ -27,6 +27,10 @@ const zh = {
     'msg.userNotEntered': '使用者尚未輸入信息',
     'msg.stranger':'陌生!!',
 
+    'selfpost.edit':'編輯',
+    'selfpost.delete':'刪除',
+
+
 
     /* pages */
     'title': '標題',

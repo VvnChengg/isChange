@@ -19,9 +19,9 @@ const StyledThreeDotButton = styled.button`
   }
 `;
 
-const ThreeDotButton = () => {
+const ThreeDotButton = ({ onClick }) => {
   return (
-    <StyledThreeDotButton>
+    <StyledThreeDotButton onClick={onClick}>
       <div></div>
       <div></div>
       <div></div>

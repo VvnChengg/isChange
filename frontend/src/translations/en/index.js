@@ -27,6 +27,10 @@ const en = {
     'msg.userNotEntered': 'No message now!',
     'msg.stranger':'Stranger!!',
 
+    'selfpost.edit':'Edit',
+    'selfpost.delete':'Delete',
+
+
     /* pages */
     'title': 'Title',
     'inputTitle': 'What is your title?',

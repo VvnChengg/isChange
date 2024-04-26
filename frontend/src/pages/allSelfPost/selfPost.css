@@ -1,0 +1,10 @@
+.self-post-wrapper {
+    display: flex;
+    align-items: center; 
+    width: 100%;
+}
+
+.self-post-wrapper > *:first-child {
+    width: 90%;
+    margin-right: 10px;
+}
