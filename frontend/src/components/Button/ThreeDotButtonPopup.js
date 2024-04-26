@@ -8,10 +8,13 @@ import '../StartPrivate/StartPrivate.css';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 
+
+
 const ThreeDotButtonPopup = ({ isOpen, onClose, onEdit, onDelete, buttonPosition }) => {
+  
   return (
     isOpen && (
-      <div className='three-dot-popup' style={{ top: buttonPosition.top, left: buttonPosition.left }}>
+      <div className='three-dot-popup' style={{ position: 'fixed',  top: buttonPosition.top, left: buttonPosition.left }}>
         <button className='startprivate-close-button' onClick={onClose}>X</button>
         <ul>
           <li>

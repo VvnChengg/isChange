@@ -15,15 +15,21 @@ export default function SelfPost() {
     const hostname = process.env.REACT_APP_API_HOSTNAME;
     const token = window.localStorage.getItem('access_token');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 }); // 新增這行
-    //const [selectedPost, setSelectedPost] = useState(null);
+    const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 }); 
+    const [selectedPost, setSelectedPost] = useState(null);
     
-    const handleButtonClick = (buttonPosition) => {
+
+    
+    const handleButtonClick = (postID,event) => {
         //console.log('Button clicked!');
-        //setSelectedPost(post._id);
+        setSelectedPost(postID);
         setIsModalOpen(true);
         setButtonPosition(buttonPosition);
-        console.log(isModalOpen)
+        //console.log(buttonPosition)
+        const buttonRect = event.target.getBoundingClientRect();
+        const buttonX = buttonRect.left;
+        const buttonY = buttonRect.top;
+        setButtonPosition({ top: buttonY, left: buttonX });
     };
 
     const handleCloseModal = () => {
@@ -46,7 +52,7 @@ export default function SelfPost() {
         })
         .then(response => {
             setPosts(response.data.result);
-            console.log('已更新:', response.data);
+            //console.log('已更新:', response.data);
         })
         .catch(error => {
             console.error('API 請求失敗:', error);
@@ -54,9 +60,9 @@ export default function SelfPost() {
     }, [userId, token, hostname]);
     //console.log(posts)
 
-   /*  useEffect(() => {
-        console.log(selectedPost, isModalOpen);
-    }, [selectedPost, isModalOpen]); */
+    useEffect(() => {
+        //console.log(selectedPost, isModalOpen);
+    }, [selectedPost, isModalOpen]);
 
     return (
         <PostContainer>
@@ -64,7 +70,7 @@ export default function SelfPost() {
                 posts?.map((post, index) => (
                     <div key={`post${index}`} className="self-post-wrapper">
                         <Post post={post} />
-                        <ThreeDotButton onClick={(buttonPosition) => handleButtonClick(buttonPosition)}></ThreeDotButton> 
+                        <ThreeDotButton onClick={(event) => handleButtonClick(post._id, event)} ></ThreeDotButton> 
                     </div>
                 ))
             ) : (

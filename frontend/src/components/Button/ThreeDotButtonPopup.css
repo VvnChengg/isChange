@@ -2,7 +2,7 @@
 
 .three-dot-popup {
   position: absolute;
-  background-color: rgb(0, 0, 255); /* 調整為你想要的背景顏色 */
+  background-color: rgb(0, 0, 255); 
   padding: 10px;
   border: 1px solid  rgb(0, 0, 255);
   border-radius: 5px;
