@@ -44,6 +44,7 @@ import TourDetail from './pages/tourDetail';
 // trans
 import TransCreate from './pages/transCreate';
 import TransEdit from './pages/transEdit';
+import TransDetail from './pages/transDetail';
 
 function App() {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
@@ -86,6 +87,7 @@ function App() {
                   <Route path='trans'>
                     <Route path='create' element={<TransCreate />} />
                     <Route path='edit' element={<TransEdit />} />
+                    <Route path='detail' element={<TransDetail />} />
                   </Route>
                 </Route>
               </Routes>
