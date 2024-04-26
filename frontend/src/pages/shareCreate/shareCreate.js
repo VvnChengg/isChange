@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useIntl, FormattedMessage } from 'react-intl';
+import { ImageUploadDiv } from './imageDiv'
 
 import './shareCreate-style.css';
 
@@ -26,13 +27,10 @@ export default function Share() {
     navigate(path);
   };
 
-  // const [inputTitle, setInputTitle] = useState('')
-  // const [inputContent, setInputContent] = useState('')
-
   const [post, setPost] = useState({
     title: '',
     content: '',
-    // photo: '',
+    photo: '',
     // status: ['draft'],
   })
 
@@ -50,12 +48,12 @@ export default function Share() {
       });
   }
 
-  // function setPhoto(input) {
-  //   setPost({
-  //       ...post,
-  //       photo: input
-  //   });
-  // }
+  function setPhoto(input) {
+    setPost({
+        ...post,
+        photo: input
+    });
+  }
 
   // function setStatus(input) {
   //   setPost({
@@ -89,11 +87,13 @@ export default function Share() {
           text={post.content}
           setText={setContent}
         />
-        <button className='figure-button' onClick={() => routeChange()}><img
+        {/* <button className='figure-button' onClick={() => routeChange()}><img
             loading='lazy'
             src='https://cdn.builder.io/api/v1/image/assets/TEMP/3f570a0c69a52557b5a1cd2aabd09f0ea82824f62a802a9b9d432ad5b29bbd66?'
-            // className='self-end aspect-square fill-sky-600 mt-[469px] w-[30px] max-md:mt-10'
-          /></button>
+          /></button> */}
+        <ImageUploadDiv
+          photo={post.photo}
+          setPhoto={setPhoto} />
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <Button
             text={intl.formatMessage({ id: 'back' })}

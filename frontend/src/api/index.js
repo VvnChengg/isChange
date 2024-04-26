@@ -36,6 +36,24 @@ export const api = {
             .catch(err => console.log(err))
         )
     },
+    postImage: (formData, token) => {
+        return axios.patch(`${hostname}/member/edit-page`,
+            formData, {
+
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        }, )
+            .then(res => {
+                // console.log(res)
+                return res.data
+            })
+            .catch(err => {
+                // console.log(err)
+                throw err
+            });
+    },
     deleteUserPost: (pID) => {
         const token = window.localStorage.getItem('access_token');
         return axios.delete(`${hostname}/post/${pID}`, {
@@ -47,6 +65,19 @@ export const api = {
                 console.log(pID);
                 console.log(res.data.message);
                 alert(`${res.data.message}`);
+                return res.data;
+            })
+            .catch(err => {
+                throw err;
+            });
+    },
+    getPostDetail: (pID) => {
+        // const token = window.localStorage.getItem('access_token');
+        return axios.get(`${hostname}/post/detail/${pID}`)
+            .then(res => {
+                console.log(pID);
+                console.log(res);
+                console.log(res.data.message);
                 return res.data;
             })
             .catch(err => {

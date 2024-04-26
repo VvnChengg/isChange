@@ -68,7 +68,7 @@ function App() {
                   <Route path='chatroom/:chatid' element={<Chatroom/>} />
                   <Route path='testing' element={<StartPrivate/>} />
                   <Route path='post'>
-                    <Route path='detail' element={<ShareDetail />} />
+                    <Route path='detail/:pid' element={<ShareDetail />} />
                     <Route path='create' element={<ShareCreate />} />
                     <Route path='published' element={<SharePublished />} />
                     <Route path='find' element={<ShareFind />} />

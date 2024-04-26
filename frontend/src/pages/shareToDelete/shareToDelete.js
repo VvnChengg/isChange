@@ -31,7 +31,7 @@ export default function MyComponent() {
   function onDelete() {
     var r=window.confirm('你真的真的要刪掉他嗎');
     if (r==true){
-      api.deleteUserPost('662876d392b76a7e7f4b7d40')
+      api.deleteUserPost('662aeeada7e96168dcb8383e')
       .then(res => console.log(res))
       .catch(err => console.log(err));
     }
