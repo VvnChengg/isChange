@@ -1,12 +1,13 @@
 // selfPost.js
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PostContainer } from '../home/home-style';
 import Post from '../../components/Post';
 import ThreeDotButton from '../../components/Button/ThreeDotButton'; 
 import ThreeDotButtonPopup from '../../components/Button/ThreeDotButtonPopup';
 import axios from 'axios';
 import './selfPost.css'
-
+import PopupOnly from './popUPOnly';
 
 
 export default function SelfPost() {
@@ -17,7 +18,10 @@ export default function SelfPost() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 }); 
     const [selectedPost, setSelectedPost] = useState(null);
-    
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false); 
+    const navigate = useNavigate();
+
+
 
     
     const handleButtonClick = (postID,event) => {
@@ -37,12 +41,19 @@ export default function SelfPost() {
     };
 
     const handleEditPost = () => {
-        console.log('Editing post...');
+        //導流置該頁面
+        navigate('/page/edit/${selectedPost}');
+        console.log(selectedPost);
     };
 
-    const handleDeletePost = () => {
-        console.log('Deleting post...');
+    const handleDeletePost  = () => {
+        // popup
+        //setShowPopup(true);
+        setShowConfirmPopup(true); // 显示确认弹出窗口
     };
+
+
+
 
     useEffect(() => {
         axios.get(`${hostname}/post/${userId}`, {
@@ -52,7 +63,7 @@ export default function SelfPost() {
         })
         .then(response => {
             setPosts(response.data.result);
-            //console.log('已更新:', response.data);
+            console.log('已更新:', response.data);
         })
         .catch(error => {
             console.error('API 請求失敗:', error);
@@ -75,6 +86,16 @@ export default function SelfPost() {
                 ))
             ) : (
                 <p>NONE!!</p>
+            )}
+            {showConfirmPopup && ( 
+                <PopupOnly 
+                    onConfirm={() => {
+                        // 呼叫刪除 api
+                        setShowConfirmPopup(false); 
+                    }}
+                    onCancel={() => setShowConfirmPopup(false)} 
+                    postIdToDelete = {selectedPost}
+                />
             )}
             {isModalOpen && (
                 <ThreeDotButtonPopup  
