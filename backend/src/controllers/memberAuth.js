@@ -113,18 +113,15 @@ const registerMember = async (req, res) => {
 
   // create member and memberAuth in database
   if (!user) {
+    //註冊
     await MemberAuth.create({
       email: email,
       verification_code: code,
       source: "credentials",
     });
-  } else if (user && !user.password) {
-    await MemberAuth.updateOne({ email }, { verification_code: code });
   } else {
-    return res.status(400).json({
-      status: "error",
-      message: "已成為會員，請登入",
-    });
+    //忘記密碼
+    await MemberAuth.updateOne({ email }, { verification_code: code });
   }
 
   // send email
@@ -155,15 +152,11 @@ const verifyRegisterMember = async (req, res) => {
 
   try {
     const user = await MemberAuth.findOne({ email });
-    if (!user) {
+    if (!user && !user.password) {
+      //還沒註冊過的會員，也還沒有信箱驗證
       return res.status(400).json({
         status: "error",
         message: "電子郵件尚未驗證，請申請驗證碼",
-      });
-    } else if (user.is_verified) {
-      return res.status(400).json({
-        status: "error",
-        message: "電子郵件已完成驗證，請登入",
       });
     } else if (!user || user.verification_code !== verification_code) {
       return res.status(400).json({
@@ -172,6 +165,7 @@ const verifyRegisterMember = async (req, res) => {
       });
     }
 
+    //已經註冊過的會員忘記密碼 or 還沒有註冊過的會員要設定密碼
     const updatedUser = await MemberAuth.findOneAndUpdate(
       { email },
       { is_verified: true }
@@ -249,6 +243,28 @@ const verifiedMember = async (req, res) => {
   }
 };
 
+const forgetPwd = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    // hash password
+    const hashedPassword = await hashPassword(password);
+    // reset password
+    const user = await MemberAuth.findOneAndUpdate(
+      { email },
+      { password: hashedPassword }
+    );
+    return res.status(200).json({
+      status: "success",
+      message: "密碼已重設",
+      data: user.email,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ status: "failed", message: "重設失敗，請稍後再試" });
+  }
+};
+
 const deleteTestMember = async (req, res) => {
   const { email } = req.body; // Extract email from request body
   try {
@@ -287,5 +303,6 @@ module.exports = {
   verifyRegisterMember,
   checkUsername,
   verifiedMember,
+  forgetPwd,
   deleteTestMember,
 };

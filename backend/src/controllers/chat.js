@@ -8,7 +8,7 @@ const checkChat = async (req, res) => {
         const { receiver_id } = req.params;
         const { userId } = req.body; // 使用者的 member._id, 如果是 object 就轉成 string
 
-        console.log(userId, receiver_id)
+        // console.log(userId, receiver_id)
 
         const chat = await Chat.findOne({
             $or: [
@@ -39,14 +39,9 @@ const checkChat = async (req, res) => {
 // POST 建立聊天
 const createChat = async (req, res) => {
     try {
-        // const { userId, receiver_id } = req.body;
-        // const { receiver_id } = req.query; // test receiver_id 放在 query 裡
+        const { userId, receiver_id } = req.body;
 
-        // for 0416 demo
-        const { userId } = req.body;
-        const receiver_id = "660bbad71dd21a48510f209c";
-
-        console.log(userId, receiver_id)
+        // console.log(userId, receiver_id)
 
         const receiver = await Member.findById(receiver_id);
         if (!receiver) {
@@ -65,7 +60,7 @@ const createChat = async (req, res) => {
             stranger: false // phase 1: accept all chat
         });
 
-        console.log(newChat)
+        // console.log(newChat)
 
         // 更新兩個使用者的聊天 ID 列表
         await Member.updateMany(
@@ -112,13 +107,12 @@ const getChatDetail = async (req, res) => {
         const member = await Member.findById(chat_to_id);
         const messages = await Message.find({ chat_id: cid });
         // console.log(messages);
-        
+
         // Convert photo data to base64
         let photoBase64 = null;
         if (member.photo && member.photo.contentType) {
-            photoBase64 = `data:${
-                member.photo.contentType
-            };base64,${member.photo.data.toString("base64")}`;
+            photoBase64 = `data:${member.photo.contentType
+                };base64,${member.photo.data.toString("base64")}`;
         }
 
         res.status(200).json({
@@ -136,13 +130,12 @@ const getChatDetail = async (req, res) => {
 const getChatList = async (req, res) => {
     try {
         const userId = req.body.userId;  // 使用者透過 token 或是某方式，抓自己的 member._id
-        console.log(userId);
 
         // 直接從 user 的 chat_ids list 抓出聊天
         const user = await Member.findById(userId);
         const chatData = [];
 
-        console.log(user.chat_ids);
+        // console.log(user.chat_ids);
 
         // 如果用戶沒有聊天，chats 回傳 null
         if (user.chat_ids == null) {
@@ -169,9 +162,8 @@ const getChatList = async (req, res) => {
             // Convert photo data to base64
             let photoBase64 = null;
             if (member.photo && member.photo.contentType) {
-                photoBase64 = `data:${
-                    member.photo.contentType
-                };base64,${member.photo.data.toString("base64")}`;
+                photoBase64 = `data:${member.photo.contentType
+                    };base64,${member.photo.data.toString("base64")}`;
             }
 
             // 將資料添加到 chatData 中
@@ -195,56 +187,181 @@ const getChatList = async (req, res) => {
     }
 };
 
-// POST 傳送訊息，未完成
-const sendMessage = async (req, res) => {
+// POST 傳送訊息 ok
+const sendTextMsg = async (req, res) => {
     try {
         const { cid } = req.params;
-        const {
-            userId,
-            content,
-        } = req.body;
+        const { userId, content } = req.body;
 
-        console.log(typeof (content));
-
-        let msg_type = "text";
-        if (typeof (content) != "text") {
-            msg_type = "pic";
+        // 確保 content 和 userId 是有效的
+        if (!content || !userId) {
+            return res.status(400).json({
+                message: 'Invalid content or userId.',
+            });
         }
 
-        // 找出聊天，先確認傳送者是否屬於這則聊天
+        // 找出聊天，並檢查 chat 是否存在
         const chat = await Chat.findById(cid);
-        if (userId != chat.first_person && userId != chat.second_person) {
-            return res.status(401).json({
-                message: 'User is not in this chat.',
-            });
+        if (!chat) {
+            return res.status(404).json({ error: "This chat doesn't exist." });
+        }
+
+        // 檢查使用者是不是聊天成員
+        if (userId != chat.first_person.toString() && userId != chat.second_person.toString()) {
+            return res.status(400).json({ error: "You are not one of members in this chat." });
         }
 
         // 建立新訊息
         const newMessage = await Message.create({
-            type: msg_type,
+            message_type: "text",
             content: content,
             sender_id: userId,
             chat_id: cid,
             timestamp: Date.now(),
         });
 
-        // 更新聊天：最新訊息的內容、時間、傳送者
+        // 更新聊天
         const updateChat = {
             last_message: content,
             last_sender: userId,
             last_update: Date.now(),
-        }
+        };
 
         await Chat.findByIdAndUpdate(cid, updateChat);
 
-        // 重新抓出所有訊息
+        // 重新查詢整個聊天的訊息
         const messages = await Message.find({ chat_id: cid });
-        console.log(messages);
+        // console.log(messages);
 
+        // 回傳整個聊天的訊息
         res.status(200).json({ messages });
     } catch (error) {
         console.error('Failed to send message:', error);
         res.status(500).json({ error: 'Failed to send message' });
+    }
+};
+
+// POST 傳送圖片，未測試
+const sendPic = async (req, res) => {
+    try {
+        const { cid } = req.params;
+        const { userId, photo } = req.body;
+
+        const user = await Member.findById(userId);
+
+        // 確保 content 和 userId 是有效的
+        if (!photo || !userId) {
+            return res.status(400).json({
+                message: 'Invalid photo or userId.',
+            });
+        }
+
+        // 找出聊天，並檢查 chat 是否存在
+        const chat = await Chat.findById(cid);
+        if (!chat) {
+            return res.status(404).json({ error: "This chat doesn't exist." });
+        }
+
+        // 檢查使用者是不是聊天成員
+        if (userId != chat.first_person.toString() && userId != chat.second_person.toString()) {
+            return res.status(400).json({ error: "You are not one of members in this chat." });
+        }
+
+        // 取得上傳的圖片
+        let photoData;
+        if (photo) {
+            try {
+                photoData = {
+                    data: photo.buffer,
+                    contentType: photo.mimetype,
+                };
+            } catch (error) {
+                console.error(error);
+                return res.status(500).json({ error: "Failed to process photo upload" });
+            }
+        }
+
+        // 建立新訊息
+        const newMessage = await Message.create({
+            message_type: "pic",
+            photo: photoData,
+            sender_id: userId,
+            chat_id: cid,
+            timestamp: Date.now(),
+        });
+
+        console.log(newMessage);
+
+        // 更新聊天
+        const updateChat = {
+            last_message: user.username + " 傳送了圖片",
+            last_sender: userId,
+            last_update: Date.now(),
+        };
+
+        await Chat.findByIdAndUpdate(cid, updateChat);
+
+        // 重新查詢整個聊天的訊息
+        const messages = await Message.find({ chat_id: cid });
+
+        // 回傳整個聊天的訊息
+        res.status(200).json({ messages });
+    } catch (error) {
+        console.error('Failed to send message:', error);
+        res.status(500).json({ error: 'Failed to send message' });
+    }
+};
+
+// GET 下載圖片，不確定是什麼效果
+const savePic = async (req, res) => {
+    try {
+        const { mid } = req.params;
+        const message = await Message.findById(mid);
+
+        // 檢查是否找到了對應的訊息
+        if (!message || !message.photo) {
+            return res.status(404).json({ error: 'Message or photo not found' });
+        }
+
+        // 設定 HTTP 響應的標頭，告訴瀏覽器返回的是圖片
+        res.set('Content-Type', 'image/jpeg'); // 假設圖片是 JPEG 格式
+
+        // 將圖片資料作為回應主體直接發送
+        res.send(message.photo);
+    } catch (error) {
+        console.error('Failed to download image:', error);
+        res.status(500).json({ error: 'Failed to download image' });
+    }
+}
+
+// 刪除聊天 ok
+const deleteChat = async (req, res) => {
+    try {
+        const { cid } = req.params;
+
+        // 查找與該聊天相關聯的所有成員
+        const chat = await Chat.findById(cid);
+        if (!chat) {
+            console.log('Chat not found.');
+            return res.status(400).json({
+                message: 'Invalid chat id.',
+            });;
+        }
+        const { first_person, second_person } = chat;
+
+        // 從兩個聊天成員的 chat_ids 中刪除 chat_id
+        await Member.updateMany(
+            { _id: { $in: [first_person, second_person] } },
+            { $pull: { chat_ids: cid }, }
+        );
+
+        // 刪除聊天本身
+        await Chat.findByIdAndDelete(cid);
+
+        return res.status(200).json({ msg: 'Chat deleted successfully.' });
+    } catch (error) {
+        console.error('Failed to delete chat:', error);
+        res.status(500).json({ error: 'Failed to delete chat' });
     }
 };
 
@@ -253,5 +370,8 @@ module.exports = {
     createChat,
     getChatList,
     getChatDetail,
-    sendMessage
+    sendTextMsg,
+    sendPic,
+    savePic,
+    deleteChat
 };
