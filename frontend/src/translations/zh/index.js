@@ -144,6 +144,7 @@ const zh = {
     'tour.date': '日期',
     'tour.create': '創建揪團',
     'tour.edit': '編輯揪團',
+    'tour.message': '私訊主揪',
 
     'trans.type': '交易類別',
     'trans.sell': '賣出',

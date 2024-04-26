@@ -143,6 +143,7 @@ const en = {
     'tour.date': 'Date',
     'tour.create': 'Create tour',
     'tour.edit': 'Edit tour',
+    'tour.message': 'Contact team lead',
 
     'trans.type': 'Type',
     'trans.sell': 'Sell',

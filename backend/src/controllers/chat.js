@@ -92,7 +92,7 @@ const getChatDetail = async (req, res) => {
 
         // 檢查 chat 是否存在
         if (!chat) {
-            return res.status(404).json({ error: "This chat doesn"t exist." });
+            return res.status(404).json({ error: "This chat doesn't exist." });
         }
 
         // 檢查使用者是不是聊天成員
@@ -148,7 +148,7 @@ const getChatList = async (req, res) => {
         if (user.chat_ids == null) {
             res.status(200).json({
                 chats: null,
-                message: "You don"t have any chat."
+                message: "You don't have any chat."
             });
         }
 

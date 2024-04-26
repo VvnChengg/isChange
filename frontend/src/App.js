@@ -39,6 +39,7 @@ import SelfPost from './pages/allSelfPost/selfPost';
 // tour
 import TourCreate from './pages/tourCreate';
 import TourEdit from './pages/tourEdit';
+import TourDetail from './pages/tourDetail';
 
 // trans
 import TransCreate from './pages/transCreate';
@@ -80,6 +81,7 @@ function App() {
                   <Route path='tour'>
                     <Route path='create' element={<TourCreate />} />
                     <Route path='edit' element={<TourEdit />} />
+                    <Route path='detail' element={<TourDetail />} />
                   </Route>
                   <Route path='trans'>
                     <Route path='create' element={<TransCreate />} />
