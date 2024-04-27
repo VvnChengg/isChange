@@ -29,6 +29,11 @@ const zh = {
 
     'selfpost.edit':'編輯',
     'selfpost.delete':'刪除',
+    'selfpost.cancel':'算了',
+    'selfpost.cancelnotification':'確定要取消嗎?',
+    'selfpost.nothingMsg' :'尚未發表文章!',
+
+
 
 
 

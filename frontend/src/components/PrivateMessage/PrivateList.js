@@ -3,15 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ChatRoomList from './ChatRoomList';
+import { useToken } from '../../hooks/useToken';
 
 function PrivateList() {
   const [rooms, setRooms] = useState([]);
   const hostname = process.env.REACT_APP_API_HOSTNAME;
+  const token = useToken();
+  //const userId = window.localStorage.getItem('user_id');
 
   useEffect(() => {
-    const userId = window.localStorage.getItem('user_id');
-    const token = window.localStorage.getItem('access_token');
     
+
     axios.get(`${hostname}/chat/chatlist`, {
       headers: {
         'Authorization':  `Bearer ${token}`
@@ -20,10 +22,11 @@ function PrivateList() {
     .then(response => {
       setRooms(response.data.chats);
     })
+    // 之後應新增沒找到的話，.....
     .catch(error => {
       console.error('Error fetching data:', error);
     });
-  }, []);
+  }, [hostname, token]);
 
   return (
     <div>

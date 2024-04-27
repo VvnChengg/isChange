@@ -29,6 +29,10 @@ const en = {
 
     'selfpost.edit':'Edit',
     'selfpost.delete':'Delete',
+    'selfpost.cancel':'Cancel',
+    'selfpost.cancelnotification':'Are you sure you want to delete?',
+    'selfpost.nothingMsg' :' No post found!',
+
 
 
     /* pages */

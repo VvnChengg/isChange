@@ -26,19 +26,19 @@ const PopupOnly = ({ onConfirm, onCancel ,postIdToDelete}) => {
 
     return (
         <Modal
-            title="Confirmation"
-            open={true} // 这里根据需要设置是否可见
-            onCancel={onCancel} // 取消按钮点击事件
+            //title="Confirmation"
+            open={true} 
+            onCancel={onCancel} // 取消
             footer={[
                 <Button key="cancel" onClick={onCancel}>
-                    Cancel
+                    <FormattedMessage id='selfpost.cancel' />
                 </Button>,
                 <Button key="confirm" type="primary" onClick={handleConfirm}>
-                    Confirm
+                    <FormattedMessage id='msg.confirmButton' />
                 </Button>,
             ]}
         >
-            <p>Are you sure you want to delete?</p>
+            <p><FormattedMessage id='selfpost.cancelnotification' /></p>
         </Modal>
     );
 };

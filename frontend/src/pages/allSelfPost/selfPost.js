@@ -8,19 +8,23 @@ import ThreeDotButtonPopup from '../../components/Button/ThreeDotButtonPopup';
 import axios from 'axios';
 import './selfPost.css'
 import PopupOnly from './popUPOnly';
+import { FormattedMessage } from 'react-intl';
+import { useToken } from '../../hooks/useToken';
+
 
 
 export default function SelfPost() {
     const [posts, setPosts] = useState([]);
     const userId = window.localStorage.getItem('user_id');
     const hostname = process.env.REACT_APP_API_HOSTNAME;
-    const token = window.localStorage.getItem('access_token');
+    //const token = window.localStorage.getItem('access_token');
+    const token = useToken()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 }); 
     const [selectedPost, setSelectedPost] = useState(null);
     const [showConfirmPopup, setShowConfirmPopup] = useState(false); 
     const navigate = useNavigate();
-
+    const [error, setError] = useState(null);
 
 
     
@@ -42,14 +46,14 @@ export default function SelfPost() {
 
     const handleEditPost = () => {
         //導流置該頁面
-        navigate('/page/edit/${selectedPost}');
+        navigate(`/page/edit/${selectedPost}`);
         console.log(selectedPost);
     };
 
     const handleDeletePost  = () => {
         // popup
         //setShowPopup(true);
-        setShowConfirmPopup(true); // 显示确认弹出窗口
+        setShowConfirmPopup(true); //  顯示確認框
     };
 
 
@@ -66,7 +70,10 @@ export default function SelfPost() {
             console.log('已更新:', response.data);
         })
         .catch(error => {
-            console.error('API 請求失敗:', error);
+            console.error('API 请求失败:', error);
+            if (error.response && error.response.status === 500) {
+                setError(error);
+            }
         });
     }, [userId, token, hostname]);
     //console.log(posts)
@@ -76,16 +83,21 @@ export default function SelfPost() {
     }, [selectedPost, isModalOpen]);
 
     return (
-        <PostContainer>
-            {Array.isArray(posts) && posts.length > 0 ? (
-                posts?.map((post, index) => (
-                    <div key={`post${index}`} className="self-post-wrapper">
-                        <Post post={post} />
-                        <ThreeDotButton onClick={(event) => handleButtonClick(post._id, event)} ></ThreeDotButton> 
-                    </div>
-                ))
+        <>
+            {error && error.response && error.response.status === 500 ? (
+                // nothing-container 這個取名比較廣泛感覺可以共用在所有沒找到的地方（？
+                <div className="nothing-container"> 
+                    <p className="self-post-nothing-msg"> <FormattedMessage id='selfpost.nothingMsg' /></p>
+                </div>
             ) : (
-                <p>NONE!!</p>
+                <PostContainer>
+                    {posts.map((post, index) => (
+                        <div key={`post${index}`} className="self-post-wrapper">
+                            <Post post={post} />
+                            <ThreeDotButton onClick={(event) => handleButtonClick(post._id, event)} />
+                        </div>
+                    ))}
+                </PostContainer>
             )}
             {showConfirmPopup && ( 
                 <PopupOnly 
@@ -106,6 +118,6 @@ export default function SelfPost() {
                     buttonPosition={buttonPosition} 
                 />
             )}
-        </PostContainer>
+        </>
     )
 }
