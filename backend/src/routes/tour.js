@@ -11,5 +11,6 @@ router.put('/edit/:eid', validateToken, tourApi.editTour);
 router.delete('/delete', validateToken, tourApi.deleteTour);
 router.get('/list/established', validateToken, tourApi.getEstablishedTours);
 router.get('/list/finished', validateToken, tourApi.getFinishedTours);
+router.get('/list/:userId', validateToken, tourApi.getMyEstablishedTours);
 
 module.exports = router;

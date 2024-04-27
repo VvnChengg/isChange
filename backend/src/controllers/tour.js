@@ -171,8 +171,6 @@ class tourApi {
 
     async getEstablishedTours(req, res) {
         try {
-            const { userId } = req.body;
-
             const tours = await TourModel.find({ status: 'ongoing' });
             return res.status(200).json({
                 established_list: tours
@@ -189,11 +187,9 @@ class tourApi {
 
     async getFinishedTours(req, res) {
         try {
-            const { userId } = req.body;
-
             const tours = await TourModel.find({ status: 'complete' });
             return res.status(200).json({
-                established_list: tours
+                finished_list: tours
             });
 
         } catch (err) {
@@ -201,6 +197,24 @@ class tourApi {
             return res.status(500).json({
                 success: false,
                 message: '取得已成團列表失敗',
+            });
+        }
+    }
+
+    async getMyEstablishedTours(req, res) {
+        try {
+            const { userId } = req.params;
+
+            const tours = await TourModel.find({ creator_id: userId });
+            return res.status(200).json({
+                my_list: tours
+            });
+
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                message: '取得自己創立的揪團列表失敗',
             });
         }
     }
