@@ -88,7 +88,7 @@ const getPostDetail = async (req, res, next) => {
     // const {userId} = req.body;
     let article;
     try{
-        article = await Article.findOne({_id:pid, status:"complete"},);
+        article = await Article.findById(pid);
         if(!article){
             return res.status(404).json({message:"找不到此文章"});
         }
@@ -213,14 +213,65 @@ const deletePost = async (req, res, next) => {
         if (!post.creator_id.equals(uId)) {
             return res.status(401).json({ message: "您沒有權限刪除此文章" });
         }
-        Article.findOneAndDelete({ "_id": pid },);
+        post = await Article.findByIdAndDelete(pid);
+
         res.status(200).json({ message: '成功刪除貼文' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
 
+const deleteContent = async (req, res, next) => {
+    const { userId, type,id } = req.body;
+    let deleteItem, itemType, model;
 
+    // 檢查 body 是否傳入所有需要的資訊
+    if(!userId){
+        return res.status(401).json({message:"請先登入"});
+    }
+    if(!id){
+        return res.status(400).json({message:"請傳入 type (商品種類)和 id (要刪除內容的 id )"});
+    }
+    try {
+
+        // 依據 type 設定相關內容
+        switch(type){
+            case 'post':
+                model = Article;
+                itemType = "文章";
+                break;
+            case 'trans':
+                model = Product;
+                itemType = "商品";
+                break;
+            case 'tour':
+                model = Event;
+                itemType = "揪團";
+                break;
+            default:
+                return res.status(400).json({message:"輸入的 type 不正確，請使用 post, trans 或 tour"});
+        }
+
+        deleteItem = await model.findById(id);
+
+        // 檢查是否有找到文章
+        if (!deleteItem) {
+            return res.status(404).json({ message: itemType+'不存在，或者商品種類設定錯誤' });
+        }
+
+        // 檢查使用者是否有權限刪除文章
+        if (!deleteItem.creator_id.equals(userId)) {
+            return res.status(401).json({ message: "您沒有權限刪除此"+itemType });
+        }
+        deleteItem = await model.findByIdAndDelete(id);
+        res.status(200).json({ message: '成功刪除'+itemType });
+    } catch (err) {
+        if(err.name === "CastError"){
+            return res.status(400).json({message: "id 無法正確轉換成 ObjectId，請檢查 id 格式"});
+        }
+        res.status(500).json({ message: err });
+    }
+};
 
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
@@ -228,3 +279,4 @@ exports.createPost = createPost;
 exports.updatePost = updatePost;
 exports.deletePost = deletePost;
 exports.getPostDetail = getPostDetail;
+exports.deleteContent = deleteContent;
