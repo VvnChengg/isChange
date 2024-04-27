@@ -130,57 +130,55 @@ const getChatDetail = async (req, res) => {
 const getChatList = async (req, res) => {
     try {
         const userId = req.body.userId;  // 使用者透過 token 或是某方式，抓自己的 member._id
-
+        
         // 直接從 user 的 chat_ids list 抓出聊天
         const user = await Member.findById(userId);
         const chatData = [];
 
         // console.log(user.chat_ids);
 
-        // 如果用戶沒有聊天，chats 回傳 null
-        if (user.chat_ids == null) {
+        // 如果用戶沒有聊天，chats 回傳 null；如果有就搜
+        if (user.chat_ids.length === 0) {
             res.status(200).json({
                 chats: null,
                 message: "You don't have any chat."
             });
-        }
+        } else {
+            // 一筆一筆挑出聊天來看
+            for (const chatId of user.chat_ids) {
+                const chat = await Chat.findById(chatId);
+                // 確定聊天對象的 id
+                let chat_to_id;
+                if (userId.toString() == chat.first_person.toString()) {
+                    chat_to_id = chat.second_person;
+                } else {
+                    chat_to_id = chat.first_person;
+                }
 
-        // 一筆一筆挑出聊天來看
-        for (const chatId of user.chat_ids) {
-            const chat = await Chat.findById(chatId);
-            // 確定聊天對象的 id
-            let chat_to_id;
-            if (userId.toString() == chat.first_person.toString()) {
-                chat_to_id = chat.second_person;
-            } else {
-                chat_to_id = chat.first_person;
+                // 找出聊天對象，回傳照片和使用者名稱
+                const member = await Member.findById(chat_to_id);
+                // Convert photo data to base64
+                let photoBase64 = null;
+                if (member.photo && member.photo.contentType) {
+                    photoBase64 = `data:${member.photo.contentType
+                        };base64,${member.photo.data.toString("base64")}`;
+                }
+
+                // 將資料添加到 chatData 中
+                chatData.push({
+                    chat_to_photo: photoBase64,
+                    chat_to_username: member.username,
+                    chat_id: chat._id,
+                    first_person: chat.first_person,
+                    second_person: chat.second_person,
+                    last_message: chat.last_message,
+                    last_sender: chat.last_sender,
+                    last_update: chat.last_update,
+                    stranger: chat.stranger
+                });
             }
-
-            // 找出聊天對象，回傳照片和使用者名稱
-            const member = await Member.findById(chat_to_id);
-
-            // Convert photo data to base64
-            let photoBase64 = null;
-            if (member.photo && member.photo.contentType) {
-                photoBase64 = `data:${member.photo.contentType
-                    };base64,${member.photo.data.toString("base64")}`;
-            }
-
-            // 將資料添加到 chatData 中
-            chatData.push({
-                chat_to_photo: photoBase64,
-                chat_to_username: member.username,
-                chat_id: chat._id,
-                first_person: chat.first_person,
-                second_person: chat.second_person,
-                last_message: chat.last_message,
-                last_sender: chat.last_sender,
-                last_update: chat.last_update,
-                stranger: chat.stranger
-            });
+            res.status(200).json({ chats: chatData });
         }
-
-        res.status(200).json({ chats: chatData });
     } catch (error) {
         console.error('Failed to show chatlist:', error);
         res.status(500).json({ error: 'Failed to show chatlist' });
