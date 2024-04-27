@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { useIntl } from 'react-intl';
 
-// import '../../styles/LoginForm.css';
 import loginStyles from '../../styles/LoginForm.module.css';
 
 import LoginFormPwd from './LoginFormPwd'; // 匯入密碼表單元件

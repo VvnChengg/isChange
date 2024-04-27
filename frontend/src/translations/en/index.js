@@ -41,6 +41,7 @@ const en = {
     'textarea': 'Description',
     'inputTextarea': 'Say something...',
     'back': 'Back',
+    'loading': 'Loading',
 
     'login.title': 'Login or Register',
     'login.inputEmail': 'Please enter your email',
@@ -53,6 +54,15 @@ const en = {
     'login.login': 'Login',
     'login.loginSuccess': 'Login successfully',
     'login.wrongPassword': 'Wrong password',
+    'login.forgotPwd': 'Forgot password?',
+    'login.sendMail': 'Send Code',
+    'login.mailSent': 'Verification code sent to your email',
+    'login.forgotPwdEmail': 'Please enter your email',
+    'login.newPassword': 'New password',
+    'login.newPasswordHint': 'Please enter your new password',
+    'login.passwordChanged': 'Reset password successfully',
+    'login.passwordChangeFailed': 'Reset password failed, please try again',
+    'login.resetPwd': 'Reset password',
 
     'register.tryAgain': 'Please try again',
     'register.emailRegistered': 'Email is registered',

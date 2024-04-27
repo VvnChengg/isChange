@@ -107,6 +107,7 @@ const Register = () => {
                     setIsSending(false);
                     clearInterval(intervalId);
                 }, 45000);
+                
                 alert(`${data.message}`);
                 return true;
             } else {

@@ -37,7 +37,19 @@
     font-size: 0.9rem;
     border-style: solid;
     border-color: #E0F0FF;
+    transition: border-color 0.3s ease;
 }
+
+.loginForm__input:focus {
+    border-color: #007BFF;  /* 你想要的颜色 */
+    outline: none;
+}
+
+.loginForm__input:hover {
+    border-color: #007BFF;  /* 你想要的颜色 */
+    outline: none;
+}
+
 
 .loginForm__button {
     margin: 0 auto;
@@ -56,6 +68,22 @@
 
 .loginForm__buttonHover {
     background-color: '#005ea6';
+}
+
+.hover__pointer {
+    color: #ccc;
+    transition: color 0.3s ease;  /* 新增這行 */
+}
+
+.hover__pointer:hover {
+    cursor: pointer;
+    color: black;
+}
+
+.loginForm__errormsg{
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
 }
 
 @media screen and (max-width: 768px){

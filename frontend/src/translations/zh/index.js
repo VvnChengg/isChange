@@ -43,6 +43,7 @@ const zh = {
     'textarea': '文字說明',
     'inputTextarea': '說些什麼吧！',
     'back': '返回上頁',
+    'loading': '讀取中',
 
     'login.title': '登入或建立帳號',
     'login.inputEmail': '請輸入電子信箱',
@@ -55,6 +56,15 @@ const zh = {
     'login.login': '登入',
     'login.loginSuccess': '登入成功',
     'login.wrongPassword': '密碼錯誤',
+    'login.forgotPwd': '忘記密碼?',
+    'login.sendMail': '寄送驗證碼',
+    'login.mailSent': '驗證碼已寄送至您的電子信箱',
+    'login.forgotPwdEmail': '請輸入電子信箱',
+    'login.newPassword': '新密碼',
+    'login.newPasswordHint': '請輸入新密碼',
+    'login.passwordChanged': '重設密碼成功',
+    'login.passwordChangeFailed': '重設密碼失敗，請再試一次',
+    'login.resetPwd': '重設密碼',
 
     'register.tryAgain': '請再試一次',
     'register.emailRegistered': '電子信箱已被註冊',

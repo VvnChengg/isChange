@@ -55,4 +55,18 @@ export const loginApi = {
         });
     },
 
+    // 忘記密碼
+    forgetPassword: (email, password) => {
+        return axios.patch(`${hostname}/member-auth/forget-pwd`, {
+            email: email,
+            password: password
+        })
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            throw err;
+        });
+    },
+
 };

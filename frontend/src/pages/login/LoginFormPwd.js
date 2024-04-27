@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
+import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
+import { Modal } from "antd";
+
 import { loginApi } from '../../api/loginApi';
 import loginStyles from '../../styles/LoginForm.module.css';
-import { FormattedMessage } from 'react-intl';
+import { ForgetPwd } from './ForgetPwd';
+
 import Button from '../../components/Button';
-import { useIntl } from 'react-intl';
+
 
 
 
 const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
   const [password, setPassword] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const intl = useIntl();
 
@@ -35,6 +41,11 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       }
     }
   };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <div className={loginStyles.loginForm}>
       <h2 className={loginStyles.loginForm__title}><FormattedMessage id='login.enterPassword' /></h2>
@@ -57,11 +68,15 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
         </FormattedMessage>
 
       </div>
+
       <Button
         style={{ width: '100%' }}
         onClick={handleFormSubmit}
         text={intl.formatMessage({ id: 'login.login' })}
       />
+      
+      <div className={loginStyles.hover__pointer} onClick={showModal}>{intl.formatMessage({ id: 'login.forgotPwd' })}</div>
+      <ForgetPwd isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
 
     </div>
   );
