@@ -2,8 +2,7 @@ const Article = require('../models/article');
 const Event = require('../models/event');
 const Product = require('../models/product');
 const { validatePut } = require('../middlewares/post');
-const Member = require('../models/member');
-const memberAuth = require('../models/member-auth');
+const { default: mongoose } = require('mongoose');
 
 const getAllPosts = async (req, res, next) => {
     let articles, events, products;
@@ -76,7 +75,7 @@ const getAllPosts = async (req, res, next) => {
     } catch (err) {
         return next(err);
     }
-    if (result.length<=0) {
+    if (result.length <= 0) {
         return res.status(500).json({ message: "資料庫中無任何內容" });
     }
     return res.status(200).json({ result });
@@ -86,9 +85,9 @@ const getPostDetail = async (req, res, next) => {
     const { pid } = req.params;
     let article;
     try {
-        article = await Article.findOne({ _id: pid },);
+        article = await Article.findById(pid);
         if (!article) {
-            return res.status(404).json({ message: "文章不存在" });
+            return res.status(404).json({ message: "找不到此文章" });
         }
     } catch (error) {
         if (error.name === "CastError") {
@@ -175,7 +174,7 @@ const getUserPosts = async (req, res, next) => {
     } catch (err) {
         return next(err);
     }
-    if (result.length<=0) {
+    if (result.length <= 0) {
         return res.status(500).json({ message: "使用者無創建任何內容" });
     }
     return res.status(200).json({ result });
@@ -251,18 +250,113 @@ const deletePost = async (req, res, next) => {
         if (!post.creator_id.equals(uId)) {
             return res.status(401).json({ message: "您沒有權限刪除此文章" });
         }
-        Article.findOneAndDelete({ "_id": pid },);
+        post = await Article.findByIdAndDelete(pid);
+
         res.status(200).json({ message: '成功刪除貼文' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
 
+const deleteContent = async (req, res, next) => {
+    const { userId, type, id } = req.body;
+    let deleteItem, itemType, model;
 
+    // 檢查 body 是否傳入所有需要的資訊
+    if (!userId) {
+        return res.status(401).json({ message: "請先登入" });
+    }
+    if (!id) {
+        return res.status(400).json({ message: "請傳入 type (商品種類)和 id (要刪除內容的 id )" });
+    }
+    try {
+
+        // 依據 type 設定相關內容
+        switch (type) {
+            case 'post':
+                model = Article;
+                itemType = "文章";
+                break;
+            case 'trans':
+                model = Product;
+                itemType = "商品";
+                break;
+            case 'tour':
+                model = Event;
+                itemType = "揪團";
+                break;
+            default:
+                return res.status(400).json({ message: "輸入的 type 不正確，請使用 post, trans 或 tour" });
+        }
+
+        deleteItem = await model.findById(id);
+
+        // 檢查是否有找到文章
+        if (!deleteItem) {
+            return res.status(404).json({ message: itemType + '不存在，或者商品種類設定錯誤' });
+        }
+
+        // 檢查使用者是否有權限刪除文章
+        if (!deleteItem.creator_id.equals(userId)) {
+            return res.status(401).json({ message: "您沒有權限刪除此" + itemType });
+        }
+        deleteItem = await model.findByIdAndDelete(id);
+        res.status(200).json({ message: '成功刪除' + itemType });
+    } catch (err) {
+        if (err.name === "CastError") {
+            return res.status(400).json({ message: "id 無法正確轉換成 ObjectId，請檢查 id 格式" });
+        }
+        res.status(500).json({ message: err });
+    }
+};
+
+const likePost = async (req, res, next) => {
+    const pid = req.params.pid;
+    const uId = req.body.userId;
+    let res_message = "";
+
+    if (!pid) {
+        return res.status(400).json({ message: '請傳入文章id' });
+    }
+
+    try {
+        // 從資料庫取得貼文內容
+        let post = await Article.findById(pid);
+
+        if (!post) {
+            return res.status(404).json({ message: '貼文不存在' });
+        }
+
+        // 存取按讚人員清單
+        let like_list = post.like_by_user_ids;
+
+        // 尋找目前使用者是否在清單中，是 -> 回傳索引值； 否 -> 回傳 -1
+        const liked = like_list.indexOf(uId);
+
+        if (liked > -1) {               // 使用者原本有按讚
+            like_list.splice(liked, 1);
+            res_message = '成功取消按讚'
+        } else {                      // 使用者原本沒按讚
+            like_list.splice(like_list.length, 0, new mongoose.Types.ObjectId(uId));
+            res_message = '成功按讚'
+        }
+
+        // 更新資料庫內容
+        post = await Article.findByIdAndUpdate(pid, { like_by_user_ids: like_list });
+        res.status(200).json({ message: res_message });
+    } catch (err) {
+        if (err.name === "CastError") {
+            return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
+        }
+        res.status(500).json({ message: err.message });
+    }
+};
 
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
 exports.updatePost = updatePost;
-exports.deletePost = deletePost;
+// exports.deletePost = deletePost;
 exports.getPostDetail = getPostDetail;
+exports.deleteContent = deleteContent;
+exports.likePost = likePost;
