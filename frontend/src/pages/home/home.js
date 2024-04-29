@@ -4,9 +4,11 @@ import { api } from '../../api';
 
 import { PostContainer } from './home-style';
 
+import PostTypeSelector from '../../components/PostTypeSelector';
 import Post from '../../components/Post';
 
 export default function Home() {
+    const [type, setType] = useState('all');
     const [posts, setPosts] = useState([]);
     useEffect(() => {
         api.getAllPosts()
@@ -16,9 +18,13 @@ export default function Home() {
 
     return (
         <PostContainer>
-            {posts?.map((post, index) => 
-                <Post key={`post${index}`} post={post} />
-            )}
+            <PostTypeSelector type={type} setType={setType} />
+            {posts
+                ?.filter(post => type === 'all' || post.type === type)
+                .map((post, index) => 
+                    <Post key={`post${index}`} post={post} />
+                )
+            }
         </PostContainer>
     )
 }

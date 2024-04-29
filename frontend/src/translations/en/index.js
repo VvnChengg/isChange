@@ -2,6 +2,7 @@ const en = {
     /* components */
     'email': 'Email',
 
+    'tag.all': 'ALL',
     'tag.trans': 'TRANS',
     'tag.tour': 'TOUR',
     'tag.post': 'SHARE',

@@ -2,6 +2,7 @@ const zh = {
     /* components */
     'email': '電子信箱',
 
+    'tag.all': '全部',
     'tag.trans': '交易',
     'tag.tour': '揪團',
     'tag.post': '分享',
