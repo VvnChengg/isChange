@@ -15,10 +15,20 @@ export default function Post({ post }) {
         content: 'this is a sample post :D'
     }
 
+    /*
+    function renderStatus() {
+        if the post is product or tour
+            return (
+                <Tag type={status} />
+            )
+    }
+    */
+
     return (
         <PostWrapper>
             <div style={{display: 'flex', alignItems: 'center'}}>
                 <Tag type={post ? post.type : samplePost.type} />
+                {/* post.status && renderStatus() */}
                 {post && post.location &&
                     <>
                         <PostIcon src='location' />

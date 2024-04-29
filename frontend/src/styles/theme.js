@@ -11,4 +11,6 @@ export const lightTheme = {
     trans: '#0071D9',
     tour: '#0086BF',
     post: '#4DC0FF',
+
+    // 加 status 相關的背景顏色
   };

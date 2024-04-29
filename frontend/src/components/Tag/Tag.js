@@ -11,9 +11,12 @@ export default function Tag({ type }) {
         buy: <FormattedMessage id='trans.buy' />,
         lend: <FormattedMessage id='trans.lend' />,
         rent: <FormattedMessage id='trans.rent' />
+
+        // 加 status 相關的
     };
 
     function background() {
+        // status 也要有對應的背景顏色需改這裡
         if (type === 'trans' || type === 'tour' || type === 'post')
             return type;
         else return 'trans';
