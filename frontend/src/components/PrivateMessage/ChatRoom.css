@@ -40,7 +40,7 @@ margin-bottom: 1%;
 }
 
 .private-message-time {
-  font-size: 2vw;
+  font-size: 1vw;
   color: #888;
   width: 100%;
   margin-bottom: 1%;
@@ -49,9 +49,6 @@ margin-bottom: 1%;
 
 .private-message-message-box {
     display: inline-block; /* 將元素設置為內聯塊，使其大小根據內容自動調整 */
-    margin-bottom: 2%;
-    padding: 2%;
-    border-radius: 8px;
     overflow-wrap: break-word; /* 超出寬度時自動換行 */
     word-wrap: break-word;
 }
@@ -60,21 +57,40 @@ margin-bottom: 1%;
 .private-message-own-message {
   text-align: right;
   display: block;
-  background-color: #4629F2;
-  color: white;
   float: right;
-  font-size: 4vw;
 }
 
 /* 別人發送的訊息靠左 */
 .private-message-message-box:not(.private-message-own-message) {
+  text-align: left;
+  display: block;
+  float: left;  
+}
+
+/* 自己發送的訊息靠右 */
+.private-message-own {
+  text-align: right;
+  display: block;
+  background-color: #4629F2;
+  color: white;
+  float: right;
+  font-size: 2vw;
+  border-radius: 5%;
+  padding: 0.2em; 
+}
+
+/* 別人發送的訊息靠左 */
+.private-message-message:not(.private-message-own) {
   background-color: #F1F7FF;
   color: black;
   text-align: left;
   display: block;
   float: left;  
-  font-size: 4vw;
+  font-size: 2vw;
+  border-radius: 5%;
+  padding: 0.2em; 
 }
+
 
 .private-message-chat-header{
   border-bottom: 2px solid #008CD9;

@@ -31,13 +31,21 @@ export default function ChatRoom({ chatData, userId }) {
                   </div>
                 )}
                 <div className={`private-message-message-box ${message.sender_id === userId ? 'private-message-own-message' : ''}`}>
-                  <p className='private-message-message-content'>{message.content}</p>
+                  <div className={`private-message-message ${message.sender_id === userId ? 'private-message-own' : ''}`}>
+                    <p className='private-message-message-content'>{message.content}</p>
+                  </div>
+                <div >
                   <p className='private-message-time'>{formattedHours}:{formattedMinutes}</p>
+                </div>
                 </div>
               </div>
             );
           })}
         </div>
+
+        // 聊天 input
+
+        
       )}
     </div>
   );
