@@ -4,19 +4,24 @@ import axios from 'axios';
 import { FormattedMessage } from 'react-intl';
 
 
-const PopupOnly = ({ onConfirm, onCancel ,postIdToDelete}) => {
+const PopupOnly = ({ onConfirm, onCancel ,postIdToDelete, postTypeToDelete}) => {
     const hostname = process.env.REACT_APP_API_HOSTNAME;
     const token = window.localStorage.getItem('access_token');
     const handleConfirm = () => {
-        axios.delete(`${hostname}/post/${postIdToDelete}`, {
+        axios.delete(`${hostname}/post/delete`, {
             headers: {
                 'Authorization':  `Bearer ${token}`
+            },
+            data: {
+                id: postIdToDelete,
+                type:postTypeToDelete, 
             }
         })
             .then(response => {
                 console.log('Post deleted successfully');
                 onConfirm(); 
                 console.log(response.data.message);
+                window.location.reload(); 
             })
             .catch(error => {
                 console.error('Failed to delete post:', error);

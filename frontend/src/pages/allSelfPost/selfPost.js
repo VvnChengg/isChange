@@ -22,15 +22,17 @@ export default function SelfPost() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 }); 
     const [selectedPost, setSelectedPost] = useState(null);
+    const [selectedPostType, setSelectedPostType] = useState(null);
     const [showConfirmPopup, setShowConfirmPopup] = useState(false); 
     const navigate = useNavigate();
     const [error, setError] = useState(null);
 
 
     
-    const handleButtonClick = (postID,event) => {
+    const handleButtonClick = (postID,postType,event) => {
         //console.log('Button clicked!');
         setSelectedPost(postID);
+        setSelectedPostType(postType);
         setIsModalOpen(true);
         setButtonPosition(buttonPosition);
         //console.log(buttonPosition)
@@ -80,7 +82,7 @@ export default function SelfPost() {
 
     useEffect(() => {
         //console.log(selectedPost, isModalOpen);
-    }, [selectedPost, isModalOpen]);
+    }, [selectedPost, selectedPostType, isModalOpen]);
 
     return (
         <>
@@ -94,7 +96,7 @@ export default function SelfPost() {
                     {posts.map((post, index) => (
                         <div key={`post${index}`} className="self-post-wrapper">
                             <Post post={post} />
-                            <ThreeDotButton onClick={(event) => handleButtonClick(post._id, event)} />
+                            <ThreeDotButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
                         </div>
                     ))}
                 </PostContainer>
@@ -107,6 +109,7 @@ export default function SelfPost() {
                     }}
                     onCancel={() => setShowConfirmPopup(false)} 
                     postIdToDelete = {selectedPost}
+                    postTypeToDelete = {selectedPostType}
                 />
             )}
             {isModalOpen && (
