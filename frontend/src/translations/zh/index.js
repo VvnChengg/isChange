@@ -161,6 +161,10 @@ const zh = {
     'tour.create': '創建揪團',
     'tour.edit': '編輯揪團',
     'tour.message': '私訊主揪',
+    'tour.ongoing':'揪團中',
+    'tour.complete':'揪團完成',
+    'tour.end':'已結束',
+
 
     'trans.type': '交易類別',
     'trans.sell': '賣出',
@@ -173,6 +177,10 @@ const zh = {
     'trans.date': '租借日期',
     'trans.create': '創建商品',
     'trans.edit': '編輯商品',
+    'trans.draft':'草稿',
+    'trans.instock': '銷售中',
+    'trans.reserved':'已保留',
+    'trans.sold':'已售出',
 
     /* alert */
     'alert.login': '請先登入',

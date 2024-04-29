@@ -23,6 +23,15 @@ export default function Post({ post }) {
             )
     }
     */
+    function renderStatus() {
+        if (post && (post.type === 'trans' || post.type === 'tour')) {
+            return (
+                <Tag type={post.status} />
+            );
+        }
+        return null;
+    }
+
 
     return (
         <PostWrapper>
@@ -35,6 +44,8 @@ export default function Post({ post }) {
                         <div>{post.location}</div>
                     </>
                 }
+                {renderStatus()}
+
             </div>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
                 <PostTitle>{post ? post.title : samplePost.title}</PostTitle>

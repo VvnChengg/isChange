@@ -159,7 +159,11 @@ const en = {
     'tour.create': 'Create tour',
     'tour.edit': 'Edit tour',
     'tour.message': 'Contact team lead',
+    'tour.ongoing':'ongoing',
+    'tour.complete':'complete',
+    'tour.end':'end',
 
+    
     'trans.type': 'Type',
     'trans.sell': 'Sell',
     'trans.buy': 'Buy',
@@ -171,6 +175,10 @@ const en = {
     'trans.date': 'Rent date',
     'trans.create': 'Create product',
     'trans.edit': 'Edit product',
+    'trans.draft':'draft',
+    'trans.instock': 'in stock',
+    'trans.reserved':'reserved',
+    'trans.sold':'sold',
 
     /* alert */
     'alert.login': 'Please login',

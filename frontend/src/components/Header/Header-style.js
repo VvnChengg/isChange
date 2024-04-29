@@ -15,6 +15,8 @@ export const HeaderWrapper = styled.div `
 
     display: flex;
     align-items: center;
+    z-index : 2;
+
 `
 
 export const HeaderTitle = styled.div `
@@ -43,6 +45,7 @@ export const HeaderTitle = styled.div `
             2px 2px 0 ${props => props.theme.title},
             4px 4px 4px ${props => props.theme.shadow};
     }
+    z-index : 2;
 `
 
 export const HeaderButtonContainer = styled.div `
@@ -55,6 +58,7 @@ export const HeaderButtonContainer = styled.div `
     display: flex;
         gap: 1px;
         align-items: center;
+        z-index : 2;
 `
 
 export const HeaderButton = styled.div `
@@ -73,6 +77,7 @@ export const HeaderButton = styled.div `
         box-shadow: 2px 2px 2px ${props => props.theme.shadow};
         color: ${props => props.theme.active};
     }
+    z-index : 2;
 `
 
 export const HeaderIcon = styled.div `
@@ -95,4 +100,5 @@ export const HeaderIcon = styled.div `
             fill: ${props => props.theme.active};
         }
     }
+    z-index : 2;
 `
