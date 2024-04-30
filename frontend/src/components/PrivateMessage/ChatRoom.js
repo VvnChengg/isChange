@@ -5,12 +5,13 @@ import './ChatRoom.css';
 
 export default function ChatRoom({ chatData, userId }) {
   let lastDate = null;
+  
 
   return (
     <div>
       {chatData && (
         <div className='private-message-chat-room-container'>
-          <div className='private-message-chat-header'>
+          <div className='private-message-chat-header' style={{bottom:0}}>
             <img className='private-message-photo' src={chatData.chat_to_photo || '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }}/>
             <p className='private-message-name'>{chatData.chat_to_username}</p>
           </div>
@@ -39,14 +40,14 @@ export default function ChatRoom({ chatData, userId }) {
                 </div>
                 </div>
               </div>
+
             );
           })}
-        </div>
-
-        // 聊天 input
+        </div>        
 
         
       )}
+
     </div>
   );
 }

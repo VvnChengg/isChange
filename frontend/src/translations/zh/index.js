@@ -27,6 +27,8 @@ const zh = {
     'msg.chatRoomTitle': '聊天室',
     'msg.userNotEntered': '使用者尚未輸入信息',
     'msg.stranger':'陌生!!',
+    'msg.input':'輸入訊息!!',
+
 
     'selfpost.edit':'編輯',
     'selfpost.delete':'刪除',

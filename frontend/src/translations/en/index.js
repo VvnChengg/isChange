@@ -27,6 +27,8 @@ const en = {
     'msg.chatRoomTitle': 'Chat Room',
     'msg.userNotEntered': 'No message now!',
     'msg.stranger':'Stranger!!',
+    'msg.input':'Type Here!!',
+
 
     'selfpost.edit':'Edit',
     'selfpost.delete':'Delete',

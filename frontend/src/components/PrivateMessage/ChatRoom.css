@@ -3,8 +3,8 @@
 /* 整個聊天室容器 */
 .private-message-chat-room-container {
     position: fixed; /* 使用絕對定位 */
-    top: 16%; /* 距離頂部 100 像素 */
-    bottom: 10%;
+    top: 16%; 
+    bottom: 20%;
     left: 50%; /* 水平居中 */
     transform: translateX(-50%); /* 水平居中 */
     width: 60%; /* 固定寬度為 60% */
@@ -12,9 +12,28 @@
     padding: 2%;
     box-sizing: border-box; /* 盒模型設定為邊框盒 */
     border: 2px solid #008CD9; /* 添加 2 像素寬度的實線邊框，顏色為 #008CD9 */
-    overflow-y: auto; /* 添加垂直滾動條 */
   }
-  
+
+/*輸入框*/
+.private-message-input-box{
+  position: fixed; /* 使用絕對定位 */
+  top:80%;
+  bottom: 10%;
+  transform: translateX(-50%); /* 水平居中 */
+  width: 60%; /* 固定寬度為 60% */
+  box-sizing: border-box; /* 盒模型設定為邊框盒 */
+  padding: 0.005%;
+  /* border: 2px solid #008CD9; 添加 2 像素寬度的實線邊框，顏色為 #008CD9 */
+  overflow-y: auto; /* 添加垂直滾動條 */
+  display: flex;
+  align-items: flex-start;
+}  
+
+.private-message-input{
+  width: 100%;
+  top:0%;
+  border-radius: 0%;
+}
     
 
 /* 單個訊息框 */
@@ -102,6 +121,7 @@ margin-bottom: 1%;
 
 .private-message-photo {
   height: 100%; 
+  bottom: 0;
 }
 
 
@@ -109,5 +129,6 @@ margin-bottom: 1%;
   text-align: left;
   margin-left: 10px;
   color: #008CD9;
-  font-size: 4vw;
+  font-size: 4vh;
+  bottom: 0;
 }
