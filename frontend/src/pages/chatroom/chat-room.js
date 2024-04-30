@@ -17,6 +17,7 @@ export default function Chatroom() {
     const token = useToken();
     const [inputValue, setInputValue] = useState('');
 
+
     const handleSubmit = () => {
         if (inputValue.trim() !== '') {
         const body = {content: inputValue.trim(),};
@@ -33,7 +34,13 @@ export default function Chatroom() {
           //console.log('API 返回的结果:', response.data);
           setChatData(response.data.messages);
           setInputValue('');
+
+          setTimeout(() => {
+            const chatBox = document.querySelector('.private-message-chat-room-container');
+            chatBox.scrollTop = chatBox.scrollHeight;
+          }, 100); 
         })
+
         .catch(error => {
           console.error('API 請求失败:', error);
         });
@@ -53,6 +60,13 @@ export default function Chatroom() {
           }
         };
 
+    const scrollToBottom = () => {
+            setTimeout(() => {
+                const chatBox = document.querySelector('.private-message-chat-room-container');
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 0);
+        };
+
     useEffect(() => {
         axios.get(`${hostname}/chat/detail/${chatid}`, {
             headers: {
@@ -62,6 +76,7 @@ export default function Chatroom() {
         .then(response => {
             setChatPhoto(response.data);
             setChatData(response.data.messages);
+            scrollToBottom(); 
         })
         .catch(error => {
             console.error('API 請求失敗:', error);
@@ -69,6 +84,7 @@ export default function Chatroom() {
     }, [hostname, chatid, token]);
 
     return (
+        
         <div>
             <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} />
             <ChatRoomInput 

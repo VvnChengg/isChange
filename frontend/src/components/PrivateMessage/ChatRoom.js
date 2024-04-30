@@ -1,15 +1,14 @@
 // ChatRoom.js
 
-import React from 'react';
+import  React from 'react';
 import './ChatRoom.css';
 
 export default function ChatRoom({ chatData, chatPhoto, userId }) {
   let lastDate = null;
-  //console.log(chatData)
-  
+
 
   return (
-    <div>
+    <div >
       {chatData && (
         <div className='private-message-chat-room-container'>
           <div className='private-message-chat-header' style={{bottom:0}}>
@@ -34,11 +33,14 @@ export default function ChatRoom({ chatData, chatPhoto, userId }) {
                 )}
                 <div className={`private-message-message-box ${message.sender_id === userId ? 'private-message-own-message' : ''}`}>
                   <div className={`private-message-message ${message.sender_id === userId ? 'private-message-own' : ''}`}>
-                    <p className='private-message-message-content'>{message.content}</p>
+                        {message.content && (
+                        <p
+                            className='private-message-message-content'
+                            dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br>') }}
+                        ></p>
+                    )}
                   </div>
-                <div >
                   <p className='private-message-time'>{formattedHours}:{formattedMinutes}</p>
-                </div>
                 </div>
               </div>
 

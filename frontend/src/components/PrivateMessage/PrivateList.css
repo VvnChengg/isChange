@@ -25,7 +25,6 @@
 
 .private-message-a-chat {
   height: 10vhx;
-  width: 80vhx;
 }
 
 .private-message-bottom {
@@ -58,9 +57,11 @@
 }
 
 
-.private-message-chat-text{
+.private-message-chat-text {
   font-size: 4vw;
-  vertical-align: bottom; 
+  vertical-align: bottom;
+  max-width: 0;
+  white-space: nowrap; 
   overflow: hidden; 
-  width: 60%;
+  text-overflow: ellipsis; 
 }

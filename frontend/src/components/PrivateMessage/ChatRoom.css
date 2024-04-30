@@ -12,7 +12,7 @@
     padding: 2%;
     box-sizing: border-box; /* 盒模型設定為邊框盒 */
     border: 2px solid #008CD9; /* 添加 2 像素寬度的實線邊框，顏色為 #008CD9 */
-    overflow-y: auto; /* 添加垂直滾動條 */
+    overflow-y: overlay; /* 添加垂直滾動條 */
   }
 
 /*輸入框*/
@@ -62,44 +62,46 @@ margin-bottom: 1%;
 .private-message-time {
   font-size: 1vw;
   color: #888;
-  width: 100%;
-  margin-bottom: 1%;
   text-align: right; 
+  display: inline-block; 
   }
 
 .private-message-message-box {
     display: inline-block; /* 將元素設置為內聯塊，使其大小根據內容自動調整 */
     overflow-wrap: break-word; /* 超出寬度時自動換行 */
     word-wrap: break-word;
+    width: 80%;
+    padding: 1%;
 }
 
-/* 自己發送的訊息靠右 */
+/* 自己發送的框靠右 */
 .private-message-own-message {
   text-align: right;
   display: block;
   float: right;
 }
 
-/* 別人發送的訊息靠左 */
+/* 別人發送的框靠左 */
 .private-message-message-box:not(.private-message-own-message) {
   text-align: left;
   display: block;
   float: left;  
 }
 
-/* 自己發送的訊息靠右 */
+/* 自己發送的文字靠右 */
 .private-message-own {
-  text-align: right;
+  text-align: left;
   display: block;
   background-color: #4629F2;
   color: white;
   float: right;
   font-size: 2vw;
-  border-radius: 5%;
+  border-radius: 0%;
   padding: 0.2em; 
+  max-width: 80%;
 }
 
-/* 別人發送的訊息靠左 */
+/* 別人發送的文字靠左 */
 .private-message-message:not(.private-message-own) {
   background-color: #F1F7FF;
   color: black;
@@ -107,8 +109,9 @@ margin-bottom: 1%;
   display: block;
   float: left;  
   font-size: 2vw;
-  border-radius: 5%;
+  border-radius: 0%;
   padding: 0.2em; 
+  max-width: 80%;
 }
 
 
