@@ -12,6 +12,7 @@
     padding: 2%;
     box-sizing: border-box; /* 盒模型設定為邊框盒 */
     border: 2px solid #008CD9; /* 添加 2 像素寬度的實線邊框，顏色為 #008CD9 */
+    overflow-y: auto; /* 添加垂直滾動條 */
   }
 
 /*輸入框*/

@@ -3,8 +3,9 @@
 import React from 'react';
 import './ChatRoom.css';
 
-export default function ChatRoom({ chatData, userId }) {
+export default function ChatRoom({ chatData, chatPhoto, userId }) {
   let lastDate = null;
+  //console.log(chatData)
   
 
   return (
@@ -12,11 +13,11 @@ export default function ChatRoom({ chatData, userId }) {
       {chatData && (
         <div className='private-message-chat-room-container'>
           <div className='private-message-chat-header' style={{bottom:0}}>
-            <img className='private-message-photo' src={chatData.chat_to_photo || '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }}/>
-            <p className='private-message-name'>{chatData.chat_to_username}</p>
+            <img className='private-message-photo' src={chatPhoto.chat_to_photo || '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }}/>
+            <p className='private-message-name'>{chatPhoto.chat_to_username}</p>
           </div>
 
-          {chatData.messages.map(message => {
+          {chatData.map(message => {
             const messageDate = new Date(message.timestamp);
             const formattedDate = `${messageDate.getFullYear()}/${(messageDate.getMonth() + 1).toString().padStart(2, '0')}/${messageDate.getDate().toString().padStart(2, '0')}`;
             const formattedHours = messageDate.getHours().toString().padStart(2, '0');

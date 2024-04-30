@@ -10,6 +10,7 @@ import { useToken } from '../../hooks/useToken';
 
 export default function Chatroom() {
     const { chatid } = useParams();
+    const [chatPhoto, setChatPhoto] = useState(null);
     const [chatData, setChatData] = useState(null);
     const userId = window.localStorage.getItem('user_id');
     const hostname = process.env.REACT_APP_API_HOSTNAME;
@@ -19,7 +20,7 @@ export default function Chatroom() {
     const handleSubmit = () => {
         if (inputValue.trim() !== '') {
         const body = {content: inputValue.trim(),};
-        console.log(body)
+        //console.log(body)
         
         axios.post(`${hostname}/chat/sendtext/${chatid}`, body,{
             headers: {
@@ -29,8 +30,8 @@ export default function Chatroom() {
 
         })
         .then(response => {
-          console.log('API 返回的结果:', response.data);
-          setChatData(response.data);
+          //console.log('API 返回的结果:', response.data);
+          setChatData(response.data.messages);
           setInputValue('');
         })
         .catch(error => {
@@ -59,7 +60,8 @@ export default function Chatroom() {
             }
         })
         .then(response => {
-            setChatData(response.data);
+            setChatPhoto(response.data);
+            setChatData(response.data.messages);
         })
         .catch(error => {
             console.error('API 請求失敗:', error);
@@ -68,7 +70,7 @@ export default function Chatroom() {
 
     return (
         <div>
-            <ChatRoom chatData={chatData} userId={userId} />
+            <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} />
             <ChatRoomInput 
                 handleInputChange={handleInputChange} 
                 inputValue={inputValue} 
