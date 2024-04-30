@@ -3,7 +3,7 @@ const router = express.Router();
 const validateToken = require("../../src/middlewares/validateToken");
 
 // 載入controller.
-var { getAllPosts, getUserPosts, createPost, updatePost, getPostDetail, deleteContent, likePost } = require("../controllers/post");
+var { getAllPosts, getUserPosts, createPost, updatePost, getPostDetail, deleteContent, likePost, commentPost } = require("../controllers/post");
 
 // 指定route對應的controller
 router.get('/all', getAllPosts);
@@ -15,4 +15,5 @@ router.put('/:pid', validateToken, updatePost);
 router.get('/detail/:pid', getPostDetail);
 router.delete('/delete', validateToken, deleteContent);
 router.put('/like/:pid', validateToken, likePost);
+router.post('/comment', validateToken, commentPost);
 module.exports = router;

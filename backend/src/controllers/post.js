@@ -1,8 +1,11 @@
 const Article = require('../models/article');
 const Event = require('../models/event');
 const Product = require('../models/product');
+const Comment = require('../models/comment');
 const { validatePut } = require('../middlewares/post');
 const { default: mongoose } = require('mongoose');
+const comment = require('../models/comment');
+const moment = require('moment');
 
 const getAllPosts = async (req, res, next) => {
     let articles, events, products;
@@ -89,6 +92,10 @@ const getPostDetail = async (req, res, next) => {
         if (!article) {
             return res.status(404).json({ message: "找不到此文章" });
         }
+
+        // 將評論資料併入 article 中
+        console.log("comment list:", getCommentList(pid));        
+
     } catch (error) {
         if (error.name === "CastError") {
             return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
@@ -184,10 +191,10 @@ const createPost = async (req, res, next) => {
     const post = req.body;
     const uId = req.body.userId;
     if (!post) {
-        return res.status(404).json({ message: "未傳入文章創建資訊" });
+        return res.status(400).json({ message: "未傳入文章創建資訊" });
     }
     try {
-        newPost = new Article({
+        let newPost = new Article({
             article_title: post.title,
             content: post.content,
             article_pic: post.photo,
@@ -306,7 +313,7 @@ const deleteContent = async (req, res, next) => {
         if (err.name === "CastError") {
             return res.status(400).json({ message: "id 無法正確轉換成 ObjectId，請檢查 id 格式" });
         }
-        res.status(500).json({ message: err });
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -352,6 +359,64 @@ const likePost = async (req, res, next) => {
     }
 };
 
+async function getCommentList(pid) {
+    const post = await Article.findById(pid);
+    if (!post) {
+        throw new Error("找不到文章");
+    }
+    try {
+        const comments = await Comment.find({ '_id': { $in: post.comment_ids } });
+        // console.log("comments", comments);
+        return comments;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+const commentPost = async (req, res, next) => {
+    const { pid, text, datetime, userId } = req.body;
+    try {
+        if (!pid || !text) {
+            return res.status(400).json({ message: "請傳入 pid (文章id), text(評論內容)" })
+        }
+
+        // 撈要評論的文章資料
+        let post = await Article.findById(pid);
+        if (!post) {
+            return res.status(404).json({ message: "找不到文章" })
+        }
+
+        // 製作新的評論物件，並檢查傳入的日期是否符合格式 (YYYY-MM-DDTHH:mm:ssZ)
+        // 如果合格就用傳入的時間(datetime)，如果不合格就用現在時間建立
+        const parsedDate = moment(datetime, 'YYYY-MM-DDTHH:mm:ssZ', true)
+        let newComment = new Comment({
+            content: text,
+            created_at: parsedDate.isValid() ? parsedDate : Date.now(),
+            commentor_id: userId
+        })
+
+        // 等待剛才的物件製作完成再繼續
+        await newComment.save();
+
+        // 從文章資料中撈出目前的評論列表
+        let this_comment_ids = post.comment_ids;
+
+        // 將這則評論塞到列表的最後，並將評論依時間順序進行排列
+        this_comment_ids.push(newComment._id);
+        const comments = await Comment.find({ '_id': { $in: this_comment_ids } }, 'created_at').sort({ created_at: 1 });
+        const sorted_comment_list = comments.map(comment => comment._id);
+
+        // 更新資料庫資料
+        await Article.findByIdAndUpdate(pid, { comment_ids: sorted_comment_list });
+        res.status(200).json({ message: "測試成功" });
+    } catch (err) {
+        if (err.name === 'CastError') {
+            return res.status(400).json({ message: "pid 無法轉換成 ObjectId" })
+        }
+        res.status(500).json({ message: err.message });
+    }
+};
+
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
@@ -360,3 +425,4 @@ exports.updatePost = updatePost;
 exports.getPostDetail = getPostDetail;
 exports.deleteContent = deleteContent;
 exports.likePost = likePost;
+exports.commentPost = commentPost;
