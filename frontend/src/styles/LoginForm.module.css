@@ -2,9 +2,9 @@
 .loginForm {
     width: 30%;
     margin: 2rem auto;
-    padding: 1.5rem;
+    padding: 4rem 3rem;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -16,15 +16,16 @@
 }
 
 .loginForm__inputGroup {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     display: block;
 }
 
 .loginForm__label {
     display: block;
-    padding: 0.5rem;
+    /* padding: 0.5rem; */
     font-weight: bold;
-    margin-bottom: 0.25rem;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
     font-size: 0.9rem;
     text-align: left;
 }

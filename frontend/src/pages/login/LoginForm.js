@@ -69,7 +69,7 @@ const LoginForm = () => {
             <EmailInput email={email} handleEmailChange={handleEmailChange} />
 
             <Button
-              style={{ width: '100%' }}
+              style={{ width: '60%', height: '35px', margin: 'auto' }}
               onClick={handleUseEmailAuth}
               text={intl.formatMessage({ id: 'login.useEmailLogin' })}
             />
@@ -79,7 +79,8 @@ const LoginForm = () => {
             </label>
             
             <Button
-              style={{ width: '100%' }}
+              style={{ width: '60%', height: '35px', margin: 'auto' }}
+              secondary={true}
               onClick={handleUseGoogleAuth}
               text={intl.formatMessage({ id: 'login.useGoogleLogin' })}
             />

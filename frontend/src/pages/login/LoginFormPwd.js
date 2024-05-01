@@ -9,6 +9,7 @@ import loginStyles from '../../styles/LoginForm.module.css';
 import { ForgetPwd } from './ForgetPwd';
 
 import Button from '../../components/Button';
+import { Input } from 'antd';
 
 
 
@@ -56,12 +57,11 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
 
         <FormattedMessage id='login.inputPassword'>
           {msg =>
-            <input
+            <Input
               type='password' // 設置為密碼輸入框
               id='password'
               value={password} // 設置為你的密碼 state 變數
               onChange={handlePasswordChange} // 設置密碼變化的事件處理函數
-              className={loginStyles.loginForm__input} // 設置樣式類名
               placeholder={msg} // 設置密碼輸入框的占位符
             />
           }
@@ -70,7 +70,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       </div>
 
       <Button
-        style={{ width: '100%' }}
+        style={{ width: '60%', height: '35px', margin: 'auto' }}
         onClick={handleFormSubmit}
         text={intl.formatMessage({ id: 'login.login' })}
       />

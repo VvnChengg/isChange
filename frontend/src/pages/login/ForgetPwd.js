@@ -1,14 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
-import { loginApi } from '../../api/loginApi';
-import loginStyles from '../../styles/LoginForm.module.css';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../components/Button';
 import { useIntl } from 'react-intl';
-import { Modal, Spin} from "antd";
-import { LoadingOutlined } from '@ant-design/icons';
-import { registerApi } from '../../api/registerApi';
 
+import loginStyles from '../../styles/LoginForm.module.css';
+
+import Button from '../../components/Button';
+import { Input, Modal, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+
+import { loginApi } from '../../api/loginApi';
+import { registerApi } from '../../api/registerApi';
 
 export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中獲取 email
     const intl = useIntl();
@@ -150,9 +151,8 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
         onCancel={handleCancel}>
             <label className={loginStyles.loginForm__label}><FormattedMessage id='register.email' /></label>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <input
+            <Input
                 type='email'
-                className={loginStyles.loginForm__input} // 設置樣式類名
                 id = 'email'
                 value = {email}
                 onChange = {handleEmailChange}

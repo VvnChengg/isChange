@@ -37,9 +37,6 @@ const zh = {
     'selfpost.nothingMsg' :'尚未發表文章!',
 
 
-
-
-
     /* pages */
     'title': '標題',
     'inputTitle': '標題是什麼咧～',
@@ -59,7 +56,7 @@ const zh = {
     'login.login': '登入',
     'login.loginSuccess': '登入成功',
     'login.wrongPassword': '密碼錯誤',
-    'login.forgotPwd': '忘記密碼?',
+    'login.forgotPwd': '忘記密碼？',
     'login.sendMail': '寄送驗證碼',
     'login.mailSent': '驗證碼已寄送至您的電子信箱',
     'login.forgotPwdEmail': '請輸入電子信箱',
