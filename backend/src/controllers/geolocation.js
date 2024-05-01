@@ -68,25 +68,25 @@ const gpsd = require("node-gpsd");
 // };
 
 // 法三:在使用者同意後，透過request header的ip address取得使用者位置
-const geoip = require("node-geolocation");
+// const geoip = require("node-geolocation");
 
-const getIpLocation2 = async (req, res) => {
-  try {
-    const ip = req.ip;
-    const location = geoip.getLocation(ip);
-    if (!location) {
-      res.status(404).json({ error: "Location not found" });
-    }
-    res
-      .status(200)
-      .json({ longitude: location.longitude, latitude: location.latitude });
-  } catch (error) {
-    console.error("Error getting IP location:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while getting IP location" });
-  }
-};
+// const getIpLocation2 = async (req, res) => {
+//   try {
+//     const ip = req.ip;
+//     const location = geoip.getLocation(ip);
+//     if (!location) {
+//       res.status(404).json({ error: "Location not found" });
+//     }
+//     res
+//       .status(200)
+//       .json({ longitude: location.longitude, latitude: location.latitude });
+//   } catch (error) {
+//     console.error("Error getting IP location:", error);
+//     res
+//       .status(500)
+//       .json({ error: "An error occurred while getting IP location" });
+//   }
+// };
 
 // filter：取得附近文章、揪團、商品
 const filterDistance = (req, res) => {
@@ -169,7 +169,7 @@ const sortDistance = (req, res) => {
     [locationField]: {
       $nearSphere: {
         $geometry: { type: "Point", coordinates: [longitude, latitude] },
-        $maxDistance: radius,
+        // $maxDistance: radius,
       },
     },
   });
@@ -233,8 +233,6 @@ const sortDistance = (req, res) => {
 // };
 
 module.exports = {
-  getUserLocation,
-  getIpLocation1,
-  getIpLocation2,
-  findNearby,
+  filterDistance,
+  sortDistance,
 };
