@@ -105,20 +105,55 @@ const getChatDetail = async (req, res) => {
 
         // 找出聊天對象，回傳照片跟 username
         const member = await Member.findById(chat_to_id);
-        const messages = await Message.find({ chat_id: cid });
-        // console.log(messages);
-
-        // Convert photo data to base64
+        // Convert member photo data to base64
         let photoBase64 = null;
         if (member.photo && member.photo.contentType) {
             photoBase64 = `data:${member.photo.contentType
                 };base64,${member.photo.data.toString("base64")}`;
         }
 
+        const messages = await Message.find({ chat_id: cid });
+        const msgData = [];
+
+        // 一筆一筆挑出聊天來看
+        for (const msg of messages) {
+            if (msg.message_type === ("pic")) {
+                // console.log("Handle photo msg .......");
+                // Convert photo data to base64
+                let photoConvert = null;
+                if (msg.photo && msg.photo.contentType) {
+                    photoConvert = `data:${msg.photo.contentType
+                        };base64,${msg.photo.data.toString("base64")}`;
+                }
+                // 覆蓋掉原本要回傳的 messages 裡的 photo（不改到資料庫）
+                msgData.push(
+                    {
+                        _id: msg._id,
+                        message_type: msg.message_type,
+                        timestamp: msg.timestamp,
+                        content: msg.content,
+                        photo: photoConvert,
+                        sender_id: msg.sender_id,
+                        read: msg.read
+                    })
+            } else {
+                // 文字訊息就沒差，連 photo 都不用回傳
+                msgData.push(
+                    {
+                        _id: msg._id,
+                        message_type: msg.message_type,
+                        timestamp: msg.timestamp,
+                        content: msg.content,
+                        sender_id: msg.sender_id,
+                        read: msg.read
+                    })
+            }
+        }
+
         res.status(200).json({
             chat_to_photo: photoBase64,
             chat_to_username: member.username,
-            messages
+            messages: msgData
         });
     } catch (error) {
         console.error('Failed to show chat detail:', error);
@@ -130,7 +165,7 @@ const getChatDetail = async (req, res) => {
 const getChatList = async (req, res) => {
     try {
         const userId = req.body.userId;  // 使用者透過 token 或是某方式，抓自己的 member._id
-        
+
         // 直接從 user 的 chat_ids list 抓出聊天
         const user = await Member.findById(userId);
         const chatData = [];
@@ -243,14 +278,14 @@ const sendTextMsg = async (req, res) => {
 const sendPic = async (req, res) => {
     try {
         const { cid } = req.params;
-        const { userId, photo } = req.body;
+        const { userId } = req.body;
 
         const user = await Member.findById(userId);
 
-        // 確保 content 和 userId 是有效的
-        if (!photo || !userId) {
+        // 確保 userId 是有效的
+        if (!userId) {
             return res.status(400).json({
-                message: 'Invalid photo or userId.',
+                message: 'Invalid userId.',
             });
         }
 
@@ -267,11 +302,11 @@ const sendPic = async (req, res) => {
 
         // 取得上傳的圖片
         let photoData;
-        if (photo) {
+        if (req.file) {
             try {
                 photoData = {
-                    data: photo.buffer,
-                    contentType: photo.mimetype,
+                    data: req.file.buffer,
+                    contentType: req.file.mimetype,
                 };
             } catch (error) {
                 console.error(error);
@@ -339,11 +374,9 @@ const deleteChat = async (req, res) => {
 
         // 查找與該聊天相關聯的所有成員
         const chat = await Chat.findById(cid);
+        // 檢查 chat 是否存在
         if (!chat) {
-            console.log('Chat not found.');
-            return res.status(400).json({
-                message: 'Invalid chat id.',
-            });;
+            return res.status(404).json({ error: "This chat doesn't exist." });
         }
         const { first_person, second_person } = chat;
 
