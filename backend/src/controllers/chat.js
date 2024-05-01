@@ -262,12 +262,8 @@ const sendTextMsg = async (req, res) => {
 
         await Chat.findByIdAndUpdate(cid, updateChat);
 
-        // 重新查詢整個聊天的訊息
-        const messages = await Message.find({ chat_id: cid });
-        // console.log(messages);
-
-        // 回傳整個聊天的訊息
-        res.status(200).json({ messages });
+        // 回傳新訊息
+        res.status(200).json({ new_message: newMessage});
     } catch (error) {
         console.error('Failed to send message:', error);
         res.status(500).json({ error: 'Failed to send message' });
@@ -334,11 +330,8 @@ const sendPic = async (req, res) => {
 
         await Chat.findByIdAndUpdate(cid, updateChat);
 
-        // 重新查詢整個聊天的訊息
-        const messages = await Message.find({ chat_id: cid });
-
-        // 回傳整個聊天的訊息
-        res.status(200).json({ messages });
+        // 回傳新訊息
+        res.status(200).json({ new_message: newMessage });
     } catch (error) {
         console.error('Failed to send message:', error);
         res.status(500).json({ error: 'Failed to send message' });
