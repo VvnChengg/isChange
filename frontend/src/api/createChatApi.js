@@ -2,9 +2,10 @@
 
 const hostname = process.env.REACT_APP_API_HOSTNAME;
 
-export async function createChat(userId, token) {
+export async function createChat(userId, receiver_id, token) {
   const requestBody = {
-    user_id: userId
+    userId: userId,
+    receiver_id: receiver_id
   };
 
   try {

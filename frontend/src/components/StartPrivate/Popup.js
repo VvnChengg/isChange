@@ -23,7 +23,7 @@ const Popup = ({ isOpen, onClose, other_id, other_name, direction }) => {
     if (isChecked) {
       if (action === 'confirm') {
         try {
-          const newChatId = await createChat(userId, token);
+          const newChatId = await createChat(userId, other_id, token);
           navigate('/chatroom/' + newChatId);
         } catch (error) {
           console.error('Error creating chat:', error);

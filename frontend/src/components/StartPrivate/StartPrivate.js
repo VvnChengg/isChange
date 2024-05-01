@@ -11,12 +11,11 @@ import { useNavigate } from 'react-router-dom';
 
 
 // 把按鈕跟 popup 混合
-const StartPrivate = () => {
+const StartPrivate = ( {receiver_id, receiver_name} ) => {
   const navigate = useNavigate();
   // 需要 receiver_id 及 receiver_name
-  //const receiver_id = ;
-  //const receiver_name = ;
-
+  // const receiver_id = ';
+  // const receiver_name = '';
 
   const [isOpen, setIsOpen] = useState(false);
   const [ischatId, setchatId] = useState('');
@@ -27,25 +26,24 @@ const StartPrivate = () => {
     const userId = window.localStorage.getItem('user_id');
     // console.log(userId)
     const token = window.localStorage.getItem('access_token');
-    // 發送 API 請求
-  //   axios.get(`${hostname}/chat/check/{receiver_id}` ,{headers: {
-  //     'Authorization':  `Bearer ${token}`
-  // }})
-  // to test popup 9c-5c
-    axios.get(`${hostname}/chat/check/660bbad71dd21a48510f205c` ,{headers: {
-      'Authorization':  `Bearer ${token}`
-  }})
-    .then(response => {
-      // 數據取得
-      setchatId(response.data.chat_id);
-    })     
-      .catch(error => {
-        console.error('API 請求失敗:', error);
-      });
+    if(receiver_id){
+      // 發送 API 請求
+      axios.get(`${hostname}/chat/check/${receiver_id}` ,{headers: {
+        'Authorization':  `Bearer ${token}`
+    }})
+      .then(response => {
+        // 數據取得
+        setchatId(response.data.chat_id);
+      })     
+        .catch(error => {
+          console.error('API 請求失敗:', error);
+        });
+    }
   }, []);
+
   //console.log(ischatId)
   const togglePopup = () => {
-    if (ischatId === null) { // 檢查是否已有chat
+    if (ischatId === '') { // 檢查是否已有chat
       setIsOpen(!isOpen);
     } else {
       navigate('/chatroom/'+ischatId);
@@ -55,8 +53,8 @@ const StartPrivate = () => {
   return (
     <div>
       <StartPrivateButton onClick={togglePopup} />
-      {/* <Popup other_id={receiver_id} other_name={'receiver_name'} isOpen={isOpen} onClose={togglePopup} direction ={'Invite'} /> */}
-      <Popup other_id={'660bbad71dd21a4850f209c'} other_name={'testing'} isOpen={isOpen} onClose={togglePopup} direction ={'Invite'} />
+      <Popup other_id={receiver_id} other_name={receiver_name} isOpen={isOpen} onClose={togglePopup} direction ={'Invite'} />
+      {/* <Popup other_id={'660bbad71dd21a4850f209c'} other_name={'testing'} isOpen={isOpen} onClose={togglePopup} direction ={'Invite'} /> */}
     </div>
   );
 };

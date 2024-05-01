@@ -51,11 +51,12 @@ export const ViewWithUid = () => {
   const [photo, setPhoto] = useState('');
   const [intro, setIntro] = useState('');
   const [student_veri, setStudentVeri] = useState(false);
-  const { uid } = useParams();
+  const [other_uid, setOtherUid] = useState('');
+  const { other_username } = useParams();
 
   // 先讀取使用者資料
   const getOtherMemberInfo = async () =>{
-    const memberInfo = await viewApi.getOtherMember(uid);
+    const memberInfo = await viewApi.getOtherMember(other_username);
     // console.log(memberInfo);
 
     setUsername(memberInfo.username);
@@ -63,17 +64,26 @@ export const ViewWithUid = () => {
     setPhoto(memberInfo.photo);
     setIntro(memberInfo.intro);
     setStudentVeri(memberInfo.student_verification);
+    setOtherUid(memberInfo._id);
+    // console.log(memberInfo._id);
   }
 
   useEffect(() => {
-    if(uid){
+    if(other_username){
       getOtherMemberInfo();
     }
-  }, [uid]);
+  }, [other_username]);
 
   return (
     <div className={viewStyles.isChange}>
-      <ViewMemberInfo photo={photo} username={username} school={school} student_veri={student_veri} uid={uid}/>
+      <ViewMemberInfo 
+      photo={photo} 
+      username={username} 
+      school={school} 
+      student_veri={student_veri} 
+      other_username={other_username}
+      other_uid={other_uid}
+      />
       <ViewMemberSelfIntro intro={intro}/>
       <ViewMemberPost />
     </div>

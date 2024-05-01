@@ -4,9 +4,10 @@ import { EditProfileButton } from './View-style';
 import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
 import { useIntl } from 'react-intl';
 import Button from '../../components/Button';
+import StartPrivate from '../../components/StartPrivate/StartPrivate';
 
 // 包含使用者的大頭貼、使用者名稱、學校名稱
-const ViewMemberInfo = ({photo, username, school, student_veri, uid}) => {
+const ViewMemberInfo = ({photo, username, school, student_veri, other_username, other_uid}) => {
   const [image, setImage] = useState('/icons/profile.png');
   const navigate = useNavigate();
   const [showEditImage, setShowEditImage] = useState('');
@@ -19,12 +20,13 @@ const ViewMemberInfo = ({photo, username, school, student_veri, uid}) => {
   }, [photo]);
 
   useEffect(() => {
-    if(uid){
+    // console.log(other_username, other_uid);
+    if(other_username && other_uid){
       setShowEditImage(false);
     }else{
       setShowEditImage(true);
     }
-  }, [uid]);
+  }, [other_username, other_uid]);
 
   function handleEditProfileClick(){
       navigate('/edit');
@@ -42,8 +44,19 @@ const ViewMemberInfo = ({photo, username, school, student_veri, uid}) => {
       </div>
       <div className={viewStyles.profileRight}>
         {showEditImage && <EditProfileButton className={viewStyles.viewbutton} onClick={handleEditProfileClick}/>}
-        { uid &&<Button text={intl.formatMessage({ id: 'view.sendPrivateMessage' })} style={{marginTop: '10px'}}/>}
-        { !uid && <Button text={intl.formatMessage({ id: 'view.publishedArticles' })} style={{marginTop: '10px'}}/>}
+        { other_username &&
+        <StartPrivate
+        receiver_name={other_username}
+        receiver_id={other_uid}
+        />
+        }
+        { !other_username && 
+        <Button 
+        text={intl.formatMessage({ id: 'view.publishedArticles' })} 
+        style={{marginTop: '10px'}}
+        onClick={() => navigate('/post/published')}
+        />
+        }
       </div>
     </div>
   );

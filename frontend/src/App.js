@@ -65,7 +65,7 @@ function App() {
                   <Route path='register' element={<Register />} />
                   <Route path='edit' element={<Edit />} />
                   <Route path='member' element={<ViewWithoutUid />} />
-                  <Route path='member/:uid' element={<ViewWithUid />} />
+                  <Route path='member/:other_username' element={<ViewWithUid />} />
                   <Route path='chat-list' element={<PrivateMessageList/>}/>
                   <Route path='chatroom/:chatid' element={<Chatroom/>} />
                   <Route path='testing' element={<StartPrivate/>} />
