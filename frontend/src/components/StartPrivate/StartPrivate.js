@@ -23,7 +23,7 @@ const StartPrivate = ( {receiver_id, receiver_name} ) => {
   const hostname = process.env.REACT_APP_API_HOSTNAME;
   
   useEffect(() => {
-    const userId = window.localStorage.getItem('user_id');
+    //const userId = window.localStorage.getItem('user_id');
     // console.log(userId)
     const token = window.localStorage.getItem('access_token');
     if(receiver_id){
@@ -34,16 +34,21 @@ const StartPrivate = ( {receiver_id, receiver_name} ) => {
       .then(response => {
         // 數據取得
         setchatId(response.data.chat_id);
+        //console.log(ischatId)
       })     
         .catch(error => {
           console.error('API 請求失敗:', error);
         });
     }
-  }, []);
+  }, [receiver_id,hostname]);
 
-  //console.log(ischatId)
+  useEffect(() => {
+    //console.log(ischatId);
+  }, [ischatId]);
+
   const togglePopup = () => {
-    if (ischatId === '') { // 檢查是否已有chat
+    //console.log(ischatId);
+    if (ischatId === null) { // 檢查是否已有chat
       setIsOpen(!isOpen);
     } else {
       navigate('/chatroom/'+ischatId);

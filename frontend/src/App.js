@@ -29,7 +29,7 @@ import StartPrivate from './components/StartPrivate/StartPrivate';
 // share post
 import ShareCreate from './pages/shareCreate';
 import ShareDetail from './pages/shareDetail';
-import SharePublished from './pages/sharePublished';
+// import SharePublished from './pages/sharePublished';
 import ShareFind from './pages/shareFind';
 import ShareToEdit from './pages/shareToEdit';
 import ShareEdit from './pages/shareEdit';
@@ -72,12 +72,11 @@ function App() {
                   <Route path='post'>
                     <Route path='detail/:pid' element={<ShareDetail />} />
                     <Route path='create' element={<ShareCreate />} />
-                    <Route path='published' element={<SharePublished />} />
+                    <Route path='published' element={<SelfPost />} />
                     <Route path='find' element={<ShareFind />} />
                     <Route path='to-edit' element={<ShareToEdit />} />
                     <Route path='edit' element={<ShareEdit />} />
                     <Route path='to-delete' element={<ShareToDelete />} />
-                    <Route path='self' element={<SelfPost />} />
                   </Route>
                   <Route path='tour'>
                     <Route path='create' element={<TourCreate />} />
