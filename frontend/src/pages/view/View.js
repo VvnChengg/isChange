@@ -40,7 +40,7 @@ export const ViewWithoutUid = () => {
     <div className={viewStyles.isChange}>
       <ViewMemberInfo photo={photo} username={username} school={school} student_veri={student_veri}/>
       <ViewMemberSelfIntro intro={intro}/>
-      <ViewMemberPost />
+      {/* <ViewMemberPost /> */}
     </div>
   );
 };
