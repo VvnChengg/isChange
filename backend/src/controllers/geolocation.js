@@ -150,7 +150,7 @@ const filterDistance = (req, res) => {
 
 // sort：文章、揪團、商品依距離排序
 const sortDistance = (req, res) => {
-  const { type, longitude, latitude, radius } = req.body; // type: event, article, product
+  const { type, longitude, latitude } = req.body; // type: event, article, product
 
   if (!longitude || !latitude) {
     return res
