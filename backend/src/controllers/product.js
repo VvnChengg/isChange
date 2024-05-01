@@ -1,4 +1,5 @@
 const ProductModel = require('../models/product.js');
+const FavoriteModel = require('../models/favorite.js');
 
 class productApi {
     async createProduct(req, res) {
@@ -171,6 +172,51 @@ class productApi {
             return res.status(500).json({
                 success: false,
                 message: '分享商品失敗',
+            });
+        }
+    }
+
+    async collectProduct(req, res) {
+        try {
+            const { user_id, tid } = req.body;
+
+            const payload = {
+                user_id,
+                item_id: tid,
+                save_type: "Product"
+            };
+    
+            const fav = await FavoriteModel.create(payload);
+
+            return res.status(201).json({
+                success: true,
+                message: '成功收藏商品',
+                favId: fav._id,
+            });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                message: '收藏商品失敗',
+            });
+        }
+    }
+
+    async viewCollection(req, res) {
+        try {
+            const { user_id } = req.params;
+            const collection = await FavoriteModel.find({ user_id, save_type: "Product" });
+
+            return res.status(200).json({
+                success: true,
+                message: '查看收藏成功',
+                collection: collection,
+            })
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                message: '查看收藏失敗',
             });
         }
     }
