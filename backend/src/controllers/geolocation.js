@@ -182,7 +182,7 @@ const sortDistance = (req, res) => {
       model = Event;
       locationField = "destination";
       break;
-    case "article":
+    case "post":
       model = Article;
       locationField = "article_region";
       break;
