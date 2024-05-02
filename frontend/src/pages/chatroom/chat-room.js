@@ -12,6 +12,7 @@ export default function Chatroom() {
     const { chatid } = useParams();
     const [chatPhoto, setChatPhoto] = useState(null);
     const [chatData, setChatData] = useState(null);
+    //const [newchatData, setnewChatData] = useState(null);
     const userId = window.localStorage.getItem('user_id');
     const hostname = process.env.REACT_APP_API_HOSTNAME;
     const token = useToken();
@@ -26,13 +27,12 @@ export default function Chatroom() {
         axios.post(`${hostname}/chat/sendtext/${chatid}`, body,{
             headers: {
                 'Authorization':  `Bearer ${token}`
-
             }
-
         })
         .then(response => {
-          //console.log('API 返回的结果:', response.data);
-          setChatData(response.data.messages);
+          //setnewChatData(response.data.new_message);
+          setChatData(prevChatData => [...prevChatData, response.data.new_message]);
+          //console.log(newchatData)
           setInputValue('');
 
           setTimeout(() => {
@@ -76,6 +76,7 @@ export default function Chatroom() {
         .then(response => {
             setChatPhoto(response.data);
             setChatData(response.data.messages);
+            //console.log(chatData)
             scrollToBottom(); 
         })
         .catch(error => {

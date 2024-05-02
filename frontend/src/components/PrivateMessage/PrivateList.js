@@ -22,7 +22,6 @@ function PrivateList() {
     .then(response => {
       setRooms(response.data.chats);
     })
-    // 之後應新增沒找到的話，.....
     .catch(error => {
       console.error('Error fetching data:', error);
     });
