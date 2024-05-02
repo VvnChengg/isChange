@@ -5,6 +5,7 @@ import { loginApi } from '../../api/loginApi';
 import { registerApi } from '../../api/registerApi';
 import {EmailRegisterInput, NormalRegisterInput} from './RegisterInputs';
 import { useIntl } from 'react-intl';
+import { toast } from 'react-toastify';
 
 const Register = () => {
     const intl = useIntl();
@@ -58,7 +59,7 @@ const Register = () => {
             if (data === 1) {
                 return true;
             } else {
-                alert(`${intl.formatMessage({ id: 'register.tryAgain' })}`);
+                toast.error(`${intl.formatMessage({ id: 'register.tryAgain' })}`);
                 // alert('請再試一次');
                 return null;
             }
@@ -82,7 +83,7 @@ const Register = () => {
 
         //若已被註冊則不寄送，並彈出視窗
         if (registered) {
-            alert(`${intl.formatMessage({ id: 'register.emailRegistered' })}`);
+            toast.error(`${intl.formatMessage({ id: 'register.emailRegistered' })}`);
             // alert('此信箱已被註冊');
         } else if(registered === false){
             sendMail(email);
@@ -108,15 +109,15 @@ const Register = () => {
                     clearInterval(intervalId);
                 }, 45000);
                 
-                alert(`${data.message}`);
+                toast.success(`${data.message}`);
                 return true;
             } else {
-                alert(`${data.message}`);
+                toast.error(`${data.message}`);
                 return false;
             }
         } catch (error) {
             // console.error('Error getting user info:', error);
-            alert(`${intl.formatMessage({ id: 'register.resendMail' })}`);
+            toast.error(`${intl.formatMessage({ id: 'register.resendMail' })}`);
             // alert(`'錯誤訊息，請重新驗證'`);
         }
     };
@@ -143,21 +144,21 @@ const Register = () => {
                 // console.log(data);
                 setVerificationPass(true);
                 setVeriHint('');
-                alert(`${intl.formatMessage({ id: 'register.emailVerified' })}`);
+                toast.success(`${intl.formatMessage({ id: 'register.emailVerified' })}`);
                 // alert(`${data.message}`);
                 return true;
             }else{
                 setVerificationPass(false);
                 // setVeriHint('驗證碼錯誤');
                 setVeriHint(`${intl.formatMessage({ id: 'register.emailVerifiedFailedButton' })}`);
-                alert(`${intl.formatMessage({ id: 'register.emailVerifiedFailed' })}`);
+                toast.error(`${intl.formatMessage({ id: 'register.emailVerifiedFailed' })}`);
                 // alert(`${data.message}`);
                 return false;
             }
         }catch(error){
             // console.error('Error getting user info:', error);
             // alert(`'錯誤訊息，請重新驗證'`);
-            alert(`${intl.formatMessage({ id: 'register.checkVerifiedFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'register.checkVerifiedFailed' })}`);
         }
     }
 
@@ -282,17 +283,17 @@ const Register = () => {
             const data = await registerApi.verifyMemberPatch(email, passWord, username, userSchoolName);
             if(data.status === 'success'){
                 // console.log(data);
-                alert(`${intl.formatMessage({ id: 'register.registerSuccess' })}`);
+                toast.success(`${intl.formatMessage({ id: 'register.registerSuccess' })}`);
                 // alert(`${data.message}`);
                 // 跳轉到登入頁面
                 window.location.href = '/login';
             }else{
-                alert(`${intl.formatMessage({ id: 'register.registerFailed' })}`);
+                toast.error(`${intl.formatMessage({ id: 'register.registerFailed' })}`);
                 // alert(`${data.message}`);
             }
         }catch(error){
             // console.error('Error getting user info:', error);
-            alert(`${intl.formatMessage({ id: 'register.registerFailed' })}`);
+           toast.error(`${intl.formatMessage({ id: 'register.registerFailed' })}`);
             // alert(`'錯誤訊息，請重新嘗試註冊'`);
         }
     };

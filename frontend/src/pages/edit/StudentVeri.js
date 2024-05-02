@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
 import { useIntl } from 'react-intl';
 import { useToken } from '../../hooks/useToken';
+import { toast } from 'react-toastify';
 
 
 // 編輯基本資料的元件
@@ -32,7 +33,7 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
     // 在這裡寄送驗證信
     const checkAndSendSchoolEmail = async () => {
         if (!schoolEmail.split('@').pop().includes('edu')){
-            alert(`${intl.formatMessage({ id: 'edit.notStudentEmail' })}`);
+            toast.error(`${intl.formatMessage({ id: 'edit.notStudentEmail' })}`);
             return;
         }
 
@@ -52,14 +53,14 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
                     clearInterval(intervalId);
                 }, 45000);
 
-                alert(`${intl.formatMessage({ id: 'edit.sentVerification' })}`);
+                toast.info(`${intl.formatMessage({ id: 'edit.sentVerification' })}`);
                 return true;
             }
         } catch (error) {
             if (error.response.data.error === 'Email已被使用') {
-                alert(`${intl.formatMessage({ id: 'edit.schoolEmailRegistered' })}`);
+                toast.error(`${intl.formatMessage({ id: 'edit.schoolEmailRegistered' })}`);
             }else{
-                alert(`${intl.formatMessage({ id: 'edit.resendMail' })}`);
+                toast.error(`${intl.formatMessage({ id: 'edit.resendMail' })}`);
             }
         }
     }
@@ -76,14 +77,14 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
         try{
             const data = await editApi.editStudentVeri(schoolEmail, veriCode, token);
             if(data.status === 'success'){
-                alert(`${intl.formatMessage({ id: 'edit.studentVeriSuccess' })}`);
+                toast.success(`${intl.formatMessage({ id: 'edit.studentVeriSuccess' })}`);
                 handleClose();
                 setStudentVeriStatus(true);
                 window.location.reload();
             }
 
         } catch (error) {
-            alert(`${intl.formatMessage({ id: 'edit.reVeriCode' })}`);
+            toast.error(`${intl.formatMessage({ id: 'edit.reVeriCode' })}`);
         }
     }
 

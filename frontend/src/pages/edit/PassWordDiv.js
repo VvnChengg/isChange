@@ -3,6 +3,7 @@ import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
 import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
+import { toast } from 'react-toastify';
 
 // 編輯密碼的元件
 export const PassWordEdit = ({ showPasswordDiv,
@@ -148,12 +149,12 @@ export const PassWordEdit = ({ showPasswordDiv,
             const token = localStorage.getItem('access_token');
             const data = await editApi.editPassWord(OriginPassWord, passWord, token);
             if(data.status === 'success'){
-                alert('更新成功');
+                toast.success('更新成功');
                 handleClose();
             }
         }catch(error){
             // console.error(error);
-            alert('更新失敗');
+            toast.error('更新失敗');
         }
 
     }

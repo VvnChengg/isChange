@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const hostname = process.env.REACT_APP_API_HOSTNAME;
 
@@ -30,7 +31,7 @@ export const api = {
                 }
             })
             .then(res => {
-                alert(`創建成功！`);
+                toast.success(`創建成功！`);
                 return res.data;
             })
             .catch(err => console.log(err))
@@ -64,7 +65,7 @@ export const api = {
             .then(res => {
                 console.log(pID);
                 console.log(res.data.message);
-                alert(`${res.data.message}`);
+                toast.success(`${res.data.message}`);
                 return res.data;
             })
             .catch(err => {

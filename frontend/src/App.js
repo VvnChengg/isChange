@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { IntlProvider } from 'react-intl';
 import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 /* translations */
 import translations from './translations';
@@ -9,6 +10,7 @@ import translations from './translations';
 /* styles */
 import './styles/App.css';
 import './styles/global.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { lightTheme } from './styles/theme';
 
 /* pages */
@@ -56,6 +58,9 @@ function App() {
   return (
     <IntlProvider locale={language} messages={translations[language]}>
       <ThemeProvider theme={lightTheme}>
+        <ToastContainer 
+          position='bottom-right'
+        />
         <Router>
             <div className="App">
               <Routes>

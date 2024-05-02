@@ -4,6 +4,7 @@ import editStyles from '../../styles/Edit.module.css';
 import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
 import { useIntl } from 'react-intl';
+import { toast } from 'react-toastify';
 
 // 編輯自我介紹的元件
 export const SelfInfo = ({setIntroText, introText}) => {
@@ -20,7 +21,7 @@ export const SelfInfo = ({setIntroText, introText}) => {
     const handleSubmitIntro = async() => {
         // console.log('儲存自我介紹:', introText);
         if (introText.length > 200) {
-            alert(`${intl.formatMessage({ id: 'edit.introRule' })}`);
+            toast.error(`${intl.formatMessage({ id: 'edit.introRule' })}`);
             return;
         }
 
@@ -28,11 +29,11 @@ export const SelfInfo = ({setIntroText, introText}) => {
             const token = localStorage.getItem('access_token');
             const data = await editApi.editIntro(introText, token);
             if(data.status === 'success'){
-                alert(`${intl.formatMessage({ id: 'edit.saveIntroSuccess' })}`);
+                toast.success(`${intl.formatMessage({ id: 'edit.saveIntroSuccess' })}`);
             }
         }catch(error){
             // console.error(error);
-            alert(`${intl.formatMessage({ id: 'edit.saveIntroFail' })}`);
+            toast.error(`${intl.formatMessage({ id: 'edit.saveIntroFail' })}`);
         }
     }
 

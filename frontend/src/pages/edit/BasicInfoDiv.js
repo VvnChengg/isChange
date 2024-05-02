@@ -4,6 +4,7 @@ import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
 import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
+import { toast } from 'react-toastify';
 
 // 編輯基本資料的元件
 export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInputFocus, handleInputBlur, username, school }) => {
@@ -90,12 +91,12 @@ export const BasicInfoEdit = ({ showBasicInfo, handleClose, isFocused, handleInp
             const token = localStorage.getItem('access_token');
             const data = await editApi.editBasicInfo(userName, userSchoolName, token);
             if(data.status === 'success'){
-                alert('更新成功');
+                toast.success('更新成功');
                 handleClose();
             }
         }catch(error){
             // console.error(error);
-            alert('更新失敗');
+            toast.error('更新失敗');
         }
     }
 

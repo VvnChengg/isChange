@@ -4,6 +4,7 @@ import { editApi } from '../../api/editApi';
 import editStyles from '../../styles/Edit.module.css';
 import Button from '../../components/Button';
 import { FormattedMessage } from 'react-intl';
+import { toast } from 'react-toastify';
 
 // 匯入編輯大頭貼的元件
 export const ImageUploadDiv = ({ photo, setPhoto }) => {
@@ -15,7 +16,7 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
     const handleFileChange = (event) => {
         let file = event.target.files[0];
         if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
+            toast.error('Please select an image file');
             return;
         }
         setImage(URL.createObjectURL(file));
@@ -45,11 +46,11 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                     console.log(data);
                     if (data.status === 'success') {
                         // console.log('更新後的圖片'+data.data.photo);
-                        alert('更新成功');
+                        toast.success('更新成功');
                     }
                 } catch (error) {
                     // console.error(error);
-                    alert('更新失敗');
+                    toast.error('更新失敗');
                 }
             }
         }

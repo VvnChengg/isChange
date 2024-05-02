@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const hostname = process.env.REACT_APP_API_HOSTNAME;
 
@@ -45,7 +46,7 @@ export const loginApi = {
                 return res.data;
             }else{
                 // console.log('Failed to login: ' + res.data.message);
-                alert(`${res.data.message}`);
+                toast.error(`${res.data.message}`);
             }
             return res.data;
         })

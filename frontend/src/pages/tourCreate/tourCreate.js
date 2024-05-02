@@ -10,6 +10,7 @@ import {
 
 import TourForm from '../../components/TourForm';
 import Button from '../../components/Button';
+import { toast } from 'react-toastify';
 
 export default function TourCreate() {
     const intl = useIntl();
@@ -32,11 +33,11 @@ export default function TourCreate() {
         api.createTour(tour)
         .then(res => {
             console.log(res);
-            alert(res.message);
+            toast.success(res.message);
         })
         .catch(err => {
             console.log(err);
-            alert(err.message);
+            toast.error(err.message);
         });
     }
 

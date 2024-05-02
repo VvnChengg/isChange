@@ -10,6 +10,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 import { loginApi } from '../../api/loginApi';
 import { registerApi } from '../../api/registerApi';
+import { toast } from 'react-toastify';
 
 export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中獲取 email
     const intl = useIntl();
@@ -86,7 +87,7 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
             const data = await registerApi.register(email);
             setIsLoading(false);
             if(data.status === 'verified'){
-                alert(`${intl.formatMessage({ id: 'login.mailSent' })}`)
+                toast.info(`${intl.formatMessage({ id: 'login.mailSent' })}`)
                 setIsSending(true);
                 setCountdown(45);
         
@@ -103,7 +104,7 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
 
             }
             } catch (error) {
-                alert('error');
+                toast.error('error');
             }
       
     }
@@ -116,12 +117,12 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
                     // alert('verified');
                     setVerificationPass(true);
                     setIsVeriLoading(false);
-                    alert(`${intl.formatMessage({ id: 'register.emailVerified' })}`);
+                    toast.success(`${intl.formatMessage({ id: 'register.emailVerified' })}`);
                 }
             } catch (error) {
                 setVerificationPass(false);
                 setIsVeriLoading(false);
-                alert(`${intl.formatMessage({ id: 'register.emailVerifiedFailed' })}`);
+                toast.error(`${intl.formatMessage({ id: 'register.emailVerifiedFailed' })}`);
             }
     }
 
@@ -130,12 +131,12 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
             setIsSubmitLoading(true);
             const data = await loginApi.forgetPassword(email, password);
             if(data.status === 'success'){
-                alert(`${intl.formatMessage({ id: 'login.passwordChanged' })}`);
+                toast.success(`${intl.formatMessage({ id: 'login.passwordChanged' })}`);
                 setIsModalOpen(false);
                 setIsSubmitLoading(false);
             }
         } catch (error) {
-            alert(`${intl.formatMessage({ id: 'login.passwordChangeFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'login.passwordChangeFailed' })}`);
             setIsSubmitLoading(false);
         }
     }

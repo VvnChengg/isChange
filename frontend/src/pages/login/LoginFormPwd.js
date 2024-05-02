@@ -10,6 +10,7 @@ import { ForgetPwd } from './ForgetPwd';
 
 import Button from '../../components/Button';
 import { Input } from 'antd';
+import { toast } from 'react-toastify';
 
 
 
@@ -29,16 +30,16 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       // 調用 loginApi 中的 login 函數，傳入 email 和 password
       const data = await loginApi.login(email, password);
       if (data.status === 'success') {
-        alert(`${intl.formatMessage({ id: 'login.loginSuccess' })}`);
+        toast.success(`${intl.formatMessage({ id: 'login.loginSuccess' })}`);
         navigate('/');
       }
     } catch (error) {
       // console.error(error);
       const error_msg = error.response.data.message;
       if (error_msg === '密碼錯誤') {
-        alert(`${intl.formatMessage({ id: 'login.wrongPassword' })}`);
+        toast.error(`${intl.formatMessage({ id: 'login.wrongPassword' })}`);
       } else {
-        alert(`${error.response.data.message}`);
+        toast.error(`${error.response.data.message}`);
       }
     }
   };
