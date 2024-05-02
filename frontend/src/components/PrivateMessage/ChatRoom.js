@@ -5,6 +5,7 @@ import './ChatRoom.css';
 
 export default function ChatRoom({ chatData, chatPhoto, userId }) {
   let lastDate = null;
+  //console.log(chatData)
 
 
   return (
@@ -33,14 +34,29 @@ export default function ChatRoom({ chatData, chatPhoto, userId }) {
                 )}
                 <div className={`private-message-message-box ${message.sender_id === userId ? 'private-message-own-message' : ''}`}>
                   <div className={`private-message-message ${message.sender_id === userId ? 'private-message-own' : ''}`}>
-                        {message.content && (
+                  {message.message_type === 'text' ? (
                         <p
                             className='private-message-message-content'
                             dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br>') }}
                         ></p>
-                    )}
+                    ) : message.message_type === 'pic' ? (
+                        <div>
+                        <img
+                            src={message.photo}
+                            alt='pic'
+                            className='private-message-pic-content'
+                        />
+                        </div>
+                    ) : null}
                   </div>
                   <p className='private-message-time'>{formattedHours}:{formattedMinutes}</p>
+                  <div className='private-message-download'>
+                    {message.message_type === 'pic' ? (
+                        <div>
+                          <p>下載圖片</p>
+                        </div>
+                    ):null}
+                  </div>
                 </div>
               </div>
 

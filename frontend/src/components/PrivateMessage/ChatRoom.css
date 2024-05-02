@@ -15,6 +15,29 @@
     overflow-y: overlay; /* 添加垂直滾動條 */
   }
 
+
+.private-message-chat-header{
+  border-bottom: 2px solid #008CD9;
+  display: flex; 
+  align-items: baseline;
+  height: 10%; 
+  margin-bottom: 4%; /* 添加 下邊距 */
+}
+
+.private-message-photo {
+  height: 100%; 
+  bottom: 0;
+}
+
+
+.private-message-name {
+  text-align: left;
+  margin-left: 10px;
+  color: #008CD9;
+  font-size: 4vh;
+  bottom: 0;
+}
+
 /*輸入框*/
 .private-message-input-box{
   position: fixed; /* 使用絕對定位 */
@@ -50,7 +73,7 @@
   margin-top: 2%; /* 添加一個上邊距，避免與 .private-message-message-box 重疊 */
 }
 
-/* 訊息時間戳 */
+/* 訊息日期戳 */
 .private-message-date {
 font-size: 2vw;
 color: #888;
@@ -58,13 +81,6 @@ text-align: center;
 width: 100%;
 margin-bottom: 1%; 
 }
-
-.private-message-time {
-  font-size: 1vw;
-  color: #888;
-  text-align: right; 
-  display: inline-block; 
-  }
 
 .private-message-message-box {
     display: inline-block; /* 將元素設置為內聯塊，使其大小根據內容自動調整 */
@@ -114,25 +130,20 @@ margin-bottom: 1%;
   max-width: 80%;
 }
 
-
-.private-message-chat-header{
-  border-bottom: 2px solid #008CD9;
-  display: flex; 
-  align-items: baseline;
-  height: 10%; 
-  margin-bottom: 4%; /* 添加 下邊距 */
+.private-message-pic-content{
+  display: block;
 }
 
-.private-message-photo {
-  height: 100%; 
-  bottom: 0;
-}
+.private-message-time {
+  font-size: 1vw;
+  color: #888;
+  text-align: right ; 
+  display: inline;
+  }
 
 
-.private-message-name {
-  text-align: left;
-  margin-left: 10px;
-  color: #008CD9;
-  font-size: 4vh;
-  bottom: 0;
+
+.private-message-download {
+  display: block;
+  margin-top: 10px; /* 根據需要調整上方的間距 */
 }
