@@ -3,6 +3,19 @@ import axios from "axios";
 const hostname = process.env.REACT_APP_API_HOSTNAME;
 
 export const transApi = {
+    viewTrans: (tid, user_id, token) => {
+        return axios.get(`${hostname}/trans/detail/${tid}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+          .then(res => {
+            return res.data
+          })
+          .catch(err => {
+            return err
+          });
+  
+    },
+
     createTrans: (data, token) => {
         return axios.post(`${hostname}/trans/create`, {
             product_title: data.trans_title,

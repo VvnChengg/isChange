@@ -13,6 +13,7 @@ import Tag from '../Tag';
 import Icon from '../Icon';
 
 export default function PostDetail({ post }) {
+    console.log(post.trans_type);
     return (
         <PostDetailWrapper>
             <PostDetailTitle>{post.title || post.event_title || post.trans_title}</PostDetailTitle>

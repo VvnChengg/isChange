@@ -8,9 +8,9 @@ export default function Tag({ type }) {
         post: <FormattedMessage id='tag.post' />,
 
         sell: <FormattedMessage id='trans.sell' />,
-        buy: <FormattedMessage id='trans.buy' />,
+        purchase: <FormattedMessage id='trans.buy' />,
         lend: <FormattedMessage id='trans.lend' />,
-        rent: <FormattedMessage id='trans.rent' />,
+        borrow: <FormattedMessage id='trans.rent' />,
 
 
         // 加 status 相關的
