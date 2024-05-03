@@ -65,6 +65,7 @@ const zh = {
     'login.passwordChanged': '重設密碼成功',
     'login.passwordChangeFailed': '重設密碼失敗，請再試一次',
     'login.resetPwd': '重設密碼',
+    'login.invalidEmailInput': '無效的電子信箱格式',
 
     'register.tryAgain': '請再試一次',
     'register.emailRegistered': '電子信箱已被註冊',

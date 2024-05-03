@@ -10,7 +10,6 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 import { loginApi } from '../../api/loginApi';
 import { registerApi } from '../../api/registerApi';
-import { toast } from 'react-toastify';
 
 export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中獲取 email
     const intl = useIntl();
@@ -81,13 +80,23 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
 
 
     const handleSendMail = async () => {
+        // Regular expression for basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            alert(`${intl.formatMessage({ id: 'login.invalidEmailInput' })}`);
+            setIsLoading(false);
+            return;
+        }
+
         setIsLoading(true);
+
         // const response = await fetchData();
         try{
             const data = await registerApi.register(email);
             setIsLoading(false);
             if(data.status === 'verified'){
-                toast.info(`${intl.formatMessage({ id: 'login.mailSent' })}`)
+                alert(`${intl.formatMessage({ id: 'login.mailSent' })}`)
                 setIsSending(true);
                 setCountdown(45);
         
@@ -104,7 +113,7 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
 
             }
             } catch (error) {
-                toast.error('error');
+                alert('error');
             }
       
     }
@@ -117,12 +126,12 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
                     // alert('verified');
                     setVerificationPass(true);
                     setIsVeriLoading(false);
-                    toast.success(`${intl.formatMessage({ id: 'register.emailVerified' })}`);
+                    alert(`${intl.formatMessage({ id: 'register.emailVerified' })}`);
                 }
             } catch (error) {
                 setVerificationPass(false);
                 setIsVeriLoading(false);
-                toast.error(`${intl.formatMessage({ id: 'register.emailVerifiedFailed' })}`);
+                alert(`${intl.formatMessage({ id: 'register.emailVerifiedFailed' })}`);
             }
     }
 
@@ -131,12 +140,12 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
             setIsSubmitLoading(true);
             const data = await loginApi.forgetPassword(email, password);
             if(data.status === 'success'){
-                toast.success(`${intl.formatMessage({ id: 'login.passwordChanged' })}`);
+                alert(`${intl.formatMessage({ id: 'login.passwordChanged' })}`);
                 setIsModalOpen(false);
                 setIsSubmitLoading(false);
             }
         } catch (error) {
-            toast.error(`${intl.formatMessage({ id: 'login.passwordChangeFailed' })}`);
+            alert(`${intl.formatMessage({ id: 'login.passwordChangeFailed' })}`);
             setIsSubmitLoading(false);
         }
     }
@@ -177,7 +186,8 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
                 : isSending ?
                     intl.formatMessage({ id: 'register.countdown' }, { countdown}) 
                 : intl.formatMessage({ id: 'login.sendMail' })}
-                onClick={isSending || verificationPass || !email? undefined : handleSendMail}
+                
+                onClick={isSending || verificationPass || !email ? undefined : handleSendMail}
             />
             </div>
 

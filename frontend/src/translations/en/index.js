@@ -66,6 +66,7 @@ const en = {
     'login.passwordChanged': 'Reset password successfully',
     'login.passwordChangeFailed': 'Reset password failed, please try again',
     'login.resetPwd': 'Reset password',
+    'login.invalidEmailInput': 'Invalid email input format',
 
     'register.tryAgain': 'Please try again',
     'register.emailRegistered': 'Email is registered',

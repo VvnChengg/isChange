@@ -92,6 +92,15 @@ const Register = () => {
     };
 
     const sendMail = async (email) => {
+        // Regular expression for basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            alert(`${intl.formatMessage({ id: 'login.invalidEmailInput' })}`);
+            return;
+        }
+        
+        
         // 在這裡寄送驗證信
         try {
             const data = await registerApi.register(email);
