@@ -2,12 +2,20 @@ import {
     FormTextBox,
     FormTextTitle,
     FormTextInput,
-    FormTextarea
+    FormTextarea,
+    FormTextSelect
 } from './FormInput-style.js';
 
 import { useIntl } from 'react-intl';
 import { Radio, DatePicker } from 'antd';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
+
 const { RangePicker } = DatePicker;
+
+const dateFormat = 'YYYY-MM-DD';
 
 export function FormInput({type, title, placeholder, text, setText}) {
     return (
@@ -62,31 +70,40 @@ export function FormRange({title, placeholder, unit, range, setRange}) {
     )
 }
 
-export function FormBudget({title, placeholder, currency, setCurrency, budget, setBudget}) {
+export function FormBudget({title, placeholder, currency, setCurrency, budget, setBudget, currencies}) {
     const intl = useIntl();
+    if(currencies === undefined){
+        currencies = ["USD", "GBP", "EUR", "TWD", "CAD", "AUD"];
+    }
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ width: '90%', display: 'flex', justifyContent: 'space-between' }}>
                     <FormTextInput
+                        type="number"
                         value={budget}
                         onChange={e => setBudget(e.target.value)}
                         placeholder={placeholder}
                     />
                 </div>
-                <FormTextInput
+                {/* <FormTextInput
                     value={currency}
                     onChange={e => setCurrency(e.target.value)}
                     placeholder={intl.formatMessage({ id: 'formInput.unit' })}
                     style={{ width: '50px', textAlign: 'right' }}
-                />
+                /> */}
+                <FormTextSelect value={currency} onChange={e => setCurrency(e.target.value)}>
+                    {currencies.map(currency => (
+                        <option key={currency} value={currency}>{currency}</option>
+                    ))}
+                </FormTextSelect>
             </div>
         </FormTextBox>
     )
 }
 
-export function FormDate({title, setDate}) {
+export function FormDate({title, setDate, defaultMinDate, defaultMaxDate}) {
     const intl = useIntl();
     return (
         <FormTextBox>
@@ -99,12 +116,20 @@ export function FormDate({title, setDate}) {
                 placeholder={[intl.formatMessage({ id: 'formInput.startDate' }),
                               intl.formatMessage({ id: 'formInput.endDate' })]}
                 onChange={setDate}
+                defaultValue = {defaultMinDate && defaultMaxDate ? [dayjs(defaultMinDate, dateFormat), dayjs(defaultMaxDate, dateFormat)] : undefined}
             />
         </FormTextBox>
     )
 }
 
-export function FormCheck({title, options, onChange}) {
+export function FormCheck({title, options, onChange, defaultOption}) {
+    
+    let defaultOptionIndex = -1;
+    if (defaultOption !== undefined) {
+        defaultOptionIndex = options.findIndex(option => option.value === defaultOption);
+    }
+
+
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
@@ -112,6 +137,7 @@ export function FormCheck({title, options, onChange}) {
                 style={{ textAlign: 'left' }}
                 options={options}
                 defaultValue={options[0].value}
+                value = {defaultOptionIndex != -1? options[defaultOptionIndex].value : options[0].value}
                 onChange={onChange}
             />
         </FormTextBox>

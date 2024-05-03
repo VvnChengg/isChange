@@ -48,7 +48,7 @@ export default function SelfPost() {
 
     const handleEditPost = () => {
         //導流置該頁面
-        navigate(`/post/edit/${selectedPost}`);
+        navigate(`/${selectedPostType}/edit/${selectedPost}`);
         console.log(selectedPost);
     };
 

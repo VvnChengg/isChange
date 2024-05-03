@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-
-import { api } from '../../api';
+import { useNavigate } from 'react-router-dom';
 
 import {
     CreateContainer,
@@ -10,33 +9,50 @@ import {
 
 import TransForm from '../../components/TransForm';
 import Button from '../../components/Button';
+import { transApi } from '../../api/transApi';
+import { useToken } from '../../hooks/useToken';
 
 export default function TransCreate() {
     const intl = useIntl();
+    const token = useToken();
+    const user_id = localStorage.getItem('user_id');
+    const navigate = useNavigate();
 
     const [trans, setTrans] = useState({
         trans_title: '',
         trans_type: 'sell',
-        trans_method: '',
-        price_lb: '',
-        price_ub: '',
+        currency: 'TWD',
+        budget: '',
         rent_start_time: '',
         rent_end_time: '',
         trans_intro: '',
+        user_id: user_id,
+
+        product_type: 'others', //待補前端設計
+        product_pic: '', //待補前端設計
+        transaction_region: '', //待補前端設計
+
+        price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
+        price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
+
     })
 
-    function onSubmit() {
+    async function onSubmit() {
         console.log(trans);
-
-        // api.createtrans(trans)
-        // .then(res => {
-        //     console.log(res);
-        //     alert(res.message);
-        // })
-        // .catch(err => {
-        //     console.log(err);
-        //     alert(err.message);
-        // });
+        try{
+            const data = await transApi.createTrans(trans, token);
+            console.log(data);
+            if(data.success){
+                alert(intl.formatMessage({ id: 'trans.createSuccess'}));
+                navigate('/post/published');
+            }else{
+                alert(intl.formatMessage({ id: 'trans.createFail'}));
+            }
+        }
+        catch(e){
+            // console.log(e);
+            alert(intl.formatMessage({ id: 'trans.createFail'}));
+        }
     }
 
     return (
@@ -46,6 +62,7 @@ export default function TransCreate() {
                 <Button
                     text={intl.formatMessage({ id: 'back' })}
                     secondary={true}
+                    onClick={() => window.history.back()}
                 />
                 <Button
                     text={intl.formatMessage({ id: 'trans.create' })}

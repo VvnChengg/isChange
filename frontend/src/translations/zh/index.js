@@ -180,6 +180,18 @@ const zh = {
     'trans.instock': '銷售中',
     'trans.reserved':'已保留',
     'trans.sold':'已售出',
+    'trans.createSuccess': '創建商品成功',
+    'trans.createFail': '創建商品失敗',
+    'trans.productType': '商品類型',
+    'trans.kitchen': '廚房',
+    'trans.livingRoom': '房間',
+    'trans.restroom': '浴室',
+    'trans.cosmetic': '美妝',
+    'trans.clothing': '衣服',
+    'trans.others': '其他',
+    'trans.checkEditFailed': '讀取編輯頁面失敗，請再試一次',
+    'trans.editSuccess': '編輯商品成功',
+    'trans.editFailed': '編輯商品失敗，請再試一次',
 
     /* alert */
     'alert.login': '請先登入',

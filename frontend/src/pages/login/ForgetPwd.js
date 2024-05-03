@@ -177,7 +177,7 @@ export const ForgetPwd = ({ isModalOpen ,setIsModalOpen }) => { // 從 props 中
                 : isSending ?
                     intl.formatMessage({ id: 'register.countdown' }, { countdown}) 
                 : intl.formatMessage({ id: 'login.sendMail' })}
-                onClick={isSending || verificationPass? undefined : handleSendMail}
+                onClick={isSending || verificationPass || !email? undefined : handleSendMail}
             />
             </div>
 

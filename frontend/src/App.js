@@ -90,7 +90,7 @@ function App() {
                   </Route>
                   <Route path='trans'>
                     <Route path='create' element={<TransCreate />} />
-                    <Route path='edit' element={<TransEdit />} />
+                    <Route path='edit/:tid' element={<TransEdit />} />
                     <Route path='detail' element={<TransDetail />} />
                   </Route>
                 </Route>

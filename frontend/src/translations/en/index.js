@@ -181,6 +181,19 @@ const en = {
     'trans.instock': 'in stock',
     'trans.reserved':'reserved',
     'trans.sold':'sold',
+    'trans.createSuccess': 'Create product successfully',
+    'trans.createFail': 'Create product failed',
+    'trans.productType': 'Product Type',
+    'trans.kitchen': 'Kitchen',
+    'trans.livingRoom': 'Living Room',
+    'trans.restroom': 'Restroom',
+    'trans.cosmetic': 'Cosmetic',
+    'trans.clothing': 'Clothing',
+    'trans.others': 'Others',
+    'trans.checkEditFailed': 'Loading edit page failed, please try again',
+    'trans.editSuccess': 'Edit product successfully',
+    'trans.editFailed': 'Edit product failed, please try again',
+
 
     /* alert */
     'alert.login': 'Please login',
