@@ -1,8 +1,13 @@
 const Article = require('../models/article');
 const Event = require('../models/event');
 const Product = require('../models/product');
+const Comment = require('../models/comment');
 const { validatePut } = require('../middlewares/post');
 const { default: mongoose } = require('mongoose');
+const comment = require('../models/comment');
+const moment = require('moment');
+const Favorite = require('../models/favorite');
+const { ObjectId } = require('mongodb');
 
 const getAllPosts = async (req, res, next) => {
     let articles, events, products;
@@ -83,19 +88,45 @@ const getAllPosts = async (req, res, next) => {
 
 const getPostDetail = async (req, res, next) => {
     const { pid } = req.params;
-    let article;
+    const { userId } = req.body;
+    let article, item;
     try {
         article = await Article.findById(pid);
         if (!article) {
             return res.status(404).json({ message: "找不到此文章" });
         }
+        // 取得按讚、收藏資料
+        const isLiked = article.like_by_user_ids.indexOf(userId);
+        console.log("isLiked", isLiked);
+        const saveList = await Favorite.find({ item_id: pid, save_type: "Article" });
+        const isSaved = saveList.filter((save) => save.user_id.equals(userId)).length;
+        console.log("isLiked", isLiked);
+
+        // 取得評論資料
+        const commentList = await getCommentList(pid);
+
+        item = {
+            _id: article._id,
+            title: article.article_title,
+            content: article.content,
+            type: "post",
+            coverPhoto: article.article_pic,
+            location: article.article_region,
+            datetime: article.post_date,
+            creator_id: article.creator_id,
+            like_count: article.like_by_user_ids.length,  // 按讚數
+            save_count: saveList.length,            // 收藏數
+            is_liked: isLiked >= 0 ? true : false,   // 使用者是否有按讚
+            is_saved: isSaved > 0 ? true : false,   // 使用者是否有收藏
+            comment_list: commentList               // 評論串
+        };
     } catch (error) {
         if (error.name === "CastError") {
             return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
         }
         return res.status(400).json({ message: error });
     }
-    return res.status(200).json({ article });
+    return res.status(200).json({ item });
 };
 
 const getUserPosts = async (req, res, next) => {
@@ -184,15 +215,16 @@ const createPost = async (req, res, next) => {
     const post = req.body;
     const uId = req.body.userId;
     if (!post) {
-        return res.status(404).json({ message: "未傳入文章創建資訊" });
+        return res.status(400).json({ message: "未傳入文章創建資訊" });
     }
     try {
-        newPost = new Article({
+        let newPost = new Article({
             article_title: post.title,
             content: post.content,
             article_pic: post.photo,
-            status: post.status,
+            // status: post.status,
             creator_id: uId
+            // article_region: post.location
         })
         await newPost.save();
         console.log("new post: ", newPost);
@@ -232,31 +264,31 @@ const updatePost = async (req, res, next) => {
     };
 }
 
-const deletePost = async (req, res, next) => {
-    const { pid } = req.params;
-    const uId = req.body.userId;
-    let post;
-    try {
-        // 找到貼文內容
-        console.log("pid: ", pid);
-        post = await Article.findOne({ "_id": pid },);
-        console.log("post", post);
-        // 檢查是否有找到文章
-        if (!post) {
-            return res.status(404).json({ message: '貼文不存在' });
-        }
+// const deletePost = async (req, res, next) => {
+//     const { pid } = req.params;
+//     const uId = req.body.userId;
+//     let post;
+//     try {
+//         // 找到貼文內容
+//         console.log("pid: ", pid);
+//         post = await Article.findOne({ "_id": pid },);
+//         console.log("post", post);
+//         // 檢查是否有找到文章
+//         if (!post) {
+//             return res.status(404).json({ message: '貼文不存在' });
+//         }
 
-        // 檢查使用者是否有權限刪除文章
-        if (!post.creator_id.equals(uId)) {
-            return res.status(401).json({ message: "您沒有權限刪除此文章" });
-        }
-        post = await Article.findByIdAndDelete(pid);
+//         // 檢查使用者是否有權限刪除文章
+//         if (!post.creator_id.equals(uId)) {
+//             return res.status(401).json({ message: "您沒有權限刪除此文章" });
+//         }
+//         post = await Article.findByIdAndDelete(pid);
 
-        res.status(200).json({ message: '成功刪除貼文' });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
+//         res.status(200).json({ message: '成功刪除貼文' });
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// };
 
 const deleteContent = async (req, res, next) => {
     const { userId, type, id } = req.body;
@@ -306,7 +338,7 @@ const deleteContent = async (req, res, next) => {
         if (err.name === "CastError") {
             return res.status(400).json({ message: "id 無法正確轉換成 ObjectId，請檢查 id 格式" });
         }
-        res.status(500).json({ message: err });
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -352,6 +384,98 @@ const likePost = async (req, res, next) => {
     }
 };
 
+async function getCommentList(pid) {
+    const post = await Article.findById(pid);
+    if (!post) {
+        throw new Error("找不到文章");
+    }
+    try {
+        const comments = await Comment.find({ '_id': { $in: post.comment_ids } });
+        // console.log("comments", comments);
+        return comments;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+const commentPost = async (req, res, next) => {
+    const { pid, text, datetime, userId } = req.body;
+    try {
+        if (!pid || !text) {
+            return res.status(400).json({ message: "請傳入 pid (文章id), text(評論內容)" })
+        }
+
+        // 撈要評論的文章資料
+        let post = await Article.findById(pid);
+        if (!post) {
+            return res.status(404).json({ message: "找不到文章" })
+        }
+
+        // 製作新的評論物件，並檢查傳入的日期是否符合格式 (YYYY-MM-DDTHH:mm:ssZ)
+        // 如果合格就用傳入的時間(datetime)，如果不合格就用現在時間建立
+        const parsedDate = moment(datetime, 'YYYY-MM-DDTHH:mm:ssZ', true)
+        let newComment = new Comment({
+            content: text,
+            created_at: parsedDate.isValid() ? parsedDate : Date.now(),
+            commentor_id: userId
+        })
+
+        // 等待剛才的物件製作完成再繼續
+        await newComment.save();
+
+        // 從文章資料中撈出目前的評論列表
+        let this_comment_ids = post.comment_ids;
+
+        // 將這則評論塞到列表的最後，並將評論依時間順序進行排列
+        this_comment_ids.push(newComment._id);
+        const comments = await Comment.find({ '_id': { $in: this_comment_ids } }, 'created_at').sort({ created_at: 1 });
+        const sorted_comment_list = comments.map(comment => comment._id);
+
+        // 更新資料庫資料
+        await Article.findByIdAndUpdate(pid, { comment_ids: sorted_comment_list });
+        res.status(200).json({ message: "留言成功" });
+    } catch (err) {
+        if (err.name === 'CastError') {
+            return res.status(400).json({ message: "pid 無法轉換成 ObjectId" })
+        }
+        res.status(500).json({ message: err.message });
+    }
+};
+
+const collectProduct = async (req, res) => {
+    try {
+        const { pid } = req.params;
+        const { userId } = req.body;
+        const payload = {
+            user_id: userId,
+            item_id: pid,
+            save_type: "Article"
+        };
+
+        const collection = await Favorite.find({ user_id: userId, item_id: pid, save_type: "Article" });
+        if (!collection || collection.length === 0) {
+            const fav = await Favorite.create(payload);
+            return res.status(201).json({
+                success: true,
+                message: '成功收藏文章',
+                favId: fav._id,
+            });
+        } else {
+            await Favorite.deleteMany({ user_id: userId, item_id: pid, save_type: "Article" });
+            return res.status(200).json({
+                success: true,
+                message: '成功取消收藏文章',
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            message: '收藏/取消收藏 文章失敗',
+        });
+    }
+}
+
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
@@ -360,3 +484,5 @@ exports.updatePost = updatePost;
 exports.getPostDetail = getPostDetail;
 exports.deleteContent = deleteContent;
 exports.likePost = likePost;
+exports.commentPost = commentPost;
+exports.collectProduct = collectProduct;
