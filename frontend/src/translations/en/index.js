@@ -36,6 +36,25 @@ const en = {
     'selfpost.cancelnotification':'Are you sure you want to delete?',
     'selfpost.nothingMsg' :' No post found!',
 
+    'sidebar.general': 'General',
+    'sidebar.suggest': 'Suggest',
+    'sidebar.hot': 'Hot',
+    'sidebar.new': 'New',
+    'sidebar.following': 'Following',
+
+    'sidebar.trans': 'Product',
+    'sidebar.priceLow': 'Low price',
+    'sidebar.priceHigh': 'High price',
+
+    'sidebar.tour': 'Tour',
+    'sidebar.distanceLow': 'Less distance',
+    'sidebar.distanceHigh': 'More distance',
+    'sidebar.budgetLow': 'Low budget',
+    'sidebar.budgetHigh': 'High budget',
+    'sidebar.dateClose': 'Close date',
+    'sidebar.dateFar': 'Far Date',
+
+    'sidebar.region': 'Region',
 
 
     /* pages */

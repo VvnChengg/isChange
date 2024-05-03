@@ -26,15 +26,35 @@ const zh = {
     'msg.rejectButton': '拒絕',
     'msg.chatRoomTitle': '聊天室',
     'msg.userNotEntered': '使用者尚未輸入信息',
-    'msg.stranger':'陌生!!',
-    'msg.input':'輸入訊息!!',
+    'msg.stranger':'陌生！！',
+    'msg.input':'輸入訊息！！',
 
 
     'selfpost.edit':'編輯',
     'selfpost.delete':'刪除',
     'selfpost.cancel':'算了',
-    'selfpost.cancelnotification':'確定要取消嗎?',
-    'selfpost.nothingMsg' :'尚未發表文章!',
+    'selfpost.cancelnotification':'確定要取消嗎？',
+    'selfpost.nothingMsg' :'尚未發表文章！',
+
+    'sidebar.general': '一般排序',
+    'sidebar.suggest': '推薦',
+    'sidebar.hot': '熱門',
+    'sidebar.new': '最新',
+    'sidebar.following': '追蹤中',
+
+    'sidebar.trans': '交易排序',
+    'sidebar.priceLow': '價格最低',
+    'sidebar.priceHigh': '價格最高',
+
+    'sidebar.tour': '揪團排序',
+    'sidebar.distanceLow': '距離最近',
+    'sidebar.distanceHigh': '距離最遠',
+    'sidebar.budgetLow': '預算最低',
+    'sidebar.budgetHigh': '預算最高',
+    'sidebar.dateClose': '日期最近',
+    'sidebar.dateFar': '日期最遠',
+
+    'sidebar.region': '地區篩選',
 
 
     /* pages */

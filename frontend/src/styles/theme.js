@@ -3,7 +3,7 @@ export const lightTheme = {
     fill: '#ffffff',
     title: '#ffffff',
     text: '#000000',
-    shadow: 'rgba(0, 0, 0, 0.5)',
+    shadow: 'rgba(0, 0, 0, 0.25)',
 
     main: '#008CD9',
     active: '#154F86',
