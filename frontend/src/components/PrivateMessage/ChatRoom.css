@@ -146,4 +146,5 @@ margin-bottom: 1%;
 .private-message-download {
   display: block;
   margin-top: 10px; /* 根據需要調整上方的間距 */
+  bottom: 0;
 }

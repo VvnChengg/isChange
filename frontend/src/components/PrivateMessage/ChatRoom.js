@@ -1,21 +1,25 @@
 // ChatRoom.js
 
-import  React from 'react';
+import React from 'react';
 import './ChatRoom.css';
+import { Button } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
 
-export default function ChatRoom({ chatData, chatPhoto, userId }) {
+export default function ChatRoom({ chatData, chatPhoto, userId, handleDownload }) {
   let lastDate = null;
-  //console.log(chatData)
-
+    
 
   return (
-    <div >
+    <div>
       {chatData && (
         <div className='private-message-chat-room-container'>
-          <div className='private-message-chat-header' style={{bottom:0}}>
+          <div className='private-message-chat-header' style={{ bottom: 0 }}>
             <img className='private-message-photo' src={chatPhoto.chat_to_photo || '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }}/>
             <p className='private-message-name'>{chatPhoto.chat_to_username}</p>
           </div>
+        
+
+
 
           {chatData.map(message => {
             const messageDate = new Date(message.timestamp);
@@ -24,6 +28,7 @@ export default function ChatRoom({ chatData, chatPhoto, userId }) {
             const formattedMinutes = messageDate.getMinutes().toString().padStart(2, '0');
             const showDate = formattedDate !== lastDate;
             lastDate = formattedDate;
+
 
             return (
               <div className='private-message-message-container' key={message._id}>
@@ -34,39 +39,35 @@ export default function ChatRoom({ chatData, chatPhoto, userId }) {
                 )}
                 <div className={`private-message-message-box ${message.sender_id === userId ? 'private-message-own-message' : ''}`}>
                   <div className={`private-message-message ${message.sender_id === userId ? 'private-message-own' : ''}`}>
-                  {message.message_type === 'text' ? (
-                        <p
-                            className='private-message-message-content'
-                            dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br>') }}
-                        ></p>
+                    {message.message_type === 'text' ? (
+                      <p
+                        className='private-message-message-content'
+                        dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br>') }}
+                      ></p>
                     ) : message.message_type === 'pic' ? (
-                        <div>
+                      <div>
                         <img
-                            src={message.photo}
-                            alt='pic'
-                            className='private-message-pic-content'
+                          src={message.photo}
+                          alt='pic'
+                          className='private-message-pic-content'
                         />
-                        </div>
+                      </div>
                     ) : null}
                   </div>
                   <p className='private-message-time'>{formattedHours}:{formattedMinutes}</p>
                   <div className='private-message-download'>
                     {message.message_type === 'pic' ? (
-                        <div>
-                          <p>下載圖片</p>
-                        </div>
-                    ):null}
+                      <div>
+                        <Button onClick={() => handleDownload(message.photo)} icon={<DownloadOutlined />} />
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
-
             );
           })}
-        </div>        
-
-        
+        </div>
       )}
-
     </div>
   );
 }

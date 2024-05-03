@@ -18,6 +18,22 @@ export default function Chatroom() {
     const token = useToken();
     const [inputValue, setInputValue] = useState('');
 
+    const handleDownload = (imageUrl) => {
+        const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = 'image.jpg'; // 下載的文件名，可以自行設定
+    link.style.display = 'none'; // 隱藏這個元素
+
+    // 將這個元素添加到 body 中
+    document.body.appendChild(link);
+
+    // 模擬點擊這個鏈接
+    link.click();
+
+    // 清理
+    document.body.removeChild(link);
+};
+
 
     const handleSubmit = () => {
         if (inputValue.trim() !== '') {
@@ -66,7 +82,10 @@ export default function Chatroom() {
                 chatBox.scrollTop = chatBox.scrollHeight;
             }, 0);
         };
+    
+    
 
+    
     useEffect(() => {
         axios.get(`${hostname}/chat/detail/${chatid}`, {
             headers: {
@@ -87,7 +106,7 @@ export default function Chatroom() {
     return (
         
         <div>
-            <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} />
+            <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
             <ChatRoomInput 
                 handleInputChange={handleInputChange} 
                 inputValue={inputValue} 
