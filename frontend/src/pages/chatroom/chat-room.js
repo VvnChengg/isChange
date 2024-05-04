@@ -104,8 +104,14 @@ export default function Chatroom() {
                         }
                     })
                     .then(response => {
-                    //console.log(response)
-                    setChatData(prevChatData => [...prevChatData, response.data.new_message]);
+                    //console.log(response.data.new_message)
+                    const timestamp = new Date().toISOString();
+                    const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
+                    const newpic = {message_type: 'pic', timestamp:timestamp, photo:base64Image,sender_id:userId, _id:randomNumber}
+                    //setChatData(prevChatData => [...prevChatData, response.data.new_message]);
+                    //console.log(newpic)
+                    setChatData(prevChatData => [...prevChatData, newpic]);
+
             
                     setTimeout(() => {
                         const chatBox = document.querySelector('.private-message-chat-room-container');
@@ -136,7 +142,6 @@ export default function Chatroom() {
         .then(response => {
             setChatPhoto(response.data);
             setChatData(response.data.messages);
-            //console.log(chatData)
             scrollToBottom(); 
         })
         .catch(error => {
