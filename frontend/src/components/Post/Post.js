@@ -8,7 +8,7 @@ import {
 
 import Tag from '../Tag';
 
-export default function Post({ post }) {
+export default function Post({ post, onClick }) {
     const samplePost = {
         type: 'post',
         title: 'SAMPLE',
@@ -34,7 +34,7 @@ export default function Post({ post }) {
 
 
     return (
-        <PostWrapper>
+        <PostWrapper onClick={onClick}>
             <div style={{display: 'flex', alignItems: 'center'}}>
                 <Tag type={post ? post.type : samplePost.type} />
                 {/* post.status && renderStatus() */}

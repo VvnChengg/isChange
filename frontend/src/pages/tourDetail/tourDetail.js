@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 
 import { api } from '../../api';
@@ -13,6 +14,7 @@ import Button from '../../components/Button';
 
 export default function TourDetail() {
     const intl = useIntl();
+    const { pid } = useParams();
 
     const [tour, setTour] = useState({
         event_title: '',

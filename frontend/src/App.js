@@ -86,7 +86,7 @@ function App() {
                   <Route path='tour'>
                     <Route path='create' element={<TourCreate />} />
                     <Route path='edit' element={<TourEdit />} />
-                    <Route path='detail' element={<TourDetail />} />
+                    <Route path='detail/:pid' element={<TourDetail />} />
                   </Route>
                   <Route path='trans'>
                     <Route path='create' element={<TransCreate />} />
