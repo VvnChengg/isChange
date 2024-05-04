@@ -37,8 +37,8 @@ function ChatRoomList({ rooms }) {
               <React.Fragment key={`room_${index}`}>
                 <tbody className='private-message-a-chat' onClick={() => handleRoomClick(room.chat_id)}>
                 <tr>
-                  <td rowSpan={2} style={{ width: '20%' }}>
-                    <img src={room.chat_to_photo|| '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} style={{ width: '100%' }} />
+                  <td rowSpan={2} style={{ width: '80px' }}>
+                    <img src={room.chat_to_photo||'/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} style={{ width: '100%', borderRadius: '50%'}} />
                   </td>
                   <td colSpan={1} className='private-message-chat-name' style={{textAlign:'left'}}>{room.chat_to_username}</td>
                   <td colSpan={2} className='private-message-chat-time'>{formatDate(room.last_update)}</td>

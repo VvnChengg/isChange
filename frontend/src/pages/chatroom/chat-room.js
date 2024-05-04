@@ -51,14 +51,10 @@ export default function Chatroom() {
           //console.log(newchatData)
           setInputValue('');
 
-          setTimeout(() => {
-            const chatBox = document.querySelector('.private-message-chat-room-container');
-            chatBox.scrollTop = chatBox.scrollHeight;
-          }, 100); 
+          scrollToBottom(100);  
         })
-
         .catch(error => {
-          console.error('API 請求失败:', error);
+          //console.error('API 請求失敗:', error);
         });
     } else {
       console.log('請輸入有效值');
@@ -76,12 +72,16 @@ export default function Chatroom() {
           }
         };
 
-    const scrollToBottom = () => {
-            setTimeout(() => {
-                const chatBox = document.querySelector('.private-message-chat-room-container');
+    const scrollToBottom = (num) => {
+        setTimeout(() => {
+            const chatBox = document.querySelector('.private-message-chat-room-container');
+            if (chatBox) {
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 0);
-        };
+            } else {
+                //console.error('chatBox element not found!');
+            }
+        }, num);
+    };
 
     const handleFileInputChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -142,24 +142,33 @@ export default function Chatroom() {
         .then(response => {
             setChatPhoto(response.data);
             setChatData(response.data.messages);
-            scrollToBottom(); 
+            scrollToBottom(0); 
         })
         .catch(error => {
-            console.error('API 請求失敗:', error);
+            //console.error('API 請求失敗:', error);
         });
-    }, [hostname, chatid, token]);
+    }, [hostname, chatid, token, chatData]);
 
     return (
-        
         <div>
-            <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
-            <ChatRoomInput 
-                handleInputChange={handleInputChange} 
-                inputValue={inputValue} 
-                handleSubmit={handleSubmit}
-                handleKeyDown={handleKeyDown}
-                handleFileInputChange={handleFileInputChange}
-            />
+            {chatData && chatData.length > 0 && (
+                <>
+                    <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
+                    <ChatRoomInput 
+                        handleInputChange={handleInputChange} 
+                        inputValue={inputValue} 
+                        handleSubmit={handleSubmit}
+                        handleKeyDown={handleKeyDown}
+                        handleFileInputChange={handleFileInputChange}
+                    />
+                </>
+            )}
+            {!chatData && (
+                <div>Loading...</div>
+            )}
+            {chatData && chatData.length === 0 && (
+                <div>No data available</div>
+            )}
         </div>
     );
 }
