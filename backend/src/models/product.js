@@ -13,7 +13,7 @@ const productSchema = new Schema({
   },
   description: {
     type: String,
-    maxlength: 15,
+    maxlength: 1000,
     required: true,
   },
   product_type: {
@@ -45,7 +45,7 @@ const productSchema = new Schema({
   },
   period: {
     type: String,
-    maxlength: 10,
+    maxlength: 100,
   },
   status: {
     type: String,
