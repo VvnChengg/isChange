@@ -23,7 +23,7 @@ function PrivateList() {
       setRooms(response.data.chats);
     })
     .catch(error => {
-      console.error('Error fetching data:', error);
+      //console.error('Error fetching data:', error);
     });
   }, [hostname, token]);
 

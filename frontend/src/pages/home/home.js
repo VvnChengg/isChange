@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api';
 
@@ -13,6 +14,8 @@ import SideBar from '../../components/SideBar';
 import Icon from '../../components/Icon';
 
 export default function Home() {
+    const navigate = useNavigate();
+
     const [showSideBar, setShowSideBar] = useState(false);
     const [type, setType] = useState('all');
     const [posts, setPosts] = useState([]);
@@ -27,8 +30,12 @@ export default function Home() {
             <PostTypeSelector type={type} setType={setType} />
             {posts
                 ?.filter(post => type === 'all' || post.type === type)
-                .map((post, index) => 
-                    <Post key={`post${index}`} post={post} />
+                .map(post => 
+                    <Post
+                        key={post._id}
+                        post={post}
+                        onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
+                    />
                 )
             }
             <PostSelector onClick={() => setShowSideBar(!showSideBar)}>

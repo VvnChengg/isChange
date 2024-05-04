@@ -28,12 +28,16 @@ export default function TransCreate() {
         trans_intro: '',
         user_id: user_id,
 
-        product_type: 'others', //待補前端設計
+        product_type: 'kitchen',
         product_pic: '', //待補前端設計
         transaction_region: '', //待補前端設計
 
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
         price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
+
+        transaction_country: '',
+        transaction_region_location_latitude: null,
+        transaction_region_location_longitude: null,
 
     })
 

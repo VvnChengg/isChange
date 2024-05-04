@@ -51,14 +51,10 @@ export default function Chatroom() {
           //console.log(newchatData)
           setInputValue('');
 
-          setTimeout(() => {
-            const chatBox = document.querySelector('.private-message-chat-room-container');
-            chatBox.scrollTop = chatBox.scrollHeight;
-          }, 100); 
+          scrollToBottom(100);  
         })
-
         .catch(error => {
-          console.error('API 請求失败:', error);
+          //console.error('API 請求失敗:', error);
         });
     } else {
       console.log('請輸入有效值');
@@ -76,12 +72,63 @@ export default function Chatroom() {
           }
         };
 
-    const scrollToBottom = () => {
-            setTimeout(() => {
-                const chatBox = document.querySelector('.private-message-chat-room-container');
+    const scrollToBottom = (num) => {
+        setTimeout(() => {
+            const chatBox = document.querySelector('.private-message-chat-room-container');
+            if (chatBox) {
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 0);
-        };
+            } else {
+                //console.error('chatBox element not found!');
+            }
+        }, num);
+    };
+
+    const handleFileInputChange = (e) => {
+        const selectedFile = e.target.files[0];
+        const formData = new FormData();
+        formData.append('image', selectedFile); 
+
+        if (selectedFile) {
+            const isImage = selectedFile.type.startsWith('image/');
+            //轉成對應的格式
+            if (isImage) {
+                const reader = new FileReader();
+                reader.readAsDataURL(selectedFile);
+                reader.onload = () => {
+                    const base64Image = reader.result;
+                    //console.log('Base64 image:', base64Image);             
+                    const body = formData;
+                    axios.post(`${hostname}/chat/sendpic/${chatid}`, body,{
+                        headers: {
+                            'Authorization':  `Bearer ${token}`
+                        }
+                    })
+                    .then(response => {
+                    //console.log(response.data.new_message)
+                    const timestamp = new Date().toISOString();
+                    const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
+                    const newpic = {message_type: 'pic', timestamp:timestamp, photo:base64Image,sender_id:userId, _id:randomNumber}
+                    //setChatData(prevChatData => [...prevChatData, response.data.new_message]);
+                    //console.log(newpic)
+                    setChatData(prevChatData => [...prevChatData, newpic]);
+
+            
+                    setTimeout(() => {
+                        const chatBox = document.querySelector('.private-message-chat-room-container');
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }, 100); 
+                    })
+            
+                    .catch(error => {
+                    console.error('API 請求失败:', error);
+                    });
+        
+                };
+                } else {
+                alert('請選擇圖片檔案 (JPG 或 PNG)');
+            }
+        }
+    };       
     
     
 
@@ -95,24 +142,33 @@ export default function Chatroom() {
         .then(response => {
             setChatPhoto(response.data);
             setChatData(response.data.messages);
-            //console.log(chatData)
-            scrollToBottom(); 
+            scrollToBottom(0); 
         })
         .catch(error => {
-            console.error('API 請求失敗:', error);
+            //console.error('API 請求失敗:', error);
         });
-    }, [hostname, chatid, token]);
+    }, [hostname, chatid, token, chatData]);
 
     return (
-        
         <div>
-            <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
-            <ChatRoomInput 
-                handleInputChange={handleInputChange} 
-                inputValue={inputValue} 
-                handleSubmit={handleSubmit}
-                handleKeyDown={handleKeyDown}
-            />
+            {chatData && chatData.length > 0 && (
+                <>
+                    <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
+                    <ChatRoomInput 
+                        handleInputChange={handleInputChange} 
+                        inputValue={inputValue} 
+                        handleSubmit={handleSubmit}
+                        handleKeyDown={handleKeyDown}
+                        handleFileInputChange={handleFileInputChange}
+                    />
+                </>
+            )}
+            {!chatData && (
+                <div>Loading...</div>
+            )}
+            {chatData && chatData.length === 0 && (
+                <div>No data available</div>
+            )}
         </div>
     );
 }

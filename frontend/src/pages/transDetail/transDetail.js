@@ -22,18 +22,22 @@ export default function TransDetail() {
     const [trans, setTrans] = useState({
         trans_title: '',
         trans_type: 'sell',
-        product_type: 'others',
         currency: 'TWD',
         budget: '',
         rent_start_time: '',
         rent_end_time: '',
         trans_intro: '',
 
+        product_type: 'kitchen',
         product_pic: '', //待補前端設計
         transaction_region: '', //待補前端設計
 
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
         price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
+
+        transaction_country: '',
+        transaction_region_location_latitude: null,
+        transaction_region_location_longitude: null,
     })
 
     const sampleTrans = {
@@ -91,6 +95,7 @@ export default function TransDetail() {
                     transaction_region: data.trans.transaction_region,
                     trans_type: data.trans.transaction_way,
                     user_id: data.trans.creator_id,
+                    product_pic: data.trans.product_pic,
                     // __v: data.__v
                 });
                 }

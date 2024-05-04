@@ -32,7 +32,7 @@ export default function TransEdit() {
         user_id: user_id,
         tid: tid,
 
-        product_pic: '', //待補前端設計
+        product_pic: '',
         transaction_region: '', //待補前端設計
 
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
@@ -55,6 +55,7 @@ export default function TransEdit() {
             // console.log(data.trans.currency);
             // console.log(data.trans.description);
             // console.log(data.trans.product_type);
+            console.log(data);
             
             if(data.success){
                 let period = data.trans.period;
@@ -62,6 +63,8 @@ export default function TransEdit() {
             
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
+
+                console.log(data.trans.product_pic)
             
                 setTrans({
                     rent_start_time: rent_start_time,
@@ -78,6 +81,7 @@ export default function TransEdit() {
                     transaction_region: data.trans.transaction_region,
                     trans_type: data.trans.transaction_way,
                     user_id: data.trans.creator_id,
+                    product_pic: data.trans.product_pic,
                     // __v: data.__v
                 });
                 }

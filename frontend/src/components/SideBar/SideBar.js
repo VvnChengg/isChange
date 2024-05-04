@@ -49,7 +49,7 @@ export default function SideBar({ showSideBar, type }) {
 
     return (
         <SideBarWrapper show={showSideBar}>
-            <SideBarContainer>
+            <SideBarContainer show={showSideBar}>
                 <SideBarTitle>
                     <FormattedMessage id='sidebar.general' />
                 </SideBarTitle>

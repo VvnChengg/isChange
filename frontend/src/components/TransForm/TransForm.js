@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 import {
@@ -6,11 +7,14 @@ import {
     FormRange,
     FormBudget,
     FormDate,
-    FormCheck
+    FormCheck,
+    FormImage,
+    FormLocation
 } from '../FormInput';
 import Button from '../Button';
 
 export default function TransForm({ trans, setTrans }) {
+    // console.log(trans.product_pic);
     const intl = useIntl();
 
     function setTitle(input) {
@@ -70,6 +74,42 @@ export default function TransForm({ trans, setTrans }) {
             ...trans,
             trans_intro: input
         });
+    }
+
+    function setImage(input) {
+        setTrans({
+            ...trans,
+            product_pic: input
+        });
+    }
+
+    //需要詳細地點object資料的時候才用
+    function setRegionObject(input) {
+        setTrans({
+            ...trans,
+            transaction_region: input
+        });
+    }
+
+    function setRegionString(input){
+        setTrans({
+            ...trans,
+            transaction_region_string: input
+        })
+    }
+
+    // React.useEffect(() => {
+    //     console.log(trans);
+    // },[trans])
+
+    function setRegionCountry_Latitude_Longitute(input){
+        setTrans({
+            ...trans,
+            transaction_region_string: input.region_string,
+            transaction_country: input.country,
+            transaction_region_location_latitude: input.latitude,
+            transaction_region_location_longitude: input.longitude
+        })
     }
 
     const typeOptions = [
@@ -135,6 +175,15 @@ export default function TransForm({ trans, setTrans }) {
                 text={trans.trans_title}
                 setText={setTitle}
             />
+            <FormLocation
+                title={intl.formatMessage({ id: 'trans.productRegion' })}
+                placeholder={intl.formatMessage({ id: 'trans.productRegionHint' })}
+                value = {trans.transaction_region}
+                setValue = {setRegionObject}
+                inputValue={trans.transaction_region_string}
+                setInputValue={setRegionString}
+                setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
+                />
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.type' })}
                 options={typeOptions}
@@ -179,6 +228,15 @@ export default function TransForm({ trans, setTrans }) {
                 placeholder={intl.formatMessage({ id: 'inputTextarea' })}
                 text={trans.trans_intro}
                 setText={setIntro}
+            />
+
+            <FormImage
+                type='file'
+                title={intl.formatMessage({id: 'trans.productPicture'})}
+                placeholder={intl.formatMessage({id: 'trans.productPicture'})}
+                onFileChange={e => console.log(e.target.files)}
+                imagePreviewUrl={trans.product_pic}
+                setImagePreviewUrl={setImage}
             />
         </>
     )
