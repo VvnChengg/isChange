@@ -6,7 +6,7 @@ import { Button, Input, Space } from 'antd';
 import { CameraOutlined ,SendOutlined} from '@ant-design/icons';
 // import { FormattedMessage } from 'react-intl';
 
-export default function ChatRoomInput({ handleInputChange, inputValue, handleSubmit, handleKeyDown}) {
+export default function ChatRoomInput({ handleInputChange, inputValue, handleSubmit, handleKeyDown, handleFileInputChange}) {
   const [inputRows, setInputRows] = useState(0);
   const handleResize = () => {
     setInputRows(0)
@@ -17,11 +17,6 @@ export default function ChatRoomInput({ handleInputChange, inputValue, handleSub
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-
-  const handleFileInputChange = (e) => {
-    console.log('Selected file:', e.target.files[0]);
-  };
-
 
   
   return (

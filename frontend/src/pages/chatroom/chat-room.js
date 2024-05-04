@@ -82,6 +82,47 @@ export default function Chatroom() {
                 chatBox.scrollTop = chatBox.scrollHeight;
             }, 0);
         };
+
+    const handleFileInputChange = (e) => {
+        const selectedFile = e.target.files[0];
+        const formData = new FormData();
+        formData.append('image', selectedFile); 
+
+        if (selectedFile) {
+            const isImage = selectedFile.type.startsWith('image/');
+            //轉成對應的格式
+            if (isImage) {
+                const reader = new FileReader();
+                reader.readAsDataURL(selectedFile);
+                reader.onload = () => {
+                    const base64Image = reader.result;
+                    //console.log('Base64 image:', base64Image);             
+                    const body = formData;
+                    axios.post(`${hostname}/chat/sendpic/${chatid}`, body,{
+                        headers: {
+                            'Authorization':  `Bearer ${token}`
+                        }
+                    })
+                    .then(response => {
+                    //console.log(response)
+                    setChatData(prevChatData => [...prevChatData, response.data.new_message]);
+            
+                    setTimeout(() => {
+                        const chatBox = document.querySelector('.private-message-chat-room-container');
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }, 100); 
+                    })
+            
+                    .catch(error => {
+                    console.error('API 請求失败:', error);
+                    });
+        
+                };
+                } else {
+                alert('請選擇圖片檔案 (JPG 或 PNG)');
+            }
+        }
+    };       
     
     
 
@@ -112,6 +153,7 @@ export default function Chatroom() {
                 inputValue={inputValue} 
                 handleSubmit={handleSubmit}
                 handleKeyDown={handleKeyDown}
+                handleFileInputChange={handleFileInputChange}
             />
         </div>
     );
