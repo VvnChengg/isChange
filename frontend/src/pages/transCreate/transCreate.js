@@ -28,7 +28,7 @@ export default function TransCreate() {
         trans_intro: '',
         user_id: user_id,
 
-        product_type: 'others', //待補前端設計
+        product_type: 'kitchen',
         product_pic: '', //待補前端設計
         transaction_region: '', //待補前端設計
 

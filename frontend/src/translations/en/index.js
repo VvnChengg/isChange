@@ -213,6 +213,7 @@ const en = {
     'trans.checkEditFailed': 'Loading edit page failed, please try again',
     'trans.editSuccess': 'Edit product successfully',
     'trans.editFailed': 'Edit product failed, please try again',
+    'trans.productPicture': 'Product Picture',
 
 
     /* alert */

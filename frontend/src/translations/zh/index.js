@@ -213,6 +213,7 @@ const zh = {
     'trans.checkEditFailed': '讀取編輯頁面失敗，請再試一次',
     'trans.editSuccess': '編輯商品成功',
     'trans.editFailed': '編輯商品失敗，請再試一次',
+    'trans.productPicture': '商品圖片',
 
     /* alert */
     'alert.login': '請先登入',

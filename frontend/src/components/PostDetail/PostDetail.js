@@ -13,7 +13,7 @@ import Tag from '../Tag';
 import Icon from '../Icon';
 
 export default function PostDetail({ post }) {
-    console.log(post.trans_type);
+    console.log(post.product_pic);
     return (
         <PostDetailWrapper>
             <PostDetailTitle>{post.title || post.event_title || post.trans_title}</PostDetailTitle>
@@ -75,6 +75,7 @@ export default function PostDetail({ post }) {
                         {line}
                     </div>
                 ))}
+                {post.product_pic && <img src={post.product_pic} alt='product' />}
             </PostDetailContent>
         </PostDetailWrapper>
     )

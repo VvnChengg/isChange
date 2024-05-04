@@ -66,7 +66,6 @@ export const editApi = {
     editImage: (formData, token) => {
         return axios.patch(`${hostname}/member/edit-page`,
             formData, {
-
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'

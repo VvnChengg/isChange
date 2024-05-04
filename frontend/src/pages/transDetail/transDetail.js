@@ -29,7 +29,7 @@ export default function TransDetail() {
         rent_end_time: '',
         trans_intro: '',
 
-        product_pic: '', //待補前端設計
+        product_pic: '',
         transaction_region: '', //待補前端設計
 
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
@@ -91,6 +91,7 @@ export default function TransDetail() {
                     transaction_region: data.trans.transaction_region,
                     trans_type: data.trans.transaction_way,
                     user_id: data.trans.creator_id,
+                    product_pic: data.trans.product_pic,
                     // __v: data.__v
                 });
                 }

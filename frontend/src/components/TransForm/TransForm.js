@@ -6,11 +6,14 @@ import {
     FormRange,
     FormBudget,
     FormDate,
-    FormCheck
+    FormCheck,
+    FormImage,
+    FormLocation
 } from '../FormInput';
 import Button from '../Button';
 
 export default function TransForm({ trans, setTrans }) {
+    // console.log(trans.product_pic);
     const intl = useIntl();
 
     function setTitle(input) {
@@ -69,6 +72,13 @@ export default function TransForm({ trans, setTrans }) {
         setTrans({
             ...trans,
             trans_intro: input
+        });
+    }
+
+    function setImage(input) {
+        setTrans({
+            ...trans,
+            product_pic: input
         });
     }
 
@@ -135,6 +145,9 @@ export default function TransForm({ trans, setTrans }) {
                 text={trans.trans_title}
                 setText={setTitle}
             />
+            <FormLocation
+
+            />
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.type' })}
                 options={typeOptions}
@@ -179,6 +192,15 @@ export default function TransForm({ trans, setTrans }) {
                 placeholder={intl.formatMessage({ id: 'inputTextarea' })}
                 text={trans.trans_intro}
                 setText={setIntro}
+            />
+
+            <FormImage
+                type='file'
+                title={intl.formatMessage({id: 'trans.productPicture'})}
+                placeholder={intl.formatMessage({id: 'trans.productPicture'})}
+                onFileChange={e => console.log(e.target.files)}
+                imagePreviewUrl={trans.product_pic}
+                setImagePreviewUrl={setImage}
             />
         </>
     )

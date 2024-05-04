@@ -1,3 +1,4 @@
+import React, { useRef, useEffect, useState } from 'react';
 import {
     FormTextBox,
     FormTextTitle,
@@ -10,6 +11,17 @@ import { useIntl } from 'react-intl';
 import { Radio, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import Button from '../Button';
+
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import parse from 'autosuggest-highlight/parse';
+import { debounce } from '@mui/material/utils';
+
 
 dayjs.extend(customParseFormat);
 
@@ -17,7 +29,10 @@ const { RangePicker } = DatePicker;
 
 const dateFormat = 'YYYY-MM-DD';
 
-export function FormInput({type, title, placeholder, text, setText}) {
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
+
+export function FormInput({ type, title, placeholder, text, setText }) {
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
@@ -38,7 +53,7 @@ export function FormInput({type, title, placeholder, text, setText}) {
     )
 }
 
-export function FormRange({title, placeholder, unit, range, setRange}) {
+export function FormRange({ title, placeholder, unit, range, setRange }) {
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
@@ -70,9 +85,8 @@ export function FormRange({title, placeholder, unit, range, setRange}) {
     )
 }
 
-export function FormBudget({title, placeholder, currency, setCurrency, budget, setBudget, currencies}) {
-    const intl = useIntl();
-    if(currencies === undefined){
+export function FormBudget({ title, placeholder, currency, setCurrency, budget, setBudget, currencies }) {
+    if (currencies === undefined) {
         currencies = ["USD", "GBP", "EUR", "TWD", "CAD", "AUD"];
     }
     return (
@@ -103,7 +117,7 @@ export function FormBudget({title, placeholder, currency, setCurrency, budget, s
     )
 }
 
-export function FormDate({title, setDate, defaultMinDate, defaultMaxDate}) {
+export function FormDate({ title, setDate, defaultMinDate, defaultMaxDate }) {
     const intl = useIntl();
     return (
         <FormTextBox>
@@ -114,16 +128,16 @@ export function FormDate({title, setDate, defaultMinDate, defaultMaxDate}) {
                     padding: 0
                 }}
                 placeholder={[intl.formatMessage({ id: 'formInput.startDate' }),
-                              intl.formatMessage({ id: 'formInput.endDate' })]}
+                intl.formatMessage({ id: 'formInput.endDate' })]}
                 onChange={setDate}
-                defaultValue = {defaultMinDate && defaultMaxDate ? [dayjs(defaultMinDate, dateFormat), dayjs(defaultMaxDate, dateFormat)] : undefined}
+                defaultValue={defaultMinDate && defaultMaxDate ? [dayjs(defaultMinDate, dateFormat), dayjs(defaultMaxDate, dateFormat)] : undefined}
             />
         </FormTextBox>
     )
 }
 
-export function FormCheck({title, options, onChange, defaultOption}) {
-    
+export function FormCheck({ title, options, onChange, defaultOption }) {
+
     let defaultOptionIndex = -1;
     if (defaultOption !== undefined) {
         defaultOptionIndex = options.findIndex(option => option.value === defaultOption);
@@ -137,9 +151,57 @@ export function FormCheck({title, options, onChange, defaultOption}) {
                 style={{ textAlign: 'left' }}
                 options={options}
                 defaultValue={options[0].value}
-                value = {defaultOptionIndex != -1? options[defaultOptionIndex].value : options[0].value}
+                value={defaultOptionIndex != -1 ? options[defaultOptionIndex].value : options[0].value}
                 onChange={onChange}
             />
         </FormTextBox>
     )
 }
+
+export function FormImage({ title, placeholder, text, setText, setImagePreviewUrl, imagePreviewUrl }) {
+    const intl = useIntl();
+    const fileInput = useRef(null);
+    const [blobUrl, setBlobUrl] = useState(null);
+
+
+    const handleButtonClick = () => {
+        fileInput.current.click();
+    }
+
+    const onFileChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            setImagePreviewUrl(reader.result);
+        }
+
+        reader.readAsDataURL(file);
+    }
+    // useEffect(() => {
+    //     console.log(imagePreviewUrl);
+    // }, [imagePreviewUrl])
+
+    return (
+        <FormTextBox style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <FormTextTitle style={{ whiteSpace: 'nowrap' }}>{title}</FormTextTitle>
+                <Button
+                    text={intl.formatMessage({ id: 'edit.uploadImage' })}
+                    onClick={handleButtonClick}
+                />
+            </div>
+            <FormTextInput
+                type="file"
+                ref={fileInput}
+                onChange={onFileChange}
+                style={{ display: 'none' }}
+                placeholder={placeholder}
+            />
+            {imagePreviewUrl && <img src={imagePreviewUrl} alt="Image preview" style={{ maxWidth: '20vh', maxHeight: '20vh', objectFit: 'contain' }} />}
+
+        </FormTextBox>
+    )
+}
+
+
