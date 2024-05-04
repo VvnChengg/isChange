@@ -14,6 +14,7 @@ const chatSchema = new Schema({
     },
     last_message: {
         type: String,
+        default: null
     },
     last_sender: {
         type: Schema.Types.ObjectId,

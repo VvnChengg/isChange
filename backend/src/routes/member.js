@@ -7,13 +7,19 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.get("/edit-page", validateToken, memberController.showMember);
+router.get("/edit-page", validateToken, memberController.showMember); //顯示個人資料
 router.patch(
   "/edit-page",
   upload.single("image"),
   validateToken,
   memberController.modifyMember
 );
+router.patch(
+  "/stud-ver-code",
+  validateToken,
+  memberController.studentVerificationCode
+);
+router.patch("/stud-ver", validateToken, memberController.studentVerification);
 router.get("/:uid", memberController.showMemberDetail); //非會員也可以查看資料
 router.delete("/delete", memberController.deleteTestMember); //後端測試用
 
