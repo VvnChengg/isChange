@@ -223,7 +223,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
     }
 
     async function getCountryName(lat, lng) {
-        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}`);
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}&language=en`);
         const results = response.data.results;
         if (results[0]) {
             for (let i = 0; i < results[0].address_components.length; i++) {
