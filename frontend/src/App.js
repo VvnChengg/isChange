@@ -80,7 +80,7 @@ function App() {
                     <Route path='published' element={<SelfPost />} />
                     <Route path='find' element={<ShareFind />} />
                     <Route path='to-edit' element={<ShareToEdit />} />
-                    <Route path='edit' element={<ShareEdit />} />
+                    <Route path='edit/:pid' element={<ShareEdit />} />
                     <Route path='to-delete' element={<ShareToDelete />} />
                   </Route>
                   <Route path='tour'>

@@ -169,6 +169,7 @@ const zh = {
     'edit.confirmCode': '確認',
 
     'post.create': '創建貼文',
+    'post.edit': '更新貼文',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',

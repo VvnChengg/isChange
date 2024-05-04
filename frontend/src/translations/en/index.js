@@ -169,6 +169,7 @@ const en = {
     'edit.confirmCode': 'Confirm',
 
     'post.create': 'Create post',
+    'post.edit': 'Edit post',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',

@@ -64,7 +64,7 @@ export default function Share() {
 
   function onSubmit() {
     console.log(post);
-
+    console.log('abc')
     api.createPost(post)
     .then(res => console.log(res))
     .catch(err => console.log(err));
