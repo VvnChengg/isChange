@@ -182,6 +182,11 @@ const getChatList = async (req, res) => {
             // 一筆一筆挑出聊天來看
             for (const chatId of user.chat_ids) {
                 const chat = await Chat.findById(chatId);
+
+                if (!chat) {
+                    console.log("There are non-exist chat in your chat_ids.")
+                }
+
                 // 確定聊天對象的 id
                 let chat_to_id;
                 if (userId.toString() == chat.first_person.toString()) {
