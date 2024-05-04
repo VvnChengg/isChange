@@ -35,6 +35,10 @@ export default function TransCreate() {
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
         price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
 
+        transaction_country: '',
+        transaction_region_location_latitude: null,
+        transaction_region_location_longitude: null,
+
     })
 
     async function onSubmit() {

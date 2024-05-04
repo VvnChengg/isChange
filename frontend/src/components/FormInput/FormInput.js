@@ -21,6 +21,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import { debounce } from '@mui/material/utils';
+import axios from 'axios';
 
 
 dayjs.extend(customParseFormat);
@@ -205,3 +206,224 @@ export function FormImage({ title, placeholder, text, setText, setImagePreviewUr
 }
 
 
+export function FormLocation({type, title, placeholder, value, setValue, inputValue ,setInputValue, 
+    setRegionCountry_Latitude_Longitute}) {
+    // console.log(GOOGLE_MAPS_API_KEY);
+
+    function loadScript(src, position, id) {
+        if (!position) {
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.setAttribute('async', '');
+        script.setAttribute('id', id);
+        script.src = src;
+        position.appendChild(script);
+    }
+
+    async function getCountryName(lat, lng) {
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}`);
+        const results = response.data.results;
+        if (results[0]) {
+            for (let i = 0; i < results[0].address_components.length; i++) {
+                if (results[0].address_components[i].types.includes('country')) {
+                    return results[0].address_components[i].long_name;
+                }
+            }
+        }
+        return null;
+    }
+    
+
+    const autocompleteService = { current: null };
+
+    const [options, setOptions] = React.useState([]);
+    const loaded = React.useRef(false);
+
+    if (typeof window !== 'undefined' && !loaded.current) {
+        if (!document.querySelector('#google-maps')) {
+            loadScript(
+                `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+                document.querySelector('head'),
+                'google-maps',
+            );
+        }
+
+        loaded.current = true;
+    }
+
+    const fetch = React.useMemo(
+        () =>
+          debounce((request, callback) => {
+            if(autocompleteService.current)
+            autocompleteService.current.getPlacePredictions(request, callback);
+          }, 400),
+        [autocompleteService],
+      );
+        
+    React.useEffect(() => {
+        let active = true;
+
+        if (!autocompleteService.current && window.google) {
+            autocompleteService.current =
+                new window.google.maps.places.AutocompleteService();
+        }
+        if (!autocompleteService.current) {
+            return undefined;
+        }
+        if (inputValue === '') {
+            setOptions(value ? [value] : []);
+            return undefined;
+        }
+        
+        fetch({ input: inputValue }, (results) => {
+            if (active) {
+                let newOptions = [];
+
+                if (value) {
+                    newOptions = [value];
+                }
+
+                if (results) {
+                    newOptions = [...newOptions, ...results];
+                }
+
+                setOptions(newOptions);
+            }
+        });
+
+        return () => {
+            active = false;
+        };
+    }, [value, inputValue]);
+
+    React.useEffect(() => {
+        // 這裡的代碼只有在 `value` 變化時才會運行
+        // console.log(value);
+
+        if(value !== null && value !== undefined && value.description !== undefined && value.description !== null){
+            // 這邊可以轉經緯度, 但還沒確定有沒要用所以先註解掉
+            const geocoder = new window.google.maps.Geocoder();
+            geocoder.geocode({ address: value.description }, (results, status) => {
+                if (status === 'OK') {
+                    const latitude = results[0].geometry.location.lat();
+                    const longitude = results[0].geometry.location.lng();
+                    // console.log('Latitude: ' + latitude);
+                    // console.log('Longitude: ' + longitude);
+
+            
+                    (async () => {
+                        try {
+                            const country = await getCountryName(latitude ,longitude);
+                            setRegionCountry_Latitude_Longitute({
+                                region_string: value.description,
+                                country: country,
+                                latitude: latitude,
+                                longitude: longitude,
+                            })
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    })();
+                    } else {
+                    console.log('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+    }, [value]);
+    
+    // React.useEffect(() => {
+    //     // 這裡的代碼只有在 `inputValue` 變化時才會運行
+    //     console.log("inputValue")
+    //     console.log(inputValue)
+    // }, [inputValue]);
+    
+    // React.useEffect(() => {
+    //     // 這裡的代碼只有在 `fetch` 變化時才會運行
+    //     console.log("fetch")
+    //     console.log(fetch)
+    // }, [fetch]);
+
+    return (
+        <Autocomplete
+            id="google-map-demo"
+            sx={{ 
+                minWidth: '50px',
+            }}     
+
+            getOptionLabel={(option) =>
+                typeof option === 'string' ? option : option.description
+            }
+            filterOptions={(x) => x}
+            options={options}
+            autoComplete
+            includeInputInList
+            filterSelectedOptions
+            value={value}
+            noOptionsText="No locations"
+            onChange={(event, newValue) => {
+                setOptions(newValue ? [newValue, ...options] : options);
+                setValue(newValue);
+            }}
+            onInputChange={(event, newInputValue) => {
+                setInputValue(newInputValue);
+            }}
+            renderInput={(params) => (
+                // <TextField {...params} 
+                // // label="Add a location" 
+                // fullWidth
+                // />
+                <FormTextBox ref={params.InputProps.ref}>
+                    <FormTextTitle>{title}</FormTextTitle>
+                    <input 
+                        type="text" 
+                        style={{ 
+                            minWidth: '50px',
+                            border: '0',
+                            padding: '0',
+                            outline: 'none',
+                        }}
+                        placeholder={placeholder}
+                        {...params.inputProps}
+                    />
+                </FormTextBox>
+                
+            )}
+            renderOption={(props, option) => {
+                const matches =
+                    option.structured_formatting.main_text_matched_substrings || [];
+
+                const parts = parse(
+                    option.structured_formatting.main_text,
+                    matches.map((match) => [match.offset, match.offset + match.length]),
+                );
+
+                return (
+                    <li {...props}>
+                        <Grid container alignItems="center">
+                            <Grid item sx={{ display: 'flex', width: 44 }}>
+                                <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                            </Grid>
+                            <Grid item sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                                {parts.map((part, index) => (
+                                    <Box
+                                        key={index}
+                                        component="span"
+                                        sx={{ fontWeight: part.highlight ? 'bold' : 'regular' }}
+                                    >
+                                        {part.text}
+                                    </Box>
+                                ))}
+                                <Typography variant="body2" color="text.secondary">
+                                    {option.structured_formatting.secondary_text}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </li>
+                );
+            }}
+        />
+    );
+}

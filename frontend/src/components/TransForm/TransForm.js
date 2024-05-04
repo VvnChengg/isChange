@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 import {
@@ -82,6 +83,35 @@ export default function TransForm({ trans, setTrans }) {
         });
     }
 
+    //需要詳細地點object資料的時候才用
+    function setRegionObject(input) {
+        setTrans({
+            ...trans,
+            transaction_region: input
+        });
+    }
+
+    function setRegionString(input){
+        setTrans({
+            ...trans,
+            transaction_region_string: input
+        })
+    }
+
+    // React.useEffect(() => {
+    //     console.log(trans);
+    // },[trans])
+
+    function setRegionCountry_Latitude_Longitute(input){
+        setTrans({
+            ...trans,
+            transaction_region_string: input.region_string,
+            transaction_country: input.country,
+            transaction_region_location_latitude: input.latitude,
+            transaction_region_location_longitude: input.longitude
+        })
+    }
+
     const typeOptions = [
         {
             label: intl.formatMessage({ id: 'trans.sell'}),
@@ -146,8 +176,14 @@ export default function TransForm({ trans, setTrans }) {
                 setText={setTitle}
             />
             <FormLocation
-
-            />
+                title={intl.formatMessage({ id: 'trans.productRegion' })}
+                placeholder={intl.formatMessage({ id: 'trans.productRegionHint' })}
+                value = {trans.transaction_region}
+                setValue = {setRegionObject}
+                inputValue={trans.transaction_region_string}
+                setInputValue={setRegionString}
+                setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
+                />
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.type' })}
                 options={typeOptions}

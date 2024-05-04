@@ -9,6 +9,7 @@ import {
     PostDetailContent
 } from './PostDetail-style.js';
 
+
 import Tag from '../Tag';
 import Icon from '../Icon';
 
@@ -17,6 +18,13 @@ export default function PostDetail({ post }) {
     return (
         <PostDetailWrapper>
             <PostDetailTitle>{post.title || post.event_title || post.trans_title}</PostDetailTitle>
+            {post.transaction_region &&
+                <PostDetailRow>
+                    <Icon.Location />
+                    {post.transaction_region}
+                </PostDetailRow>
+            }
+
             {post.trans_type &&
                 <div style={{ display: 'flex', alignItems: 'center', gap: 5}}>
                     <Tag type={post.trans_type} />

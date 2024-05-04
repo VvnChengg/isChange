@@ -1,1 +1,1 @@
-export { FormInput, FormRange, FormBudget, FormDate, FormCheck, FormImage } from './FormInput';
+export { FormInput, FormRange, FormBudget, FormDate, FormCheck, FormImage, FormLocation } from './FormInput';

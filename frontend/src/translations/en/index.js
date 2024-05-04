@@ -214,6 +214,8 @@ const en = {
     'trans.editSuccess': 'Edit product successfully',
     'trans.editFailed': 'Edit product failed, please try again',
     'trans.productPicture': 'Product Picture',
+    'trans.productRegion': 'Product Region',
+    'trans.productRegionHint': 'Please enter product region',
 
 
     /* alert */

@@ -41,7 +41,8 @@ export const transApi = {
         formData.append('currency', data.currency);
         formData.append('price', data.budget);
         formData.append('period', data.rent_start_time + ' - ' + data.rent_end_time);
-        formData.append('transaction_region', data.transaction_region);
+        formData.append('transaction_region', data.transaction_country); //後端是string, 先放string
+        // formData.append('transaction_region', data.transaction_region);
         formData.append('transaction_way', data.trans_type);
         formData.append('user_id', data.user_id);
 
@@ -97,7 +98,8 @@ export const transApi = {
         formData.append('currency', data.currency);
         formData.append('price', data.budget);
         formData.append('period', data.rent_start_time + ' - ' + data.rent_end_time);
-        formData.append('transaction_region', data.transaction_region);
+        // formData.append('transaction_region', data.transaction_region);
+        formData.append('transaction_region', data.transaction_country); //後端是string, 先放string
         formData.append('transaction_way', data.trans_type);
         formData.append('user_id', data.user_id);
         return axios.put(`${hostname}/trans/edit/${data.tid}`,

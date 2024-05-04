@@ -214,6 +214,8 @@ const zh = {
     'trans.editSuccess': '編輯商品成功',
     'trans.editFailed': '編輯商品失敗，請再試一次',
     'trans.productPicture': '商品圖片',
+    'trans.productRegion': '交易地點',
+    'trans.productRegionHint': '請輸入交易地點',
 
     /* alert */
     'alert.login': '請先登入',
