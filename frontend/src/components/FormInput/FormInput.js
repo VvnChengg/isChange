@@ -33,26 +33,34 @@ const dateFormat = 'YYYY-MM-DD';
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 
-export function FormInput({ type, title, placeholder, text, setText }) {
+export function FormInput({ type, title, placeholder, text, setText, defaultStatus, statusOptions, setStatus }) {
     return (
         <FormTextBox>
             <FormTextTitle>{title}</FormTextTitle>
-            {type === 'input' ?
-                <FormTextInput
-                    value={text}
-                    onChange={e => setText(e.target.value)}
-                    placeholder={placeholder}
-                /> :
-                <FormTextarea
-                    value={text}
-                    onChange={e => setText(e.target.value)}
-                    placeholder={placeholder}
-                    rows={5}
-                />
-            }
-        </FormTextBox>
-    )
-}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                {type === 'input' ?
+                    <FormTextInput
+                        value={text}
+                        onChange={e => setText(e.target.value)}
+                        placeholder={placeholder}
+                    /> :
+                    <FormTextarea
+                        value={text}
+                        onChange={e => setText(e.target.value)}
+                        placeholder={placeholder}
+                        rows={5}
+                    />
+                }
+                {setStatus &&
+                    <FormTextSelect style={{ marginLeft: 'auto' }} value={defaultStatus} onChange={e => setStatus(e.target.value)}>
+                        {statusOptions.map(status => (
+                            <option key={status.value} value={status.value}>{status.label}</option>
+                        ))}
+                    </FormTextSelect>
+                }
+            </div>
+        </FormTextBox>)
+    }
 
 export function FormRange({ title, placeholder, unit, range, setRange }) {
     return (
@@ -119,6 +127,9 @@ export function FormBudget({ title, placeholder, currency, setCurrency, budget, 
 }
 
 export function FormDate({ title, setDate, defaultMinDate, defaultMaxDate }) {
+    // console.log(defaultMinDate, defaultMaxDate)
+    // console.log(dayjs(defaultMinDate, dateFormat), dayjs(defaultMaxDate, dateFormat))
+    // console.log(dayjs(defaultMinDate, dateFormat).isValid(), dayjs(defaultMaxDate, dateFormat).isValid())
     const intl = useIntl();
     return (
         <FormTextBox>
@@ -147,26 +158,26 @@ export function FormCheck({ title, options, onChange, defaultOption, trans_NowSt
 
     return (
         <FormTextBox>
-        <FormTextTitle>{title}</FormTextTitle>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ width: '90%', display: 'flex', justifyContent: 'space-between' }}>
+            <FormTextTitle>{title}</FormTextTitle>
+            <div style={setStatus ? { display: 'flex', justifyContent: 'space-between' } : {}}>
+                <div style={setStatus ? { width: '90%', display: 'flex', justifyContent: 'space-between' } : {}}>
 
-                <Radio.Group
-                    style={{ textAlign: 'left' }}
-                    options={options}
-                    defaultValue={options[0].value}
-                    value={defaultOptionIndex != -1 ? options[defaultOptionIndex].value : options[0].value}
-                    onChange={onChange}
-                />
+                    <Radio.Group
+                        style={{ textAlign: 'left' }}
+                        options={options}
+                        defaultValue={options[0].value}
+                        value={defaultOptionIndex != -1 ? options[defaultOptionIndex].value : options[0].value}
+                        onChange={onChange}
+                    />
+                </div>
+                {setStatus &&
+                    <FormTextSelect value={trans_NowStatus} onChange={e => setStatus(e.target.value)}>
+                        {statusOptions.map(status => (
+                            <option key={status.value} value={status.value}>{status.label}</option>
+                        ))}
+                    </FormTextSelect>
+                }
             </div>
-            {setStatus &&
-                <FormTextSelect value={trans_NowStatus} onChange={e => setStatus(e.target.value)}>
-                    {statusOptions.map(status => (
-                        <option key={status.value} value={status.value}>{status.label}</option>
-                    ))}
-                </FormTextSelect>
-            }
-        </div>
 
         </FormTextBox>
     )

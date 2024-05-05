@@ -10,6 +10,7 @@ import {
 import Button from '../Button';
 
 export default function TourForm({ tour, setTour }) {
+    console.log(tour.end_time)
     const intl = useIntl();
 
     function setTitle(input) {
@@ -66,6 +67,28 @@ export default function TourForm({ tour, setTour }) {
         });
     }
 
+    function setStatus(input) {
+        setTour({
+            ...tour,
+            status: input
+        });
+    }
+
+    const statusOptions = [
+        {
+            value: 'ongoing',
+            label: intl.formatMessage({ id: 'tour.ongoing' })
+        },
+        {
+            value: 'complete',
+            label: intl.formatMessage({ id: 'tour.complete' })
+        },
+        {
+            value: 'end',
+            label: intl.formatMessage({ id: 'tour.end' })
+        }
+    ];
+
     return (
         <>
             <FormInput
@@ -81,6 +104,8 @@ export default function TourForm({ tour, setTour }) {
                 placeholder={intl.formatMessage({ id: 'tour.inputDestination' })}
                 text={tour.destination}
                 setText={setDestination}
+                setStatus={setStatus}
+                statusOptions={statusOptions}
             />
 
             {/* <FormLocation
@@ -112,6 +137,8 @@ export default function TourForm({ tour, setTour }) {
             <FormDate
                 title={intl.formatMessage({ id: 'tour.date' })}
                 setDate={setDate}
+                defaultMinDate={tour.start_time? tour.start_time : ""}
+                defaultMaxDate={tour.end_time? tour.end_time : ""}
             />
             <FormInput
                 type='textarea'

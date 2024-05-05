@@ -186,7 +186,9 @@ const en = {
     'tour.complete':'complete',
     'tour.end':'end',
     'tour.viewPageFailed': 'Failed to view tour page, please try again',
-
+    'tour.checkEditFailed': 'Loading edit page failed, please try again',
+    'tour.editSuccess': 'Edit tour successfully',
+    'tour.editFailed': 'Edit tour failed, please try again',
     
     'trans.type': 'Type',
     'trans.sell': 'Sell',
