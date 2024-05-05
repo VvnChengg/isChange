@@ -54,16 +54,24 @@ const productSchema = new Schema({
     default: "draft",
     enum: ["draft", "in stock", "reserved", "sold"],
   },
-  transaction_region: {
+  transaction_region_country: {
+    type: String,
+    maxlength: 30,
+  },
+  transaction_region_city: {
     type: String,
     maxlength: 30,
   },
   location: {
-    type: "Point",
-    coordinates: [
-      { type: "Number", float: "double" },
-      { type: "Number", float: "double" },
-    ],
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      index: "2dsphere",
+    },
   },
   transaction_way: {
     type: String,
