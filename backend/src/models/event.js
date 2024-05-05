@@ -11,14 +11,12 @@ const eventSchema = new Schema({
     data: Buffer,
     contentType: String,
   },
-  destination_country: {
-    type: String,
-    maxlength: 20,
+  destination_en: {
+    type: [String], // [country, city]
     required: true,
   },
-  destination_city: {
-    type: String,
-    maxlength: 20,
+  destination_zh: {
+    type: [String], // [country, city]
     required: true,
   },
   location: {
@@ -28,7 +26,7 @@ const eventSchema = new Schema({
       default: "Point",
     },
     coordinates: {
-      type: [Number],
+      type: [Number], // [longitude, latitude]
       index: "2dsphere",
     },
   },

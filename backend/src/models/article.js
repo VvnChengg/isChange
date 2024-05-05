@@ -44,13 +44,11 @@ const articleSchema = new Schema({
     type: [Schema.Types.ObjectId],
     ref: "Comment",
   },
-  article_region_country: {
-    type: String,
-    maxlength: 30,
+  article_region_en: {
+    type: [String], // [country, city]
   },
-  article_region_city: {
-    type: String,
-    maxlength: 30,
+  article_region_zh: {
+    type: [String], // [country, city]
   },
   location: {
     type: {
