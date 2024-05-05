@@ -12,28 +12,31 @@ export default function ChatRoomInput({ handleInputChange, inputValue, handleSub
     setInputRows(0)
   };
 
-  const fileInputRef = useRef(null);
+  const fileInputRef2 = useRef(null);
 
   const handleButtonClick = () => {
-    fileInputRef.current.click();
+    fileInputRef2.current.click();
   };
 
+  const test = () =>{
+    fileInputRef2.current.click(); 
+  }
   
   return (
       <div className='private-message-input-box'>
         <Space.Compact className='private-message-input'>
           <Button
-          type="primary"
-          icon={<CameraOutlined />}
-          style={{ width: '10%', borderRadius: 0 }}
-          onClick={handleButtonClick}
+            type="primary"
+            icon={<CameraOutlined />}
+            style={{ width: '10%', borderRadius: 0 }}
+            onClick={handleButtonClick}
           >
           </Button>
           <input
             type='file'
             id='fileInput'
             style={{ display: 'none' }}
-            ref={fileInputRef}
+            ref={fileInputRef2}
             onChange={handleFileInputChange}
           />
           <Input.TextArea

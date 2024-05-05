@@ -25,6 +25,15 @@ function ChatRoomList({ rooms }) {
     const handleRoomClick = (chatid) => {
       navigate('/chatroom/'+chatid);
     };
+    if (!rooms) {
+      return (
+      <p> Loading... </p>
+      )};
+
+    if ( rooms && rooms.length === 0) {
+      return (
+      <p> No Chat Now!! </p>)
+      }; 
 
     return (
       <div className='private-message-container'>

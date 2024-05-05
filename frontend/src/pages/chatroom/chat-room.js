@@ -18,21 +18,22 @@ export default function Chatroom() {
     const token = useToken();
     const [inputValue, setInputValue] = useState('');
 
+
     const handleDownload = (imageUrl) => {
         const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = 'image.jpg'; // 下載的文件名，可以自行設定
-    link.style.display = 'none'; // 隱藏這個元素
+        link.href = imageUrl;
+        link.download = 'image.jpg'; // 下載的文件名，可以自行設定
+        link.style.display = 'none'; // 隱藏這個元素
 
-    // 將這個元素添加到 body 中
-    document.body.appendChild(link);
+        // 將這個元素添加到 body 中
+        document.body.appendChild(link);
 
-    // 模擬點擊這個鏈接
-    link.click();
+        // 模擬點擊這個鏈接
+        link.click();
 
-    // 清理
-    document.body.removeChild(link);
-};
+        // 清理
+        document.body.removeChild(link);
+    };
 
 
     const handleSubmit = () => {
@@ -84,6 +85,7 @@ export default function Chatroom() {
     };
 
     const handleFileInputChange = (e) => {
+        console.log('click')
         const selectedFile = e.target.files[0];
         const formData = new FormData();
         formData.append('image', selectedFile); 
@@ -130,7 +132,6 @@ export default function Chatroom() {
         }
     };       
     
-    
 
     
     useEffect(() => {
@@ -143,11 +144,12 @@ export default function Chatroom() {
             setChatPhoto(response.data);
             setChatData(response.data.messages);
             scrollToBottom(0); 
+            //console.log(response)
         })
         .catch(error => {
             //console.error('API 請求失敗:', error);
         });
-    }, [hostname, chatid, token, chatData]);
+    }, [hostname, chatid, token]);
 
     return (
         <div>
