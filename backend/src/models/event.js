@@ -63,6 +63,7 @@ const eventSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
+    default: []
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],
@@ -78,6 +79,7 @@ const eventSchema = new Schema({
   },
 });
 
+eventSchema.index({ event_title: "text", event_intro: "text" });
 // destination 換成經緯度後要加這行
 // eventSchema.index({ destination: "2dsphere" });
 

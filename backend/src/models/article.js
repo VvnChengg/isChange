@@ -35,6 +35,7 @@ const articleSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
+    default: []
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],
@@ -52,6 +53,7 @@ const articleSchema = new Schema({
   },
 });
 
+articleSchema.index({ article_title: 'text', content: 'text' });
 // article_region 換成經緯度後要加這行
 // articleSchema.index({ article_region: "2dsphere" });
 

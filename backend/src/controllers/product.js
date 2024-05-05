@@ -1,5 +1,6 @@
 const ProductModel = require('../models/product.js');
 const FavoriteModel = require('../models/favorite.js');
+const MemberModel = require('../models/member.js');
 
 class productApi {
     async createProduct(req, res) {
@@ -80,7 +81,7 @@ class productApi {
             }
     
             return res.status(200).json({
-                trans: trans,
+                trans: responseTrans,
                 success: true,
                 message: '檢視將要編輯的交易成功',
             });
@@ -186,11 +187,21 @@ class productApi {
                     message: '找不到該交易',
                 });
             }
+
+            // 取得交易發布者的資料
+            const member = await MemberModel.findById(trans.creator_id);
+            if (!member) {
+                return res.status(404).json({
+                    success: false,
+                    message: '此交易的發布者不存在',
+                });
+            }
+            responseTrans.creator_username = member.username;
     
             return res.status(200).json({
                 success: true,
                 message: '檢視交易詳細資訊成功',
-                trans: trans,
+                trans: responseTrans,
             });
     
         } catch (err) {

@@ -75,6 +75,7 @@ const productSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
+    default: []
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],
@@ -82,6 +83,7 @@ const productSchema = new Schema({
   },
 });
 
+productSchema.index({ product_title: "text", description: "text" });
 // transaction_region 換成經緯度後要加這行
 // productSchema.index({ transaction_region: "2dsphere" });
 
