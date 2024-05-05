@@ -126,27 +126,12 @@ const getChatDetail = async (req, res) => {
                         };base64,${msg.photo.data.toString("base64")}`;
                 }
                 // 覆蓋掉原本要回傳的 messages 裡的 photo（不改到資料庫）
-                msgData.push(
-                    {
-                        _id: msg._id,
-                        message_type: msg.message_type,
-                        timestamp: msg.timestamp,
-                        content: msg.content,
-                        photo: photoConvert,
-                        sender_id: msg.sender_id,
-                        read: msg.read
-                    })
+                const returnPicMsg = { ...msg };
+                returnPicMsg.photo = photoConvert;  
+                msgData.push(returnPicMsg)
             } else {
                 // 文字訊息就沒差，連 photo 都不用回傳
-                msgData.push(
-                    {
-                        _id: msg._id,
-                        message_type: msg.message_type,
-                        timestamp: msg.timestamp,
-                        content: msg.content,
-                        sender_id: msg.sender_id,
-                        read: msg.read
-                    })
+                msgData.push(msg)
             }
         }
 
@@ -264,7 +249,6 @@ const sendTextMsg = async (req, res) => {
             last_sender: userId,
             last_update: Date.now(),
         };
-
         await Chat.findByIdAndUpdate(cid, updateChat);
 
         // 回傳新訊息
@@ -324,7 +308,14 @@ const sendPic = async (req, res) => {
             timestamp: Date.now(),
         });
 
-        console.log(newMessage);
+        // Convert photo data to base64
+        let photoBase64 = null;
+        if (newMessage.photo && newMessage.photo.contentType) {
+            photoBase64 = `data:${newMessage.photo.contentType
+                };base64,${newMessage.photo.data.toString("base64")}`;
+        }
+        const returnMessage = { ...newMessage };
+        returnMessage.photo = photoBase64;
 
         // 更新聊天
         const updateChat = {
@@ -332,11 +323,10 @@ const sendPic = async (req, res) => {
             last_sender: userId,
             last_update: Date.now(),
         };
-
         await Chat.findByIdAndUpdate(cid, updateChat);
 
         // 回傳新訊息
-        res.status(200).json({ new_message: newMessage });
+        res.status(200).json({ new_message: returnMessage });
     } catch (error) {
         console.error('Failed to send message:', error);
         res.status(500).json({ error: 'Failed to send message' });
