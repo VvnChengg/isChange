@@ -44,12 +44,22 @@ const articleSchema = new Schema({
     type: [Schema.Types.ObjectId],
     ref: "Comment",
   },
-  article_region: {
-    type: String,
-    maxlength: 30,
-    //type: { type: String },
-    //coordinates: [Number],
+  article_region_en: {
+    type: [String], // [country, city]
   },
+  article_region_zh: {
+    type: [String], // [country, city]
+  },
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      index: "2dsphere",
+    },
 });
 
 // article_region 換成經緯度後要加這行
