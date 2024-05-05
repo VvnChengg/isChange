@@ -70,6 +70,7 @@ const productSchema = new Schema({
       type: [Number],
       index: "2dsphere",
     },
+  },
   transaction_way: {
     type: String,
     maxlength: 10,
