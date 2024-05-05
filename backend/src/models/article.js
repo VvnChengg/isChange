@@ -60,6 +60,7 @@ const articleSchema = new Schema({
       type: [Number],
       index: "2dsphere",
     },
+  },
 });
 
 // article_region 換成經緯度後要加這行
