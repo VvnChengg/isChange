@@ -79,7 +79,6 @@ const eventSchema = new Schema({
   },
 });
 
-eventSchema.index({ event_title: "text", event_intro: "text" });
 // destination 換成經緯度後要加這行
 // eventSchema.index({ destination: "2dsphere" });
 

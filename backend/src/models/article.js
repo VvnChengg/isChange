@@ -53,7 +53,6 @@ const articleSchema = new Schema({
   },
 });
 
-articleSchema.index({ article_title: 'text', content: 'text' });
 // article_region 換成經緯度後要加這行
 // articleSchema.index({ article_region: "2dsphere" });
 

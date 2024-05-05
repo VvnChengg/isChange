@@ -83,7 +83,6 @@ const productSchema = new Schema({
   },
 });
 
-productSchema.index({ product_title: "text", description: "text" });
 // transaction_region 換成經緯度後要加這行
 // productSchema.index({ transaction_region: "2dsphere" });
 
