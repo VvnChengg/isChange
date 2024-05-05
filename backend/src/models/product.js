@@ -86,6 +86,7 @@ const productSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
+    default: []
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],

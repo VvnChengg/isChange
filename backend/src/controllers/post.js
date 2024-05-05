@@ -2,6 +2,7 @@ const Article = require('../models/article');
 const Event = require('../models/event');
 const Product = require('../models/product');
 const Comment = require('../models/comment');
+const Member = require('../models/member');
 const { validatePut } = require('../middlewares/post');
 const { default: mongoose } = require('mongoose');
 const comment = require('../models/comment');
@@ -105,6 +106,15 @@ const getPostDetail = async (req, res, next) => {
         // 取得評論資料
         const commentList = await getCommentList(pid);
 
+        // 取得文章發布者的資料
+        const member = await Member.findById(article.creator_id);
+        if (!member) {
+            return res.status(404).json({
+                success: false,
+                message: '此文章的發布者不存在',
+            });
+        }
+
         item = {
             _id: article._id,
             title: article.article_title,
@@ -114,6 +124,7 @@ const getPostDetail = async (req, res, next) => {
             location: article.article_region,
             datetime: article.post_date,
             creator_id: article.creator_id,
+            creator_username: member.username,
             like_count: article.like_by_user_ids.length,  // 按讚數
             save_count: saveList.length,            // 收藏數
             is_liked: isLiked >= 0 ? true : false,   // 使用者是否有按讚
@@ -476,6 +487,100 @@ const collectProduct = async (req, res) => {
     }
 }
 
+const getAllPostsSortedByLikes = async (req, res, next) => {
+    try {
+        // 取得文章、活動、商品資訊
+        let articles = await Article.aggregate([
+            { $project: {
+                title: '$article_title',
+                content: 1,
+                type: { $literal: "post" },
+                coverPhoto: '$article_pic',
+                location: '$article_region',
+                datetime: '$post_date',
+                likesCount: { 
+                    $size: { $ifNull: ["$like_by_user_ids", []] }
+                }
+            }}
+        ]);
+
+        let events = await Event.aggregate([
+            { $project: {
+                title: '$event_title',
+                content: '$event_intro',
+                type: { $literal: "tour" },
+                location: '$destination',
+                datetime: '$start_time',
+                likesCount: { 
+                    $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
+                }
+            }}
+        ]);
+
+        let products = await Product.aggregate([
+            { $project: {
+                title: '$product_title',
+                content: '$description',
+                type: { $literal: "trans" },
+                coverPhoto: '$product_pic',
+                location: '$transaction_region',
+                datetime: '$post_time',
+                likesCount: { 
+                    $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
+                }
+            }}
+        ]);
+
+        // 合併所有結果
+        let result = [...articles, ...events, ...products];
+
+        // 依按讚數量倒序排序
+        result.sort((a, b) => b.likesCount - a.likesCount);
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: "沒有找到任何內容" });
+        }
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+const searchPosts = async (req, res) => {
+    const { searchText } = req.query;
+
+    if (!searchText) {
+        return res.status(400).json({ message: '搜尋內容不能為空' });
+    }
+
+    try {
+        // 正則表達，'i'代表不區分大小寫
+        const searchRegex = new RegExp(searchText, 'i');
+
+        const articles = await Article.find({
+            $or: [{ article_title: { $regex: searchRegex } }, { content: { $regex: searchRegex } }]
+        });
+        
+        const events = await Event.find({
+            $or: [{ event_title: { $regex: searchRegex } }, { event_intro: { $regex: searchRegex } }]
+        });
+
+        const products = await Product.find({
+            $or: [{ product_title: { $regex: searchRegex } }, { description: { $regex: searchRegex } }]
+        });
+
+        const result = [...articles, ...events, ...products];
+
+        res.status(200).json(result);
+        
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            message: err.message
+        });
+    }
+};
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
@@ -486,3 +591,5 @@ exports.deleteContent = deleteContent;
 exports.likePost = likePost;
 exports.commentPost = commentPost;
 exports.collectProduct = collectProduct;
+exports.getAllPostsSortedByLikes = getAllPostsSortedByLikes;
+exports.searchPosts = searchPosts;
