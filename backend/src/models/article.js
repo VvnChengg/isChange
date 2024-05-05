@@ -47,13 +47,8 @@ const articleSchema = new Schema({
   article_region: {
     type: String,
     maxlength: 30,
-  },
-  location: {
-    type: "Point",
-    coordinates: [
-      { type: "Number", float: "double" },
-      { type: "Number", float: "double" },
-    ],
+    //type: { type: String },
+    //coordinates: [Number],
   },
 });
 
