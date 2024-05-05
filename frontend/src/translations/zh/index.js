@@ -185,6 +185,7 @@ const zh = {
     'tour.ongoing':'揪團中',
     'tour.complete':'揪團完成',
     'tour.end':'已結束',
+    'tour.viewPageFailed': '讀取揪團頁面失敗，請再試一次',
 
 
     'trans.type': '交易類別',
@@ -217,6 +218,7 @@ const zh = {
     'trans.productPicture': '商品圖片',
     'trans.productRegion': '交易地點',
     'trans.productRegionHint': '請輸入交易地點',
+    'trans.viewPageFailed': '讀取商品頁面失敗，請再試一次',
 
     /* alert */
     'alert.login': '請先登入',

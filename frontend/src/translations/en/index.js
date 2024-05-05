@@ -185,6 +185,7 @@ const en = {
     'tour.ongoing':'ongoing',
     'tour.complete':'complete',
     'tour.end':'end',
+    'tour.viewPageFailed': 'Failed to view tour page, please try again',
 
     
     'trans.type': 'Type',
@@ -217,6 +218,7 @@ const en = {
     'trans.productPicture': 'Product Picture',
     'trans.productRegion': 'Product Region',
     'trans.productRegionHint': 'Please enter product region',
+    'trans.viewPageFailed': 'Failed to view product page, please try again',
 
 
     /* alert */

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 import { api } from '../../api';
+import { tourApi } from '../../api/tourApi';
 
 import {
     DetailContainer,
@@ -14,7 +17,8 @@ import Button from '../../components/Button';
 
 export default function TourDetail() {
     const intl = useIntl();
-    const { pid } = useParams();
+    const { tid } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
 
     const [tour, setTour] = useState({
         event_title: '',
@@ -47,16 +51,45 @@ export default function TourDetail() {
     }
 
     useEffect(() => {
-        setTour(sampleTour);
+        // setTour(sampleTour);
         // api: get tour detail
         // 串好就可以把 sampleTour 拿掉
+        viewTour();
+
     }, []);
+
+    async function viewTour() {
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toISOString().split('T')[0];
+        }
+        
+        try{
+            const data = await tourApi.viewTour(tid);
+            console.log(data);
+            if(data.success){
+                data.tour.start_time = formatDate(data.tour.start_time);
+                data.tour.end_time = formatDate(data.tour.end_time);
+                setTour(data.tour);
+            }
+    
+        }catch(err){
+            alert(`${intl.formatMessage({ id: 'tours.viewPageFailed' })}`);
+        }
+
+        setIsLoading(false);
+    }
 
     function contact() {
         console.log('contact');
 
         // api: send msg
     }
+
+    if (isLoading) {
+        return <Spin />;
+    }
+
 
     return (
         <DetailContainer>
@@ -65,6 +98,7 @@ export default function TourDetail() {
                 <Button
                     text={intl.formatMessage({ id: 'back' })}
                     secondary={true}
+                    onClick={() => window.history.back()}
                 />
                 <Button
                     text={intl.formatMessage({ id: 'tour.message' })}

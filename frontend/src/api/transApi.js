@@ -2,16 +2,9 @@ import axios from "axios";
 
 const hostname = process.env.REACT_APP_API_HOSTNAME;
 
-function getContentType(dataUrl) {
-    return dataUrl.split(';')[0].split(':')[1];
-}
-
-
 export const transApi = {
-    viewTrans: (tid, user_id, token) => {
-        return axios.get(`${hostname}/trans/detail/${tid}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
+    viewTrans: (tid) => {
+        return axios.get(`${hostname}/trans/detail/${tid}`)
             .then(res => {
                 return res.data
             })

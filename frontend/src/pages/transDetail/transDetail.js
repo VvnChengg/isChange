@@ -62,11 +62,6 @@ export default function TransDetail() {
         viewPost();
     }, []);
 
-    if (isLoading) {
-        return <Spin />;
-    }
-
-
     function contact() {
         console.log('contact');
 
@@ -110,10 +105,15 @@ export default function TransDetail() {
                 }
 
         }catch(e){
-            alert(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
+            alert(`${intl.formatMessage({ id: 'trans.viewPageFailed' })}`);
         }
         setIsLoading(false);
     }
+
+    if (isLoading) {
+        return <Spin />;
+    }
+
 
     return (
         <DetailContainer>

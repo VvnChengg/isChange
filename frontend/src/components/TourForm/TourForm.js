@@ -4,7 +4,8 @@ import {
     FormInput,
     FormRange,
     FormBudget,
-    FormDate
+    FormDate,
+    FormLocation
 } from '../FormInput';
 import Button from '../Button';
 
@@ -81,6 +82,17 @@ export default function TourForm({ tour, setTour }) {
                 text={tour.destination}
                 setText={setDestination}
             />
+
+            {/* <FormLocation
+                title={intl.formatMessage({ id: 'tour.destination' })}
+                placeholder={intl.formatMessage({ id: 'tour.inputDestination' })}
+                value = {trans.transaction_region}
+                setValue = {setRegionObject}
+                inputValue={trans.transaction_region_string}
+                setInputValue={setRegionString}
+                setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
+            /> */}
+
             <FormRange
                 title={intl.formatMessage({ id: 'tour.people' })}
                 placeholder={[intl.formatMessage({ id: 'tour.min' }),
