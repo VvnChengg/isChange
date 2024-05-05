@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 import { transApi } from '../../api/transApi';
 
@@ -17,6 +19,8 @@ export default function TransDetail() {
     const intl = useIntl();
     const navigate = useNavigate();
     const { tid } = useParams();
+
+    const [isLoading, setIsLoading] = useState(true);
 
 
     const [trans, setTrans] = useState({
@@ -57,6 +61,11 @@ export default function TransDetail() {
         // api: get trans detail
         viewPost();
     }, []);
+
+    if (isLoading) {
+        return <Spin />;
+    }
+
 
     function contact() {
         console.log('contact');
@@ -103,7 +112,7 @@ export default function TransDetail() {
         }catch(e){
             alert(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
         }
-
+        setIsLoading(false);
     }
 
     return (

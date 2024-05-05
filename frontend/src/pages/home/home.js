@@ -13,17 +13,35 @@ import Post from '../../components/Post';
 import SideBar from '../../components/SideBar';
 import Icon from '../../components/Icon';
 
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
+
+
 export default function Home() {
     const navigate = useNavigate();
 
     const [showSideBar, setShowSideBar] = useState(false);
     const [type, setType] = useState('all');
     const [posts, setPosts] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
+        setIsLoading(true);
         api.getAllPosts()
-        .then(res => setPosts(res))
-        .catch(err => console.log(err));
+        .then(res => {
+            setPosts(res);
+            setIsLoading(false);
+        })
+        .catch(err => {
+            console.log(err);
+            setIsLoading(false);
+        });
     }, []);
+
+    if (isLoading) {
+        return <Spin />;
+    }
 
     return (
         <PostContainer>

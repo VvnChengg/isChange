@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import editStyles from '../../styles/Edit.module.css';
 import { FormattedMessage } from 'react-intl';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 
 import { PassWordEdit } from './PassWordDiv';
@@ -28,6 +30,8 @@ const Edit = () => {
     const [studentVeriStatus, setStudentVeriStatus] = useState(false);
     const token = useToken();
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const getInfo = async () => {
         const memberInfo = await viewApi.getMember(token);
 
@@ -37,15 +41,20 @@ const Edit = () => {
         setIntroText(memberInfo.intro);
         setStudentVeriStatus(memberInfo.student_verification);
         // console.log('photo:'+memberInfo.photo);
+        setIsLoading(false);
     }
 
     useEffect(() => {
-
         if(token){
             getInfo();
         }
 
     }, [token]);
+
+    if (isLoading) {
+        return <Spin />;
+    }
+
 
     // 處理輸入框的焦點
     const handleInputFocus = () => {

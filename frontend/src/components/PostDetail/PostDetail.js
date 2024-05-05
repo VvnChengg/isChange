@@ -14,7 +14,7 @@ import Tag from '../Tag';
 import Icon from '../Icon';
 
 export default function PostDetail({ post }) {
-    console.log(post.product_pic);
+    // console.log(post.product_pic);
     return (
         <PostDetailWrapper>
             <PostDetailTitle>{post.title || post.event_title || post.trans_title}</PostDetailTitle>
