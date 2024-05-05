@@ -15,13 +15,8 @@ const eventSchema = new Schema({
     type: String,
     maxlength: 20,
     required: true,
-  },
-  location: {
-    type: "Point",
-    coordinates: [
-      { type: "Number", float: "double" },
-      { type: "Number", float: "double" },
-    ],
+    //type: { type: String },
+    //coordinates: [Number],
   },
   event_intro: {
     type: String,
