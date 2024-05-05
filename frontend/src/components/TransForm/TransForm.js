@@ -106,7 +106,8 @@ export default function TransForm({ trans, setTrans }) {
         setTrans({
             ...trans,
             transaction_region_string: input.region_string,
-            transaction_country: input.country,
+            transaction_region_zh: input.transaction_region_zh,
+            transaction_region_en: input.transaction_region_en,
             transaction_region_location_latitude: input.latitude,
             transaction_region_location_longitude: input.longitude
         })

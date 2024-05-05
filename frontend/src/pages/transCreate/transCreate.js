@@ -38,11 +38,10 @@ export default function TransCreate() {
         transaction_country: '',
         transaction_region_location_latitude: null,
         transaction_region_location_longitude: null,
-
     })
 
     async function onSubmit() {
-        console.log(trans);
+        // console.log(trans);
         try{
             const data = await transApi.createTrans(trans, token);
             console.log(data);

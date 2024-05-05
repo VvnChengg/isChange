@@ -222,7 +222,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
         position.appendChild(script);
     }
 
-    async function getCountryName(lat, lng) {
+    async function getCountryNameZH(lat, lng) {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}&language=en`);
         const results = response.data.results;
         if (results[0]) {
@@ -234,7 +234,62 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
         }
         return null;
     }
+
+    async function  getCityOrCountryNameZH(lat, lng) {
+        function isChinese(text) {
+            const re = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
+            return re.test(text);
+        }
+
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}&language=zh-TW`);
+        const results = response.data.results;
+        let country = null;
+        let city = null;
     
+        for (let j = 0; j < results.length; j++) {
+            for (let i = 0; i < results[j].address_components.length; i++) {
+                if (results[j].address_components[i].types.includes('locality') && isChinese(results[j].address_components[i].long_name)) {
+                    city = results[j].address_components[i].long_name;
+                }
+                if (results[j].address_components[i].types.includes('country') && isChinese(results[j].address_components[i].long_name)) {
+                    country = results[j].address_components[i].long_name;
+                }
+                if (!city && results[j].address_components[i].types.includes('administrative_area_level_1') && isChinese(results[j].address_components[i].long_name)) {
+                    city = results[j].address_components[i].long_name;
+                }
+            }
+        }
+    
+        return city ? `${country}, ${city}` : country;
+    }
+
+    async function getCityOrCountryNameEN(lat, lng) {
+        function isEnglish(text) {
+            const re = /^[A-Za-z\s]*$/;
+            return re.test(text);
+        }
+
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}&language=en`);
+        const results = response.data.results;
+        let country = null;
+        let city = null;
+
+        for (let j = 0; j < results.length; j++) {
+            for (let i = 0; i < results[j].address_components.length; i++) {
+                if (results[j].address_components[i].types.includes('locality') && isEnglish(results[j].address_components[i].long_name)) {
+                    city = results[j].address_components[i].long_name;
+                }
+                if (results[j].address_components[i].types.includes('country') && isEnglish(results[j].address_components[i].long_name)) {
+                    country = results[j].address_components[i].long_name;
+                }
+                if (!city && results[j].address_components[i].types.includes('administrative_area_level_1') && isEnglish(results[j].address_components[i].long_name)) {
+                    city = results[j].address_components[i].long_name;
+                }
+            }
+        }
+
+        return city ? `${country}, ${city}` : country;
+    }    
 
     const autocompleteService = { current: null };
 
@@ -315,10 +370,14 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
             
                     (async () => {
                         try {
-                            const country = await getCountryName(latitude ,longitude);
+                            const region_en = await getCityOrCountryNameEN(latitude ,longitude);
+                            const region_zh = await getCityOrCountryNameZH(latitude ,longitude);
+                            // console.log(region_en);
+                            // console.log(region_zh);
                             setRegionCountry_Latitude_Longitute({
                                 region_string: value.description,
-                                country: country,
+                                transaction_region_zh: region_zh,
+                                transaction_region_en: region_en,
                                 latitude: latitude,
                                 longitude: longitude,
                             })
