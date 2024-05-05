@@ -1,0 +1,10 @@
+.self-post-delete-button {
+    border: none; /* 移除邊框 */
+    background: none;
+    color: #008CD9; /* 設定顏色為藍色 */
+    cursor: pointer; /* 讓滑鼠指針變成手型 */
+  }
+
+  .self-post-delete-button svg {
+    font-size: 36px; /* 調整圖標大小 */
+  }

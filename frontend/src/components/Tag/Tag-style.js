@@ -8,7 +8,7 @@ export const TagWrapper = styled.div`
     color: ${props => props.theme.fill};
 
     &:not(:first-child) {
-        width: 70px;
+        width: 110.4px; /* 等於圖片大小 */
         padding: 2px;
         background: ${props => props.theme[props.type]};
         color: ${props => props.theme.fill};

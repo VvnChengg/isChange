@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PostContainer } from '../home/home-style';
 import Post from '../../components/Post';
-import ThreeDotButton from '../../components/Button/ThreeDotButton'; 
-import ThreeDotButtonPopup from '../../components/Button/ThreeDotButtonPopup';
+import DeleteButton from '../../components/Button/DeleteButton'; 
 import axios from 'axios';
 import './selfPost.css'
 import PopupOnly from './popUPOnly';
@@ -19,7 +18,6 @@ export default function SelfPost() {
     const hostname = process.env.REACT_APP_API_HOSTNAME;
     //const token = window.localStorage.getItem('access_token');
     const token = useToken()
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 }); 
     const [selectedPost, setSelectedPost] = useState(null);
     const [selectedPostType, setSelectedPostType] = useState(null);
@@ -33,31 +31,14 @@ export default function SelfPost() {
         //console.log('Button clicked!');
         setSelectedPost(postID);
         setSelectedPostType(postType);
-        setIsModalOpen(true);
         setButtonPosition(buttonPosition);
         //console.log(buttonPosition)
         const buttonRect = event.target.getBoundingClientRect();
         const buttonX = buttonRect.left;
         const buttonY = buttonRect.top;
         setButtonPosition({ top: buttonY, left: buttonX });
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleEditPost = () => {
-        //導流置該頁面
-        navigate(`/${selectedPostType}/edit/${selectedPost}`);
-        console.log(selectedPost);
-    };
-
-    const handleDeletePost  = () => {
-        // popup
-        //setShowPopup(true);
         setShowConfirmPopup(true); //  顯示確認框
     };
-
 
 
 
@@ -69,7 +50,7 @@ export default function SelfPost() {
         })
         .then(response => {
             setPosts(response.data.result);
-            console.log('已更新:', response.data);
+            //console.log('已更新:', response.data);
         })
         .catch(error => {
             console.error('API 请求失败:', error);
@@ -82,7 +63,7 @@ export default function SelfPost() {
 
     useEffect(() => {
         //console.log(selectedPost, isModalOpen);
-    }, [selectedPost, selectedPostType, isModalOpen]);
+    }, [selectedPost, selectedPostType, showConfirmPopup]);
 
     return (
         <>
@@ -95,8 +76,8 @@ export default function SelfPost() {
                 <PostContainer>
                     {posts.map((post, index) => (
                         <div key={`post${index}`} className="self-post-wrapper">
-                            <Post post={post} />
-                            <ThreeDotButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
+                            <Post post={post} onClick={() => navigate(`/${post.type}/edit/${post._id}`)}/>
+                            <DeleteButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
                         </div>
                     ))}
                 </PostContainer>
@@ -104,21 +85,11 @@ export default function SelfPost() {
             {showConfirmPopup && ( 
                 <PopupOnly 
                     onConfirm={() => {
-                        // 呼叫刪除 api
                         setShowConfirmPopup(false); 
                     }}
                     onCancel={() => setShowConfirmPopup(false)} 
                     postIdToDelete = {selectedPost}
                     postTypeToDelete = {selectedPostType}
-                />
-            )}
-            {isModalOpen && (
-                <ThreeDotButtonPopup  
-                    isOpen={isModalOpen} 
-                    onClose={handleCloseModal} 
-                    onEdit={handleEditPost} 
-                    onDelete={handleDeletePost} 
-                    buttonPosition={buttonPosition} 
                 />
             )}
         </>
