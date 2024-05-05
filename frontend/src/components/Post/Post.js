@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
     PostWrapper,
     PostIcon,
@@ -9,6 +10,8 @@ import {
 import Tag from '../Tag';
 
 export default function Post({ post, onClick }) {
+    const [coverPhoto, setCoverPhoto] = useState(null);
+
     const samplePost = {
         type: 'post',
         title: 'SAMPLE',
@@ -23,6 +26,16 @@ export default function Post({ post, onClick }) {
             )
     }
     */
+    useEffect(() => {
+        if (post && post.coverPhoto) {
+            isValidImageBase64(post.coverPhoto).then(isValid => {
+                if (isValid) {
+                    setCoverPhoto(post.coverPhoto);
+                }
+            });
+        }
+    }, [post]);
+
     function renderStatus() {
         if (post && (post.type === 'trans' || post.type === 'tour')) {
             return (
@@ -32,7 +45,18 @@ export default function Post({ post, onClick }) {
         return null;
     }
 
-
+    function isValidImageBase64(str) {
+        return new Promise((resolve) => {
+            // Create new image element
+            var img = new Image();
+            // Set the img src to the base64 string
+            img.src = str;
+            // Validate the image
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+        });
+    }
+    
     return (
         <PostWrapper onClick={onClick}>
             <div style={{display: 'flex', alignItems: 'center'}}>
@@ -51,7 +75,7 @@ export default function Post({ post, onClick }) {
                 <PostTitle>{post ? post.title : samplePost.title}</PostTitle>
                 <PostPreview>{post ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview>
             </div>
-            {(post && post.coverPhoto) ? <PostImage src={post.coverPhoto} /> : ''}
+            {coverPhoto ? <PostImage src={coverPhoto} /> : ''}
         </PostWrapper>
     )
 }
