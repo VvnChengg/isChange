@@ -102,6 +102,7 @@ export const transApi = {
         formData.append('transaction_region', data.transaction_country); //後端是string, 先放string
         formData.append('transaction_way', data.trans_type);
         formData.append('user_id', data.user_id);
+        formData.append('status', data.trans_status);
         return axios.put(`${hostname}/trans/edit/${data.tid}`,
             formData, {
             headers: {

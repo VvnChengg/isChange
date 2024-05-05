@@ -21,6 +21,7 @@ export default function TransEdit() {
     const user_id = localStorage.getItem('user_id');
 
     const [trans, setTrans] = useState({
+        transform_type: 'edit',
         trans_title: '',
         trans_type: 'sell',
         product_type: 'others',
@@ -64,7 +65,7 @@ export default function TransEdit() {
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
 
-                console.log(data.trans.product_pic)
+                console.log(data.trans.status)
             
                 setTrans({
                     rent_start_time: rent_start_time,
@@ -82,6 +83,8 @@ export default function TransEdit() {
                     trans_type: data.trans.transaction_way,
                     user_id: data.trans.creator_id,
                     product_pic: data.trans.product_pic,
+                    transform_type: 'edit',
+                    trans_status: data.trans.status,
                     // __v: data.__v
                 });
                 }

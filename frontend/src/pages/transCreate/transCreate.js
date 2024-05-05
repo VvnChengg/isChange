@@ -19,6 +19,7 @@ export default function TransCreate() {
     const navigate = useNavigate();
 
     const [trans, setTrans] = useState({
+        transform_type: 'create',
         trans_title: '',
         trans_type: 'sell',
         currency: 'TWD',

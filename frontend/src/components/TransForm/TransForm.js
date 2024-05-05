@@ -14,7 +14,7 @@ import {
 import Button from '../Button';
 
 export default function TransForm({ trans, setTrans }) {
-    // console.log(trans.product_pic);
+    console.log(trans);
     const intl = useIntl();
 
     function setTitle(input) {
@@ -29,6 +29,13 @@ export default function TransForm({ trans, setTrans }) {
             ...trans,
             trans_type: input
         });
+    }
+
+    function setStatus(input) {
+        setTrans({
+            ...trans,
+            trans_status: input
+        })
     }
 
     function setProductType(input) {
@@ -159,6 +166,12 @@ export default function TransForm({ trans, setTrans }) {
         }
     ]
 
+    const statusOptions = [
+        { value: 'in stock', label: intl.formatMessage({ id: 'trans.instock' }) },
+        { value: 'reserved', label: intl.formatMessage({ id: 'trans.reserved' }) },
+        { value: 'sold', label: intl.formatMessage({ id: 'trans.sold' }) },
+    ];
+
     function onTypeChange(e) {
         setType(e.target.value)
     }
@@ -184,12 +197,15 @@ export default function TransForm({ trans, setTrans }) {
                 inputValue={trans.transaction_region_string}
                 setInputValue={setRegionString}
                 setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
-                />
+            />
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.type' })}
                 options={typeOptions}
                 onChange={onTypeChange}
                 defaultOption={trans.trans_type}
+                trans_NowStatus = {trans.transform_type === 'edit'? trans.trans_status : null}
+                setStatus={trans.transform_type === 'edit'? setStatus : null}
+                statusOptions={statusOptions}
             />
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.productType' })}
@@ -206,6 +222,7 @@ export default function TransForm({ trans, setTrans }) {
                 range={[trans.price_lb, trans.price_ub]}
                 setRange={setPrice}
             /> */}
+
             <FormBudget
                 title={intl.formatMessage({id: 'trans.price'})}
                 placeholder={intl.formatMessage({id: 'trans.max'})}
@@ -214,6 +231,7 @@ export default function TransForm({ trans, setTrans }) {
                 setBudget={setBudget}
                 setCurrency = {setCurrency}
             />
+
             {trans.trans_type === 'borrow' &&
                 <FormDate
                     title={intl.formatMessage({ id: 'trans.date' })}

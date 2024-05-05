@@ -137,7 +137,7 @@ export function FormDate({ title, setDate, defaultMinDate, defaultMaxDate }) {
     )
 }
 
-export function FormCheck({ title, options, onChange, defaultOption }) {
+export function FormCheck({ title, options, onChange, defaultOption, trans_NowStatus, statusOptions, setStatus }) {
 
     let defaultOptionIndex = -1;
     if (defaultOption !== undefined) {
@@ -147,14 +147,27 @@ export function FormCheck({ title, options, onChange, defaultOption }) {
 
     return (
         <FormTextBox>
-            <FormTextTitle>{title}</FormTextTitle>
-            <Radio.Group
-                style={{ textAlign: 'left' }}
-                options={options}
-                defaultValue={options[0].value}
-                value={defaultOptionIndex != -1 ? options[defaultOptionIndex].value : options[0].value}
-                onChange={onChange}
-            />
+        <FormTextTitle>{title}</FormTextTitle>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ width: '90%', display: 'flex', justifyContent: 'space-between' }}>
+
+                <Radio.Group
+                    style={{ textAlign: 'left' }}
+                    options={options}
+                    defaultValue={options[0].value}
+                    value={defaultOptionIndex != -1 ? options[defaultOptionIndex].value : options[0].value}
+                    onChange={onChange}
+                />
+            </div>
+            {setStatus &&
+                <FormTextSelect value={trans_NowStatus} onChange={e => setStatus(e.target.value)}>
+                    {statusOptions.map(status => (
+                        <option key={status.value} value={status.value}>{status.label}</option>
+                    ))}
+                </FormTextSelect>
+            }
+        </div>
+
         </FormTextBox>
     )
 }
@@ -206,8 +219,8 @@ export function FormImage({ title, placeholder, text, setText, setImagePreviewUr
 }
 
 
-export function FormLocation({type, title, placeholder, value, setValue, inputValue ,setInputValue, 
-    setRegionCountry_Latitude_Longitute}) {
+export function FormLocation({ type, title, placeholder, value, setValue, inputValue, setInputValue,
+    setRegionCountry_Latitude_Longitute }) {
     // console.log(GOOGLE_MAPS_API_KEY);
 
     function loadScript(src, position, id) {
@@ -235,7 +248,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
         return null;
     }
 
-    async function  getCityOrCountryNameZH(lat, lng) {
+    async function getCityOrCountryNameZH(lat, lng) {
         function isChinese(text) {
             const re = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
             return re.test(text);
@@ -245,7 +258,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
         const results = response.data.results;
         let country = null;
         let city = null;
-    
+
         for (let j = 0; j < results.length; j++) {
             for (let i = 0; i < results[j].address_components.length; i++) {
                 if (results[j].address_components[i].types.includes('locality') && isChinese(results[j].address_components[i].long_name)) {
@@ -259,7 +272,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
                 }
             }
         }
-    
+
         return city ? `${country}, ${city}` : country;
     }
 
@@ -289,7 +302,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
         }
 
         return city ? `${country}, ${city}` : country;
-    }    
+    }
 
     const autocompleteService = { current: null };
 
@@ -310,13 +323,13 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
 
     const fetch = React.useMemo(
         () =>
-          debounce((request, callback) => {
-            if(autocompleteService.current)
-            autocompleteService.current.getPlacePredictions(request, callback);
-          }, 400),
+            debounce((request, callback) => {
+                if (autocompleteService.current)
+                    autocompleteService.current.getPlacePredictions(request, callback);
+            }, 400),
         [autocompleteService],
-      );
-        
+    );
+
     React.useEffect(() => {
         let active = true;
 
@@ -331,7 +344,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
             setOptions(value ? [value] : []);
             return undefined;
         }
-        
+
         fetch({ input: inputValue }, (results) => {
             if (active) {
                 let newOptions = [];
@@ -357,7 +370,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
         // 這裡的代碼只有在 `value` 變化時才會運行
         // console.log(value);
 
-        if(value !== null && value !== undefined && value.description !== undefined && value.description !== null){
+        if (value !== null && value !== undefined && value.description !== undefined && value.description !== null) {
             // 這邊可以轉經緯度, 但還沒確定有沒要用所以先註解掉
             const geocoder = new window.google.maps.Geocoder();
             geocoder.geocode({ address: value.description }, (results, status) => {
@@ -367,11 +380,11 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
                     // console.log('Latitude: ' + latitude);
                     // console.log('Longitude: ' + longitude);
 
-            
+
                     (async () => {
                         try {
-                            const region_en = await getCityOrCountryNameEN(latitude ,longitude);
-                            const region_zh = await getCityOrCountryNameZH(latitude ,longitude);
+                            const region_en = await getCityOrCountryNameEN(latitude, longitude);
+                            const region_zh = await getCityOrCountryNameZH(latitude, longitude);
                             // console.log(region_en);
                             // console.log(region_zh);
                             setRegionCountry_Latitude_Longitute({
@@ -385,20 +398,20 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
                             console.log(error);
                         }
                     })();
-                    } else {
+                } else {
                     console.log('Geocode was not successful for the following reason: ' + status);
                 }
             });
         }
 
     }, [value]);
-    
+
     // React.useEffect(() => {
     //     // 這裡的代碼只有在 `inputValue` 變化時才會運行
     //     console.log("inputValue")
     //     console.log(inputValue)
     // }, [inputValue]);
-    
+
     // React.useEffect(() => {
     //     // 這裡的代碼只有在 `fetch` 變化時才會運行
     //     console.log("fetch")
@@ -408,9 +421,9 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
     return (
         <Autocomplete
             id="google-map-demo"
-            sx={{ 
+            sx={{
                 minWidth: '50px',
-            }}     
+            }}
 
             getOptionLabel={(option) =>
                 typeof option === 'string' ? option : option.description
@@ -436,9 +449,9 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
                 // />
                 <FormTextBox ref={params.InputProps.ref}>
                     <FormTextTitle>{title}</FormTextTitle>
-                    <input 
-                        type="text" 
-                        style={{ 
+                    <input
+                        type="text"
+                        style={{
                             minWidth: '50px',
                             border: '0',
                             padding: '0',
@@ -448,7 +461,7 @@ export function FormLocation({type, title, placeholder, value, setValue, inputVa
                         {...params.inputProps}
                     />
                 </FormTextBox>
-                
+
             )}
             renderOption={(props, option) => {
                 const matches =
