@@ -57,8 +57,13 @@ const productSchema = new Schema({
   transaction_region: {
     type: String,
     maxlength: 30,
-    // type: { type: String },
-    // coordinates: [Number],
+  },
+  location: {
+    type: "Point",
+    coordinates: [
+      { type: "Number", float: "double" },
+      { type: "Number", float: "double" },
+    ],
   },
   transaction_way: {
     type: String,

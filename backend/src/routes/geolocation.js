@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const geolocationController = require("../controllers/geolocation.js");
-const validateToken = require("../middlewares/validateToken.js");
+const ipLocation = require("../middlewares/ipLocation.js");
 
-// router.get("/check/:receiver_id", validateToken, chatController.checkChat);
+router.get("/sort", ipLocation, geolocationController.sortDistance);
+router.get("/filter", ipLocation, geolocationController.filterDistance);
 
 module.exports = router;
