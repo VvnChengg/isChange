@@ -24,6 +24,7 @@ export default function TourCreate() {
     const token = useToken();
     const user_id = localStorage.getItem('user_id');
     const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [tour, setTour] = useState({
         event_title: '',
@@ -105,10 +106,23 @@ export default function TourCreate() {
                 <Button
                     text={intl.formatMessage({ id: 'back' })}
                     secondary={true}
+                    onClick={() => window.history.back()}
                 />
                 <Button
-                    text={intl.formatMessage({ id: 'tour.edit' })}
-                    onClick={() => onSubmit()}
+                    style={{
+                        backgroundColor: isSubmitting ? '#ccc' : '',
+                        color: isSubmitting ? '#888' : '',
+                        cursor: isSubmitting ? 'not-allowed' : '',
+                    }}
+                
+                    text={isSubmitting?
+                        <div>
+                        <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                        {intl.formatMessage({ id: 'loading' })}
+                        </div> 
+                        : intl.formatMessage({ id: 'tour.edit' })}
+                    onClick={isSubmitting ? undefined : onSubmit}
+
                 />
             </CreateButtonContainer>
         </CreateContainer>
