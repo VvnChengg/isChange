@@ -10,7 +10,7 @@ import {
 import Tag from '../Tag';
 import Icon from '../Icon';
 
-export default function Post({ post, onClick }) {
+export default function Post({ post, onClick, showDivider }) {
     const [coverPhoto, setCoverPhoto] = useState(null);
 
     const samplePost = {
@@ -59,7 +59,7 @@ export default function Post({ post, onClick }) {
     }
     
     return (
-        <PostWrapper onClick={onClick}>
+        <PostWrapper onClick={onClick} showDivider={showDivider}>
             <div style={{display: 'flex', alignItems: 'center', gap: '7px'}}>
                 <Tag type={post ? post.type : samplePost.type} />
                 {/* post.status && renderStatus() */}

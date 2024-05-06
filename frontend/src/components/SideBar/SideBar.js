@@ -1,31 +1,35 @@
-import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+
+import { Checkbox, Col, Row } from 'antd';
 
 import {
     SideBarWrapper,
     SideBarContainer,
     SideBarTitle,
+    SideBarFilter,
     SideBarOptionsContainer,
     SideBarOption
 } from './SideBar-style.js';
 
-export default function SideBar({ showSideBar, type, sort, setSort }) {
-    const general = ['new', 'hot', /* 'suggest', 'following' */];
-    const trans = ['priceLow', 'priceHigh'];
-    const tour = [
-        // ['distanceLow', 'distanceHigh'],
-        ['budgetLow', 'budgetHigh'],
-        ['dateClose', 'dateFar']
-    ];
+export default function SideBar({ showSideBar, type, sort, setSort, filters, setFilters, filterOptions }) {
+    const sortOptions = {
+        general: ['new', 'hot', /* 'suggest', 'following' */],
+        trans: ['priceLow', 'priceHigh'],
+        tour: [
+            // ['distanceLow', 'distanceHigh'],
+            ['budgetLow', 'budgetHigh'],
+            ['dateClose', 'dateFar']
+        ]
+    }
 
     return (
-        <SideBarWrapper show={showSideBar.toString()}>
-            <SideBarContainer show={showSideBar.toString()}>
+        <SideBarWrapper show={showSideBar}>
+            <SideBarContainer show={showSideBar}>
                 <SideBarTitle>
-                    <FormattedMessage id='sidebar.general' />
+                    <FormattedMessage id='sidebar.generalSort' />
                 </SideBarTitle>
                 <SideBarOptionsContainer>
-                    {general.map((option, index) => 
+                    {sortOptions.general.map((option, index) => 
                         <div key={option} style={{display: 'flex'}}>
                             <SideBarOption
                                 selected={sort === option}
@@ -33,17 +37,17 @@ export default function SideBar({ showSideBar, type, sort, setSort }) {
                             >
                                 <FormattedMessage id={`sidebar.${option}`}/>
                             </SideBarOption>
-                            {index !== general.length - 1 && '｜'}
+                            {index !== sortOptions.general.length - 1 && '｜'}
                         </div>
                     )}
                 </SideBarOptionsContainer>
                 {type === 'trans' &&
                     <>
                         <SideBarTitle>
-                            <FormattedMessage id='sidebar.trans' />
+                            <FormattedMessage id='sidebar.transSort' />
                         </SideBarTitle>
                         <SideBarOptionsContainer>
-                            {trans.map((option, index) => 
+                            {sortOptions.trans.map((option, index) => 
                                 <div key={option} style={{display: 'flex'}}>
                                     <SideBarOption
                                         selected={sort === option}
@@ -51,34 +55,64 @@ export default function SideBar({ showSideBar, type, sort, setSort }) {
                                     >
                                         <FormattedMessage id={`sidebar.${option}`}/>
                                     </SideBarOption>
-                                    {index !== trans.length - 1 && '｜'}
+                                    {index !== sortOptions.trans.length - 1 && '｜'}
                                 </div>
                             )}
+                        </SideBarOptionsContainer>
+                        <SideBarTitle>
+                            <FormattedMessage id='sidebar.transFilter' />
+                        </SideBarTitle>
+                        {Object.entries(filterOptions.trans).map(([filter, options], index) => 
+                            <div key={filter}>
+                                <SideBarFilter>
+                                    <FormattedMessage id={`sidebar.${filter}`}/>
+                                </SideBarFilter>
+                                <Checkbox.Group
+                                    defaultValue={options}
+                                    style={{ marginBottom: '10px', display: 'inline-block' }}
+                                    onChange={checked => {
+                                        const tempFilters = { ...filters };
+                                        tempFilters.trans[filter] = checked;
+                                        setFilters(tempFilters);
+                                    }}
+                                >
+                                    <Row>
+                                        {options.map(option =>
+                                            <Col span={10} key={option}>
+                                                <Checkbox value={option}>
+                                                    {filter === 'currency' ? option : <FormattedMessage id={`option.${option}`} />}
+                                                </Checkbox>
+                                            </Col>
+                                        )}
+                                    </Row>
+                                </Checkbox.Group>
+                            </div>
+                        )}
+                        <SideBarOptionsContainer>
+                            
                         </SideBarOptionsContainer>
                     </>
                 }
                 {type === 'tour' &&
                     <>
                         <SideBarTitle>
-                            <FormattedMessage id='sidebar.tour' />
+                            <FormattedMessage id='sidebar.tourSort' />
                         </SideBarTitle>
-                        {
-                            tour.map((options, index1) => 
-                                <SideBarOptionsContainer key={options[0]}>
-                                    {options.map((option, index2) => 
-                                        <div key={option} style={{display: 'flex'}}>
-                                            <SideBarOption
-                                                selected={sort === option}
-                                                onClick={() => setSort(option)}
-                                            >
-                                                <FormattedMessage id={`sidebar.${option}`}/>
-                                            </SideBarOption>
-                                            {index2 !== options.length - 1 && '｜'}
-                                        </div>
-                                     )}
-                                </SideBarOptionsContainer>
-                            )
-                        }
+                        {sortOptions.tour.map((options, index1) => 
+                            <SideBarOptionsContainer key={options[0]}>
+                                {options.map((option, index2) => 
+                                    <div key={option} style={{display: 'flex'}}>
+                                        <SideBarOption
+                                            selected={sort === option}
+                                            onClick={() => setSort(option)}
+                                        >
+                                            <FormattedMessage id={`sidebar.${option}`}/>
+                                        </SideBarOption>
+                                        {index2 !== options.length - 1 && '｜'}
+                                    </div>
+                                    )}
+                            </SideBarOptionsContainer>
+                        )}
                     </>
                 }
                 {/* <SideBarTitle>

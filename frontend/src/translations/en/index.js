@@ -36,17 +36,39 @@ const en = {
     'selfpost.cancelnotification':'Are you sure you want to delete?',
     'selfpost.nothingMsg' :' No post found!',
 
-    'sidebar.general': 'General',
+    'sidebar.generalSort': 'General Sort',
     'sidebar.suggest': 'Suggest',
     'sidebar.hot': 'Hot',
     'sidebar.new': 'New',
     'sidebar.following': 'Following',
 
-    'sidebar.trans': 'Product',
+    'sidebar.transSort': 'Product Sort',
     'sidebar.priceLow': 'Low price',
     'sidebar.priceHigh': 'High price',
 
-    'sidebar.tour': 'Tour',
+    'sidebar.transFilter': 'Product Filter',
+    'sidebar.productType': 'Product Type',
+    'option.kitchen': 'Kitchen',
+    'option.living room': 'Living Room',
+    'option.restroom': 'Restroom',
+    'option.cosmetic': 'Cosmetic',
+    'option.clothing': 'Clothing',
+    'option.others': 'Others',
+
+    'sidebar.transactionWay': 'Transaction Way',
+    'option.sell': 'Sell',
+    'option.purchase': 'Purchase',
+    'option.lend': 'Lend',
+    'option.borrow': 'Borrow',
+
+    'sidebar.status': 'Status',
+    'option.in stock': 'In Stock',
+    'option.reserved': 'Reserved',
+    'option.sold': 'Sold',
+
+    'sidebar.currency': 'Currency',
+
+    'sidebar.tourSort': 'Tour Sort',
     'sidebar.distanceLow': 'Less distance',
     'sidebar.distanceHigh': 'More distance',
     'sidebar.budgetLow': 'Low budget',
@@ -64,6 +86,8 @@ const en = {
     'inputTextarea': 'Say something...',
     'back': 'Back',
     'loading': 'Loading',
+
+    'home.noContent': 'No Content',
 
     'login.title': 'Login or Register',
     'login.inputEmail': 'Please enter your email',

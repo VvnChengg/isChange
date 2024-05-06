@@ -36,17 +36,39 @@ const zh = {
     'selfpost.cancelnotification':'確定要取消嗎？',
     'selfpost.nothingMsg' :'尚未發表文章！',
 
-    'sidebar.general': '一般排序',
+    'sidebar.generalSort': '一般排序',
     'sidebar.suggest': '推薦',
     'sidebar.hot': '熱門',
     'sidebar.new': '最新',
     'sidebar.following': '追蹤中',
 
-    'sidebar.trans': '交易排序',
+    'sidebar.transSort': '交易排序',
     'sidebar.priceLow': '價格最低',
     'sidebar.priceHigh': '價格最高',
 
-    'sidebar.tour': '揪團排序',
+    'sidebar.transFilter': '交易篩選',
+    'sidebar.productType': '商品種類',
+    'option.kitchen': '廚房',
+    'option.living room': '客廳',
+    'option.restroom': '浴室',
+    'option.cosmetic': '化妝品',
+    'option.clothing': '服飾',
+    'option.others': '其他',
+
+    'sidebar.transactionWay': '交易方式',
+    'option.sell': '賣出',
+    'option.purchase': '購買',
+    'option.lend': '出借',
+    'option.borrow': '租用',
+
+    'sidebar.status': '狀態',
+    'option.in stock': '銷售中',
+    'option.reserved': '已保留',
+    'option.sold': '已售出',
+
+    'sidebar.currency': '幣值',
+
+    'sidebar.tourSort': '揪團排序',
     'sidebar.distanceLow': '距離最近',
     'sidebar.distanceHigh': '距離最遠',
     'sidebar.budgetLow': '預算最低',
@@ -64,6 +86,8 @@ const zh = {
     'inputTextarea': '說些什麼吧！',
     'back': '返回上頁',
     'loading': '讀取中',
+
+    'home.noContent': '沒有貼文',
 
     'login.title': '登入或建立帳號',
     'login.inputEmail': '請輸入電子信箱',
