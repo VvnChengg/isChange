@@ -21,7 +21,7 @@ npm install
 複製一份`.env.example`，並改名成`.env`，填入所需設定(後端會給)  
 沒有.env.example的話也可以直接建一個.env檔案
 
-### 4. run project (兩種方式不知道差在哪) 
+### 4. Run project
 - Compiles and hot-reloads for development
     ```
     npm run dev
@@ -33,22 +33,6 @@ npm install
 ### 5. Test Api
 環境建置完成，可以在 http://localhost:3000 測試api了
 
-### @ 其他需要安裝的東西 @
-* **Joi** : 驗證資料的模組
-* **bcrypt** : 加密密碼的模組
-* **nodemailer** : 郵件發送的模組
-* **randomstring** : 產生隨機字串
-* **jsonwebtoken** : jwt - 在網頁間傳送身分驗證 token
-
-
-
-    ```
-    npm i joi
-    npm install bcrypt
-    npm install nodemailer
-    npm install randomstring
-    npm install jsonwebtoken
-    ```
 
 ## 其他注意事項
 ### 1. 資料夾說明
