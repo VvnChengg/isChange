@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import viewStyles from '../../styles/View.module.css';
 import ViewMemberSelfIntro from './ViewMemberSelfIntro';
@@ -62,7 +63,9 @@ export const ViewWithUid = () => {
   const [student_veri, setStudentVeri] = useState(false);
   const [other_uid, setOtherUid] = useState('');
   const { other_username } = useParams();
+  const user_id = localStorage.getItem('user_id');
 
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   // 先讀取使用者資料
@@ -86,6 +89,12 @@ export const ViewWithUid = () => {
       getOtherMemberInfo();
     }
   }, [other_username]);
+
+  useEffect(() => {
+    if(other_uid === user_id){
+      navigate(`/member`);
+    }
+  }, [other_uid]);
 
   if (isLoading) {
     return <Spin />;
