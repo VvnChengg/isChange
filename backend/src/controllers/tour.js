@@ -59,10 +59,13 @@ class tourApi {
                     message: '此揪團的發布者不存在',
                 });
             }
-            tourDetail.creator_username = member.username;
+            const responseTour = {
+                ...tourDetail._doc,
+                creator_username: member.username,
+            };
     
             return res.status(200).json({
-                tour: tourDetail,
+                tour: responseTour,
                 success: true,
                 message: '查看揪團細節成功',
             });
