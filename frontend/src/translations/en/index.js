@@ -202,6 +202,9 @@ const en = {
     'post.edit': 'Edit post',
     'post.uploadImage': 'Upload image',
     'post.checkEditFailed': 'Loading edit page failed, please try again',
+    'post.createSuccess': 'Create post successfully',
+    'post.createFail': 'Create post failed',
+    'post.articlePicture':'Post Picture',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',

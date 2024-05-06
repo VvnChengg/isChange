@@ -202,6 +202,9 @@ const zh = {
     'post.edit': '更新貼文',
     'post.uploadImage': '上傳圖片',
     'post.checkEditFailed': '讀取編輯頁面失敗，請再試一次',
+    'post.createSuccess': '創建文章成功',
+    'post.createFail': '創建文章失敗',
+    'post.articlePicture':'文章圖片',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',
