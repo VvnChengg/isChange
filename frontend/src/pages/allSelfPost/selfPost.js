@@ -10,7 +10,8 @@ import PopupOnly from './popUPOnly';
 import { FormattedMessage } from 'react-intl';
 import { useToken } from '../../hooks/useToken';
 import CreateAllButton from '../../components/Button/CreateAllButton';
-
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 
 export default function SelfPost() {
@@ -25,6 +26,7 @@ export default function SelfPost() {
     const [showConfirmPopup, setShowConfirmPopup] = useState(false); 
     const navigate = useNavigate();
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
 
     
@@ -52,12 +54,14 @@ export default function SelfPost() {
         .then(response => {
             setPosts(response.data.result);
             //console.log('已更新:', response.data);
+            setIsLoading(false);
         })
         .catch(error => {
             console.error('API 请求失败:', error);
             if (error.response && error.response.status === 500) {
                 setError(error);
             }
+            setIsLoading(false);
         });
     }, [userId, token, hostname]);
     //console.log(posts)
@@ -65,6 +69,10 @@ export default function SelfPost() {
     useEffect(() => {
         //console.log(selectedPost, isModalOpen);
     }, [selectedPost, selectedPostType, showConfirmPopup]);
+
+    if (isLoading) {
+        return <Spin />;
+    }
 
     return (
         <>
