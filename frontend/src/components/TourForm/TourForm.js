@@ -10,7 +10,7 @@ import {
 import Button from '../Button';
 
 export default function TourForm({ tour, setTour }) {
-    console.log(tour.end_time)
+    console.log(tour.status)
     const intl = useIntl();
 
     function setTitle(input) {
@@ -106,6 +106,7 @@ export default function TourForm({ tour, setTour }) {
                 setText={setDestination}
                 setStatus={setStatus}
                 statusOptions={statusOptions}
+                defaultStatus={tour.status}
             />
 
             {/* <FormLocation

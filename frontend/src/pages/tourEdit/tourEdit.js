@@ -122,7 +122,6 @@ export default function TourCreate() {
                         </div> 
                         : intl.formatMessage({ id: 'tour.edit' })}
                     onClick={isSubmitting ? undefined : onSubmit}
-
                 />
             </CreateButtonContainer>
         </CreateContainer>
