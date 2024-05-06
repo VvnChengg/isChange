@@ -91,6 +91,7 @@ const en = {
     'inputTextarea': 'Say something...',
     'back': 'Back',
     'loading': 'Loading',
+    'shareToOthers': 'Share to others',
 
     'home.noContent': 'No Content',
 

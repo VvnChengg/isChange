@@ -91,6 +91,7 @@ const zh = {
     'inputTextarea': '說些什麼吧！',
     'back': '返回上頁',
     'loading': '讀取中',
+    'shareToOthers': '分享給其他人',
 
     'home.noContent': '沒有貼文',
 

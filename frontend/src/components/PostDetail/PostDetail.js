@@ -20,9 +20,10 @@ export default function PostDetail({ post }) {
     // const url = "https://www.facebook.com/?locale=zh_TW";
     return (
         <PostDetailWrapper>
-            <PostDetailTitle>{post.title || post.event_title || post.trans_title}</PostDetailTitle>
-
-            <SharePage url={url}/>
+            <PostDetailTitle>
+                {post.title || post.event_title || post.trans_title}
+                <SharePage url={url}/>
+            </PostDetailTitle>
 
             {post.transaction_region &&
                 <PostDetailRow>
@@ -37,6 +38,7 @@ export default function PostDetail({ post }) {
                     {post.trans_method}
                 </div>
             }
+
             {post.start_time && 
                 <PostDetailRow>
                     <PostDetailIcon>
