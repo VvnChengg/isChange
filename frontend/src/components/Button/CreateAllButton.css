@@ -1,0 +1,38 @@
+.circle-button-container {
+    position: fixed;
+    bottom: 20px; /* 距離底部的距離 */
+    left: 20px; /* 距離左邊的距離 */
+    
+  }
+
+.main-button{
+    height: 30px;
+    width: 30px;
+    font-size: 50px;
+    color: #008CD9;
+}
+  
+
+.sub-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    bottom: 50px; 
+    left: 0;
+}
+  
+.sub-button {
+    border-color: transparent;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    padding: 5px;   
+    width: 150px;
+}
+
+.sub-icon {
+    margin-right: 5px;
+    font-size: 30px;
+    color: #008CD9;
+}

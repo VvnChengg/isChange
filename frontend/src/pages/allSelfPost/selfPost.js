@@ -9,6 +9,7 @@ import './selfPost.css'
 import PopupOnly from './popUPOnly';
 import { FormattedMessage } from 'react-intl';
 import { useToken } from '../../hooks/useToken';
+import CreateAllButton from '../../components/Button/CreateAllButton';
 
 
 
@@ -92,6 +93,7 @@ export default function SelfPost() {
                     postTypeToDelete = {selectedPostType}
                 />
             )}
+        <CreateAllButton></CreateAllButton>
         </>
     )
 }
