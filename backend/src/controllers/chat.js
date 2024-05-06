@@ -137,16 +137,8 @@ const getChatDetail = async (req, res) => {
                         read: msg.read
                     })
             } else {
-                // 文字訊息就沒差，連 photo 都不用回傳
-                msgData.push(
-                    {
-                        _id: msg._id,
-                        message_type: msg.message_type,
-                        timestamp: msg.timestamp,
-                        content: msg.content,
-                        sender_id: msg.sender_id,
-                        read: msg.read
-                    })
+                // 文字訊息就沒差，直接回傳就好
+                msgData.push(msg)
             }
         }
 
@@ -275,7 +267,7 @@ const sendTextMsg = async (req, res) => {
     }
 };
 
-// POST 傳送圖片，未測試
+// POST 傳送圖片 ok，return 的 json 檔再確認一下
 const sendPic = async (req, res) => {
     try {
         const { cid } = req.params;
@@ -324,7 +316,22 @@ const sendPic = async (req, res) => {
             timestamp: Date.now(),
         });
 
-        console.log(newMessage);
+        // console.log(newMessage);
+
+        // Convert photo data to base64 and return
+        let photoBase64 = null;
+        if (newMessage.photo && newMessage.photo.contentType) {
+            photoBase64 = `data:${newMessage.photo.contentType
+                };base64,${newMessage.photo.data.toString("base64")}`;
+        }
+        const returnMessage = {
+            _id: newMessage._id,
+            message_type: newMessage.message_type,
+            photo: photoBase64,
+            sender_id: userId,
+            chat_id: cid,
+            timestamp: newMessage.timestamp,
+        };
 
         // 更新聊天
         const updateChat = {
@@ -336,7 +343,7 @@ const sendPic = async (req, res) => {
         await Chat.findByIdAndUpdate(cid, updateChat);
 
         // 回傳新訊息
-        res.status(200).json({ new_message: newMessage });
+        res.status(200).json({ new_message: returnMessage });
     } catch (error) {
         console.error('Failed to send message:', error);
         res.status(500).json({ error: 'Failed to send message' });
