@@ -18,6 +18,13 @@ export const api = {
             .catch(err => console.log(err))
         )
     },
+    getHotPosts: () => {
+        return (
+            axios.get(hostname + '/post/hot')
+            .then(res => res.data)
+            .catch(err => console.log(err))
+        )
+    },
     createPost: (post) => {
           const token = window.localStorage.getItem('access_token');
 

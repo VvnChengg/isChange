@@ -14,7 +14,7 @@ import {
 import Button from '../Button';
 
 export default function TransForm({ trans, setTrans }) {
-    console.log(trans);
+    // console.log(trans);
     const intl = useIntl();
 
     function setTitle(input) {
@@ -189,7 +189,7 @@ export default function TransForm({ trans, setTrans }) {
                 text={trans.trans_title}
                 setText={setTitle}
             />
-            <FormLocation
+            {/* <FormLocation
                 title={intl.formatMessage({ id: 'trans.productRegion' })}
                 placeholder={intl.formatMessage({ id: 'trans.productRegionHint' })}
                 value = {trans.transaction_region}
@@ -197,7 +197,7 @@ export default function TransForm({ trans, setTrans }) {
                 inputValue={trans.transaction_region_string}
                 setInputValue={setRegionString}
                 setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
-            />
+            /> */}
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.type' })}
                 options={typeOptions}

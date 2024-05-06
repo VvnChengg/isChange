@@ -7,7 +7,7 @@ export const PostWrapper = styled.div `
     
     padding: 20px 0 20px 0;
 
-    border-bottom: 2px solid #008CD9;
+    border-bottom: ${props => props.showDivider ? '2px solid #008CD9' : ''};
 
     display: flex;
     flex-direction: column;

@@ -47,6 +47,10 @@ export const SideBarTitle = styled.div `
     color: ${props => props.theme.text};
     font-weight: 700;
 `
+export const SideBarFilter = styled.div `
+    color: ${props => props.theme.text};
+    font-size: 12px;
+`
 
 export const SideBarOptionsContainer = styled.div `
     display: flex;

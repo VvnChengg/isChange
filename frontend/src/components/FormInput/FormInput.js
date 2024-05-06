@@ -44,6 +44,8 @@ export function FormInput({ type, title, placeholder, text, setText, defaultStat
                         onChange={e => setText(e.target.value)}
                         placeholder={placeholder}
                     /> :
+                    type === 'temporary input' ? //地點不能用所以先這樣設, 之後要拿掉
+                    <div></div>:
                     <FormTextarea
                         value={text}
                         onChange={e => setText(e.target.value)}
@@ -52,7 +54,7 @@ export function FormInput({ type, title, placeholder, text, setText, defaultStat
                     />
                 }
                 {setStatus &&
-                    <FormTextSelect style={{ marginLeft: 'auto' }} value={defaultStatus} onChange={e => setStatus(e.target.value)}>
+                    <FormTextSelect style={type === 'temporary input' ? {} : { marginLeft: 'auto' }} value={defaultStatus} onChange={e => setStatus(e.target.value)}>
                         {statusOptions.map(status => (
                             <option key={status.value} value={status.value}>{status.label}</option>
                         ))}

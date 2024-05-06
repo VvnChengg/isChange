@@ -36,23 +36,50 @@ const zh = {
     'selfpost.cancelnotification':'確定要取消嗎？',
     'selfpost.nothingMsg' :'尚未發表文章！',
 
-    'sidebar.general': '一般排序',
+    'sidebar.generalSort': '一般排序',
     'sidebar.suggest': '推薦',
     'sidebar.hot': '熱門',
     'sidebar.new': '最新',
     'sidebar.following': '追蹤中',
 
-    'sidebar.trans': '交易排序',
+    'sidebar.transSort': '交易排序',
     'sidebar.priceLow': '價格最低',
     'sidebar.priceHigh': '價格最高',
 
-    'sidebar.tour': '揪團排序',
+    'sidebar.transFilter': '交易篩選',
+    'sidebar.productType': '商品種類',
+    'option.kitchen': '廚房',
+    'option.living room': '客廳',
+    'option.restroom': '浴室',
+    'option.cosmetic': '化妝品',
+    'option.clothing': '服飾',
+    'option.others': '其他',
+
+    'sidebar.transactionWay': '交易方式',
+    'option.sell': '賣出',
+    'option.purchase': '購買',
+    'option.lend': '出借',
+    'option.borrow': '租用',
+
+    'sidebar.status': '狀態',
+    'option.in stock': '銷售中',
+    'option.reserved': '已保留',
+    'option.sold': '已售出',
+
+    'sidebar.currency': '幣值',
+
+    'sidebar.tourSort': '揪團排序',
     'sidebar.distanceLow': '距離最近',
     'sidebar.distanceHigh': '距離最遠',
     'sidebar.budgetLow': '預算最低',
     'sidebar.budgetHigh': '預算最高',
     'sidebar.dateClose': '日期最近',
     'sidebar.dateFar': '日期最遠',
+
+    'sidebar.tourFilter': '揪團篩選',
+    'option.ongoing': '揪團中',
+    'option.complete': '揪團完成',
+    'option.end': '已結束',
 
     'sidebar.region': '地區篩選',
 
@@ -64,6 +91,9 @@ const zh = {
     'inputTextarea': '說些什麼吧！',
     'back': '返回上頁',
     'loading': '讀取中',
+    'shareToOthers': '分享給其他人',
+
+    'home.noContent': '沒有貼文',
 
     'login.title': '登入或建立帳號',
     'login.inputEmail': '請輸入電子信箱',
@@ -189,6 +219,7 @@ const zh = {
     'tour.checkEditFailed': '讀取編輯頁面失敗，請再試一次',
     'tour.editSuccess': '編輯揪團成功',
     'tour.editFailed': '編輯揪團失敗，請再試一次',
+    'tour.status': '揪團狀態',
 
 
     'trans.type': '交易類別',
