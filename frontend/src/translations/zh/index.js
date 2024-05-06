@@ -213,6 +213,7 @@ const zh = {
     'tour.checkEditFailed': '讀取編輯頁面失敗，請再試一次',
     'tour.editSuccess': '編輯揪團成功',
     'tour.editFailed': '編輯揪團失敗，請再試一次',
+    'tour.status': '揪團狀態',
 
 
     'trans.type': '交易類別',

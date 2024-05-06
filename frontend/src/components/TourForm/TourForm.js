@@ -98,7 +98,7 @@ export default function TourForm({ tour, setTour }) {
                 text={tour.event_title}
                 setText={setTitle}
             />
-            <FormInput
+            {/* <FormInput
                 type='input'
                 title={intl.formatMessage({ id: 'tour.destination' })}
                 placeholder={intl.formatMessage({ id: 'tour.inputDestination' })}
@@ -107,7 +107,19 @@ export default function TourForm({ tour, setTour }) {
                 setStatus={setStatus}
                 statusOptions={statusOptions}
                 defaultStatus={tour.status}
+            /> */}
+
+            <FormInput
+                type='temporary input'
+                title={intl.formatMessage({ id: 'tour.status' })}
+                placeholder={intl.formatMessage({ id: 'tour.inputDestination' })}
+                text={tour.destination}
+                setText={setDestination}
+                setStatus={setStatus}
+                statusOptions={statusOptions}
+                defaultStatus={tour.status}
             />
+
 
             {/* <FormLocation
                 title={intl.formatMessage({ id: 'tour.destination' })}
