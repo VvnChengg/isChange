@@ -256,7 +256,6 @@ const sendTextMsg = async (req, res) => {
             last_sender: userId,
             last_update: Date.now(),
         };
-
         await Chat.findByIdAndUpdate(cid, updateChat);
 
         // 回傳新訊息
@@ -339,7 +338,6 @@ const sendPic = async (req, res) => {
             last_sender: userId,
             last_update: Date.now(),
         };
-
         await Chat.findByIdAndUpdate(cid, updateChat);
 
         // 回傳新訊息
