@@ -1,4 +1,5 @@
 const TourModel = require('../models/event.js');
+const MemberModel = require('../models/member.js');
 
 class tourApi {
     async createTour(req, res) {
@@ -50,7 +51,15 @@ class tourApi {
                 });
             }
     
-            // console.log("tourDetail: ", tourDetail);
+            // 取得揪團發布者的資料
+            const member = await MemberModel.findById(tourDetail.creator_id);
+            if (!member) {
+                return res.status(404).json({
+                    success: false,
+                    message: '此揪團的發布者不存在',
+                });
+            }
+            tourDetail.creator_username = member.username;
     
             return res.status(200).json({
                 tour: tourDetail,
@@ -70,7 +79,7 @@ class tourApi {
     async checkEditingTour(req, res) {
         try {
             const { eid } = req.params;
-            const { userId } = req.body;
+            const { userId } = req.query;
     
             const tour = await TourModel.findById(eid);
             console.log("tour creator_id", tour.creator_id);
@@ -107,7 +116,7 @@ class tourApi {
     async editTour(req, res) {
         try {
             const { eid } = req.params;
-            const { userId } = req.body;
+            const userId = req.body.user_id;
             const payload = req.body;
     
             const tour = await TourModel.findById(eid);

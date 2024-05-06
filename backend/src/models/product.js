@@ -13,7 +13,7 @@ const productSchema = new Schema({
   },
   description: {
     type: String,
-    maxlength: 15,
+    maxlength: 1000,
     required: true,
   },
   product_type: {
@@ -45,7 +45,7 @@ const productSchema = new Schema({
   },
   period: {
     type: String,
-    maxlength: 10,
+    maxlength: 100,
   },
   status: {
     type: String,
@@ -54,11 +54,22 @@ const productSchema = new Schema({
     default: "draft",
     enum: ["draft", "in stock", "reserved", "sold"],
   },
-  transaction_region: {
-    type: String,
-    maxlength: 30,
-    // type: { type: String },
-    // coordinates: [Number],
+  transaction_region_en: {
+    type: [String], // [country, city]
+  },
+  transaction_region_zh: {
+    type: [String], // [country, city]
+  },
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      index: "2dsphere",
+    },
   },
   transaction_way: {
     type: String,
@@ -75,6 +86,7 @@ const productSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
+    default: []
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],

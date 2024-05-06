@@ -35,6 +35,7 @@ const articleSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
+    default: []
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],
@@ -44,11 +45,22 @@ const articleSchema = new Schema({
     type: [Schema.Types.ObjectId],
     ref: "Comment",
   },
-  article_region: {
-    type: String,
-    maxlength: 30,
-    //type: { type: String },
-    //coordinates: [Number],
+  article_region_en: {
+    type: [String], // [country, city]
+  },
+  article_region_zh: {
+    type: [String], // [country, city]
+  },
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      index: "2dsphere",
+    },
   },
 });
 

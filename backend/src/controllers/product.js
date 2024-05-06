@@ -1,10 +1,19 @@
 const ProductModel = require('../models/product.js');
 const FavoriteModel = require('../models/favorite.js');
+const MemberModel = require('../models/member.js');
 
 class productApi {
     async createProduct(req, res) {
         try {
-            const { product_title, product_pic, description, product_type, currency, price, period, transaction_region, transaction_way, user_id } = req.body;
+            console.log(req.file);
+            const { product_title, description, product_type, currency, price, period, transaction_region, transaction_way, user_id } = req.body;
+
+            const product_pic = req.file ? 
+            {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+            }
+            : null; // 判斷是否有文件被上傳
 
             const payload = {
                 product_title,
@@ -42,9 +51,20 @@ class productApi {
     async checkEditingProduct(req, res) {
         try {
             const { tid } = req.params;
-            const { user_id } = req.body;
+            const { user_id } = req.query;
     
             const trans = await ProductModel.findById(tid);
+            console.log("check before" + user_id);
+
+            // Convert image data to base64
+            let photoBase64 = null;
+            if (trans.product_pic && trans.product_pic.contentType) {
+                photoBase64 = `data:${trans.product_pic.contentType};base64,${trans.product_pic.data.toString("base64")}`;
+            }
+
+            let responseTrans = trans.toObject(); // Convert the Mongoose document to a plain JavaScript object
+            delete responseTrans.product_pic;
+            responseTrans.product_pic = photoBase64;
     
             if (user_id != trans.creator_id) {
                 return res.status(401).json({
@@ -61,7 +81,7 @@ class productApi {
             }
     
             return res.status(200).json({
-                trans: trans,
+                trans: responseTrans,
                 success: true,
                 message: '檢視將要編輯的交易成功',
             });
@@ -79,7 +99,21 @@ class productApi {
         try {
             const { tid } = req.params;
             const { user_id } = req.body;
-            const payload = req.body;
+            const product_pic = req.file ? 
+            {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+            }
+            : null; // 判斷是否有文件被上傳
+
+            const payload = {
+                ...req.body,
+                product_pic
+            };
+
+            console.log(req.body)
+            console.log(payload)
+            console.log(tid)
 
             const trans = await ProductModel.findById(tid);
     
@@ -136,17 +170,38 @@ class productApi {
             const { tid } = req.params;
     
             const trans = await ProductModel.findById(tid);
+
+            // Convert image data to base64
+            let photoBase64 = null;
+            if (trans.product_pic && trans.product_pic.contentType) {
+                photoBase64 = `data:${trans.product_pic.contentType};base64,${trans.product_pic.data.toString("base64")}`;
+            }
+
+            let responseTrans = trans.toObject(); // Convert the Mongoose document to a plain JavaScript object
+            delete responseTrans.product_pic;
+            responseTrans.product_pic = photoBase64;
+
             if (!trans) {
                 return res.status(404).json({
                     success: false,
                     message: '找不到該交易',
                 });
             }
+
+            // 取得交易發布者的資料
+            const member = await MemberModel.findById(trans.creator_id);
+            if (!member) {
+                return res.status(404).json({
+                    success: false,
+                    message: '此交易的發布者不存在',
+                });
+            }
+            responseTrans.creator_username = member.username;
     
             return res.status(200).json({
                 success: true,
                 message: '檢視交易詳細資訊成功',
-                trans: trans,
+                trans: responseTrans,
             });
     
         } catch (err) {

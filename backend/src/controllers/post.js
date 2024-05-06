@@ -454,50 +454,44 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
     try {
         // 取得文章、活動、商品資訊
         let articles = await Article.aggregate([
-            {
-                $project: {
-                    title: '$article_title',
-                    content: 1,
-                    type: { $literal: "post" },
-                    coverPhoto: '$article_pic',
-                    location: '$article_region',
-                    datetime: '$post_date',
-                    likesCount: {
-                        $size: { $ifNull: ["$like_by_user_ids", []] }
-                    }
+            { $project: {
+                title: '$article_title',
+                content: 1,
+                type: { $literal: "post" },
+                coverPhoto: '$article_pic',
+                location: '$article_region',
+                datetime: '$post_date',
+                likesCount: { 
+                    $size: { $ifNull: ["$like_by_user_ids", []] }
                 }
-            }
+            }}
         ]);
 
         let events = await Event.aggregate([
-            {
-                $project: {
-                    title: '$event_title',
-                    content: '$event_intro',
-                    type: { $literal: "tour" },
-                    location: '$destination',
-                    datetime: '$start_time',
-                    likesCount: {
-                        $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
-                    }
+            { $project: {
+                title: '$event_title',
+                content: '$event_intro',
+                type: { $literal: "tour" },
+                location: '$destination',
+                datetime: '$start_time',
+                likesCount: { 
+                    $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
                 }
-            }
+            }}
         ]);
 
         let products = await Product.aggregate([
-            {
-                $project: {
-                    title: '$product_title',
-                    content: '$description',
-                    type: { $literal: "trans" },
-                    coverPhoto: '$product_pic',
-                    location: '$transaction_region',
-                    datetime: '$post_time',
-                    likesCount: {
-                        $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
-                    }
+            { $project: {
+                title: '$product_title',
+                content: '$description',
+                type: { $literal: "trans" },
+                coverPhoto: '$product_pic',
+                location: '$transaction_region',
+                datetime: '$post_time',
+                likesCount: { 
+                    $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
                 }
-            }
+            }}
         ]);
 
         // 合併所有結果
@@ -531,6 +525,7 @@ const searchPosts = async (req, res) => {
             $or: [{ article_title: { $regex: searchRegex } }, { content: { $regex: searchRegex } }]
         });
 
+      
         const events = await Event.find({
             $or: [{ event_title: { $regex: searchRegex } }, { event_intro: { $regex: searchRegex } }]
         });
@@ -542,7 +537,7 @@ const searchPosts = async (req, res) => {
         const result = [...articles, ...events, ...products];
 
         res.status(200).json(result);
-
+        
     } catch (err) {
         console.error(err);
         res.status(500).json({
