@@ -9,62 +9,32 @@ import {
     SideBarOption
 } from './SideBar-style.js';
 
-export default function SideBar({ showSideBar, type }) {
-    const [selected, setSelected] = useState({
-        general: 'suggest',
-        trans: 'priceLow',
-        tour: ['distanceLow', 'budgetLow', 'dateClose']
-    });
-
-    const general = ['suggest', 'hot', 'new', 'following'];
+export default function SideBar({ showSideBar, type, sort, setSort }) {
+    const general = ['new', 'hot', /* 'suggest', 'following' */];
     const trans = ['priceLow', 'priceHigh'];
     const tour = [
-        ['distanceLow', 'distanceHigh'],
+        // ['distanceLow', 'distanceHigh'],
         ['budgetLow', 'budgetHigh'],
         ['dateClose', 'dateFar']
     ];
 
-    function setGeneral(input) {
-        setSelected({
-            ...selected,
-            general: input
-        });
-    }
-
-    function setTrans(input) {
-        setSelected({
-            ...selected,
-            trans: input
-        });
-    }
-
-    function setTour(index, input) {
-        let newArray = selected.tour;
-        newArray[index] = input;
-        setSelected({
-            ...selected,
-            tour: newArray
-        });
-    }
-
     return (
-        <SideBarWrapper show={showSideBar}>
-            <SideBarContainer show={showSideBar}>
+        <SideBarWrapper show={showSideBar.toString()}>
+            <SideBarContainer show={showSideBar.toString()}>
                 <SideBarTitle>
                     <FormattedMessage id='sidebar.general' />
                 </SideBarTitle>
                 <SideBarOptionsContainer>
                     {general.map((option, index) => 
-                        <>
+                        <div key={option} style={{display: 'flex'}}>
                             <SideBarOption
-                                key={option}
-                                selected={selected.general === option}
-                                onClick={() => setGeneral(option)}
+                                selected={sort === option}
+                                onClick={() => setSort(option)}
                             >
                                 <FormattedMessage id={`sidebar.${option}`}/>
                             </SideBarOption>
                             {index !== general.length - 1 && '｜'}
-                        </>
+                        </div>
                     )}
                 </SideBarOptionsContainer>
                 {type === 'trans' &&
@@ -76,8 +46,8 @@ export default function SideBar({ showSideBar, type }) {
                             {trans.map((option, index) => 
                                 <div key={option} style={{display: 'flex'}}>
                                     <SideBarOption
-                                        selected={selected.trans === option}
-                                        onClick={() => setTrans(option)}
+                                        selected={sort === option}
+                                        onClick={() => setSort(option)}
                                     >
                                         <FormattedMessage id={`sidebar.${option}`}/>
                                     </SideBarOption>
@@ -98,8 +68,8 @@ export default function SideBar({ showSideBar, type }) {
                                     {options.map((option, index2) => 
                                         <div key={option} style={{display: 'flex'}}>
                                             <SideBarOption
-                                                selected={selected.tour[index1] === option}
-                                                onClick={() => setTour(index1, option)}
+                                                selected={sort === option}
+                                                onClick={() => setSort(option)}
                                             >
                                                 <FormattedMessage id={`sidebar.${option}`}/>
                                             </SideBarOption>
@@ -111,9 +81,9 @@ export default function SideBar({ showSideBar, type }) {
                         }
                     </>
                 }
-                <SideBarTitle>
+                {/* <SideBarTitle>
                     <FormattedMessage id='sidebar.region' />
-                </SideBarTitle>
+                </SideBarTitle> */}
             </SideBarContainer>
         </SideBarWrapper>
     )

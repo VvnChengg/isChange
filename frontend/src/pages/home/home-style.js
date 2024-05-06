@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const PostContainer = styled.div `
     width: 50%;
+    min-height: calc(100% - 80px);
     
     position: absolute;
         top: 80px;
@@ -9,6 +10,7 @@ export const PostContainer = styled.div `
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 `
 
 export const PostSelector = styled.div `

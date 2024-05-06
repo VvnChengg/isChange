@@ -8,6 +8,7 @@ import {
 } from './Post-style.js';
 
 import Tag from '../Tag';
+import Icon from '../Icon';
 
 export default function Post({ post, onClick }) {
     const [coverPhoto, setCoverPhoto] = useState(null);
@@ -59,15 +60,34 @@ export default function Post({ post, onClick }) {
     
     return (
         <PostWrapper onClick={onClick}>
-            <div style={{display: 'flex', alignItems: 'center'}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '7px'}}>
                 <Tag type={post ? post.type : samplePost.type} />
                 {/* post.status && renderStatus() */}
+                {post && post.datetime && post.end_time && 
+                    <>
+                        <Icon.Time />
+                        <div>{post.datetime.substring(0, 10)} - {post.end_time.substring(0, 10)}</div>
+                    </>
+                }
                 {post && post.location &&
                     <>
                         <PostIcon src='location' />
                         <div>{post.location}</div>
                     </>
                 }
+                {post && (post.budget || post.price) && post.currency && 
+                    <>
+                        <Icon.Money />
+                        <div>{post.budget || post.price.$numberDecimal} {post.currency}</div>
+                    </>
+                }
+                {post && post.people_lb && post.people_ub && 
+                    <>
+                        <Icon.People />
+                        <div>{post.people_lb} - {post.people_ub}</div>
+                    </>
+                }
+                
                 {renderStatus()}
 
             </div>
