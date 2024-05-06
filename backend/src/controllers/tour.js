@@ -79,7 +79,7 @@ class tourApi {
     async checkEditingTour(req, res) {
         try {
             const { eid } = req.params;
-            const { userId } = req.body;
+            const { userId } = req.query;
     
             const tour = await TourModel.findById(eid);
             console.log("tour creator_id", tour.creator_id);
@@ -116,7 +116,7 @@ class tourApi {
     async editTour(req, res) {
         try {
             const { eid } = req.params;
-            const { userId } = req.body;
+            const userId = req.body.user_id;
             const payload = req.body;
     
             const tour = await TourModel.findById(eid);
