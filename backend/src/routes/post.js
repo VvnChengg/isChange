@@ -1,7 +1,14 @@
 const express = require('express');
 const router = express.Router();
+
+// token 相關模組
 const validateToken = require("../../src/middlewares/validateToken");
 const checkTokenExist = require("../middlewares/checkTokenExist")
+
+// 圖片相關模組
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // 載入controller.
 var { getAllPosts, getUserPosts, createPost, updatePost, getPostDetail, deleteContent, likePost, commentPost, collectProduct, getAllPostsSortedByLikes, searchPosts } = require("../controllers/post");
@@ -11,7 +18,7 @@ router.get('/all', getAllPosts);
 router.get('/hot', getAllPostsSortedByLikes);
 router.get('/search', searchPosts);
 router.get('/:uid', getUserPosts);
-router.post('/create', validateToken, createPost);
+router.post('/create', validateToken, upload.single('article_pic'), createPost);
 router.put('/:pid', validateToken, updatePost);
 router.get('/detail/:pid', checkTokenExist, getPostDetail);
 router.delete('/delete', validateToken, deleteContent);
