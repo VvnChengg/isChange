@@ -2,7 +2,7 @@ const Chat = require("../models/chat");
 const Message = require("../models/message");
 const Member = require("../models/member");
 
-// GET 確認聊天是否已存在
+// GET 確認聊天是否已存在 ok
 const checkChat = async (req, res) => {
     try {
         const { receiver_id } = req.params;
@@ -36,7 +36,7 @@ const checkChat = async (req, res) => {
     }
 };
 
-// POST 建立聊天
+// POST 建立聊天 ok
 const createChat = async (req, res) => {
     try {
         const { userId, receiver_id } = req.body;
@@ -348,28 +348,6 @@ const sendPic = async (req, res) => {
     }
 };
 
-// GET 下載圖片，不確定是什麼效果
-const savePic = async (req, res) => {
-    try {
-        const { mid } = req.params;
-        const message = await Message.findById(mid);
-
-        // 檢查是否找到了對應的訊息
-        if (!message || !message.photo) {
-            return res.status(404).json({ error: 'Message or photo not found' });
-        }
-
-        // 設定 HTTP 響應的標頭，告訴瀏覽器返回的是圖片
-        res.set('Content-Type', 'image/jpeg'); // 假設圖片是 JPEG 格式
-
-        // 將圖片資料作為回應主體直接發送
-        res.send(message.photo);
-    } catch (error) {
-        console.error('Failed to download image:', error);
-        res.status(500).json({ error: 'Failed to download image' });
-    }
-}
-
 // 刪除聊天 ok
 const deleteChat = async (req, res) => {
     try {
@@ -406,6 +384,5 @@ module.exports = {
     getChatDetail,
     sendTextMsg,
     sendPic,
-    savePic,
     deleteChat
 };
