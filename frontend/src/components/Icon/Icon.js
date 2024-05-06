@@ -5,9 +5,10 @@ import { ReactComponent as Money } from './money.svg';
 import { ReactComponent as People } from './people.svg';
 import { ReactComponent as Selector } from './selector.svg';
 import { ReactComponent as Close } from './close.svg';
+import { ReactComponent as Location } from './location.svg';
 
 const Icon = {
-    User, Chat, Time, Money, People, Selector, Close
+    User, Chat, Time, Money, People, Selector, Close, Location
 };
 
 export default Icon;

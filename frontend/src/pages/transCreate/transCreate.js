@@ -19,6 +19,7 @@ export default function TransCreate() {
     const navigate = useNavigate();
 
     const [trans, setTrans] = useState({
+        transform_type: 'create',
         trans_title: '',
         trans_type: 'sell',
         currency: 'TWD',
@@ -35,10 +36,13 @@ export default function TransCreate() {
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
         price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
 
+        transaction_country: '',
+        transaction_region_location_latitude: null,
+        transaction_region_location_longitude: null,
     })
 
     async function onSubmit() {
-        console.log(trans);
+        // console.log(trans);
         try{
             const data = await transApi.createTrans(trans, token);
             console.log(data);

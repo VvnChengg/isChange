@@ -34,7 +34,10 @@ export const api = {
                 toast.success(`創建成功！`);
                 return res.data;
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+                throw err
+            })
         )
     },
     postImage: (formData, token) => {
@@ -54,6 +57,31 @@ export const api = {
                 // console.log(err)
                 throw err
             });
+    },
+    updatePost: (pID, post) => {
+        const token = window.localStorage.getItem('access_token');
+
+        return (
+            axios.put(`${hostname}/post/${pID}`, { 
+              title: post.title,
+              content: post.content,
+            //   photo: post.photo,
+             }, {
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+            })
+            .then(res => {
+                toast.success(`更新成功！`);
+                return res.data;
+            })
+            .catch(err => {
+                console.log(pID)
+                console.log(post)
+                console.log(err)
+                throw err
+            })
+        )
     },
     deleteUserPost: (pID) => {
         const token = window.localStorage.getItem('access_token');
@@ -78,12 +106,45 @@ export const api = {
             .then(res => {
                 console.log(pID);
                 console.log(res);
-                console.log(res.data.message);
                 return res.data;
             })
             .catch(err => {
+                console.log(err)
                 throw err;
             });
+    },
+    pressLike: (pID) => {
+        const token = window.localStorage.getItem('access_token');
+
+        return (
+            axios.put(`${hostname}/post/like/${pID}`, { pID }, {
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+            })
+            .then(res => {
+                toast.success(`按讚成功！`);
+                return res.data;
+            })
+            .catch(err => {
+                console.log(pID)
+                console.log(err)
+                throw err
+            })
+        )
+    },
+    pressShare: (pID) => {
+        return (
+            axios.get(hostname + '/op/copylink', { pID })
+            .then(res => {
+                toast.success(`已複製貼文連結～`);
+                return res.data;
+            })
+            .catch(err => {
+                console.log(err)
+                throw err
+            })
+        )
     },
     createTour: (tour) => {
         const token = window.localStorage.getItem('access_token');

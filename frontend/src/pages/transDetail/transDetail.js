@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 import { transApi } from '../../api/transApi';
 
@@ -18,22 +20,28 @@ export default function TransDetail() {
     const navigate = useNavigate();
     const { tid } = useParams();
 
+    const [isLoading, setIsLoading] = useState(true);
+
 
     const [trans, setTrans] = useState({
         trans_title: '',
         trans_type: 'sell',
-        product_type: 'others',
         currency: 'TWD',
         budget: '',
         rent_start_time: '',
         rent_end_time: '',
         trans_intro: '',
 
-        product_pic: '',
+        product_type: 'kitchen',
+        product_pic: '', //待補前端設計
         transaction_region: '', //待補前端設計
 
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
         price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
+
+        transaction_country: '',
+        transaction_region_location_latitude: null,
+        transaction_region_location_longitude: null,
     })
 
     const sampleTrans = {
@@ -97,10 +105,15 @@ export default function TransDetail() {
                 }
 
         }catch(e){
-            alert(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
+            alert(`${intl.formatMessage({ id: 'trans.viewPageFailed' })}`);
         }
-
+        setIsLoading(false);
     }
+
+    if (isLoading) {
+        return <Spin />;
+    }
+
 
     return (
         <DetailContainer>

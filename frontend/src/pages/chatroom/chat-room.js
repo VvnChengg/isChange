@@ -18,21 +18,22 @@ export default function Chatroom() {
     const token = useToken();
     const [inputValue, setInputValue] = useState('');
 
+
     const handleDownload = (imageUrl) => {
         const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = 'image.jpg'; // 下載的文件名，可以自行設定
-    link.style.display = 'none'; // 隱藏這個元素
+        link.href = imageUrl;
+        link.download = 'image.jpg'; // 下載的文件名，可以自行設定
+        link.style.display = 'none'; // 隱藏這個元素
 
-    // 將這個元素添加到 body 中
-    document.body.appendChild(link);
+        // 將這個元素添加到 body 中
+        document.body.appendChild(link);
 
-    // 模擬點擊這個鏈接
-    link.click();
+        // 模擬點擊這個鏈接
+        link.click();
 
-    // 清理
-    document.body.removeChild(link);
-};
+        // 清理
+        document.body.removeChild(link);
+    };
 
 
     const handleSubmit = () => {
@@ -51,14 +52,10 @@ export default function Chatroom() {
           //console.log(newchatData)
           setInputValue('');
 
-          setTimeout(() => {
-            const chatBox = document.querySelector('.private-message-chat-room-container');
-            chatBox.scrollTop = chatBox.scrollHeight;
-          }, 100); 
+          scrollToBottom(100);  
         })
-
         .catch(error => {
-          console.error('API 請求失败:', error);
+          //console.error('API 請求失敗:', error);
         });
     } else {
       console.log('請輸入有效值');
@@ -76,14 +73,19 @@ export default function Chatroom() {
           }
         };
 
-    const scrollToBottom = () => {
-            setTimeout(() => {
-                const chatBox = document.querySelector('.private-message-chat-room-container');
+    const scrollToBottom = (num) => {
+        setTimeout(() => {
+            const chatBox = document.querySelector('.private-message-chat-room-container');
+            if (chatBox) {
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 0);
-        };
+            } else {
+                //console.error('chatBox element not found!');
+            }
+        }, num);
+    };
 
     const handleFileInputChange = (e) => {
+        console.log('click')
         const selectedFile = e.target.files[0];
         const formData = new FormData();
         formData.append('image', selectedFile); 
@@ -130,7 +132,6 @@ export default function Chatroom() {
         }
     };       
     
-    
 
     
     useEffect(() => {
@@ -142,24 +143,34 @@ export default function Chatroom() {
         .then(response => {
             setChatPhoto(response.data);
             setChatData(response.data.messages);
-            scrollToBottom(); 
+            scrollToBottom(0); 
+            //console.log(response)
         })
         .catch(error => {
-            console.error('API 請求失敗:', error);
+            //console.error('API 請求失敗:', error);
         });
     }, [hostname, chatid, token]);
 
     return (
-        
         <div>
-            <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
-            <ChatRoomInput 
-                handleInputChange={handleInputChange} 
-                inputValue={inputValue} 
-                handleSubmit={handleSubmit}
-                handleKeyDown={handleKeyDown}
-                handleFileInputChange={handleFileInputChange}
-            />
+            {chatData && chatData.length > 0 && (
+                <>
+                    <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
+                    <ChatRoomInput 
+                        handleInputChange={handleInputChange} 
+                        inputValue={inputValue} 
+                        handleSubmit={handleSubmit}
+                        handleKeyDown={handleKeyDown}
+                        handleFileInputChange={handleFileInputChange}
+                    />
+                </>
+            )}
+            {!chatData && (
+                <div>Loading...</div>
+            )}
+            {chatData && chatData.length === 0 && (
+                <div>No data available</div>
+            )}
         </div>
     );
 }

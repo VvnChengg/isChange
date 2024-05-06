@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 import {
     EditContainer,
@@ -20,7 +22,12 @@ export default function TransEdit() {
     const token = useToken();
     const user_id = localStorage.getItem('user_id');
 
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+
     const [trans, setTrans] = useState({
+        transform_type: 'edit',
         trans_title: '',
         trans_type: 'sell',
         product_type: 'others',
@@ -47,6 +54,10 @@ export default function TransEdit() {
         }
     }, [token, tid, user_id])
 
+    if (isLoading) {
+        return <Spin />;
+    }
+
     async function checkValidation(){
         try{
             const data = await transApi.editViewTrans(tid, user_id, token);
@@ -55,7 +66,7 @@ export default function TransEdit() {
             // console.log(data.trans.currency);
             // console.log(data.trans.description);
             // console.log(data.trans.product_type);
-            console.log(data);
+            // console.log(data);
             
             if(data.success){
                 let period = data.trans.period;
@@ -64,7 +75,7 @@ export default function TransEdit() {
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
 
-                console.log(data.trans.product_pic)
+                console.log(data.trans.status)
             
                 setTrans({
                     rent_start_time: rent_start_time,
@@ -82,17 +93,20 @@ export default function TransEdit() {
                     trans_type: data.trans.transaction_way,
                     user_id: data.trans.creator_id,
                     product_pic: data.trans.product_pic,
+                    transform_type: 'edit',
+                    trans_status: data.trans.status,
                     // __v: data.__v
                 });
-                }
-
+            }
         }catch(e){
             alert(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
         }
+        setIsLoading(false);
     }
 
     async function onSubmit() {
         // console.log(trans);
+        setIsSubmitting(true);
         try{
             const data = await transApi.editTrans(trans, token);
             // console.log(data);
@@ -106,6 +120,7 @@ export default function TransEdit() {
             // console.log(e);
             alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
         }
+        setIsSubmitting(false)
         
     }
 
@@ -119,8 +134,18 @@ export default function TransEdit() {
                     onClick={() => window.history.back()}
                 />
                 <Button
-                    text={intl.formatMessage({ id: 'trans.edit' })}
-                    onClick={() => onSubmit()}
+                    style={{
+                        backgroundColor: isSubmitting ? '#ccc' : '',
+                        color: isSubmitting ? '#888' : '',
+                        cursor: isSubmitting ? 'not-allowed' : '',
+                    }}
+                    text={isSubmitting?
+                        <div>
+                        <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                        {intl.formatMessage({ id: 'loading' })}
+                        </div> 
+                        : intl.formatMessage({ id: 'trans.edit' })}
+                    onClick={isSubmitting ? undefined : onSubmit}
                 />
             </EditButtonContainer>
         </EditContainer>

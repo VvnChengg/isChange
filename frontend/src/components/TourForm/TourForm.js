@@ -4,11 +4,13 @@ import {
     FormInput,
     FormRange,
     FormBudget,
-    FormDate
+    FormDate,
+    FormLocation
 } from '../FormInput';
 import Button from '../Button';
 
 export default function TourForm({ tour, setTour }) {
+    console.log(tour.status)
     const intl = useIntl();
 
     function setTitle(input) {
@@ -65,6 +67,28 @@ export default function TourForm({ tour, setTour }) {
         });
     }
 
+    function setStatus(input) {
+        setTour({
+            ...tour,
+            status: input
+        });
+    }
+
+    const statusOptions = [
+        {
+            value: 'ongoing',
+            label: intl.formatMessage({ id: 'tour.ongoing' })
+        },
+        {
+            value: 'complete',
+            label: intl.formatMessage({ id: 'tour.complete' })
+        },
+        {
+            value: 'end',
+            label: intl.formatMessage({ id: 'tour.end' })
+        }
+    ];
+
     return (
         <>
             <FormInput
@@ -80,7 +104,21 @@ export default function TourForm({ tour, setTour }) {
                 placeholder={intl.formatMessage({ id: 'tour.inputDestination' })}
                 text={tour.destination}
                 setText={setDestination}
+                setStatus={setStatus}
+                statusOptions={statusOptions}
+                defaultStatus={tour.status}
             />
+
+            {/* <FormLocation
+                title={intl.formatMessage({ id: 'tour.destination' })}
+                placeholder={intl.formatMessage({ id: 'tour.inputDestination' })}
+                value = {trans.transaction_region}
+                setValue = {setRegionObject}
+                inputValue={trans.transaction_region_string}
+                setInputValue={setRegionString}
+                setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
+            /> */}
+
             <FormRange
                 title={intl.formatMessage({ id: 'tour.people' })}
                 placeholder={[intl.formatMessage({ id: 'tour.min' }),
@@ -100,6 +138,8 @@ export default function TourForm({ tour, setTour }) {
             <FormDate
                 title={intl.formatMessage({ id: 'tour.date' })}
                 setDate={setDate}
+                defaultMinDate={tour.start_time? tour.start_time : ""}
+                defaultMaxDate={tour.end_time? tour.end_time : ""}
             />
             <FormInput
                 type='textarea'

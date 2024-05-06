@@ -2,16 +2,9 @@ import axios from "axios";
 
 const hostname = process.env.REACT_APP_API_HOSTNAME;
 
-function getContentType(dataUrl) {
-    return dataUrl.split(';')[0].split(':')[1];
-}
-
-
 export const transApi = {
-    viewTrans: (tid, user_id, token) => {
-        return axios.get(`${hostname}/trans/detail/${tid}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
+    viewTrans: (tid) => {
+        return axios.get(`${hostname}/trans/detail/${tid}`)
             .then(res => {
                 return res.data
             })
@@ -41,7 +34,8 @@ export const transApi = {
         formData.append('currency', data.currency);
         formData.append('price', data.budget);
         formData.append('period', data.rent_start_time + ' - ' + data.rent_end_time);
-        formData.append('transaction_region', data.transaction_region);
+        formData.append('transaction_region', data.transaction_country); //後端是string, 先放string
+        // formData.append('transaction_region', data.transaction_region);
         formData.append('transaction_way', data.trans_type);
         formData.append('user_id', data.user_id);
 
@@ -97,9 +91,11 @@ export const transApi = {
         formData.append('currency', data.currency);
         formData.append('price', data.budget);
         formData.append('period', data.rent_start_time + ' - ' + data.rent_end_time);
-        formData.append('transaction_region', data.transaction_region);
+        // formData.append('transaction_region', data.transaction_region);
+        formData.append('transaction_region', data.transaction_country); //後端是string, 先放string
         formData.append('transaction_way', data.trans_type);
         formData.append('user_id', data.user_id);
+        formData.append('status', data.trans_status);
         return axios.put(`${hostname}/trans/edit/${data.tid}`,
             formData, {
             headers: {

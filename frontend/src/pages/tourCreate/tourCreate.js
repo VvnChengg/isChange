@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api';
 
@@ -14,6 +15,7 @@ import { toast } from 'react-toastify';
 
 export default function TourCreate() {
     const intl = useIntl();
+    const navigate = useNavigate();
 
     const [tour, setTour] = useState({
         event_title: '',
@@ -21,7 +23,7 @@ export default function TourCreate() {
         people_lb: '',
         people_ub: '',
         budget: '',
-        currency: '',
+        currency: 'TWD',
         start_time: '',
         end_time: '',
         event_intro: '',
@@ -34,6 +36,7 @@ export default function TourCreate() {
         .then(res => {
             console.log(res);
             toast.success(res.message);
+            navigate('/post/published');
         })
         .catch(err => {
             console.log(err);

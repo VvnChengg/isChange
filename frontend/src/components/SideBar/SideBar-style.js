@@ -15,8 +15,9 @@ export const SideBarWrapper = styled.div `
     
     background-color: ${props => props.theme.background};
     border-radius: 0 0 0 40px;
-    box-shadow:  -5px 0px 10px 1px ${props => props.theme.shadow},
-        0 10px 10px -10px ${props => props.theme.shadow};
+    box-shadow: ${props => props.show ?
+        `-5px 0px 10px 1px ${props.theme.shadow},
+        0 10px 10px -10px ${props.theme.shadow}` : ''};
     
     transition: 0.5s ease;
 
@@ -28,6 +29,8 @@ export const SideBarWrapper = styled.div `
 `
 
 export const SideBarContainer = styled.div `
+    display: ${props => props.show ? 'block' : 'none'};
+    
     width: 100%;
     height: 100%;
 

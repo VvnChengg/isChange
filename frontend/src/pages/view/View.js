@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 import viewStyles from '../../styles/View.module.css';
 import ViewMemberSelfIntro from './ViewMemberSelfIntro';
@@ -18,6 +20,8 @@ export const ViewWithoutUid = () => {
   const [student_veri, setStudentVeri] = useState(false);
   const token = useToken();
 
+  const [isLoading, setIsLoading] = useState(true);
+
   // 先讀取使用者資料
   const getInfo = async () =>{
     const memberInfo = await viewApi.getMember(token);
@@ -28,6 +32,7 @@ export const ViewWithoutUid = () => {
     setPhoto(memberInfo.photo);
     setIntro(memberInfo.intro);
     setStudentVeri(memberInfo.student_verification);
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -35,6 +40,10 @@ export const ViewWithoutUid = () => {
       getInfo();
     }
   }, [token]);
+
+  if (isLoading) {
+    return <Spin />;
+}
 
   return (
     <div className={viewStyles.isChange}>
@@ -54,6 +63,8 @@ export const ViewWithUid = () => {
   const [other_uid, setOtherUid] = useState('');
   const { other_username } = useParams();
 
+  const [isLoading, setIsLoading] = useState(true);
+
   // 先讀取使用者資料
   const getOtherMemberInfo = async () =>{
     const memberInfo = await viewApi.getOtherMember(other_username);
@@ -66,6 +77,8 @@ export const ViewWithUid = () => {
     setStudentVeri(memberInfo.student_verification);
     setOtherUid(memberInfo._id);
     // console.log(memberInfo._id);
+
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -73,6 +86,10 @@ export const ViewWithUid = () => {
       getOtherMemberInfo();
     }
   }, [other_username]);
+
+  if (isLoading) {
+    return <Spin />;
+  }
 
   return (
     <div className={viewStyles.isChange}>

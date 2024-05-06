@@ -31,7 +31,6 @@ const PopupOnly = ({ onConfirm, onCancel ,postIdToDelete, postTypeToDelete}) => 
 
     return (
         <Modal
-            //title="Confirmation"
             open={true} 
             onCancel={onCancel} // 取消
             footer={[
@@ -47,7 +46,6 @@ const PopupOnly = ({ onConfirm, onCancel ,postIdToDelete, postTypeToDelete}) => 
         </Modal>
     );
 };
-
 
 export default PopupOnly;
 

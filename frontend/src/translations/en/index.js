@@ -169,6 +169,7 @@ const en = {
     'edit.confirmCode': 'Confirm',
 
     'post.create': 'Create post',
+    'post.edit': 'Edit post',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',
@@ -184,7 +185,10 @@ const en = {
     'tour.ongoing':'ongoing',
     'tour.complete':'complete',
     'tour.end':'end',
-
+    'tour.viewPageFailed': 'Failed to view tour page, please try again',
+    'tour.checkEditFailed': 'Loading edit page failed, please try again',
+    'tour.editSuccess': 'Edit tour successfully',
+    'tour.editFailed': 'Edit tour failed, please try again',
     
     'trans.type': 'Type',
     'trans.sell': 'Sell',
@@ -214,6 +218,9 @@ const en = {
     'trans.editSuccess': 'Edit product successfully',
     'trans.editFailed': 'Edit product failed, please try again',
     'trans.productPicture': 'Product Picture',
+    'trans.productRegion': 'Product Region',
+    'trans.productRegionHint': 'Please enter product region',
+    'trans.viewPageFailed': 'Failed to view product page, please try again',
 
 
     /* alert */

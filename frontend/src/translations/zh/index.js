@@ -169,6 +169,7 @@ const zh = {
     'edit.confirmCode': '確認',
 
     'post.create': '創建貼文',
+    'post.edit': '更新貼文',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',
@@ -184,6 +185,10 @@ const zh = {
     'tour.ongoing':'揪團中',
     'tour.complete':'揪團完成',
     'tour.end':'已結束',
+    'tour.viewPageFailed': '讀取揪團頁面失敗，請再試一次',
+    'tour.checkEditFailed': '讀取編輯頁面失敗，請再試一次',
+    'tour.editSuccess': '編輯揪團成功',
+    'tour.editFailed': '編輯揪團失敗，請再試一次',
 
 
     'trans.type': '交易類別',
@@ -214,6 +219,9 @@ const zh = {
     'trans.editSuccess': '編輯商品成功',
     'trans.editFailed': '編輯商品失敗，請再試一次',
     'trans.productPicture': '商品圖片',
+    'trans.productRegion': '交易地點',
+    'trans.productRegionHint': '請輸入交易地點',
+    'trans.viewPageFailed': '讀取商品頁面失敗，請再試一次',
 
     /* alert */
     'alert.login': '請先登入',

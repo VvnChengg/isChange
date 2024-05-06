@@ -80,13 +80,13 @@ function App() {
                     <Route path='published' element={<SelfPost />} />
                     <Route path='find' element={<ShareFind />} />
                     <Route path='to-edit' element={<ShareToEdit />} />
-                    <Route path='edit' element={<ShareEdit />} />
+                    <Route path='edit/:pid' element={<ShareEdit />} />
                     <Route path='to-delete' element={<ShareToDelete />} />
                   </Route>
                   <Route path='tour'>
                     <Route path='create' element={<TourCreate />} />
-                    <Route path='edit' element={<TourEdit />} />
-                    <Route path='detail' element={<TourDetail />} />
+                    <Route path='edit/:tid' element={<TourEdit />} />
+                    <Route path='detail/:tid' element={<TourDetail />} />
                   </Route>
                   <Route path='trans'>
                     <Route path='create' element={<TransCreate />} />
