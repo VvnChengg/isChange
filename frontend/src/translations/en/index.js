@@ -76,6 +76,11 @@ const en = {
     'sidebar.dateClose': 'Close date',
     'sidebar.dateFar': 'Far Date',
 
+    'sidebar.tourFilter': 'Tour Filter',
+    'option.ongoing': 'Ongoing',
+    'option.complete': 'Complete',
+    'option.end': 'End',
+
     'sidebar.region': 'Region',
 
 

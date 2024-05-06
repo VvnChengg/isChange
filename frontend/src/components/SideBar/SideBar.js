@@ -78,7 +78,7 @@ export default function SideBar({ showSideBar, type, sort, setSort, filters, set
                                 >
                                     <Row>
                                         {options.map(option =>
-                                            <Col span={10} key={option}>
+                                            <Col span={12} key={option}>
                                                 <Checkbox value={option}>
                                                     {filter === 'currency' ? option : <FormattedMessage id={`option.${option}`} />}
                                                 </Checkbox>
@@ -88,9 +88,6 @@ export default function SideBar({ showSideBar, type, sort, setSort, filters, set
                                 </Checkbox.Group>
                             </div>
                         )}
-                        <SideBarOptionsContainer>
-                            
-                        </SideBarOptionsContainer>
                     </>
                 }
                 {type === 'tour' &&
@@ -112,6 +109,35 @@ export default function SideBar({ showSideBar, type, sort, setSort, filters, set
                                     </div>
                                     )}
                             </SideBarOptionsContainer>
+                        )}
+                        <SideBarTitle>
+                            <FormattedMessage id='sidebar.tourFilter' />
+                        </SideBarTitle>
+                        {Object.entries(filterOptions.tour).map(([filter, options], index) => 
+                            <div key={filter}>
+                                <SideBarFilter>
+                                    <FormattedMessage id={`sidebar.${filter}`}/>
+                                </SideBarFilter>
+                                <Checkbox.Group
+                                    defaultValue={options}
+                                    style={{ marginBottom: '10px', display: 'inline-block' }}
+                                    onChange={checked => {
+                                        const tempFilters = { ...filters };
+                                        tempFilters.trans[filter] = checked;
+                                        setFilters(tempFilters);
+                                    }}
+                                >
+                                    <Row>
+                                        {options.map(option =>
+                                            <Col span={12} key={option}>
+                                                <Checkbox value={option}>
+                                                    {filter === 'currency' ? option : <FormattedMessage id={`option.${option}`} />}
+                                                </Checkbox>
+                                            </Col>
+                                        )}
+                                    </Row>
+                                </Checkbox.Group>
+                            </div>
                         )}
                     </>
                 }

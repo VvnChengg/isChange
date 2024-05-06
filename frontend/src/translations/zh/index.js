@@ -76,6 +76,11 @@ const zh = {
     'sidebar.dateClose': '日期最近',
     'sidebar.dateFar': '日期最遠',
 
+    'sidebar.tourFilter': '揪團篩選',
+    'option.ongoing': '揪團中',
+    'option.complete': '揪團完成',
+    'option.end': '已結束',
+
     'sidebar.region': '地區篩選',
 
 

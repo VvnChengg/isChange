@@ -30,7 +30,10 @@ export default function Home() {
             status: ['in stock', 'reserved', 'sold'],
             currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
         },
-        tour: {}
+        tour: {
+            status: ['ongoing', 'complete', 'end'],
+            currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
+        }
     }
 
     const [showSideBar, setShowSideBar] = useState(false);
@@ -76,14 +79,16 @@ export default function Home() {
             posts = posts.filter(post => {
                 for (let key in post) {
                     if (filterOptions[post.type].hasOwnProperty(key)) {
-                        const options = filters.trans[key];
+                        const options = filters[post.type][key];
                         if (!options.includes(post[key])) {
+                            console.log('no!!')
                             return false;
                         }
                     }
                 }
                 return true;
             })
+        console.log(posts)
         return posts;  
     }
 
