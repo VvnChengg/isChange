@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api';
 import { tourApi } from '../../api/tourApi';
@@ -19,6 +20,8 @@ export default function TourDetail() {
     const intl = useIntl();
     const { tid } = useParams();
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+    const user_id = localStorage.getItem('user_id');
 
     const [tour, setTour] = useState({
         event_title: '',
@@ -70,7 +73,9 @@ export default function TourDetail() {
             if(data.success){
                 data.tour.start_time = formatDate(data.tour.start_time);
                 data.tour.end_time = formatDate(data.tour.end_time);
-                setTour(data.tour);
+                // setTour(data.tour);
+                setTour(prevTour => ({...prevTour, ...data.tour}));
+
             }
     
         }catch(err){
@@ -81,9 +86,13 @@ export default function TourDetail() {
     }
 
     function contact() {
-        console.log('contact');
+        // console.log('contact');
 
         // api: send msg
+        if(tour.creator_username){
+            navigate(`/member/${tour.creator_username}`);
+        }
+        
     }
 
     if (isLoading) {
@@ -98,12 +107,14 @@ export default function TourDetail() {
                 <Button
                     text={intl.formatMessage({ id: 'back' })}
                     secondary={true}
-                    onClick={() => window.history.back()}
+                    onClick={() => navigate('/')}
                 />
-                <Button
-                    text={intl.formatMessage({ id: 'tour.message' })}
-                    onClick={() => contact()}
-                />
+                {user_id !== tour.creator_id && tour.creator_username &&
+                    <Button
+                        text={intl.formatMessage({ id: 'tour.message' })}
+                        onClick={() => contact()}
+                    />
+                }
             </DetailButtonContainer>
         </DetailContainer>
     )

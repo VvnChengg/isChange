@@ -19,6 +19,7 @@ export default function TransDetail() {
     const intl = useIntl();
     const navigate = useNavigate();
     const { tid } = useParams();
+    const user_id = localStorage.getItem('user_id');
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -63,9 +64,13 @@ export default function TransDetail() {
     }, []);
 
     function contact() {
-        console.log('contact');
+        // console.log('contact');
 
         // api: send msg
+        if(trans.creator_username){
+            navigate(`/member/${trans.creator_username}`);
+        }
+        
     }
 
     async function viewPost() {
@@ -83,7 +88,7 @@ export default function TransDetail() {
             
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
-            
+                console.log(data);
                 setTrans({
                     rent_start_time: rent_start_time,
                     rent_end_time: rent_end_time,
@@ -100,6 +105,8 @@ export default function TransDetail() {
                     trans_type: data.trans.transaction_way,
                     user_id: data.trans.creator_id,
                     product_pic: data.trans.product_pic,
+                    creator_username: data.trans.creator_username,
+                    creator_id: data.trans.creator_id,
                     // __v: data.__v
                 });
                 }
@@ -118,16 +125,19 @@ export default function TransDetail() {
     return (
         <DetailContainer>
             <PostDetail post={trans} />
-            {/* <DetailButtonContainer>
+            <DetailButtonContainer>
                 <Button
                     text={intl.formatMessage({ id: 'back' })}
                     secondary={true}
+                    onClick = {() => navigate('/')}
                 />
-                <Button
-                    text={intl.formatMessage({ id: 'tour.message' })}
-                    onClick={() => contact()}
-                />
-            </DetailButtonContainer> */}
+                {user_id !== trans.creator_id && trans.creator_username &&
+                    <Button
+                        text={intl.formatMessage({ id: 'tour.message' })}
+                        onClick={() => contact()}
+                    />
+                }
+            </DetailButtonContainer>
         </DetailContainer>
     )
 }
