@@ -24,9 +24,10 @@ export const transApi = {
             }
             return new File([u8arr], filename, { type: mime });
         }
-        const file = dataURLtoFile(data.product_pic, 'transaction.png');
+        const file = data.product_pic === "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
+        console.log(formData);
         formData.append('product_title', data.trans_title);
         formData.append('product_pic', file); // Assuming data.product_pic is a File or Blob object
         formData.append('description', data.trans_intro);
@@ -39,6 +40,8 @@ export const transApi = {
         formData.append('transaction_way', data.trans_type);
         formData.append('user_id', data.user_id);
 
+
+        console.log(formData);
         return axios.post(`${hostname}/trans/create`,
             formData, {
             headers: {
@@ -81,7 +84,7 @@ export const transApi = {
             }
             return new File([u8arr], filename, { type: mime });
         }
-        const file = dataURLtoFile(data.product_pic, 'transaction.png');
+        const file = data.product_pic? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
         formData.append('product_title', data.trans_title);

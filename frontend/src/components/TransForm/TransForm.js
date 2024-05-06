@@ -14,7 +14,7 @@ import {
 import Button from '../Button';
 
 export default function TransForm({ trans, setTrans }) {
-    console.log(trans);
+    // console.log(trans);
     const intl = useIntl();
 
     function setTitle(input) {
