@@ -5,10 +5,8 @@ const Comment = require('../models/comment');
 const Member = require('../models/member');
 const { validatePut } = require('../middlewares/post');
 const { default: mongoose } = require('mongoose');
-const comment = require('../models/comment');
 const moment = require('moment');
 const Favorite = require('../models/favorite');
-const { ObjectId } = require('mongodb');
 
 const getAllPosts = async (req, res, next) => {
     let articles, events, products;
@@ -26,22 +24,23 @@ const getAllPosts = async (req, res, next) => {
                 title: article.article_title,
                 content: article.content,
                 type: "post",
-                coverPhoto: article.article_pic,
-                location: article.article_region,
+                coverPhoto: convertToBase64(article.article_pic),
+                // location: article.location,
                 datetime: article.post_date
             };
             result.push(item);
-            // console.log("creator id: ", article.creator_id);
         });
 
         // 抽取活動需要的資訊並統一格式
         events.forEach(event => {
+
             const item = {
                 _id: event._id,
                 title: event.event_title,
                 content: event.event_intro,
                 type: "tour",
-                location: event.destination,
+                coverPhoto: convertToBase64(event.event_pic),
+                // location: event.location,
                 datetime: event.start_time,
                 currency: event.currency,
                 budget: event.budget,
@@ -60,8 +59,8 @@ const getAllPosts = async (req, res, next) => {
                 title: product.product_title,
                 content: product.description,
                 type: "trans",
-                coverPhoto: product.product_pic,
-                location: product.transaction_region,
+                coverPhoto: convertToBase64(product.product_pic),
+                // location: product.location,
                 datetime: product.post_time,
                 currency: product.currency,
                 price: product.price,
@@ -72,7 +71,6 @@ const getAllPosts = async (req, res, next) => {
             };
             result.push(item);
         });
-
         // 依時間倒序排序
         result.sort((a, b) => {
             return new Date(b.datetime) - new Date(a.datetime);
@@ -98,10 +96,8 @@ const getPostDetail = async (req, res, next) => {
         }
         // 取得按讚、收藏資料
         const isLiked = article.like_by_user_ids.indexOf(userId);
-        console.log("isLiked", isLiked);
         const saveList = await Favorite.find({ item_id: pid, save_type: "Article" });
         const isSaved = saveList.filter((save) => save.user_id.equals(userId)).length;
-        console.log("isLiked", isLiked);
 
         // 取得評論資料
         const commentList = await getCommentList(pid);
@@ -120,8 +116,8 @@ const getPostDetail = async (req, res, next) => {
             title: article.article_title,
             content: article.content,
             type: "post",
-            coverPhoto: article.article_pic,
-            location: article.article_region,
+            coverPhoto: convertToBase64(article.article_pic),
+            // location: article.location,
             datetime: article.post_date,
             creator_id: article.creator_id,
             creator_username: member.username,
@@ -146,16 +142,10 @@ const getUserPosts = async (req, res, next) => {
     const searchId = req.params.uid;
     // const uId = req.body.userId;
     try {
-        // 因為取消"草稿"狀態，所以不會有差別了 -> 若查看的不是自己的文章，只能看到已發佈的文章(狀態:complete)
-        // if (uId == searchId) {
-        //     articles = await Article.find({ creator_id: searchId },);
-        // } else {
-        //     articles = await Article.find({ creator_id: searchId, status: "complete" },);
-        // }
         articles = await Article.find({ creator_id: searchId });
         events = await Event.find({ creator_id: searchId });
         products = await Product.find({ creator_id: searchId });
-        console.log(products);
+
         // 抽取文章需要的資訊並統一格式
         articles.forEach(article => {
             const item = {
@@ -163,8 +153,8 @@ const getUserPosts = async (req, res, next) => {
                 title: article.article_title,
                 content: article.content,
                 type: "post",
-                coverPhoto: article.article_pic,
-                location: article.article_region,
+                coverPhoto: convertToBase64(article.article_pic),
+                // location: article.location,
                 datetime: article.post_date
             };
             result.push(item);
@@ -176,7 +166,8 @@ const getUserPosts = async (req, res, next) => {
                 title: event.event_title,
                 content: event.event_intro,
                 type: "tour",
-                location: event.destination,
+                coverPhoto: convertToBase64(event.event_pic),
+                // location: event.location,
                 datetime: event.start_time,
                 currency: event.currency,
                 budget: event.budget,
@@ -195,8 +186,8 @@ const getUserPosts = async (req, res, next) => {
                 title: product.product_title,
                 content: product.description,
                 type: "trans",
-                coverPhoto: product.product_pic,
-                location: product.transaction_region,
+                coverPhoto: convertToBase64(product.product_pic),
+                // location: product.location,
                 datetime: product.post_time,
                 currency: product.currency,
                 price: product.price,
@@ -228,21 +219,20 @@ const createPost = async (req, res, next) => {
     if (!post) {
         return res.status(400).json({ message: "未傳入文章創建資訊" });
     }
+
     try {
         let newPost = new Article({
             article_title: post.title,
             content: post.content,
-            article_pic: post.photo,
-            // status: post.status,
+            article_pic: convertToBase64(post.photo),
             creator_id: uId
             // article_region: post.location
         })
         await newPost.save();
-        console.log("new post: ", newPost);
     } catch (err) {
         return res.status(400).json({ message: err.message });
     }
-    // console.log("發布文章",newPost);
+  
     return res.status(200).json({ message: "成功創建文章" });
 }
 
@@ -274,32 +264,6 @@ const updatePost = async (req, res, next) => {
         return res.status(500).json({ message: err.message });
     };
 }
-
-// const deletePost = async (req, res, next) => {
-//     const { pid } = req.params;
-//     const uId = req.body.userId;
-//     let post;
-//     try {
-//         // 找到貼文內容
-//         console.log("pid: ", pid);
-//         post = await Article.findOne({ "_id": pid },);
-//         console.log("post", post);
-//         // 檢查是否有找到文章
-//         if (!post) {
-//             return res.status(404).json({ message: '貼文不存在' });
-//         }
-
-//         // 檢查使用者是否有權限刪除文章
-//         if (!post.creator_id.equals(uId)) {
-//             return res.status(401).json({ message: "您沒有權限刪除此文章" });
-//         }
-//         post = await Article.findByIdAndDelete(pid);
-
-//         res.status(200).json({ message: '成功刪除貼文' });
-//     } catch (err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// };
 
 const deleteContent = async (req, res, next) => {
     const { userId, type, id } = req.body;
@@ -402,10 +366,9 @@ async function getCommentList(pid) {
     }
     try {
         const comments = await Comment.find({ '_id': { $in: post.comment_ids } });
-        // console.log("comments", comments);
         return comments;
     } catch (err) {
-        console.log(err);
+        throw new Error(err);
     }
 };
 
@@ -561,7 +524,8 @@ const searchPosts = async (req, res) => {
         const articles = await Article.find({
             $or: [{ article_title: { $regex: searchRegex } }, { content: { $regex: searchRegex } }]
         });
-        
+
+      
         const events = await Event.find({
             $or: [{ event_title: { $regex: searchRegex } }, { event_intro: { $regex: searchRegex } }]
         });
@@ -581,11 +545,20 @@ const searchPosts = async (req, res) => {
         });
     }
 };
+
+function convertToBase64(image) {
+    let photoBase64 = null;
+    if (image && image.contentType) {
+        photoBase64 = `data:${image.contentType};base64,${image.data.toString("base64")}`;
+    }
+    console.log(photoBase64);
+    return photoBase64;
+}
+
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
 exports.updatePost = updatePost;
-// exports.deletePost = deletePost;
 exports.getPostDetail = getPostDetail;
 exports.deleteContent = deleteContent;
 exports.likePost = likePost;
