@@ -71,6 +71,9 @@ const getAllPosts = async (req, res, next) => {
             };
             result.push(item);
         });
+        if (result.length <= 0) {
+            return res.status(500).json({ message: "資料庫中無任何內容" });
+        }   
         // 依時間倒序排序
         result.sort((a, b) => {
             return new Date(b.datetime) - new Date(a.datetime);
@@ -78,9 +81,6 @@ const getAllPosts = async (req, res, next) => {
         );
     } catch (err) {
         return next(err);
-    }
-    if (result.length <= 0) {
-        return res.status(500).json({ message: "資料庫中無任何內容" });
     }
     return res.status(200).json({ result });
 };
@@ -215,25 +215,31 @@ const getUserPosts = async (req, res, next) => {
 
 const createPost = async (req, res, next) => {
     const post = req.body;
-    const uId = req.body.userId;
     if (!post) {
         return res.status(400).json({ message: "未傳入文章創建資訊" });
     }
 
     try {
+        const article_pic = req.file ? {
+            data: req.file.buffer,
+            contentType: req.file.mimetype
+        } : null;
         let newPost = new Article({
             article_title: post.title,
             content: post.content,
-            article_pic: convertToBase64(post.photo),
-            creator_id: uId
+            article_pic: article_pic,
+            creator_id: post.user_id
             // article_region: post.location
         })
         await newPost.save();
     } catch (err) {
         return res.status(400).json({ message: err.message });
     }
-  
-    return res.status(200).json({ message: "成功創建文章" });
+
+    return res.status(200).json({
+        success: true,
+        message: "成功創建文章"
+    });
 }
 
 const updatePost = async (req, res, next) => {
@@ -442,7 +448,6 @@ const collectProduct = async (req, res) => {
             });
         }
     } catch (err) {
-        console.error(err);
         return res.status(500).json({
             success: false,
             message: '收藏/取消收藏 文章失敗',
@@ -454,44 +459,50 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
     try {
         // 取得文章、活動、商品資訊
         let articles = await Article.aggregate([
-            { $project: {
-                title: '$article_title',
-                content: 1,
-                type: { $literal: "post" },
-                coverPhoto: '$article_pic',
-                location: '$article_region',
-                datetime: '$post_date',
-                likesCount: { 
-                    $size: { $ifNull: ["$like_by_user_ids", []] }
+            {
+                $project: {
+                    title: '$article_title',
+                    content: 1,
+                    type: { $literal: "post" },
+                    coverPhoto: '$article_pic',
+                    location: '$article_region',
+                    datetime: '$post_date',
+                    likesCount: {
+                        $size: { $ifNull: ["$like_by_user_ids", []] }
+                    }
                 }
-            }}
+            }
         ]);
 
         let events = await Event.aggregate([
-            { $project: {
-                title: '$event_title',
-                content: '$event_intro',
-                type: { $literal: "tour" },
-                location: '$destination',
-                datetime: '$start_time',
-                likesCount: { 
-                    $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
+            {
+                $project: {
+                    title: '$event_title',
+                    content: '$event_intro',
+                    type: { $literal: "tour" },
+                    location: '$destination',
+                    datetime: '$start_time',
+                    likesCount: {
+                        $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
+                    }
                 }
-            }}
+            }
         ]);
 
         let products = await Product.aggregate([
-            { $project: {
-                title: '$product_title',
-                content: '$description',
-                type: { $literal: "trans" },
-                coverPhoto: '$product_pic',
-                location: '$transaction_region',
-                datetime: '$post_time',
-                likesCount: { 
-                    $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
+            {
+                $project: {
+                    title: '$product_title',
+                    content: '$description',
+                    type: { $literal: "trans" },
+                    coverPhoto: '$product_pic',
+                    location: '$transaction_region',
+                    datetime: '$post_time',
+                    likesCount: {
+                        $size: { $ifNull: ["$like_by_user_ids", []] }  // 如果 like_by_user_ids 不存在，使用空数组
+                    }
                 }
-            }}
+            }
         ]);
 
         // 合併所有結果
@@ -525,7 +536,7 @@ const searchPosts = async (req, res) => {
             $or: [{ article_title: { $regex: searchRegex } }, { content: { $regex: searchRegex } }]
         });
 
-      
+
         const events = await Event.find({
             $or: [{ event_title: { $regex: searchRegex } }, { event_intro: { $regex: searchRegex } }]
         });
@@ -537,9 +548,8 @@ const searchPosts = async (req, res) => {
         const result = [...articles, ...events, ...products];
 
         res.status(200).json(result);
-        
+
     } catch (err) {
-        console.error(err);
         res.status(500).json({
             message: err.message
         });
@@ -551,7 +561,6 @@ function convertToBase64(image) {
     if (image && image.contentType) {
         photoBase64 = `data:${image.contentType};base64,${image.data.toString("base64")}`;
     }
-    console.log(photoBase64);
     return photoBase64;
 }
 
