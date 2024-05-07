@@ -1,6 +1,8 @@
 import { Fragment } from 'react';
 import registerStyles from '../../styles/Register.module.css';
 import { useIntl } from 'react-intl';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 export const NormalRegisterInput = ({ hint, name, type, value, placeholder, isFocused, isErrorCondition ,errorHint, onChange, isButtonPresent}) => {
     return (
@@ -27,7 +29,8 @@ export const NormalRegisterInput = ({ hint, name, type, value, placeholder, isFo
 
 export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handleInputFocus, handleInputBlur,
     emailRegistered, checkAndSendMail, isSending, countdown, verificationPass,
-    showVerification, verificationCode, handleVerificationCodeChange, veriHint, checkVerification }) => {
+    showVerification, verificationCode, handleVerificationCodeChange, veriHint, checkVerification,
+    isEmailSentLoading, isVeriCodeSentLoading }) => {
     const intl = useIntl();
         return (
         <Fragment>
@@ -46,9 +49,14 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                         type='button'
                         onClick={checkAndSendMail}
                         className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${isSending ? registerStyles.disabled : ''}`}
-                        disabled={isSending || verificationPass || (email.split('@').pop().includes('edu'))}
+                        disabled={isSending || verificationPass || (email.split('@').pop().includes('edu') || isEmailSentLoading)}
                     >
-                       {isSending ? 
+                       {isEmailSentLoading ?
+                       <div>
+                            <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                            {intl.formatMessage({ id: 'loading' })}
+                       </div>
+                       : isSending ? 
                         intl.formatMessage({ id: 'register.countdown' }, { countdown }) : 
                         (email.split('@').pop().includes('edu')) ? 
                             intl.formatMessage({ id: 'register.noStudentAccount' }) : 
@@ -71,8 +79,13 @@ export const EmailRegisterInput = ({ isFocused, email, handleEmailChange, handle
                     onChange = {handleVerificationCodeChange}
                     isButtonPresent = {
                         <button type='button' onClick={checkVerification} className={`${registerStyles.loginForm__button} ${registerStyles.sendButton} ${verificationPass ?  registerStyles.disabled: ''}`}
-                            disabled={verificationPass}>
-                            {verificationPass ?
+                            disabled={verificationPass || isVeriCodeSentLoading}>
+                            {isVeriCodeSentLoading ?
+                            <div>
+                                <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                                {intl.formatMessage({ id: 'loading' })}
+                            </div>
+                            : verificationPass ?
                                 intl.formatMessage({ id: 'register.verifiedCondition' }) :
                                 intl.formatMessage({ id: 'register.unverifiedCondition' })
                             }
