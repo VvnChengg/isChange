@@ -7,10 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function MyComponent() {
   let navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    let path = '/'; 
-    navigate(path);
-  };
   const routeChangeToPublished = () =>{ 
     let path = '/post/published'; 
     navigate(path);
@@ -31,6 +27,16 @@ export default function MyComponent() {
     let path = '/post/to-delete'; 
     navigate(path);
   };
+
+  function onDelete() {
+    var r=window.confirm('你真的真的要刪掉他嗎');
+    if (r==true){
+      api.deleteUserPost('6620a1abe1b917438c49db90')
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+    }
+  };
+
   return (
     <div className="container">
       <div className="edit-content">
@@ -41,12 +47,12 @@ export default function MyComponent() {
               <button className="gray-rectangle" onClick={() => routeChangeToFind()}>尋找貼文</button>
             </div>
           </div>
-            <button className="delete-button" onClick={() => routeChange()}><img
+            <button className="delete-button" onClick={() => onDelete()}><img
               loading="lazy"
               src="/icons/basket.png"
             /></button>
             <Post/>
-            <button className="delete-button" onClick={() => routeChange()}><img
+            <button className="delete-button" onClick={() => onDelete()}><img
               loading="lazy"
               src="/icons/basket.png"
             /></button>

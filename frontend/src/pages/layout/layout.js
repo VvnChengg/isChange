@@ -3,10 +3,10 @@ import { LayoutWrapper } from './layout-style.js';
 
 import Header from '../../components/Header';
 
-export default function Layout() {
+export default function Layout({ language, setLanguage }) {
     return (
         <LayoutWrapper>
-            <Header />
+            <Header language={language} setLanguage={setLanguage} />
             <Outlet />
         </LayoutWrapper>
     )

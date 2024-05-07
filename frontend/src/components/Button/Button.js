@@ -1,9 +1,20 @@
-import { ButtonWrapper } from './Button-style.js';
+import {
+    ButtonWrapper,
+    SecondaryButtonWrapper
+} from './Button-style.js';
 
-export default function Button({text, onClick}) {
+export default function Button({style, text, onClick, secondary}) {
     return (
-        <ButtonWrapper onClick={onClick}>
-            {text}
-        </ButtonWrapper>
+        <>
+            {secondary ?
+                <SecondaryButtonWrapper style={style} onClick={onClick}>
+                    {text}
+                </SecondaryButtonWrapper>
+                :
+                <ButtonWrapper style={style} onClick={onClick}>
+                    {text}
+                </ButtonWrapper>
+            }
+        </>
     )
 }

@@ -1,0 +1,27 @@
+.self-post-wrapper {
+    display: flex;
+    align-items: center; 
+    width: 100%;
+}
+
+.self-post-wrapper > *:first-child {
+    width: 90%;
+    margin-right: 10px;
+}
+
+.nothing-container {
+    align-items: center; 
+    width: 60%;  
+    height: 100%;
+    border: 2px solid black; 
+    padding: 20px; 
+    margin-top: 20px;
+    border-radius: 5%;
+}
+
+.self-post-nothing-msg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

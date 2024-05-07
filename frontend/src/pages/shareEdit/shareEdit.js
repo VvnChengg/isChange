@@ -1,32 +1,57 @@
-import React, {useEffect, useState} from "react";
-import "./shareEdit-style.css";
-// import { AiOutlineMail } from "https://esm.sh/react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useIntl, FormattedMessage } from 'react-intl';
+import { ImageUploadDiv } from '../shareCreate/imageDiv'
+import { useToken } from '../../hooks/useToken';
+// import './shareCreate-style.css';
+
+import {
+  FormInput,
+  FormRange,
+  FormBudget,
+  FormDate
+} from '../../components/FormInput';
+import Button from '../../components/Button';
+
+// import { AiOutlineMail } from 'https://esm.sh/react-icons/ai';
 // import TextField from '@material-ui/core/TextField';
-import { api } from "../../api";
+import { api } from '../../api';
 
 
 export default function Share() {
+  const intl = useIntl();
   let navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    let path = '/'; 
-    navigate(path);
-  };
-
-  const routeChangeToDetail = () =>{ 
-    let path = '/post/detail'; 
-    navigate(path);
-  };
-
-  // const [inputTitle, setInputTitle] = useState('')
-  // const [inputContent, setInputContent] = useState('')
-
+  
+  const { pid } = useParams();
+  const token = useToken();
+  const user_id = localStorage.getItem('user_id');
+  
   const [post, setPost] = useState({
     title: '',
     content: '',
-    // photo: '',
+    photo: '',
     // status: ['draft'],
   })
+
+  const getInfo = async () => {
+    // const pid = "6617996b1067c62b7d704652";
+// const pid = "6617996b106";  // 文章ID格式錯誤
+// const pid = "6617996b1067c62b7d704650"; // 尚未發布文章
+    try{
+      const postInfo = await api.getPostDetail(pid);
+      console.log(postInfo);
+      console.log('aaa');
+      setPost(prevPost => ({ ...prevPost, ...postInfo.item }));
+    }catch(e){
+        alert(`${intl.formatMessage({ id: 'tour.checkEditFailed' })}`);
+    }
+  }
+
+  useEffect(() => {
+      if(token && pid && user_id){
+        getInfo();
+      }
+  }, [token, pid, user_id])
 
   function setTitle(input) {
     setPost({
@@ -42,60 +67,53 @@ export default function Share() {
       });
   }
 
-  // function setPhoto(input) {
-  //   setPost({
-  //       ...post,
-  //       photo: input
-  //   });
-  // }
-
-  // function setStatus(input) {
-  //   setPost({
-  //       ...post,
-  //       status: input
-  //   });
-  // }
+  function setPhoto(input) {
+    setPost({
+        ...post,
+        photo: input
+    });
+  }
 
   function onSubmit() {
     console.log(post);
-
-    api.createPost(post)
-    .then(res => console.log(res))
+    api.updatePost(pid, post)
+    .then(res => {
+      console.log(res)
+      navigate('/post/published');
+    })
     .catch(err => console.log(err));
   }
 
   return (
-    <div className="container">
-      <div className="content">
-        <div className="title-box">
-          <div className="text-xl text-neutral-500">標題</div>
-          <div>
-            <input className="input-box"
-              value={post.title}
-              onChange={(event) => setTitle(event.target.value)}
-              placeholder="標題是什麼咧～" />
-          </div>
+    <div className='container'>
+      <div className='content'>
+        <FormInput
+          type='input'
+          title={intl.formatMessage({ id: 'title' })}
+          placeholder={intl.formatMessage({ id: 'inputTitle' })}          
+          text={post.title}
+          setText={setTitle}
+        />
+        <FormInput
+          type='textarea'
+          title={intl.formatMessage({ id: 'textarea' })}
+          placeholder={intl.formatMessage({ id: 'inputTextarea' })}
+          text={post.content}
+          setText={setContent}
+        />
+        <ImageUploadDiv
+          photo={post.photo}
+          setPhoto={setPhoto} />
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <Button
+            text={intl.formatMessage({ id: 'back' })}
+            onClick={() => window.history.back()}
+          />
+          <Button
+            text={intl.formatMessage({ id: 'post.edit' })}
+            onClick={() => onSubmit()}
+          />
         </div>
-        <div className="text-box">
-          <div className="text-xl leading-7 text-neutral-500">
-            文字說明
-          </div>
-          <div>
-            <textarea 
-              className="input-box"
-              value={post.content}
-              onChange={(event) => setContent(event.target.value)}
-              placeholder="說些什麼吧！"
-              rows={9}
-            />
-          </div>
-          <button className="figure-button" onClick={() => routeChange()}><img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/3f570a0c69a52557b5a1cd2aabd09f0ea82824f62a802a9b9d432ad5b29bbd66?"
-            // className="self-end aspect-square fill-sky-600 mt-[469px] w-[30px] max-md:mt-10"
-          /></button>
-        </div>
-        <button className="publish-button" onClick={() => routeChangeToDetail()}>編輯完成</button>
       </div>
     </div>
   );

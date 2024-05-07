@@ -31,8 +31,8 @@ const checkChat = async (req, res) => {
             });
         }
     } catch (error) {
-        console.error('Failed to check chat:', error);
-        res.status(500).json({ error: 'Failed to check chat' });
+        console.error("Failed to check chat:", error);
+        res.status(500).json({ error: "Failed to check chat" });
     }
 };
 
@@ -46,7 +46,7 @@ const createChat = async (req, res) => {
         const receiver = await Member.findById(receiver_id);
         if (!receiver) {
             res.status(404).json({
-                error: 'Receiver not found.',
+                error: "Receiver not found.",
             });
         }
 
@@ -70,11 +70,11 @@ const createChat = async (req, res) => {
 
         res.status(201).json({
             new_chat_id: newChat._id,
-            message: 'New chat created.'
+            message: "New chat created."
         });
     } catch (error) {
-        console.error('Failed to create chat:', error);
-        res.status(500).json({ error: 'Failed to create chat' })
+        console.error("Failed to create chat:", error);
+        res.status(500).json({ error: "Failed to create chat" })
     }
 };
 
@@ -148,8 +148,8 @@ const getChatDetail = async (req, res) => {
             messages: msgData
         });
     } catch (error) {
-        console.error('Failed to show chat detail:', error);
-        res.status(500).json({ error: 'Failed to show chat detail' });
+        console.error("Failed to show chat detail:", error);
+        res.status(500).json({ error: "Failed to show chat detail" });
     }
 };
 
@@ -212,8 +212,8 @@ const getChatList = async (req, res) => {
             res.status(200).json({ chats: chatData });
         }
     } catch (error) {
-        console.error('Failed to show chatlist:', error);
-        res.status(500).json({ error: 'Failed to show chatlist' });
+        console.error("Failed to show chatlist:", error);
+        res.status(500).json({ error: "Failed to show chatlist" });
     }
 };
 

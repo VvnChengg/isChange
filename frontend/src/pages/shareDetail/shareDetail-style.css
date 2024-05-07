@@ -158,6 +158,7 @@
     border: 0;
     background-color: #fff;
     cursor: pointer;
+    max-width: 30px;
     /* position: absolute;
     bottom: 230px;
     right: 150px; */

@@ -35,3 +35,10 @@ export const FormTextarea = styled.textarea `
 
     outline: none;
 `
+
+export const FormTextSelect = styled.select`
+    border: 0;
+    padding: 0;
+    outline: none;
+    /* 你可以在這裡添加更多的 CSS 樣式 */
+`;

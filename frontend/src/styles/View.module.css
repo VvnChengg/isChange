@@ -11,12 +11,22 @@
 .profile {
   display: flex;
   justify-content: space-between;
+  margin: 10%;
+}
+
+.profileLeft, .profileCenter, .profileRight {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .profile img {
-  width: 100px;
-  height: 100px;
+  /* width: 100%;
+  height: 100%; */
   border-radius: 50%;
+  object-fit: cover; /*始終保持圓形*/
 }
 
 .introduction,
@@ -41,7 +51,7 @@ footer {
 }
 
 .selfIntro::before {
-  content: "";
+  content: '';
   display: block;
   height: 20px;
   /* Adjust this value to match the height of your label */
@@ -99,4 +109,11 @@ footer {
   background-color: #2E9EDC;
   color: white;
   padding: 2px 5px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .isChange {
+    width: 80%;
+  }
 }

@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
-import "./shareFind-style.css";
+import React, {useEffect, useState} from 'react';
+import './shareFind-style.css';
 
-import Post from "../../components/Post";
-import { api } from "../../api";
-import { useNavigate } from "react-router-dom";
+import Post from '../../components/Post';
+import { api } from '../../api';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyComponent() {
   let navigate = useNavigate(); 
@@ -12,13 +12,13 @@ export default function MyComponent() {
     navigate(path);
   };
   return (
-    <div className="container">
-      <div className="edit-content">
-        <div className="left-section">
-          <div className="flex flex-col grow post-content">
-            <div className="blue-rectangle-group">
-              <button className="gray-rectangle" onClick={() => routeChange()}>已發布貼文</button>
-              <button className="blue-rectangle">尋找貼文</button>
+    <div className='container'>
+      <div className='edit-content'>
+        <div className='left-section'>
+          <div className='flex flex-col grow post-content'>
+            <div className='blue-rectangle-group'>
+              <button className='gray-rectangle' onClick={() => routeChange()}>已發布貼文</button>
+              <button className='blue-rectangle'>尋找貼文</button>
             </div>
           </div>
             <Post/>

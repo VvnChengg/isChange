@@ -1,14 +1,25 @@
+
 import React, { useState, useEffect, useRef } from 'react';
-import '../../styles/Edit.css';
+import editStyles from '../../styles/Edit.module.css';
+import { FormattedMessage } from 'react-intl';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
+
+
 import { PassWordEdit } from './PassWordDiv';
 import { BasicInfoEdit } from './BasicInfoDiv';
 import { SelfInfo } from './SelfInfo';
-import { ImageUploadDiv } from './ImageDiv';
+import { ImageUploadDiv } from './ImageDiv'
+import { StudentVeri } from './StudentVeri';
+
 import { viewApi } from '../../api/viewApi';
+import { useToken } from '../../hooks/useToken';
+import Button from '../../components/Button';
 
 const Edit = () => {
     const [showPasswordDiv, setShowPasswordDiv] = useState(false);
     const [showBasicInfoDiv, setShowBasicInfoDiv] = useState(false);
+    const [showStudentVeri, setShowStudentVeri] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
     const [introText, setIntroText] = useState('');
@@ -16,24 +27,33 @@ const Edit = () => {
     const [username, setUsername] = useState('');
     const [school, setSchool] = useState('');
     const [photo, setPhoto] = useState('');
+    const [studentVeriStatus, setStudentVeriStatus] = useState(false);
+    const token = useToken();
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const getInfo = async () => {
-        // use viewApi.getMember to get member info
-        const token = localStorage.getItem('access_token');
         const memberInfo = await viewApi.getMember(token);
-        // console.log(memberInfo);
 
         setUsername(memberInfo.username);
         setSchool(memberInfo.exchange_school_name);
         setPhoto(memberInfo.photo);
         setIntroText(memberInfo.intro);
-        // console.log("photo:"+memberInfo.photo);
+        setStudentVeriStatus(memberInfo.student_verification);
+        // console.log('photo:'+memberInfo.photo);
+        setIsLoading(false);
     }
 
     useEffect(() => {
-        getInfo();
-    }, []);
-    
+        if(token){
+            getInfo();
+        }
+
+    }, [token]);
+
+    if (isLoading) {
+        return <Spin />;
+    }
 
 
     // 處理輸入框的焦點
@@ -46,7 +66,6 @@ const Edit = () => {
     };
 
 
-
     const handleShowBasicInfoDivClose = () => {
         setShowBasicInfoDiv(false);
     }
@@ -56,38 +75,57 @@ const Edit = () => {
         setShowPasswordDiv(false);
     }
 
-    const handleSubmitImage = () => {
-        console.log('上傳圖片:', photo);
+    const handleStudentVeriDivClose = () => {
+        setShowStudentVeri(false);
     }
 
-    const handleSubmitIntro = () => {
-        if (introText.length > 200) {
-            alert('自我介紹只能少於200字');
-            return;
-        }
-        console.log('表單已提交:', { introText });
-
-    }
-
-    const handleSubmitStore = () => {
-        handleSubmitIntro()
-        // handleSubmitImage()
-    }
 
     return (
-        <div className="edit-container">
-            <div className="edit-form">
-                <div className="section-1">
-                    <div className="section-1-left">
-                        <ImageUploadDiv photo={photo} setPhoto={setPhoto} />
+        <div className={editStyles.editContainer}>
+            <div className={editStyles.editForm}>
+                <div className={editStyles.section1}>
+                    <div className={editStyles.section1Left}>
+                        <ImageUploadDiv
+                            photo={photo}
+                            setPhoto={setPhoto} />
                     </div>
 
-                    <div className="section-1-right">
-                        <div className="section-heading">基本資料修改</div>
-                        <div className="action-buttons">
-                            <button onClick={() => setShowPasswordDiv(true)}>修改密碼</button>
-                            <button onClick={() => setShowBasicInfoDiv(true)}>修改名稱學校</button>
+                    <div className={editStyles.section1Right}>
+                        <div className={editStyles.sectionHeading}>
+                            <FormattedMessage id='edit.changeBasicInfo'/>
+
                         </div>
+                        <div className={editStyles.actionButtonsDiv}>
+                            <FormattedMessage id='edit.changePassword'>
+                                {(text) => <Button
+                                    style={{ marginBottom: '5%' }}
+                                    onClick={() => setShowPasswordDiv(true)}
+                                    text={text}
+                                />}
+                            </FormattedMessage>
+
+                            <FormattedMessage id='edit.changeUsernameandSchool'>
+                                {(text) => <Button
+                                    style={{ marginBottom: '5%' }}
+                                    onClick={() => setShowBasicInfoDiv(true)}
+                                    text={text}
+                                />}
+                            </FormattedMessage>
+
+                            <FormattedMessage id={studentVeriStatus? 'edit.studentVerified' : 'edit.studentVeri'}>
+                                {(text) => <Button
+                                    style={{ marginBottom: '5%',
+                                    backgroundColor: studentVeriStatus ? '#ccc' : '',
+                                    color: studentVeriStatus ? '#888' : '',
+                                    cursor: studentVeriStatus ? 'not-allowed' : 'default',
+                                    }}
+                                    onClick={studentVeriStatus? undefined : () => setShowStudentVeri(true)}
+                                    // onClick={() => setShowStudentVeri(true)}
+                                    text={text}
+                                />}
+                            </FormattedMessage>
+                        </div>
+
                     </div>
 
                     <BasicInfoEdit
@@ -98,6 +136,7 @@ const Edit = () => {
                         handleInputBlur={handleInputBlur}
                         username={username}
                         school={school}
+                        setStudentVeriStatus={setStudentVeriStatus}
                     />
 
                     <PassWordEdit
@@ -108,8 +147,16 @@ const Edit = () => {
                         handleInputBlur={handleInputBlur}
                     />
 
+                    <StudentVeri
+                        showStudentVeri={showStudentVeri}
+                        handleClose={handleStudentVeriDivClose}
+                        isFocused={isFocused}
+                        handleInputFocus={handleInputFocus}
+                        handleInputBlur={handleInputBlur}
+                    />
+
                 </div>
-                <div className="section-2">
+                <div className={editStyles.section2}>
                     <SelfInfo setIntroText={setIntroText} introText={introText} />
                 </div>
             </div>

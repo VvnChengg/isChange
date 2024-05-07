@@ -10,9 +10,9 @@ export const registerApi = {
         })
             .then(res => {
                 if (res.data.status === 'verified') {
-                    console.log('Verification code has been sent');
+                    // console.log('Verification code has been sent');
                 } else {
-                    console.log('Failed to send verification code: ' + res.data.message);
+                    // console.log('Failed to send verification code: ' + res.data.message);
                 }
                 return res.data;
             })
@@ -27,7 +27,7 @@ export const registerApi = {
             verification_code: verification_code
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
@@ -62,10 +62,13 @@ export const registerApi = {
             exchange_school_name: exchange_school_name
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                // console.log(err)
+                return err
+            });
     },
 
 };

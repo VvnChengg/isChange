@@ -12,7 +12,9 @@ npm start
 * `src/api` 放 api
 * `src/components` 放各個頁面共用的元件
 * `src/pages` 放各個頁面，底下一個頁面一個資料夾，裏面包含 `<page_name>.js`、`<page_name>-style.js`、`index.js`
-* `src/styles` 放各種 css 和字體
+* `src/styles` 放各種 css、字體、主題顏色
+* `src/translations` 放所有文字的中英版本
+
 ### 2. git commit 說明文字
 * `build` : Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
 * `ci` : Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)

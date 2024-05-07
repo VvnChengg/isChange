@@ -1,10 +1,14 @@
 // Register.js這塊沒有組件化，之後有空再來改
 import React, { useState, Fragment, useEffect } from 'react';
-import '../../styles/Register.css';
+import registerStyles from '../../styles/Register.module.css';
 import { loginApi } from '../../api/loginApi';
 import { registerApi } from '../../api/registerApi';
+import {EmailRegisterInput, NormalRegisterInput} from './RegisterInputs';
+import { useIntl } from 'react-intl';
+import { toast } from 'react-toastify';
 
 const Register = () => {
+    const intl = useIntl();
     const [email, setEmail] = useState('');
     const [isFocused, setIsFocused] = useState(false);
     const [emailRegistered, setEmailRegistered] = useState(false);
@@ -30,7 +34,7 @@ const Register = () => {
     // const [fileUploaded, setFileUploaded] = useState(false);
 
     const [userSchoolName, setUserSchoolname] = useState('');
-    // const [userSchoolNameError, setUserSchoolNameError] = useState(false);
+    const [userSchoolNameError, setUserSchoolNameError] = useState(false);
 
 
     // 處理輸入框的焦點
@@ -51,16 +55,17 @@ const Register = () => {
         // false => 尚未被註冊
         try {
             const data = await loginApi.login_or_register(email);
-            console.log(data);
+            // console.log(data);
             if (data === 1) {
                 return true;
             } else {
-                alert('請再試一次');
+                toast.error(`${intl.formatMessage({ id: 'register.tryAgain' })}`);
+                // alert('請再試一次');
                 return null;
             }
         } catch (error) {
             // Handle error
-            console.error('Error getting user info:', error);
+            // console.error('Error getting user info:', error);
             return false;
         }
     };
@@ -70,15 +75,16 @@ const Register = () => {
     };
 
 
-    const SentMail = async () => {
+    const checkAndSendMail = async () => {
         // 檢查此email是否已被註冊
         let registered = await checkEmailInDatabase(email);
         setEmailRegistered(registered);
-        console.log('registered in SentMail:', registered);
+        // console.log('registered in SentMail:', registered);
 
         //若已被註冊則不寄送，並彈出視窗
         if (registered) {
-            alert('此信箱已被註冊');
+            toast.error(`${intl.formatMessage({ id: 'register.emailRegistered' })}`);
+            // alert('此信箱已被註冊');
         } else if(registered === false){
             sendMail(email);
             // console.log('寄送驗證信:', email);
@@ -86,6 +92,15 @@ const Register = () => {
     };
 
     const sendMail = async (email) => {
+        // Regular expression for basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            alert(`${intl.formatMessage({ id: 'login.invalidEmailInput' })}`);
+            return;
+        }
+        
+        
         // 在這裡寄送驗證信
         try {
             const data = await registerApi.register(email);
@@ -102,15 +117,17 @@ const Register = () => {
                     setIsSending(false);
                     clearInterval(intervalId);
                 }, 45000);
-                alert(`${data.message}`);
+                
+                toast.success(`${data.message}`);
                 return true;
             } else {
-                alert(`${data.message}`);
+                toast.error(`${data.message}`);
                 return false;
             }
         } catch (error) {
-            console.error('Error getting user info:', error);
-            alert(`'錯誤訊息，請重新驗證'`);
+            // console.error('Error getting user info:', error);
+            toast.error(`${intl.formatMessage({ id: 'register.resendMail' })}`);
+            // alert(`'錯誤訊息，請重新驗證'`);
         }
     };
 
@@ -131,27 +148,31 @@ const Register = () => {
         // false => 錯誤
         try{
             const data = await registerApi.verifyEmailPost(email, verificationCode);
-            console.log(data);
+            // console.log(data);
             if(data.status === 'verified'){
-                console.log(data);
+                // console.log(data);
                 setVerificationPass(true);
                 setVeriHint('');
-                alert(`${data.message}`);
+                toast.success(`${intl.formatMessage({ id: 'register.emailVerified' })}`);
+                // alert(`${data.message}`);
                 return true;
             }else{
                 setVerificationPass(false);
-                setVeriHint('驗證碼錯誤');
-                alert(`${data.message}`);
+                // setVeriHint('驗證碼錯誤');
+                setVeriHint(`${intl.formatMessage({ id: 'register.emailVerifiedFailedButton' })}`);
+                toast.error(`${intl.formatMessage({ id: 'register.emailVerifiedFailed' })}`);
+                // alert(`${data.message}`);
                 return false;
             }
         }catch(error){
-            console.error('Error getting user info:', error);
-            alert(`'錯誤訊息，請重新驗證'`);
+            // console.error('Error getting user info:', error);
+            // alert(`'錯誤訊息，請重新驗證'`);
+            toast.error(`${intl.formatMessage({ id: 'register.checkVerifiedFailed' })}`);
         }
     }
 
     useEffect(() => {
-        console.log('verificationPass changed:', verificationPass);
+        // console.log('verificationPass changed:', verificationPass);
     }, [verificationPass]);
 
     const checkVerification = async () => {
@@ -216,7 +237,7 @@ const Register = () => {
         try {
             const email = localStorage.getItem('email');
             const data = await registerApi.verifyUsername(username, email);
-            console.log(data);
+            // console.log(data);
 
             if (data.status === 'success') {
                 setUsernameRegistered(false);
@@ -227,20 +248,20 @@ const Register = () => {
             }        
         } catch(error) {
             if (error.response) {
-                console.log(error.response.data);
+                // console.log(error.response.data);
                 // error.response.data 將會是你的錯誤訊息物件，例如：
-                // { status: "failed", message: "使用者名稱已有人使用，請更換其他名稱" }
+                // { status: 'failed', message: '使用者名稱已有人使用，請更換其他名稱' }
                 if (error.response.data.status === 'failed') {
                     setUsernameRegistered(true);
                 } else {
                     setUsernameRegistered(false);
                 }
             } else if (error.request) {
-                console.error('No response was received', error.request);
+                // console.error('No response was received', error.request);
             } else {
-                console.error('Error setting up the request', error.message);
+                // console.error('Error setting up the request', error.message);
             }
-            console.error('Error config:', error.config);
+            // console.error('Error config:', error.config);
         };
     }
 
@@ -266,168 +287,121 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('表單已提交:', { email, passWord, passWord_confirm, username });
+        // console.log('表單已提交:', { email, passWord, passWord_confirm, username });
         try{
             const data = await registerApi.verifyMemberPatch(email, passWord, username, userSchoolName);
             if(data.status === 'success'){
-                console.log(data);
-                alert(`${data.message}`);
+                // console.log(data);
+                toast.success(`${intl.formatMessage({ id: 'register.registerSuccess' })}`);
+                // alert(`${data.message}`);
                 // 跳轉到登入頁面
                 window.location.href = '/login';
             }else{
-                alert(`${data.message}`);
+                toast.error(`${intl.formatMessage({ id: 'register.registerFailed' })}`);
+                // alert(`${data.message}`);
             }
         }catch(error){
-            console.error('Error getting user info:', error);
-            alert(`'錯誤訊息，請重新嘗試註冊'`);
+            // console.error('Error getting user info:', error);
+           toast.error(`${intl.formatMessage({ id: 'register.registerFailed' })}`);
+            // alert(`'錯誤訊息，請重新嘗試註冊'`);
         }
     };
 
     return (
-        <div className="register-container">
-            <form className="register-form" onSubmit={handleSubmit}>
-                <label htmlFor="email" className="login-form__label">電子信箱</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={handleEmailChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="請輸入電子信箱"
-                            required
-                        />
-                        {emailRegistered && <span className="registered-text">已被註冊</span>}
-                    </div>
-                    <button
-                        type = "button"
-                        onClick={SentMail}
-                        className={`login-form__button send-button ${isSending ? 'disabled' : ''}`}
-                        disabled={isSending || verificationPass || (email.split('@').pop().includes('edu'))}
-                    >
-                        {isSending ? `再 ${countdown} 秒可以重新寄送` : (email.split('@').pop().includes('edu')) ? '註冊時無法使用學生帳號' : '寄送驗證信'}
-                    </button>
-                </div>
+        <div className={registerStyles.registerContainer}>
+            <form className={registerStyles.registerForm} onSubmit={handleSubmit}>
+                <EmailRegisterInput
+                isFocused={isFocused}
+                email={email}
+                handleEmailChange={handleEmailChange}
+                emailRegistered={emailRegistered}
+                checkAndSendMail={checkAndSendMail}
+                isSending={isSending}
+                countdown={countdown}
 
-                {showVerification && (
-                    <Fragment>
-                        <label htmlFor="verificationCode" className="login-form__label">驗證碼</label>
-                        <div className="login-form__input-group">
-                            <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                                <input
-                                    type="text"
-                                    id="verificationCode"
-                                    value={verificationCode}
-                                    onChange={handleVerificationCodeChange}
-                                    onFocus={handleInputFocus}
-                                    onBlur={handleInputBlur}
-                                    className="login-form__input"
-                                    placeholder="請輸入驗證碼"
-                                    required
-                                />
-                                {!verificationPass && <span className="registered-text"> {veriHint} </span>}
-                            </div>
-                            <button type="button" onClick={checkVerification} className={`login-form__button send-button ${verificationPass ? 'disabled' : ''}`}
-                                disabled={verificationPass}>
-                                {verificationPass ? `已驗證` : '驗證'}
-                            </button>
-                        </div>
-                    </Fragment>
-                )}
-                <label htmlFor="password-input" className="login-form__label">輸入密碼</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="password"
-                            id="password-input"
-                            value={passWord}
-                            onChange={handlePasswordChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="請輸入密碼"
-                            required
-                        />
-                        {!passWordRuleMatched && <span className="registered-text">密碼至少要8個字</span>}
-                    </div>
-                </div>
+                verificationPass={verificationPass}
+                showVerification={showVerification}
+                verificationCode={verificationCode}
+                handleVerificationCodeChange={handleVerificationCodeChange}
+                veriHint={veriHint}
+                checkVerification={checkVerification}
 
-                <label htmlFor="password-confirm-input" className="login-form__label">確認密碼</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="password"
-                            id="password-confirm-input"
-                            value={passWord_confirm}
-                            onChange={handlePasswordConfirmChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="再輸入密碼"
-                            required
-                        />
-                        {!isPassWordSame && <span className="registered-text">密碼不同</span>}
-                    </div>
-                </div>
+                handleInputFocus={handleInputFocus}
+                handleInputBlur={handleInputBlur}
+                />
+                
+                <NormalRegisterInput
+                hint={intl.formatMessage({ id: 'register.passwordHint' })}
+                name='password-input'
+                type='password'
+                value={passWord}
+                onChange={handlePasswordChange}
+                placeholder={intl.formatMessage({ id: 'register.pleasePasswordHint' })}
+                isFocused={isFocused}
+                errorHint={intl.formatMessage({ id: 'register.passwordRule' })}
+                isErrorCondition={!passWordRuleMatched}
+                />
 
-                <label htmlFor="username" className="login-form__label">使用者名稱</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="text"
-                            id="username"
-                            value={username}
-                            onChange={handleUserNameChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="請輸入使用者名稱"
-                            required
-                        />
-                        {usernameRegistered && <span className="registered-text">該名稱已被使用</span>}
-                    </div>
-                </div>
+                <NormalRegisterInput
+                hint={intl.formatMessage({ id: 'register.confirmPassword' })}
+                name='password-confirm-input'
+                type='password'
+                value={passWord_confirm}
+                onChange={handlePasswordConfirmChange}
+                placeholder={intl.formatMessage({ id: 'register.pleaseConfirmPassword' })}
+                isFocused={isFocused}
+                errorHint={intl.formatMessage({ id: 'register.passwordNotMatch' })}
+                isErrorCondition={!isPassWordSame}
+                />
 
-                <label htmlFor="username" className="login-form__label">交換學校</label>
-                <div className="login-form__input-group">
-                    <div className={`input-container ${isFocused ? 'focused' : ''}`}>
-                        <input
-                            type="text"
-                            id="userSchoolName"
-                            value={userSchoolName}
-                            onChange={handleUserSchoolNameChange}
-                            onFocus={handleInputFocus}
-                            onBlur={handleInputBlur}
-                            className="login-form__input"
-                            placeholder="輸入交換學校"
-                            required
-                        />
-                        {/* {userSchoolNameError && <span className="registered-text">交換學校不可為空</span>} */}
-                    </div>
-                </div>
+                <NormalRegisterInput
+                hint={intl.formatMessage({ id: 'register.username' })}
+                name='username-input'
+                type='text'
+                value={username}
+                onChange={handleUserNameChange}
+                placeholder={intl.formatMessage({ id: 'register.pleaseEnterUserName' })}
+                isFocused={isFocused}
+                errorHint={intl.formatMessage({ id: 'register.usernameRegistered' })}
+                isErrorCondition={usernameRegistered}
+                />
+
+
+                <NormalRegisterInput
+                hint={intl.formatMessage({ id: 'register.schoolName' })}
+                name='school-input'
+                type='text'
+                value={userSchoolName}
+                onChange={handleUserSchoolNameChange}
+                placeholder={intl.formatMessage({ id: 'register.pleaseEnterSchoolName' })}
+                isFocused={isFocused}
+                errorHint='交換學校不可為空'
+                isErrorCondition={false}
+                />
+
                 {/* 這一區為學生證上傳, 但討論結果為暫時不需要,先註解 */}
-                {/* <label htmlFor="student-id" className="login-form__label">學生認證</label>
-                <div className="login-form__input-group">
+                {/* <label htmlFor='student-id' className='login-form__label'>學生認證</label>
+                <div className='login-form__input-group'>
                     <div className={`input-container ${isFocused ? 'focused' : ''}`}>
                         <input
-                            type="file"
-                            id="student-id"
+                            type='file'
+                            id='student-id'
                             onChange={handleFileUpload}
                             onFocus={handleInputFocus}
                             onBlur={handleInputBlur}
-                            className="login-form__input"
+                            className='login-form__input'
                         />
-                        {fileUploaded && <span className="registered-text">檔案已上傳</span>}
+                        {fileUploaded && <span className='registered-text'>檔案已上傳</span>}
                     </div>
                 </div> */}
 
                 <br />
-                <div className="submit-container">
-                    <button type="submit" disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName} className="login-form__button">
-                        {(!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName) ? '請檢查表單' : '送出表單'}
+                <div className={registerStyles.submitContainer}>
+                    <button type='submit' disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName} className={registerStyles.loginForm__button}>
+                        {(!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName) ? 
+                        intl.formatMessage({ id: 'register.checkForm' }) : 
+                        intl.formatMessage({ id: 'register.sendForm' })
+                        }
                     </button>
                 </div>
             </form>

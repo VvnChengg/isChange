@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
-import '../../styles/LoginForm.css';
+import { useNavigate } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
+
+import loginStyles from '../../styles/LoginForm.module.css';
+
 import LoginFormPwd from './LoginFormPwd'; // 匯入密碼表單元件
 import EmailInput from './EmailInput';
-import AuthButton from './AuthButtons';
+import Button from '../../components/Button';
+
 import { loginApi } from '../../api/loginApi';
 
 const LoginForm = () => {
+  const intl = useIntl();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [showPasswordForm, setShowPasswordForm] = useState(false); // 狀態用於顯示/隱藏密碼表單
-  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -18,10 +25,10 @@ const LoginForm = () => {
   const getUserInfoFromDatabase = async (email) => {
     try {
       const data = await loginApi.login_or_register(email);
-      console.log(data);
+      // console.log(data);
       if (data && data.error) {
         // Handle error in data
-        console.error('Error in data:', data.error);
+        // console.error('Error in data:', data.error);
       } else {
         setShowPasswordForm(true);
       }
@@ -35,7 +42,7 @@ const LoginForm = () => {
         navigate('/register');
 
       } else {
-        console.error('Error getting user info:', error);
+        // console.error('Error getting user info:', error);
       }
       
       // navigate('/register'); //因為現在可以判斷成功登入，但找不到使用者會噴錯，有點偷吃步但之後應該要改掉
@@ -55,14 +62,28 @@ const LoginForm = () => {
     <>
       {!showPasswordForm && (
         <>
-          <div className={`login-form ${showPasswordForm ? 'hidden' : ''}`}>
-            <h2 className="login-form__title">登入或建立帳號</h2>
+          <div className={`${loginStyles.loginForm} ${showPasswordForm ? 'hidden' : ''}`}>
+            <h2 className= {loginStyles.loginForm__title}>
+              <FormattedMessage id='login.title' />
+            </h2>
             <EmailInput email={email} handleEmailChange={handleEmailChange} />
-            <AuthButton handleAuth={handleUseEmailAuth} label="使用電子信箱登入" />
-            <label className="login-form__label">
-              或
+
+            <Button
+              style={{ width: '60%', height: '35px', margin: 'auto' }}
+              onClick={handleUseEmailAuth}
+              text={intl.formatMessage({ id: 'login.useEmailLogin' })}
+            />
+
+            <label className={loginStyles.loginForm__label}>
+              <FormattedMessage id='login.or' />
             </label>
-            <AuthButton handleAuth={handleUseGoogleAuth} label="使用 Google 帳號登入" />
+            
+            <Button
+              style={{ width: '60%', height: '35px', margin: 'auto' }}
+              secondary={true}
+              onClick={handleUseGoogleAuth}
+              text={intl.formatMessage({ id: 'login.useGoogleLogin' })}
+            />
           </div>
         </>
       )}

@@ -1,1 +1,1 @@
-export { default } from './View';
+export { ViewWithUid, ViewWithoutUid } from './View';

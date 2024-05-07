@@ -15,11 +15,11 @@ export const editApi = {
             }
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 throw err
             });
     },
@@ -35,11 +35,11 @@ export const editApi = {
             }
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 throw err
             });
     },
@@ -54,34 +54,68 @@ export const editApi = {
             }
         })
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 throw err
             });
     },
 
     editImage: (formData, token) => {
-        console.log("formData", formData);
-        console.log("token", token);
         return axios.patch(`${hostname}/member/edit-page`,
             formData, {
-
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
             }
         }, )
             .then(res => {
-                console.log(res)
+                // console.log(res)
                 return res.data
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 throw err
             });
+    },
+
+    // 寄送學生信箱驗證碼
+    editStudentVeriSendCode: (exchange_school_email, token) => {
+        return axios.patch(`${hostname}/member/stud-ver-code`, {
+            exchange_school_email: exchange_school_email,
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }, )
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            // console.log(err);
+            throw err
+        });
+    },
+
+    // 學生信箱驗證碼驗證
+    editStudentVeri: (exchange_school_email, veriCode,token) => {
+        return axios.patch(`${hostname}/member/stud-ver`, {
+            exchange_school_email: exchange_school_email,
+            verification_code: veriCode
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }, )
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            console.log(err);
+            throw err
+        });
     }
 
 };
