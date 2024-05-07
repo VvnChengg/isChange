@@ -64,10 +64,10 @@ const getAllPosts = async (req, res, next) => {
                 datetime: product.post_time,
                 currency: product.currency,
                 price: product.price,
-                product_type: product.product_type,
+                productType: product.product_type,
                 period: product.period,
                 status: product.status,
-                transaction_way: product.transaction_way
+                transactionWay: product.transaction_way
             };
             result.push(item);
         });
