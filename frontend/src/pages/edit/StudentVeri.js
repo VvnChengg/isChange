@@ -7,6 +7,8 @@ import { FormattedMessage } from 'react-intl';
 import { useIntl } from 'react-intl';
 import { useToken } from '../../hooks/useToken';
 import { toast } from 'react-toastify';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 
 // 編輯基本資料的元件
@@ -19,6 +21,8 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
     const [countdown, setCountdown] = useState(45);
     const [showVerification, setShowVerification] = useState(false);
     const token = useToken();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isVeriCodeSubmitting, setIsVeriCodeSubmitting] = useState(false);
 
 
 
@@ -32,6 +36,7 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
     
     // 在這裡寄送驗證信
     const checkAndSendSchoolEmail = async () => {
+        setIsSubmitting(true);
         if (!schoolEmail.split('@').pop().includes('edu')){
             toast.error(`${intl.formatMessage({ id: 'edit.notStudentEmail' })}`);
             return;
@@ -39,6 +44,7 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
 
         try {
             const data = await editApi.editStudentVeriSendCode(schoolEmail, token);
+            setIsSubmitting(false);
             if (data.status === 'verified') {
                 setIsSending(true);
                 setShowVerification(true);
@@ -74,18 +80,22 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
 
     // 確認驗證碼
     const handleConfirmVeriCode = async () => {
+        setIsVeriCodeSubmitting(true);
         try{
             const data = await editApi.editStudentVeri(schoolEmail, veriCode, token);
+            console.log(data);
             if(data.status === 'success'){
                 toast.success(`${intl.formatMessage({ id: 'edit.studentVeriSuccess' })}`);
                 handleClose();
-                setStudentVeriStatus(true);
                 window.location.reload();
             }
-
+            setIsVeriCodeSubmitting(false);
         } catch (error) {
+            console.log(error);
             toast.error(`${intl.formatMessage({ id: 'edit.reVeriCode' })}`);
+            setIsVeriCodeSubmitting(false);
         }
+        
     }
 
 
@@ -118,13 +128,19 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
                             </div>
                             <Button
                                 style={ { 
-                                backgroundColor: (!schoolEmail || isSending) ? '#ccc' : '',
-                                color: (!schoolEmail || isSending) ? '#888' : '',
-                                cursor: (!schoolEmail || isSending) ? 'not-allowed' : 'default',
+                                backgroundColor: (!schoolEmail || isSending || isSubmitting) ? '#ccc' : '',
+                                color: (!schoolEmail || isSending || isSubmitting) ? '#888' : '',
+                                cursor: (!schoolEmail || isSending || isSubmitting) ? 'not-allowed' : '',
                                 height: 'auto'
                             } }
                                 onClick={(!schoolEmail || isSending)?  undefined : checkAndSendSchoolEmail}
-                                text={isSending? <FormattedMessage id='edit.sendingVeri' values={{ countdown: countdown }} /> : <FormattedMessage id='edit.sendVerification' />}
+                                text={isSubmitting?
+                                <div>
+                                    <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                                    {intl.formatMessage({ id: 'loading' })}
+                                </div>    
+                                : isSending? <FormattedMessage id='edit.sendingVeri' values={{ countdown: countdown }} /> 
+                                : <FormattedMessage id='edit.sendVerification' />}
                             />
                         </div>
 
@@ -147,9 +163,20 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
                                 </FormattedMessage>
                             </div>
                             <Button
-                                style={ {whiteSpace:'nowrap'} }
+                                style={ {
+                                    whiteSpace:'nowrap',
+                                    backgroundColor: (!veriCode || isVeriCodeSubmitting) ? '#ccc' : '',
+                                    color: (!veriCode || isVeriCodeSubmitting) ? '#888' : '',
+                                    cursor: (!veriCode || isVeriCodeSubmitting) ? 'not-allowed' : '',
+                                    height: 'auto'
+                            } }
                                 onClick={handleConfirmVeriCode}
-                                text={<FormattedMessage id='edit.confirmCode' />}
+                                text={isVeriCodeSubmitting?
+                                    <div>
+                                        <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                                        {intl.formatMessage({ id: 'loading' })}
+                                    </div>    
+                                    :<FormattedMessage id='edit.confirmCode' />}
                             />
                         </div>
                     </form>

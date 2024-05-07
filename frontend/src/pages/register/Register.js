@@ -6,6 +6,9 @@ import { registerApi } from '../../api/registerApi';
 import {EmailRegisterInput, NormalRegisterInput} from './RegisterInputs';
 import { useIntl } from 'react-intl';
 import { toast } from 'react-toastify';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
+
 
 const Register = () => {
     const intl = useIntl();
@@ -35,6 +38,10 @@ const Register = () => {
 
     const [userSchoolName, setUserSchoolname] = useState('');
     const [userSchoolNameError, setUserSchoolNameError] = useState(false);
+
+    const [isEmailSentLoading, setIsEmailSentLoading] = useState(false);
+    const [isVeriCodeSentLoading, setIsVeriCodeSentLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
 
     // 處理輸入框的焦點
@@ -92,6 +99,7 @@ const Register = () => {
     };
 
     const sendMail = async (email) => {
+        setIsEmailSentLoading(true);
         // Regular expression for basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -104,6 +112,7 @@ const Register = () => {
         // 在這裡寄送驗證信
         try {
             const data = await registerApi.register(email);
+            setIsEmailSentLoading(false);
             if (data.status === 'verified') {
                 setIsSending(true);
                 setShowVerification(true);
@@ -146,8 +155,10 @@ const Register = () => {
         // 在這裡檢查驗證碼是否正確
         // true => ok
         // false => 錯誤
+        setIsVeriCodeSentLoading(true);
         try{
             const data = await registerApi.verifyEmailPost(email, verificationCode);
+            setIsVeriCodeSentLoading(false);
             // console.log(data);
             if(data.status === 'verified'){
                 // console.log(data);
@@ -168,6 +179,7 @@ const Register = () => {
             // console.error('Error getting user info:', error);
             // alert(`'錯誤訊息，請重新驗證'`);
             toast.error(`${intl.formatMessage({ id: 'register.checkVerifiedFailed' })}`);
+            setIsVeriCodeSentLoading(false);
         }
     }
 
@@ -287,9 +299,11 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         // console.log('表單已提交:', { email, passWord, passWord_confirm, username });
         try{
             const data = await registerApi.verifyMemberPatch(email, passWord, username, userSchoolName);
+            setIsSubmitting(false);
             if(data.status === 'success'){
                 // console.log(data);
                 toast.success(`${intl.formatMessage({ id: 'register.registerSuccess' })}`);
@@ -303,6 +317,7 @@ const Register = () => {
         }catch(error){
             // console.error('Error getting user info:', error);
            toast.error(`${intl.formatMessage({ id: 'register.registerFailed' })}`);
+           setIsSubmitting(false);
             // alert(`'錯誤訊息，請重新嘗試註冊'`);
         }
     };
@@ -328,6 +343,9 @@ const Register = () => {
 
                 handleInputFocus={handleInputFocus}
                 handleInputBlur={handleInputBlur}
+
+                isEmailSentLoading={isEmailSentLoading}
+                isVeriCodeSentLoading={isVeriCodeSentLoading}
                 />
                 
                 <NormalRegisterInput
@@ -397,8 +415,13 @@ const Register = () => {
 
                 <br />
                 <div className={registerStyles.submitContainer}>
-                    <button type='submit' disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName} className={registerStyles.loginForm__button}>
-                        {(!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName) ? 
+                    <button type='submit' disabled={!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName || isSubmitting} className={registerStyles.loginForm__button}>
+                        {isSubmitting?
+                        <div>
+                            <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                            {intl.formatMessage({ id: 'loading' })}
+                        </div>
+                        :(!isPassWordSame || !verificationPass || usernameRegistered || !email || !passWord || !username || !userSchoolName) ? 
                         intl.formatMessage({ id: 'register.checkForm' }) : 
                         intl.formatMessage({ id: 'register.sendForm' })
                         }
