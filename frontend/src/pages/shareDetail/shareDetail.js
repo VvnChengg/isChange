@@ -141,20 +141,13 @@ export default function MyComponent() {
                   src='/icons/heartHollow.png'
                 /></button>
                 }
-                {/* <button className='icon-button' onClick={() => PressLike()}><img
-                  loading='lazy'
-                  src='/icons/heartHollow.png'
-                  // src='https://cdn.builder.io/api/v1/image/assets/TEMP/93f6692886fef5c4e581a6d50dc8918be3bc625cacd01ff9a3aa406d436bc2cb?'
-                /></button> */}
-                <button className='icon-button' onClick={() => routeChange()}><img
+                {/* <button className='icon-button' onClick={() => routeChange()}><img
                   loading='lazy'
                   src='/icons/commentButton.png'
-                  // src='https://cdn.builder.io/api/v1/image/assets/TEMP/a5a756b58d142cb690b645513a52d30b8b67dfb9c2d2d8b9b14f5e59e54c55c5?'
-                /></button>
+                /></button> */}
                 <button className='icon-button' onClick={() => PressShare()}><img
                   loading='lazy'
                   src='/icons/shareButton.png'
-                  // src='https://cdn.builder.io/api/v1/image/assets/TEMP/2b5dfa48625bbd19eba35a880219025866e4486fd2d4895d0ab7a334a9ce5e40?'
                 /></button>
               </div>
             </div>
