@@ -25,6 +25,13 @@ export const api = {
                 .catch(err => console.log(err))
         )
     },
+    searchPosts: (keyword) => {
+        return (
+            axios.get(hostname + '/post/search?keyword=' + keyword)
+            .then(res => res.data.result)
+            .catch(err => console.log(err))
+        )
+    },
     createPost: (post) => {
         const token = window.localStorage.getItem('access_token');
         function dataURLtoFile(dataurl, filename) {
