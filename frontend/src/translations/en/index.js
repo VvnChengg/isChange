@@ -47,7 +47,7 @@ const en = {
     'sidebar.priceHigh': 'High price',
 
     'sidebar.transFilter': 'Product Filter',
-    'sidebar.productType': 'Product Type',
+    'sidebar.product_type': 'Product Type',
     'option.kitchen': 'Kitchen',
     'option.living room': 'Living Room',
     'option.restroom': 'Restroom',
@@ -55,7 +55,7 @@ const en = {
     'option.clothing': 'Clothing',
     'option.others': 'Others',
 
-    'sidebar.transactionWay': 'Transaction Way',
+    'sidebar.transaction_way': 'Transaction Way',
     'option.sell': 'Sell',
     'option.purchase': 'Purchase',
     'option.lend': 'Lend',
