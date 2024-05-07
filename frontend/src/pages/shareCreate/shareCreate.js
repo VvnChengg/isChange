@@ -22,11 +22,6 @@ export default function Share() {
   const intl = useIntl();
   let navigate = useNavigate(); 
 
-  const routeChange = () =>{ 
-    let path = '/'; 
-    navigate(path);
-  };
-
   const [post, setPost] = useState({
     title: '',
     content: '',
@@ -55,18 +50,13 @@ export default function Share() {
     });
   }
 
-  // function setStatus(input) {
-  //   setPost({
-  //       ...post,
-  //       status: input
-  //   });
-  // }
-
   function onSubmit() {
     console.log(post);
-    console.log('abc')
     api.createPost(post)
-    .then(res => console.log(res))
+    .then(res => {
+      console.log(res)
+      navigate('/post/published');
+    })
     .catch(err => console.log(err));
   }
 
@@ -87,10 +77,6 @@ export default function Share() {
           text={post.content}
           setText={setContent}
         />
-        {/* <button className='figure-button' onClick={() => routeChange()}><img
-            loading='lazy'
-            src='https://cdn.builder.io/api/v1/image/assets/TEMP/3f570a0c69a52557b5a1cd2aabd09f0ea82824f62a802a9b9d432ad5b29bbd66?'
-          /></button> */}
         <ImageUploadDiv
           photo={post.photo}
           setPhoto={setPhoto} />

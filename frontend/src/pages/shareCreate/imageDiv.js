@@ -68,7 +68,7 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                             /> */}
                             <img src={image}/>
                         </div>)}
-                    <FormattedMessage id='edit.cutImage'>
+                    <FormattedMessage id='post.uploadImage'>
                         {(text) => <Button
                             style={{
                                 width: '100%',
