@@ -153,7 +153,7 @@ export default function Chatroom() {
 
     return (
         <div>
-            {chatData && chatData.length > 0 && (
+            {chatData &&  (
                 <>
                     <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
                     <ChatRoomInput 
@@ -167,9 +167,6 @@ export default function Chatroom() {
             )}
             {!chatData && (
                 <div>Loading...</div>
-            )}
-            {chatData && chatData.length === 0 && (
-                <div>No data available</div>
             )}
         </div>
     );
