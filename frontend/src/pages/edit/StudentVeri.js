@@ -39,6 +39,7 @@ export const StudentVeri = ({ showStudentVeri, setStudentVeriStatus, handleClose
         setIsSubmitting(true);
         if (!schoolEmail.split('@').pop().includes('edu')){
             toast.error(`${intl.formatMessage({ id: 'edit.notStudentEmail' })}`);
+            setIsSubmitting(false);
             return;
         }
 
