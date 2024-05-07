@@ -522,32 +522,88 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
 };
 
 const searchPosts = async (req, res) => {
-    const { searchText } = req.query;
-
-    if (!searchText) {
+    const { keyword } = req.query;
+    if (!keyword) {
         return res.status(400).json({ message: '搜尋內容不能為空' });
     }
-
+    
+    let result = [];
     try {
         // 正則表達，'i'代表不區分大小寫
-        const searchRegex = new RegExp(searchText, 'i');
+        const searchRegex = new RegExp(keyword, 'i');
 
-        const articles = await Article.find({
+        let articles = await Article.find({
             $or: [{ article_title: { $regex: searchRegex } }, { content: { $regex: searchRegex } }]
         });
-
-
-        const events = await Event.find({
+        let events = await Event.find({
             $or: [{ event_title: { $regex: searchRegex } }, { event_intro: { $regex: searchRegex } }]
         });
-
-        const products = await Product.find({
+        let products = await Product.find({
             $or: [{ product_title: { $regex: searchRegex } }, { description: { $regex: searchRegex } }]
         });
 
-        const result = [...articles, ...events, ...products];
+        articles.forEach(article => {
+            const item = {
+                _id: article._id,
+                title: article.article_title,
+                content: article.content,
+                type: "post",
+                coverPhoto: convertToBase64(article.article_pic),
+                // location: article.location,
+                datetime: article.post_date
+            };
+            result.push(item);
+        });
 
-        res.status(200).json(result);
+        events.forEach(event => {
+
+            const item = {
+                _id: event._id,
+                title: event.event_title,
+                content: event.event_intro,
+                type: "tour",
+                coverPhoto: convertToBase64(event.event_pic),
+                // location: event.location,
+                datetime: event.start_time,
+                currency: event.currency,
+                budget: event.budget,
+                end_time: event.end_time,
+                people_lb: event.people_lb,
+                people_ub: event.people_ub,
+                status: event.status
+            };
+            result.push(item);
+        });
+
+        products.forEach(product => {
+            const item = {
+                _id: product._id,
+                title: product.product_title,
+                content: product.description,
+                type: "trans",
+                coverPhoto: convertToBase64(product.product_pic),
+                // location: product.location,
+                datetime: product.post_time,
+                currency: product.currency,
+                price: product.price,
+                product_type: product.product_type,
+                period: product.period,
+                status: product.status,
+                transaction_way: product.transaction_way
+            };
+            result.push(item);
+        });
+
+        if (result.length === 0) {
+            return res.status(200).json({ message: "資料庫中無任何內容" });
+        }
+
+        // 依時間倒序排序
+        result.sort((a, b) => {
+            return new Date(b.datetime) - new Date(a.datetime);
+        });
+
+        return res.status(200).json({ result });
 
     } catch (err) {
         res.status(500).json({
