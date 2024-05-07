@@ -51,6 +51,7 @@ import TransDetail from './pages/transDetail';
 function App() {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
   const [keyword, setKeyword] = useState('');
+  const [search, setSearch] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('language', language);
@@ -65,8 +66,11 @@ function App() {
         <Router>
             <div className="App">
               <Routes>
-                <Route path='/' element={<Layout language={language} setLanguage={setLanguage} setKeyword={setKeyword}/>}>
-                  <Route path='' element={<Home keyword={keyword}/>} />
+                <Route
+                  path='/'
+                  element={<Layout language={language} setLanguage={setLanguage} keyword={keyword} setKeyword={setKeyword} setSearch={setSearch} />}
+                >
+                  <Route path='' element={<Home keyword={keyword} search={search} setSearch={setSearch} />} />
                   <Route path='login' element={<LoginForm />} />
                   <Route path='register' element={<Register />} />
                   <Route path='edit' element={<Edit />} />

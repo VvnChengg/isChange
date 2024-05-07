@@ -16,13 +16,14 @@ import Icon from '../Icon';
 import { Input } from 'antd';
 const { Search } = Input;
 
-export default function Header({ language, setLanguage, setKeyword }) {
+export default function Header({ language, setLanguage, keyword, setKeyword, setSearch }) {
     const navigate = useNavigate();
     const token = window.localStorage.getItem('access_token');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    function onSearch(value, _e, info) {
-        setKeyword(value);
+    function onClickTitle() {
+        setKeyword('');
+        navigate('/');
     }
 
     function changeLanguage() {
@@ -39,8 +40,14 @@ export default function Header({ language, setLanguage, setKeyword }) {
     
     return (
         <HeaderWrapper>
-            <HeaderTitle onClick={() => navigate('/')}>isChange!</HeaderTitle>
-            <Search onSearch={onSearch} style={{ width: '30%', marginTop: '8px' }} />
+            <HeaderTitle onClick={() => onClickTitle()}>isChange!</HeaderTitle>
+            <Search
+                id='header.search'
+                value={keyword}
+                onChange={e => setKeyword(e.target.value)}
+                onSearch={() => setSearch(true)}
+                style={{ width: '30%', marginTop: '8px' }}
+            />
             <HeaderButtonContainer>
                 <HeaderIcon onClick={() => navigate('/chat-list')}>
                     <Icon.Chat />
