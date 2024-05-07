@@ -81,7 +81,6 @@ export default function Home({ keyword }) {
                     if (filterOptions[post.type].hasOwnProperty(key)) {
                         const options = filters[post.type][key];
                         if (!options.includes(post[key])) {
-                            console.log('no!!')
                             return false;
                         }
                     }
@@ -148,7 +147,10 @@ export default function Home({ keyword }) {
         }
     }, [keyword]);
 
-    useEffect(() => setSort('new'), [type]);
+    useEffect(() => {
+        setSort('new');
+        setFilters(filterOptions);
+    }, [type]);
 
     useEffect(() => {
         setToRenderPosts(renderPosts());
