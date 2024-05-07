@@ -123,7 +123,7 @@ export default function SideBar({ showSideBar, type, sort, setSort, filters, set
                                     style={{ marginBottom: '10px', display: 'inline-block' }}
                                     onChange={checked => {
                                         const tempFilters = { ...filters };
-                                        tempFilters.trans[filter] = checked;
+                                        tempFilters.tour[filter] = checked;
                                         setFilters(tempFilters);
                                     }}
                                 >
