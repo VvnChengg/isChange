@@ -104,7 +104,7 @@ export default function Share() {
           title={intl.formatMessage({ id: 'post.articlePicture' })}
           placeholder={intl.formatMessage({ id: 'post.articlePicture' })}
           onFileChange={e => console.log(e.target.files)}
-          imagePreviewUrl={post.article_pic}
+          imagePreviewUrl={post.photo}
           setImagePreviewUrl={setPhoto}
         />
         {/* <ImageUploadDiv
