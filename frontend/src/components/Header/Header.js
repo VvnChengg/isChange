@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DropdownMenu from './DropdownMenu';
 import DropdownMenustyles from '../../styles/DropdownMenu.module.css';
@@ -16,13 +16,13 @@ import Icon from '../Icon';
 import { Input } from 'antd';
 const { Search } = Input;
 
-export default function Header({ language, setLanguage }) {
+export default function Header({ language, setLanguage, setKeyword }) {
     const navigate = useNavigate();
     const token = window.localStorage.getItem('access_token');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    function onSearch() {
-        // TBD
+    function onSearch(value, _e, info) {
+        setKeyword(value);
     }
 
     function changeLanguage() {
@@ -35,6 +35,7 @@ export default function Header({ language, setLanguage }) {
         navigate('/login');
     }
 
+    useEffect(() => {}, [setKeyword]);
     
     return (
         <HeaderWrapper>

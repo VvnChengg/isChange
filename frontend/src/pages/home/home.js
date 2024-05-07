@@ -20,7 +20,7 @@ import { Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 
-export default function Home() {
+export default function Home({ keyword }) {
     const navigate = useNavigate();
 
     const filterOptions = {
@@ -87,8 +87,7 @@ export default function Home() {
                     }
                 }
                 return true;
-            })
-        console.log(posts)
+            });
         return posts;  
     }
 
@@ -110,14 +109,14 @@ export default function Home() {
 
     useEffect(() => {
         setIsLoading(true);
-            api.getHotPosts()
-            .then(res => {
-                setHotPosts(res);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.log(err);
-                setIsLoading(false);
+        api.getHotPosts()
+        .then(res => {
+            setHotPosts(res);
+            setIsLoading(false);
+        })
+        .catch(err => {
+            console.log(err);
+            setIsLoading(false);
         });
         
         setIsLoading(true);
@@ -132,6 +131,22 @@ export default function Home() {
             setIsLoading(false);
         });
     }, []);
+
+    useEffect(() => {
+        if (keyword) {
+            setIsLoading(true);
+            api.searchPosts(keyword)
+            .then(res => {
+                setPosts(res);
+                setToRenderPosts(res);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setIsLoading(false);
+            });
+        }
+    }, [keyword]);
 
     useEffect(() => setSort('new'), [type]);
 
