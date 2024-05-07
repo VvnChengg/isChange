@@ -17,6 +17,7 @@ export default function Chatroom() {
     const hostname = process.env.REACT_APP_API_HOSTNAME;
     const token = useToken();
     const [inputValue, setInputValue] = useState('');
+    let lastExecutionTime = 0;
 
 
     const handleDownload = (imageUrl) => {
@@ -37,6 +38,13 @@ export default function Chatroom() {
 
 
     const handleSubmit = () => {
+        const currentTime = Date.now();
+        if (currentTime - lastExecutionTime < 1000) {
+            return;
+        } 
+
+        lastExecutionTime = currentTime;
+
         if (inputValue.trim() !== '') {
         const body = {content: inputValue.trim(),};
         //console.log(body)
