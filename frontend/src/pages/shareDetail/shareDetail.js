@@ -7,6 +7,7 @@ import { viewApi } from '../../api/viewApi';
 import axios from 'axios';
 import { useToken } from '../../hooks/useToken';
 // import LikeButton from "./likeButton";
+import { toast } from 'react-toastify';
 
 export default function MyComponent() {
   // const [post, setPost] = useState()
@@ -60,24 +61,28 @@ export default function MyComponent() {
   useEffect(() => {
       getInfo();
   }, []);
-//   useEffect(() => {
-//     if(token){
-//         getInfo();
-//     }
-// }, [token]);
 
   function PressLike() {
+    console.log(likes);
+    console.log(isLiked);
+    
     console.log(pid);
     api.pressLike(pid)
     .then(res => console.log(res))
     .catch(err => console.log(err));
+    window.location.reload()
   }
 
   function PressShare() {
-    console.log(pid);
-    api.pressShare(pid)
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
+    const url = window.location.href;
+    navigator.clipboard.writeText(url)
+        .then(() => {
+            console.log('URL copied to clipboard:', url);
+            toast.success(`${'URL copied to clipboard'}`);
+        })
+        .catch((error) => {
+            console.error('Failed to copy URL:', error);
+        });
   }
 
   // function PressComment() {
@@ -126,11 +131,21 @@ export default function MyComponent() {
                   likes={likes}
                   is_liked={isLiked}
                   pid={pid} /> */}
+                {isLiked === true ?
+                <button className='icon-button' onClick={() => PressLike()}><img
+                  loading='lazy'
+                  src='/icons/heartFilled.png'
+                /></button> :
                 <button className='icon-button' onClick={() => PressLike()}><img
                   loading='lazy'
                   src='/icons/heartHollow.png'
-                  // src='https://cdn.builder.io/api/v1/image/assets/TEMP/93f6692886fef5c4e581a6d50dc8918be3bc625cacd01ff9a3aa406d436bc2cb?'
                 /></button>
+                }
+                {/* <button className='icon-button' onClick={() => PressLike()}><img
+                  loading='lazy'
+                  src='/icons/heartHollow.png'
+                  // src='https://cdn.builder.io/api/v1/image/assets/TEMP/93f6692886fef5c4e581a6d50dc8918be3bc625cacd01ff9a3aa406d436bc2cb?'
+                /></button> */}
                 <button className='icon-button' onClick={() => routeChange()}><img
                   loading='lazy'
                   src='/icons/commentButton.png'

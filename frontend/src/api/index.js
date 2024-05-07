@@ -130,24 +130,11 @@ export const api = {
               }
             })
             .then(res => {
-                toast.success(`按讚成功！`);
+                toast.success(`${res.data.message}`);
                 return res.data;
             })
             .catch(err => {
                 console.log(pID)
-                console.log(err)
-                throw err
-            })
-        )
-    },
-    pressShare: (pID) => {
-        return (
-            axios.get(hostname + '/op/copylink', { pID })
-            .then(res => {
-                toast.success(`已複製貼文連結～`);
-                return res.data;
-            })
-            .catch(err => {
                 console.log(err)
                 throw err
             })

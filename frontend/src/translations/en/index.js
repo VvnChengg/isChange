@@ -200,6 +200,7 @@ const en = {
 
     'post.create': 'Create post',
     'post.edit': 'Edit post',
+    'post.uploadImage': 'Upload image',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',

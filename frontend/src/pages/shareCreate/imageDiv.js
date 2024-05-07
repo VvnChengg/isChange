@@ -31,28 +31,6 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
             // Save dataUrl to your state
             setImage(dataUrl);
             setPhoto(dataUrl);
-
-
-            // // Send request here
-            // if (dataUrl && dataUrl !== '/icons/profile.png') {
-            //     // console.log(dataUrl);
-            //     const formData = new FormData();
-            //     const file = dataURLtoFile(dataUrl, 'profile.png');
-            //     formData.append('image', file);
-            //     // console.log(file);
-            //     try {
-            //         const token = localStorage.getItem('access_token');
-            //         const data = await api.postImage(formData, token);
-            //         console.log(data);
-            //         if (data.status === 'success') {
-            //             // console.log('更新後的圖片'+data.data.photo);
-            //             alert('更新成功');
-            //         }
-            //     } catch (error) {
-            //         // console.error(error);
-            //         alert('更新失敗');
-            //     }
-            // }
         }
         setModalIsOpen(false);
     };
@@ -79,7 +57,7 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                 {modalIsOpen && <div className={editStyles.floatingDiv}>
                     {image && (
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', margin:'5%' }}>
-                            <AvatarEditor
+                            {/* <AvatarEditor
                                 ref={editorRef}
                                 image={image}
                                 width={136}
@@ -87,7 +65,8 @@ export const ImageUploadDiv = ({ photo, setPhoto }) => {
                                 border={50}
                                 borderRadius={68}
                                 scale={1.2}
-                            />
+                            /> */}
+                            <img src={image}/>
                         </div>)}
                     <FormattedMessage id='edit.cutImage'>
                         {(text) => <Button
