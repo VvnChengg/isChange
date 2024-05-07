@@ -97,6 +97,7 @@ export default function Share() {
         <CreateButtonContainer>
           <Button
             text={intl.formatMessage({ id: 'back' })}
+            onClick={() => window.history.back()}
           />
           <Button
             text={intl.formatMessage({ id: 'post.create' })}

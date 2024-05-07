@@ -7,9 +7,7 @@ import { useToken } from '../../hooks/useToken';
 
 import {
   FormInput,
-  FormRange,
-  FormBudget,
-  FormDate
+  FormImage
 } from '../../components/FormInput';
 import Button from '../../components/Button';
 
@@ -101,9 +99,17 @@ export default function Share() {
           text={post.content}
           setText={setContent}
         />
-        <ImageUploadDiv
+        <FormImage
+          type='file'
+          title={intl.formatMessage({ id: 'post.articlePicture' })}
+          placeholder={intl.formatMessage({ id: 'post.articlePicture' })}
+          onFileChange={e => console.log(e.target.files)}
+          imagePreviewUrl={post.article_pic}
+          setImagePreviewUrl={setPhoto}
+        />
+        {/* <ImageUploadDiv
           photo={post.photo}
-          setPhoto={setPhoto} />
+          setPhoto={setPhoto} /> */}
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <Button
             text={intl.formatMessage({ id: 'back' })}
