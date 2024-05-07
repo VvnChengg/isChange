@@ -522,15 +522,15 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
 };
 
 const searchPosts = async (req, res) => {
-    const { searchText } = req.query;
-    if (!searchText) {
+    const { keyword } = req.query;
+    if (!keyword) {
         return res.status(400).json({ message: '搜尋內容不能為空' });
     }
     
     let result = [];
     try {
         // 正則表達，'i'代表不區分大小寫
-        const searchRegex = new RegExp(searchText, 'i');
+        const searchRegex = new RegExp(keyword, 'i');
 
         let articles = await Article.find({
             $or: [{ article_title: { $regex: searchRegex } }, { content: { $regex: searchRegex } }]
