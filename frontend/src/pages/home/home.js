@@ -25,8 +25,8 @@ export default function Home({ keyword, search, setSearch }) {
 
     const filterOptions = {
         trans: {
-            product_type: ['kitchen', 'living room', 'restroom', 'cosmetic','clothing', 'others'],
-            transaction_way: ['sell', 'purchase', 'lend', 'borrow'],
+            productType: ['kitchen', 'living room', 'restroom', 'cosmetic','clothing', 'others'],
+            transactionWay: ['sell', 'purchase', 'lend', 'borrow'],
             status: ['in stock', 'reserved', 'sold'],
             currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
         },

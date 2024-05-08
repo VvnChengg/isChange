@@ -47,7 +47,7 @@ const zh = {
     'sidebar.priceHigh': '價格最高',
 
     'sidebar.transFilter': '交易篩選',
-    'sidebar.product_type': '商品種類',
+    'sidebar.productType': '商品種類',
     'option.kitchen': '廚房',
     'option.living room': '客廳',
     'option.restroom': '浴室',
@@ -55,7 +55,7 @@ const zh = {
     'option.clothing': '服飾',
     'option.others': '其他',
 
-    'sidebar.transaction_way': '交易方式',
+    'sidebar.transactionWay': '交易方式',
     'option.sell': '賣出',
     'option.purchase': '購買',
     'option.lend': '出借',
