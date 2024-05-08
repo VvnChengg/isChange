@@ -84,7 +84,7 @@ export const transApi = {
             }
             return new File([u8arr], filename, { type: mime });
         }
-        const file = data.product_pic? "" : dataURLtoFile(data.product_pic, 'transaction.png');
+        const file = data.product_pic === "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
         formData.append('product_title', data.trans_title);
