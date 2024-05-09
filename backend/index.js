@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
@@ -15,17 +17,22 @@ const io = require("socket.io")(socketPort, {
 
 require("dotenv").config(); // 加了這行就可以抓到 port
 
+const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Routes
 const chatRoutes = require("./src/routes/chat");
 const postRoutes = require("./src/routes/post");
 const tourRoutes = require("./src/routes/tour.js");
 const memberAuthRoutes = require("./src/routes/memberAuth");
 const memberRoutes = require("./src/routes/member");
 const productRoutes = require("./src/routes/product");
+const ssoRoutes = require("./src/routes/SSO");
 
 // app.use('/api/名稱', 路徑)
 app.use("/api/chat", chatRoutes);
@@ -34,6 +41,7 @@ app.use("/api/tour", tourRoutes);
 app.use("/api/member-auth", memberAuthRoutes);
 app.use("/api/member", memberRoutes);
 app.use("/api/trans", productRoutes);
+app.use("/api/sso", ssoRoutes);
 
 // 啟動 HTTP 伺服器
 const server = app.listen(process.env.PORT || 3000, () =>
