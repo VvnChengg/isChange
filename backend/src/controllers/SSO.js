@@ -19,7 +19,6 @@ const googleSignIn = async (req, res) => {
       idToken: tokenId,
       audience: process.env.GOOGLE_OAUTH_ID,
     });
-
     const payload = ticket.getPayload();
     const { email, name } = payload;
 
