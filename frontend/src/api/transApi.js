@@ -114,4 +114,38 @@ export const transApi = {
             });
 
     },
+
+    collectTrans: (tid, user_id, token) => {
+        return axios.post(`${hostname}/trans/collect`,
+            {
+                tid: tid,
+                user_id: user_id
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                return res.data
+            })
+            .catch(err => {
+                return err
+            });
+    },
+
+    getCollectTrans: (user_id, token) => {
+        return axios.get(`${hostname}/trans/collect/${user_id}`,
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            return err
+        });
+    },
 }

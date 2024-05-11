@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
+
+import { toast } from 'react-toastify';
+import { useIntl } from 'react-intl';
+
 
 import {
     PostDetailWrapper,
@@ -10,21 +14,53 @@ import {
 } from './PostDetail-style.js';
 
 import SharePage from '../../components/SharePage';
+import CollectPost from '../CollectPost/CollectPost.js';
 import Tag from '../Tag';
 import Icon from '../Icon';
 
 export default function PostDetail({ post }) {
-    console.log(post);
+    // console.log(post);
     // 部署到服務器上時應該url就可以用了, 現在因為URL是local端 API會報錯
     const url = window.location.href;
     // const url = "https://www.facebook.com/?locale=zh_TW";
+
+    const token = localStorage.getItem('access_token');
+    const user_id = localStorage.getItem('user_id');
+    const expiryTime = localStorage.getItem('expiry_time');
+    const intl = useIntl();
+
+    // 判斷 token 是否過期
+    useEffect(() => {
+        const now = new Date();
+        if (now.getTime() > Number(expiryTime)) {
+            toast.error(intl.formatMessage({ id: 'token.Expiry' }));
+            localStorage.clear();
+            return
+        }
+    }, [expiryTime, token, user_id]);
+
+
+
+
+
     return (
         <PostDetailWrapper>
             <PostDetailTitle>
                 {post.title || post.event_title || post.trans_title}
-                <SharePage url={url}/>
             </PostDetailTitle>
 
+            
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <SharePage url={url}/>
+                {post.creator_id !== user_id && 
+                    <CollectPost 
+                        post={post}
+                        user_id={user_id}
+                        token={token}
+                    />
+                }
+            </div>
+            
             {post.transaction_region &&
                 <PostDetailRow>
                     <Icon.Location />

@@ -75,7 +75,7 @@ export default function TourDetail() {
                 data.tour.start_time = formatDate(data.tour.start_time);
                 data.tour.end_time = formatDate(data.tour.end_time);
                 // setTour(data.tour);
-                setTour(prevTour => ({...prevTour, ...data.tour}));
+                setTour(prevTour => ({...prevTour, ...data.tour, tid: data.tour._id}));
                 // toast.success(`${intl.formatMessage({ id: 'tour.viewPageSuccess' })}`);
             }
     

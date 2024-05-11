@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 
 import { transApi } from '../../api/transApi';
@@ -90,7 +89,9 @@ export default function TransDetail() {
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
                 // console.log(data);
-                setTrans({
+                setTrans(prevTrans => ({
+                    ...prevTrans,
+                    ...data.trans,
                     rent_start_time: rent_start_time,
                     rent_end_time: rent_end_time,
 
@@ -109,7 +110,7 @@ export default function TransDetail() {
                     creator_username: data.trans.creator_username,
                     creator_id: data.trans.creator_id,
                     // __v: data.__v
-                });
+                }));
                 // toast.success(`${intl.formatMessage({id: 'trans.viewPageSuccess' })}`);
                 }
 

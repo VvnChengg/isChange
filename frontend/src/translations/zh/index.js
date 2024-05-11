@@ -262,6 +262,10 @@ const zh = {
     'trans.productRegion': '交易地點',
     'trans.productRegionHint': '請輸入交易地點',
     'trans.viewPageFailed': '讀取商品頁面失敗，請再試一次',
+    'trans.collectSuccess': '成功收藏商品',
+    'trans.collectCancelSucess': '成功取消收藏商品',
+    'trans.collectFailed': '收藏商品失敗',
+    'trans.getCollectFailed': '取得收藏商品狀態失敗',
 
     /* alert */
     'alert.login': '請先登入',

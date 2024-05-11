@@ -261,6 +261,10 @@ const en = {
     'trans.productRegion': 'Product Region',
     'trans.productRegionHint': 'Please enter product region',
     'trans.viewPageFailed': 'Failed to view product page, please try again',
+    'trans.collectSuccess': 'Collect product successfully',
+    'trans.collectCancelSucess': 'Cancel collect product successfully',
+    'trans.collectFailed': 'Collect product failed',
+    'trans.getCollectFailed': 'Get collect product status failed',
     
 
 
