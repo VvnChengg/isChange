@@ -92,6 +92,8 @@ const zh = {
     'back': '返回上頁',
     'loading': '讀取中',
     'shareToOthers': '分享給其他人',
+    'CopyURLSuccess': 'URL已成功複製',
+    'CopyURLFailed': 'URL複製失敗',
 
     'home.noContent': '沒有貼文',
 

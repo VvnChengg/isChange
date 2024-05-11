@@ -92,6 +92,8 @@ const en = {
     'back': 'Back',
     'loading': 'Loading',
     'shareToOthers': 'Share to others',
+    'CopyURLSuccess': 'Copy URL successfully',
+    'CopyURLFailed': 'Copy URL failed',
 
     'home.noContent': 'No Content',
 
