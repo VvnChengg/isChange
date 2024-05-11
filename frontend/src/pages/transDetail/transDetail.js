@@ -14,6 +14,7 @@ import {
 
 import PostDetail from '../../components/PostDetail';
 import Button from '../../components/Button';
+import { toast } from 'react-toastify';
 
 export default function TransDetail() {
     const intl = useIntl();
@@ -88,7 +89,7 @@ export default function TransDetail() {
             
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
-                console.log(data);
+                // console.log(data);
                 setTrans({
                     rent_start_time: rent_start_time,
                     rent_end_time: rent_end_time,
@@ -109,10 +110,12 @@ export default function TransDetail() {
                     creator_id: data.trans.creator_id,
                     // __v: data.__v
                 });
+                // toast.success(`${intl.formatMessage({id: 'trans.viewPageSuccess' })}`);
                 }
 
         }catch(e){
-            alert(`${intl.formatMessage({ id: 'trans.viewPageFailed' })}`);
+            // alert(`${intl.formatMessage({ id: 'trans.viewPageFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'trans.viewPageFailed' })}`);
         }
         setIsLoading(false);
     }

@@ -14,6 +14,7 @@ import TransForm from '../../components/TransForm';
 import Button from '../../components/Button';
 import { transApi } from '../../api/transApi';
 import { useToken } from '../../hooks/useToken';
+import { toast } from 'react-toastify';
 
 export default function TransEdit() {
     const intl = useIntl();
@@ -75,7 +76,7 @@ export default function TransEdit() {
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
 
-                console.log(data.trans.status)
+                // console.log(data.trans.status)
             
                 setTrans({
                     rent_start_time: rent_start_time,
@@ -97,9 +98,10 @@ export default function TransEdit() {
                     trans_status: data.trans.status,
                     // __v: data.__v
                 });
+                // toast.success(`${intl.formatMessage({ id:'trans.viewPageSuccess' })}`);
             }
         }catch(e){
-            alert(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
         }
         setIsLoading(false);
     }
@@ -111,14 +113,17 @@ export default function TransEdit() {
             const data = await transApi.editTrans(trans, token);
             // console.log(data);
             if(data.success){
-                alert(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
+                // alert(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
+                toast.success(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
                 navigate('/post/published'); // redirect
             }else{
-                alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
+                // alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
+                toast.error(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
             }
         }catch(e){
             // console.log(e);
-            alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
+            // alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
         }
         setIsSubmitting(false)
         

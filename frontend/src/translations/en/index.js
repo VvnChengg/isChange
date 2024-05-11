@@ -223,6 +223,7 @@ const en = {
     'tour.complete':'complete',
     'tour.end':'end',
     'tour.viewPageFailed': 'Failed to view tour page, please try again',
+    'tour.viewPageSuccess': 'View tour page successfully',
     'tour.checkEditFailed': 'Loading edit page failed, please try again',
     'tour.editSuccess': 'Edit tour successfully',
     'tour.editFailed': 'Edit tour failed, please try again',
@@ -253,12 +254,14 @@ const en = {
     'trans.clothing': 'Clothing',
     'trans.others': 'Others',
     'trans.checkEditFailed': 'Loading edit page failed, please try again',
+    'trans.viewPageSuccess': 'View product page successfully',
     'trans.editSuccess': 'Edit product successfully',
     'trans.editFailed': 'Edit product failed, please try again',
     'trans.productPicture': 'Product Picture',
     'trans.productRegion': 'Product Region',
     'trans.productRegionHint': 'Please enter product region',
     'trans.viewPageFailed': 'Failed to view product page, please try again',
+    
 
 
     /* alert */

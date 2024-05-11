@@ -16,6 +16,7 @@ import {
 import TourForm from '../../components/TourForm';
 import Button from '../../components/Button';
 import { useToken } from '../../hooks/useToken';
+import { toast } from 'react-toastify';
 
 export default function TourCreate() {
     const intl = useIntl();
@@ -66,30 +67,34 @@ export default function TourCreate() {
                     data.tour.end_time = formatDate(data.tour.end_time);
                     console.log(data);
                     setTour(prevTour => ({ ...prevTour, ...data.tour }));
+                    // toast.success(`${intl.formatMessage({ id: 'tour.viewPageSuccess' })}`);
                 }
     
             }
         }catch(e){
-            alert(`${intl.formatMessage({ id: 'tour.checkEditFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'tour.viewPageFailed' })}`);
         }
         setIsLoading(false);
     }
 
 
     async function onSubmit() {
-        console.log(tour);
+        // console.log(tour);
 
         // api: edit tour
         try{
             const data = await tourApi.editTour(tour, token);
             if(data.success){
+                toast.success(`${intl.formatMessage({ id: 'tour.editSuccess' })}`);
                 navigate('/post/published');
             }else{
-                alert(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
+                // alert(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
+                toast.error(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
             }
         }
         catch(e){
-            alert(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
+            // alert(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
         }
 
     }
