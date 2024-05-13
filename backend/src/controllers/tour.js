@@ -31,6 +31,9 @@ class tourApi {
       const payload = {
         event_title,
         event_intro,
+        location,
+        destination_en,
+        destination_zh,
         start_time,
         end_time,
         people_lb,
