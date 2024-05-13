@@ -11,6 +11,7 @@ import TransForm from '../../components/TransForm';
 import Button from '../../components/Button';
 import { transApi } from '../../api/transApi';
 import { useToken } from '../../hooks/useToken';
+import { toast } from 'react-toastify';
 
 export default function TransCreate() {
     const intl = useIntl();
@@ -72,14 +73,14 @@ export default function TransCreate() {
         try{
             const data = await transApi.createTrans(trans, token);
             if(data.success){
-                alert(intl.formatMessage({ id: 'trans.createSuccess'}));
+                toast.success(intl.formatMessage({ id: 'trans.createSuccess'}));
                 navigate('/post/published');
             }else{
-                alert(intl.formatMessage({ id: 'trans.createFail'}));
+                toast.error(intl.formatMessage({ id: 'trans.createFail'}));
             }
         }
         catch(e){
-            alert(intl.formatMessage({ id: 'trans.createFail'}));
+            toast.error(intl.formatMessage({ id: 'trans.createFail'}));
         }
     }
 
