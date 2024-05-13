@@ -25,9 +25,9 @@ const getAllPosts = async (req, res, next) => {
         content: article.content,
         type: "post",
         coverPhoto: convertToBase64(article.article_pic),
+        // location: article.location,
         article_region_en: article.article_region_en,
         article_region_zh: article.article_region_zh,
-        // location: article.location,
         datetime: article.post_date,
       };
       result.push(item);
@@ -39,11 +39,11 @@ const getAllPosts = async (req, res, next) => {
         _id: event._id,
         title: event.event_title,
         content: event.event_intro,
-        destination_en: event.destination_en,
-        destination_zh: event.destination_zh,
         type: "tour",
         coverPhoto: convertToBase64(event.event_pic),
         // location: event.location,
+        destination_en: event.destination_en,
+        destination_zh: event.destination_zh,
         datetime: event.start_time,
         currency: event.currency,
         budget: event.budget,
@@ -61,8 +61,8 @@ const getAllPosts = async (req, res, next) => {
         _id: product._id,
         title: product.product_title,
         content: product.description,
-        transaction_region_en: product.transaction_region_en,
         transaction_region_zh: product.transaction_region_zh,
+        transaction_region_en: product.transaction_region_en,
         type: "trans",
         coverPhoto: convertToBase64(product.product_pic),
         // location: product.location,
@@ -247,6 +247,7 @@ const createPost = async (req, res, next) => {
     if (typeof article_region_zh === "string") {
       article_region_zh = JSON.parse(article_region_zh);
     }
+
     const article_pic = req.file
       ? {
           data: req.file.buffer,
@@ -258,9 +259,9 @@ const createPost = async (req, res, next) => {
       content: post.content,
       article_pic: article_pic,
       creator_id: post.user_id,
-      article_region_en: post.article_region_en,
-      article_region_zh: post.article_region_zh,
-      location: post.location,
+      article_region_en: article_region_en,
+      article_region_zh: article_region_zh,
+      location: location,
       // article_region: post.location
     });
     await newPost.save();
@@ -289,13 +290,13 @@ const updatePost = async (req, res, next) => {
   if (typeof article_region_zh === "string") {
     article_region_zh = JSON.parse(article_region_zh);
   }
+
   const article_pic = req.file
     ? {
         data: req.file.buffer,
         contentType: req.file.mimetype,
       }
     : null;
-
   const updates = {
     article_title: req.body.title,
     location: location,
@@ -309,10 +310,10 @@ const updatePost = async (req, res, next) => {
   try {
     if (
       !Boolean(updates.article_title) &&
-      !Boolean(updates.content) &&
       !Boolean(updates.location) &&
       !Boolean(updates.article_region_en) &&
       !Boolean(updates.article_region_zh) &&
+      !Boolean(updates.content) &&
       !Boolean(updates.article_pic)
     ) {
       return res.status(400).json({ message: "沒有收到任何需要更新的資料" });
