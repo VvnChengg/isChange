@@ -48,62 +48,68 @@ import TransCreate from './pages/transCreate';
 import TransEdit from './pages/transEdit';
 import TransDetail from './pages/transDetail';
 
+// google login api
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 function App() {
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
   const [keyword, setKeyword] = useState('');
   const [search, setSearch] = useState(false);
+  const oauth_cliend_id = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
 
   useEffect(() => {
     localStorage.setItem('language', language);
   }, [language]);
 
   return (
-    <IntlProvider locale={language} messages={translations[language]}>
-      <ThemeProvider theme={lightTheme}>
-        <ToastContainer 
-          position='bottom-right'
-        />
-        <Router>
-            <div className="App">
-              <Routes>
-                <Route
-                  path='/'
-                  element={<Layout language={language} setLanguage={setLanguage} keyword={keyword} setKeyword={setKeyword} setSearch={setSearch} />}
-                >
-                  <Route path='' element={<Home keyword={keyword} search={search} setSearch={setSearch} />} />
-                  <Route path='login' element={<LoginForm />} />
-                  <Route path='register' element={<Register />} />
-                  <Route path='edit' element={<Edit />} />
-                  <Route path='member' element={<ViewWithoutUid />} />
-                  <Route path='member/:other_username' element={<ViewWithUid />} />
-                  <Route path='chat-list' element={<PrivateMessageList/>}/>
-                  <Route path='chatroom/:chatid' element={<Chatroom/>} />
-                  <Route path='testing' element={<StartPrivate/>} />
-                  <Route path='post'>
-                    <Route path='detail/:pid' element={<ShareDetail />} />
-                    <Route path='create' element={<ShareCreate />} />
-                    <Route path='published' element={<SelfPost />} />
-                    <Route path='find' element={<ShareFind />} />
-                    <Route path='to-edit' element={<ShareToEdit />} />
-                    <Route path='edit/:pid' element={<ShareEdit />} />
-                    <Route path='to-delete' element={<ShareToDelete />} />
+    <GoogleOAuthProvider clientId={oauth_cliend_id}>
+      <IntlProvider locale={language} messages={translations[language]}>
+        <ThemeProvider theme={lightTheme}>
+          <ToastContainer 
+            position='bottom-right'
+          />
+          <Router>
+              <div className="App">
+                <Routes>
+                  <Route
+                    path='/'
+                    element={<Layout language={language} setLanguage={setLanguage} keyword={keyword} setKeyword={setKeyword} setSearch={setSearch} />}
+                  >
+                    <Route path='' element={<Home keyword={keyword} search={search} setSearch={setSearch} />} />
+                    <Route path='login' element={<LoginForm />} />
+                    <Route path='register' element={<Register />} />
+                    <Route path='edit' element={<Edit />} />
+                    <Route path='member' element={<ViewWithoutUid />} />
+                    <Route path='member/:other_username' element={<ViewWithUid />} />
+                    <Route path='chat-list' element={<PrivateMessageList/>}/>
+                    <Route path='chatroom/:chatid' element={<Chatroom/>} />
+                    <Route path='testing' element={<StartPrivate/>} />
+                    <Route path='post'>
+                      <Route path='detail/:pid' element={<ShareDetail />} />
+                      <Route path='create' element={<ShareCreate />} />
+                      <Route path='published' element={<SelfPost />} />
+                      <Route path='find' element={<ShareFind />} />
+                      <Route path='to-edit' element={<ShareToEdit />} />
+                      <Route path='edit/:pid' element={<ShareEdit />} />
+                      <Route path='to-delete' element={<ShareToDelete />} />
+                    </Route>
+                    <Route path='tour'>
+                      <Route path='create' element={<TourCreate />} />
+                      <Route path='edit/:tid' element={<TourEdit />} />
+                      <Route path='detail/:tid' element={<TourDetail />} />
+                    </Route>
+                    <Route path='trans'>
+                      <Route path='create' element={<TransCreate />} />
+                      <Route path='edit/:tid' element={<TransEdit />} />
+                      <Route path='detail/:tid' element={<TransDetail />} />
+                    </Route>
                   </Route>
-                  <Route path='tour'>
-                    <Route path='create' element={<TourCreate />} />
-                    <Route path='edit/:tid' element={<TourEdit />} />
-                    <Route path='detail/:tid' element={<TourDetail />} />
-                  </Route>
-                  <Route path='trans'>
-                    <Route path='create' element={<TransCreate />} />
-                    <Route path='edit/:tid' element={<TransEdit />} />
-                    <Route path='detail/:tid' element={<TransDetail />} />
-                  </Route>
-                </Route>
-              </Routes>
-            </div>
-          </Router>
-        </ThemeProvider>
-      </IntlProvider>
+                </Routes>
+              </div>
+            </Router>
+          </ThemeProvider>
+        </IntlProvider>
+      </GoogleOAuthProvider>
   );
 }
 

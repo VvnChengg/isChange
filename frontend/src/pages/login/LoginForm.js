@@ -11,7 +11,12 @@ import Button from '../../components/Button';
 
 import { loginApi } from '../../api/loginApi';
 
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+
+
 const LoginForm = () => {
+  const oauth_cliend_id = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
   const intl = useIntl();
   const navigate = useNavigate();
 
@@ -53,10 +58,41 @@ const LoginForm = () => {
     await getUserInfoFromDatabase(email); // 假設這個函數是用來從資料庫中獲取使用者資訊的
   };
 
-  const handleUseGoogleAuth = () => {
-    // 實現使用 Google 登入的邏輯
-    console.log('使用 Google 登入');
-  };
+  // const handleUseGoogleAuth = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     console.log(tokenResponse);
+  //     const tokenId = tokenResponse.access_token;
+  //     if(tokenId){
+  //       try{
+  //         const data = await loginApi.sso_login(tokenId);
+  //         console.log(data);
+  //         if(data.status === 'success'){
+  //           navigate('/');
+  //         }
+  //       }catch(error){
+  //         console.log(error);
+  //       }
+  //       }
+  //   },
+  // });
+
+  const responseGoogle = async (response) => {
+    console.log(response);
+    const tokenId = response.credential;
+
+    if(tokenId){
+      try{
+        const data = await loginApi.sso_login(tokenId);
+        if(data.status === 'success'){
+          navigate('/');
+        }
+      }catch(error){
+        console.log(error);
+      }
+    }
+  }
+
+    
 
   return (
     <>
@@ -78,12 +114,23 @@ const LoginForm = () => {
               <FormattedMessage id='login.or' />
             </label>
             
-            <Button
+            {/* <Button
               style={{ width: '60%', height: '35px', margin: 'auto' }}
               secondary={true}
               onClick={handleUseGoogleAuth}
               text={intl.formatMessage({ id: 'login.useGoogleLogin' })}
-            />
+            /> */}
+
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                  <GoogleLogin
+                    clientId={oauth_cliend_id}
+                    buttonText={intl.formatMessage({ id: 'login.useGoogleLogin' })}
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                  />
+            </div>
+
           </div>
         </>
       )}

@@ -228,6 +228,8 @@ const en = {
     'tour.editSuccess': 'Edit tour successfully',
     'tour.editFailed': 'Edit tour failed, please try again',
     'tour.status': 'Status',
+    'tour.createSuccess': 'Create tour successfully',
+    'tour.createFail': 'Create tour failed',
     
     'trans.type': 'Type',
     'trans.sell': 'Sell',
