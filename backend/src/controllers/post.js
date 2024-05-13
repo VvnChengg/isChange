@@ -25,11 +25,7 @@ const getAllPosts = async (req, res, next) => {
         content: article.content,
         type: "post",
         coverPhoto: convertToBase64(article.article_pic),
-        article_region_en: article.article_region_en,
-        article_region_zh: article.article_region_zh,
         // location: article.location,
-        article_region_en: article.article_region_en,
-        article_region_zh: article.article_region_zh,
         datetime: article.post_date,
       };
       result.push(item);
@@ -41,13 +37,9 @@ const getAllPosts = async (req, res, next) => {
         _id: event._id,
         title: event.event_title,
         content: event.event_intro,
-        destination_en: event.destination_en,
-        destination_zh: event.destination_zh,
         type: "tour",
         coverPhoto: convertToBase64(event.event_pic),
         // location: event.location,
-        destination_en: event.destination_en,
-        destination_zh: event.destination_zh,
         datetime: event.start_time,
         currency: event.currency,
         budget: event.budget,
@@ -251,6 +243,7 @@ const createPost = async (req, res, next) => {
     if (typeof article_region_zh === "string") {
       article_region_zh = JSON.parse(article_region_zh);
     }
+
     const article_pic = req.file
       ? {
           data: req.file.buffer,
@@ -262,9 +255,6 @@ const createPost = async (req, res, next) => {
       content: post.content,
       article_pic: article_pic,
       creator_id: post.user_id,
-      article_region_en: article_region_en,
-      article_region_zh: article_region_zh,
-      location: location,
       // article_region: post.location
     });
     await newPost.save();
@@ -282,45 +272,13 @@ const updatePost = async (req, res, next) => {
   // 測試可用 http://localhost:3000/api/post/6617996b1067c62b7d70464e
   const uId = req.body.userId;
   const pid = req.params.pid;
-  let { location, article_region_en, article_region_zh } = req.body;
-
-  if (typeof location === "string") {
-    location = JSON.parse(location);
-  }
-  if (typeof article_region_en === "string") {
-    article_region_en = JSON.parse(article_region_en);
-  }
-  if (typeof article_region_zh === "string") {
-    article_region_zh = JSON.parse(article_region_zh);
-  }
-  const article_pic = req.file
-    ? {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      }
-    : null;
-
   const updates = {
     article_title: req.body.title,
-    location: location,
-    article_region_en: article_region_en,
-    article_region_zh: article_region_zh,
     content: req.body.content,
-    article_pic: article_pic,
+    status: req.body.status,
   };
-
   let post = await Article.findById(pid);
   try {
-    if (
-      !Boolean(updates.article_title) &&
-      !Boolean(updates.location) &&
-      !Boolean(updates.article_region_en) &&
-      !Boolean(updates.article_region_zh) &&
-      !Boolean(updates.content) &&
-      !Boolean(updates.article_pic)
-    ) {
-      return res.status(400).json({ message: "沒有收到任何需要更新的資料" });
-    }
     // 檢查貼文是否存在
     if (!post) {
       return res.status(404).json({ message: "貼文不存在" });
