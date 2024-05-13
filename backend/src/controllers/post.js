@@ -25,6 +25,8 @@ const getAllPosts = async (req, res, next) => {
         content: article.content,
         type: "post",
         coverPhoto: convertToBase64(article.article_pic),
+        article_region_en: article.article_region_en,
+        article_region_zh: article.article_region_zh,
         // location: article.location,
         article_region_en: article.article_region_en,
         article_region_zh: article.article_region_zh,
@@ -39,6 +41,8 @@ const getAllPosts = async (req, res, next) => {
         _id: event._id,
         title: event.event_title,
         content: event.event_intro,
+        destination_en: event.destination_en,
+        destination_zh: event.destination_zh,
         type: "tour",
         coverPhoto: convertToBase64(event.event_pic),
         // location: event.location,
@@ -247,7 +251,6 @@ const createPost = async (req, res, next) => {
     if (typeof article_region_zh === "string") {
       article_region_zh = JSON.parse(article_region_zh);
     }
-
     const article_pic = req.file
       ? {
           data: req.file.buffer,
@@ -290,13 +293,13 @@ const updatePost = async (req, res, next) => {
   if (typeof article_region_zh === "string") {
     article_region_zh = JSON.parse(article_region_zh);
   }
-
   const article_pic = req.file
     ? {
         data: req.file.buffer,
         contentType: req.file.mimetype,
       }
     : null;
+
   const updates = {
     article_title: req.body.title,
     location: location,
