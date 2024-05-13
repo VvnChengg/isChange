@@ -1,235 +1,244 @@
-const TourModel = require('../models/event.js');
-const MemberModel = require('../models/member.js');
+const TourModel = require("../models/event.js");
+const MemberModel = require("../models/member.js");
 
 class tourApi {
-    async createTour(req, res) {
-        try {
-            const { userId, event_title, destination, event_intro, start_time, end_time, people_lb, people_ub, currency, budget } = req.body;
-    
-            const payload = {
-                event_title,
-                destination,
-                event_intro,
-                start_time,
-                end_time,
-                people_lb,
-                people_ub,
-                creator_id: userId,
-                status: 'ongoing',
-                like_by_user_ids: [],
-                save_by_user_ids: [],
-                currency,
-                budget
-            };
-    
-            const tour = await TourModel.create(payload);
-            console.log("tour", tour);
-    
-            return res.status(201).json({
-                success: true,
-                message: '成功建立新揪團',
-            });
-    
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                success: false,
-                message: '建立新揪團失敗',
-            });
-        }
+  async createTour(req, res) {
+    try {
+      const {
+        userId,
+        event_title,
+        destination_en,
+        destination_zh,
+        location,
+        event_intro,
+        start_time,
+        end_time,
+        people_lb,
+        people_ub,
+        currency,
+        budget,
+      } = req.body;
+
+      const payload = {
+        event_title,
+        destination_en,
+        destination_zh,
+        location,
+        event_intro,
+        start_time,
+        end_time,
+        people_lb,
+        people_ub,
+        creator_id: userId,
+        status: "ongoing",
+        like_by_user_ids: [],
+        save_by_user_ids: [],
+        currency,
+        budget,
+      };
+
+      const tour = await TourModel.create(payload);
+      console.log("tour", tour);
+
+      return res.status(201).json({
+        success: true,
+        message: "成功建立新揪團",
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "建立新揪團失敗",
+      });
     }
+  }
 
-    async checkTourDetail(req, res) {
-        try {
-            const { eid } = req.params;
-            const tourDetail = await TourModel.findById(eid);
-    
-            if (!tourDetail) {
-                return res.status(404).json({
-                    success: false,
-                    message: '找不到該揪團',
-                });
-            }
-    
-            // 取得揪團發布者的資料
-            const member = await MemberModel.findById(tourDetail.creator_id);
-            if (!member) {
-                return res.status(404).json({
-                    success: false,
-                    message: '此揪團的發布者不存在',
-                });
-            }
-            const responseTour = {
-                ...tourDetail._doc,
-                creator_username: member.username,
-            };
-    
-            return res.status(200).json({
-                tour: responseTour,
-                success: true,
-                message: '查看揪團細節成功',
-            });
-    
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                success: false,
-                message: '查看揪團細節失敗',
-            });
-        }
+  async checkTourDetail(req, res) {
+    try {
+      const { eid } = req.params;
+      const tourDetail = await TourModel.findById(eid);
+
+      if (!tourDetail) {
+        return res.status(404).json({
+          success: false,
+          message: "找不到該揪團",
+        });
+      }
+
+      // 取得揪團發布者的資料
+      const member = await MemberModel.findById(tourDetail.creator_id);
+      if (!member) {
+        return res.status(404).json({
+          success: false,
+          message: "此揪團的發布者不存在",
+        });
+      }
+      const responseTour = {
+        ...tourDetail._doc,
+        creator_username: member.username,
+      };
+
+      return res.status(200).json({
+        tour: responseTour,
+        success: true,
+        message: "查看揪團細節成功",
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "查看揪團細節失敗",
+      });
     }
+  }
 
-    async checkEditingTour(req, res) {
-        try {
-            const { eid } = req.params;
-            const { userId } = req.query;
-    
-            const tour = await TourModel.findById(eid);
-            console.log("tour creator_id", tour.creator_id);
-    
-            if (userId != tour.creator_id) {
-                return res.status(401).json({
-                    success: false,
-                    message: '沒有權限編輯該揪團',
-                });
-            }
-    
-            if (!tour) {
-                return res.status(404).json({
-                    success: false,
-                    message: '找不到該揪團',
-                });
-            }
-    
-            return res.status(200).json({
-                tour: tour,
-                success: true,
-                message: '檢視將要編輯的揪團成功',
-            });
-    
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                success: false,
-                message: '檢視將要編輯的揪團失敗',
-            });
-        }
+  async checkEditingTour(req, res) {
+    try {
+      const { eid } = req.params;
+      const { userId } = req.query;
+
+      const tour = await TourModel.findById(eid);
+      console.log("tour creator_id", tour.creator_id);
+
+      if (userId != tour.creator_id) {
+        return res.status(401).json({
+          success: false,
+          message: "沒有權限編輯該揪團",
+        });
+      }
+
+      if (!tour) {
+        return res.status(404).json({
+          success: false,
+          message: "找不到該揪團",
+        });
+      }
+
+      return res.status(200).json({
+        tour: tour,
+        success: true,
+        message: "檢視將要編輯的揪團成功",
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "檢視將要編輯的揪團失敗",
+      });
     }
+  }
 
-    async editTour(req, res) {
-        try {
-            const { eid } = req.params;
-            const userId = req.body.user_id;
-            const payload = req.body;
-    
-            const tour = await TourModel.findById(eid);
-    
-            if (userId != tour.creator_id) {
-                return res.status(401).json({
-                    success: false,
-                    message: '沒有權限編輯該揪團',
-                });
-            }
-    
-            await TourModel.findByIdAndUpdate(eid, payload);
-    
-            return res.status(200).json({
-                success: true,
-                message: '編輯揪團成功',
-            });
-    
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                success: false,
-                message: '編輯揪團失敗',
-            });
-        }
+  async editTour(req, res) {
+    try {
+      const { eid } = req.params;
+      const { userId } = req.body;
+      const payload = req.body;
+
+      const tour = await TourModel.findById(eid);
+
+      if (!userId.equals(tour.creator_id)) {
+        console.log("userId", userId);
+        return res.status(401).json({
+          success: false,
+          message: "沒有權限編輯該揪團",
+        });
+      }
+
+      await TourModel.findByIdAndUpdate(eid, payload);
+
+      return res.status(200).json({
+        success: true,
+        message: "編輯揪團成功",
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "編輯揪團失敗",
+      });
     }
+  }
 
-    async deleteTour(req, res) {
-        try {
-            const { userId, event_id } = req.body;
+  async deleteTour(req, res) {
+    try {
+      const { userId, event_id } = req.body;
 
-            if (!event_id) {
-                return res.status(400).json({
-                    success: false,
-                    message: '請傳遞event_id',
-                });
-            }
+      if (!event_id) {
+        return res.status(400).json({
+          success: false,
+          message: "請傳遞event_id",
+        });
+      }
 
-            // 檢查編輯者是否為該揪團的創建者
-            const tour = await TourModel.findById(event_id);
-            if (userId != tour.creator_id) {
-                return res.status(401).json({
-                    success: false,
-                    message: '沒有權限編輯該揪團',
-                });
-            }
+      // 檢查編輯者是否為該揪團的創建者
+      const tour = await TourModel.findById(event_id);
+      if (userId != tour.creator_id) {
+        return res.status(401).json({
+          success: false,
+          message: "沒有權限編輯該揪團",
+        });
+      }
 
-            await TourModel.findByIdAndDelete(event_id);
-            return res.status(200).json({
-                success: true,
-                message: '刪除揪團成功'
-            });
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                success: false,
-                message: '刪除揪團失敗',
-            });
-        }
+      await TourModel.findByIdAndDelete(event_id);
+      return res.status(200).json({
+        success: true,
+        message: "刪除揪團成功",
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "刪除揪團失敗",
+      });
     }
+  }
 
-    async getEstablishedTours(req, res) {
-        try {
-            const tours = await TourModel.find({ status: 'ongoing' });
-            return res.status(200).json({
-                established_list: tours
-            });
-
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                success: false,
-                message: '取得揪團中列表失敗',
-            });
-        }
+  async getEstablishedTours(req, res) {
+    try {
+      const tours = await TourModel.find({ status: "ongoing" });
+      return res.status(200).json({
+        established_list: tours,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "取得揪團中列表失敗",
+      });
     }
+  }
 
-    async getFinishedTours(req, res) {
-        try {
-            const tours = await TourModel.find({ status: 'complete' });
-            return res.status(200).json({
-                finished_list: tours
-            });
-
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                success: false,
-                message: '取得已成團列表失敗',
-            });
-        }
+  async getFinishedTours(req, res) {
+    try {
+      const tours = await TourModel.find({ status: "complete" });
+      return res.status(200).json({
+        finished_list: tours,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "取得已成團列表失敗",
+      });
     }
+  }
 
-    async getMyEstablishedTours(req, res) {
-        try {
-            const { userId } = req.params;
+  async getMyEstablishedTours(req, res) {
+    try {
+      const { userId } = req.params;
 
-            const tours = await TourModel.find({ creator_id: userId });
-            return res.status(200).json({
-                my_list: tours
-            });
-
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({
-                success: false,
-                message: '取得自己創立的揪團列表失敗',
-            });
-        }
+      const tours = await TourModel.find({ creator_id: userId });
+      return res.status(200).json({
+        my_list: tours,
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "取得自己創立的揪團列表失敗",
+      });
     }
+  }
 }
 
 module.exports = new tourApi();
