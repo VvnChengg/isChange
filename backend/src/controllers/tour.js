@@ -19,6 +19,9 @@ class tourApi {
       const {
         userId,
         event_title,
+        destination_en,
+        destination_zh,
+        location,
         event_intro,
         start_time,
         end_time,
