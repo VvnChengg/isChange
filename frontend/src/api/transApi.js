@@ -27,7 +27,7 @@ export const transApi = {
         const file = data.product_pic === "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
-        console.log(formData);
+        console.log(JSON.stringify(data.destination_zh));
         formData.append('product_title', data.trans_title);
         formData.append('product_pic', file); // Assuming data.product_pic is a File or Blob object
         formData.append('description', data.trans_intro);
@@ -35,13 +35,12 @@ export const transApi = {
         formData.append('currency', data.currency);
         formData.append('price', data.budget);
         formData.append('period', data.rent_start_time + ' - ' + data.rent_end_time);
-        formData.append('transaction_region', data.transaction_country); //後端是string, 先放string
-        // formData.append('transaction_region', data.transaction_region);
         formData.append('transaction_way', data.trans_type);
         formData.append('user_id', data.user_id);
+        formData.append('transaction_region_en', JSON.stringify(data.destination_en));
+        formData.append('transaction_region_zh', JSON.stringify(data.destination_zh));
+        formData.append('location', JSON.stringify(data.location));
 
-
-        console.log(formData);
         return axios.post(`${hostname}/trans/create`,
             formData, {
             headers: {
@@ -87,6 +86,7 @@ export const transApi = {
         const file = data.product_pic === "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
+        console.log(JSON.stringify(data.location));
         formData.append('product_title', data.trans_title);
         formData.append('product_pic', file); // Assuming data.product_pic is a File or Blob object
         formData.append('description', data.trans_intro);
@@ -97,8 +97,13 @@ export const transApi = {
         // formData.append('transaction_region', data.transaction_region);
         formData.append('transaction_region', data.transaction_country); //後端是string, 先放string
         formData.append('transaction_way', data.trans_type);
-        formData.append('user_id', data.user_id);
+        formData.append('userId', data.user_id);
         formData.append('status', data.trans_status);
+        formData.append('transaction_region_en', JSON.stringify(data.destination_en));
+        formData.append('transaction_region_zh', JSON.stringify(data.destination_zh));
+        formData.append('location', JSON.stringify(data.location));
+
+
         return axios.put(`${hostname}/trans/edit/${data.tid}`,
             formData, {
             headers: {

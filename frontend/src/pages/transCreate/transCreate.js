@@ -31,21 +31,46 @@ export default function TransCreate() {
 
         product_type: 'kitchen',
         product_pic: '', //待補前端設計
-        transaction_region: '', //待補前端設計
 
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
         price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
 
-        transaction_country: '',
-        transaction_region_location_latitude: null,
-        transaction_region_location_longitude: null,
+        destination_object: '',
+        latitude: '',
+        longitude: '',
     })
 
     async function onSubmit() {
-        // console.log(trans);
+
+        if(trans.destination_en_string !== undefined || trans.destination_zh_string !== undefined){
+            // 送出前先把destination_en, destination_zh轉成後端需要的格式
+            let destination_en_string = trans.destination_en_string;
+            let destination_zh_string = trans.destination_zh_string;
+        
+            // 如果只有一個destination, 則將其設為另一個語言的destination
+            if (typeof destination_en_string === 'undefined') {
+                destination_en_string = destination_zh_string;
+            }
+        
+            if (typeof destination_zh_string === 'undefined') {
+                destination_zh_string = destination_en_string;
+            }
+        
+            trans.destination_en = destination_en_string.split(", ").map(item => item.trim());
+            trans.destination_zh = destination_zh_string.split(", ").map(item => item.trim());
+        }
+
+        if(trans.longitude !== undefined && trans.latitude !== undefined){
+            // 把經緯度轉成後端需要的格式
+            let location = {
+                type: "Point",
+                coordinates: [Number(trans.longitude), Number(trans.latitude)]
+            };
+            trans.location = location;
+        }
+
         try{
             const data = await transApi.createTrans(trans, token);
-            console.log(data);
             if(data.success){
                 alert(intl.formatMessage({ id: 'trans.createSuccess'}));
                 navigate('/post/published');
@@ -54,7 +79,6 @@ export default function TransCreate() {
             }
         }
         catch(e){
-            // console.log(e);
             alert(intl.formatMessage({ id: 'trans.createFail'}));
         }
     }

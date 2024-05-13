@@ -94,29 +94,25 @@ export default function TransForm({ trans, setTrans }) {
     function setRegionObject(input) {
         setTrans({
             ...trans,
-            transaction_region: input
+            region_object: input
         });
     }
 
     function setRegionString(input){
         setTrans({
             ...trans,
-            transaction_region_string: input
+            destination_string: input
         })
     }
-
-    // React.useEffect(() => {
-    //     console.log(trans);
-    // },[trans])
 
     function setRegionCountry_Latitude_Longitute(input){
         setTrans({
             ...trans,
-            transaction_region_string: input.region_string,
-            transaction_region_zh: input.transaction_region_zh,
-            transaction_region_en: input.transaction_region_en,
-            transaction_region_location_latitude: input.latitude,
-            transaction_region_location_longitude: input.longitude
+            destination_string: input.destination_string,
+            destination_zh_string: input.destination_zh_string,
+            destination_en_string: input.destination_en_string,
+            longitude: input.longitude,
+            latitude: input.latitude,
         })
     }
 
@@ -189,15 +185,15 @@ export default function TransForm({ trans, setTrans }) {
                 text={trans.trans_title}
                 setText={setTitle}
             />
-            {/* <FormLocation
+            <FormLocation
                 title={intl.formatMessage({ id: 'trans.productRegion' })}
                 placeholder={intl.formatMessage({ id: 'trans.productRegionHint' })}
-                value = {trans.transaction_region}
+                value = {trans.region_object}
                 setValue = {setRegionObject}
-                inputValue={trans.transaction_region_string}
+                inputValue={trans.destination_string}
                 setInputValue={setRegionString}
                 setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
-            /> */}
+            />
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.type' })}
                 options={typeOptions}
