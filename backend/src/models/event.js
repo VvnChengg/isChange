@@ -75,7 +75,7 @@ const eventSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
-    default: []
+    default: [],
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],
@@ -92,6 +92,6 @@ const eventSchema = new Schema({
 });
 
 // destination 換成經緯度後要加這行
-// eventSchema.index({ destination: "2dsphere" });
+// eventSchema.index({ location: "2dsphere" });
 
 module.exports = mongoose.model("Event", eventSchema);
