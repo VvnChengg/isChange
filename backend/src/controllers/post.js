@@ -25,6 +25,8 @@ const getAllPosts = async (req, res, next) => {
         content: article.content,
         type: "post",
         coverPhoto: convertToBase64(article.article_pic),
+        article_region_en: article.article_region_en,
+        article_region_zh: article.article_region_zh,
         // location: article.location,
         datetime: article.post_date,
       };
@@ -37,6 +39,8 @@ const getAllPosts = async (req, res, next) => {
         _id: event._id,
         title: event.event_title,
         content: event.event_intro,
+        destination_en: event.destination_en,
+        destination_zh: event.destination_zh,
         type: "tour",
         coverPhoto: convertToBase64(event.event_pic),
         // location: event.location,
@@ -243,7 +247,6 @@ const createPost = async (req, res, next) => {
     if (typeof article_region_zh === "string") {
       article_region_zh = JSON.parse(article_region_zh);
     }
-
     const article_pic = req.file
       ? {
           data: req.file.buffer,
@@ -272,8 +275,22 @@ const updatePost = async (req, res, next) => {
   // 測試可用 http://localhost:3000/api/post/6617996b1067c62b7d70464e
   const uId = req.body.userId;
   const pid = req.params.pid;
+  let { location, article_region_en, article_region_zh } = req.body;
+
+  if (typeof location === "string") {
+    location = JSON.parse(location);
+  }
+  if (typeof article_region_en === "string") {
+    article_region_en = JSON.parse(article_region_en);
+  }
+  if (typeof article_region_zh === "string") {
+    article_region_zh = JSON.parse(article_region_zh);
+  }
   const updates = {
     article_title: req.body.title,
+    location: location,
+    article_region_en: article_region_en,
+    article_region_zh: article_region_zh,
     content: req.body.content,
     status: req.body.status,
   };
