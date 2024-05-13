@@ -15,6 +15,7 @@ const tourRoutes = require("./src/routes/tour.js");
 const memberAuthRoutes = require("./src/routes/memberAuth");
 const memberRoutes = require("./src/routes/member");
 const productRoutes = require("./src/routes/product");
+const geoRoutes = require("./src/routes/geolocation");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -25,6 +26,7 @@ app.use("/api/tour", tourRoutes);
 app.use("/api/member-auth", memberAuthRoutes);
 app.use("/api/member", memberRoutes);
 app.use("/api/trans", productRoutes);
+app.use("/api/geo", geoRoutes);
 
 // for test
 // const memberRoutes = require('./src/routes/test');
