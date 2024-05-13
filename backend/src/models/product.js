@@ -86,7 +86,7 @@ const productSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
-    default: []
+    default: [],
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],
@@ -95,6 +95,6 @@ const productSchema = new Schema({
 });
 
 // transaction_region 換成經緯度後要加這行
-// productSchema.index({ transaction_region: "2dsphere" });
+// productSchema.index({ location: "2dsphere" });
 
 module.exports = mongoose.model("Product", productSchema);
