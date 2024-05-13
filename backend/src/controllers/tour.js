@@ -4,12 +4,21 @@ const MemberModel = require("../models/member.js");
 class tourApi {
   async createTour(req, res) {
     try {
+      let { location, destination_en, destination_zh } = req.body;
+      if (typeof location === "string") {
+        location = JSON.parse(location);
+      }
+
+      if (typeof destination_en === "string") {
+        destination_en = JSON.parse(destination_en);
+      }
+
+      if (typeof destination_zh === "string") {
+        destination_zh = JSON.parse(destination_zh);
+      }
       const {
         userId,
         event_title,
-        destination_en,
-        destination_zh,
-        location,
         event_intro,
         start_time,
         end_time,
@@ -21,9 +30,6 @@ class tourApi {
 
       const payload = {
         event_title,
-        destination_en,
-        destination_zh,
-        location,
         event_intro,
         start_time,
         end_time,
@@ -132,7 +138,25 @@ class tourApi {
     try {
       const { eid } = req.params;
       const { userId } = req.body;
-      const payload = req.body;
+      let { location, destination_en, destination_zh } = req.body;
+      if (typeof location === "string") {
+        location = JSON.parse(location);
+      }
+
+      if (typeof destination_en === "string") {
+        destination_en = JSON.parse(destination_en);
+      }
+
+      if (typeof destination_zh === "string") {
+        destination_zh = JSON.parse(destination_zh);
+      }
+      const payload = {
+        ...req.body,
+        product_pic,
+        location,
+        destination_en,
+        destination_zh,
+      };
 
       const tour = await TourModel.findById(eid);
 
