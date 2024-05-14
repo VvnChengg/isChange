@@ -52,7 +52,7 @@ const productSchema = new Schema({
     maxlength: 10,
     required: true,
     default: "draft",
-    enum: ["draft", "in stock", "reserved", "sold"],
+    enum: ["draft", "in stock", "reserved", "sold", "delete"],
   },
   transaction_region_en: {
     type: [String], // [country, city]

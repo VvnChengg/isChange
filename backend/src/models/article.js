@@ -23,7 +23,7 @@ const articleSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["draft", "complete"],
+    enum: ["draft", "complete", "delete"],
     default: "draft",
     required: true,
   },

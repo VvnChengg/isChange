@@ -70,7 +70,7 @@ const eventSchema = new Schema({
     maxlength: 10,
     required: true,
     default: "ongoing",
-    enum: ["ongoing", "complete", "end"],
+    enum: ["ongoing", "complete", "end", "delete"],
   },
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
