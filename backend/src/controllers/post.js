@@ -246,9 +246,17 @@ const updatePost = async (req, res, next) => {
     // 測試可用 http://localhost:3000/api/post/6617996b1067c62b7d70464e
     const uId = req.body.userId;
     const pid = req.params.pid;
-    const updates = { article_title: req.body.title, content: req.body.content, status: req.body.status };
+    const article_pic = req.file ? {
+        data: req.file.buffer,
+        contentType: req.file.mimetype
+    } : null;
+    const updates = { article_title: req.body.title, content: req.body.content, article_pic: article_pic };
+
     let post = await Article.findById(pid);
     try {
+        if (!(Boolean(updates.article_title)) && !(Boolean(updates.content)) && !(Boolean(updates.article_pic))) {
+            return res.status(400).json({ message: '沒有收到任何需要更新的資料' })
+        }
         // 檢查貼文是否存在
         if (!post) {
             return res.status(404).json({ message: '貼文不存在' });
