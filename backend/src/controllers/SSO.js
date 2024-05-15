@@ -19,18 +19,24 @@ const googleSignIn = async (req, res) => {
     // Check if user exists in your system
     let user = await MemberAuth.findOne({ email });
     if (!user) {
+      // If user does not exist, create a new user
       user = await createNewUser(email, name);
+    } else if (user.source == "credentials") {
+      // If user exists but not google account, return error
+      return res
+        .status(400)
+        .json({ error: "此帳號已註冊，請使用原本的帳號登入" });
     }
 
-    // Generate token for the user
-    const token = jwt.sign(
-      { userId: user.user_id },
-      process.env.JWT_SECRET_KEY,
-      {
-        expiresIn: "6h",
-      }
-    );
-    res.cookie("token", token, { httpOnly: true, secure: true });
+    // // Generate token for the user
+    // const token = jwt.sign(
+    //   { userId: user.user_id },
+    //   process.env.JWT_SECRET_KEY,
+    //   {
+    //     expiresIn: "6h",
+    //   }
+    // );
+    res.cookie("token", tokenId, { httpOnly: true, secure: true });
 
     return res.status(200).json({
       status: "success",
@@ -38,7 +44,7 @@ const googleSignIn = async (req, res) => {
       data: {
         user_id: user.user_id,
         email: user.email,
-        access_token: token,
+        access_token: tokenId,
       },
     });
   } catch (error) {
@@ -55,6 +61,7 @@ const createNewUser = async (email, name) => {
   const userAuth = await MemberAuth.create({
     email,
     user_id: user._id,
+    source: "google",
   });
 
   return userAuth;
