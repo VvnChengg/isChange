@@ -6,6 +6,8 @@ import DropdownMenustyles from '../../styles/DropdownMenu.module.css';
 import {
     HeaderWrapper,
     HeaderTitle,
+    HeaderLogo,
+    HeaderSearchContainer,
     HeaderButtonContainer,
     HeaderButton,
     HeaderIcon
@@ -41,13 +43,16 @@ export default function Header({ language, setLanguage, keyword, setKeyword, set
     return (
         <HeaderWrapper>
             <HeaderTitle onClick={() => onClickTitle()}>isChange!</HeaderTitle>
-            <Search
-                id='header.search'
-                value={keyword}
-                onChange={e => setKeyword(e.target.value)}
-                onSearch={() => setSearch(true)}
-                style={{ width: '30%', marginTop: '8px' }}
-            />
+            <HeaderLogo onClick={() => onClickTitle()} />
+            <HeaderSearchContainer>
+                <Search
+                    id='header.search'
+                    value={keyword}
+                    onChange={e => setKeyword(e.target.value)}
+                    onSearch={() => setSearch(true)}
+                    //style={{ width: '30%' }}
+                />
+            </HeaderSearchContainer>
             <HeaderButtonContainer>
                 <HeaderIcon onClick={() => navigate('/chat-list')}>
                     <Icon.Chat />
