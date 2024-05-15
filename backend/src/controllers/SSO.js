@@ -9,10 +9,17 @@ const Member = require("../models/member");
 const googleSignIn = async (req, res) => {
   try {
     const { tokenId } = req.body;
+
+    // Check if tokenId is provided
+    if (!tokenId) {
+      return res.status(400).json({ error: "TokenId is required" });
+    }
+
     const ticket = await client.verifyIdToken({
       idToken: tokenId,
       audience: process.env.GOOGLE_OAUTH_ID,
     });
+
     const payload = ticket.getPayload();
     const { email, name } = payload;
 
