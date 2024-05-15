@@ -57,7 +57,7 @@ const createChat = async (req, res) => {
             last_message: null,
             last_sender: userId,
             last_update: Date.now(),
-            stranger: false // phase 1: accept all chat
+            stranger: true // phase 1: accept all chat
         });
 
         // console.log(newChat)
