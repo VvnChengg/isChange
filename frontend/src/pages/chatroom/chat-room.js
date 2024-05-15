@@ -7,6 +7,8 @@ import ChatRoom from '../../components/PrivateMessage/ChatRoom';
 import ChatRoomInput from '../../components/PrivateMessage/ChatRoomInput';
 import { useToken } from '../../hooks/useToken';
 
+import { io } from 'socket.io-client';
+const socket = io('http://localhost:8080');
 
 export default function Chatroom() {
     const { chatid } = useParams();
@@ -19,6 +21,10 @@ export default function Chatroom() {
     const [inputValue, setInputValue] = useState('');
     let lastExecutionTime = 0;
 
+    socket.on("receive-message", newMsg => {
+        // ToDo: 從這裡取得即時的訊息 newMsg，馬上顯示到畫面上！
+        console.log("[FE] Received message:", newMsg);
+    });
 
     const handleDownload = (imageUrl) => {
         const link = document.createElement('a');
@@ -41,34 +47,37 @@ export default function Chatroom() {
         const currentTime = Date.now();
         if (currentTime - lastExecutionTime < 1000) {
             return;
-        } 
+        }
 
         lastExecutionTime = currentTime;
 
         if (inputValue.trim() !== '') {
-        const body = {content: inputValue.trim(),};
-        //console.log(body)
-        
-        axios.post(`${hostname}/chat/sendtext/${chatid}`, body,{
-            headers: {
-                'Authorization':  `Bearer ${token}`
-            }
-        })
-        .then(response => {
-          //setnewChatData(response.data.new_message);
-          setChatData(prevChatData => [...prevChatData, response.data.new_message]);
-          //console.log(newchatData)
-          setInputValue('');
+            const body = { content: inputValue.trim(), };
+            //console.log(body)
 
-          scrollToBottom(100);  
-        })
-        .catch(error => {
-          //console.error('API 請求失敗:', error);
-        });
-    } else {
-      console.log('請輸入有效值');
-    }
-  };
+            axios.post(`${hostname}/chat/sendtext/${chatid}`, body, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
+                .then(response => {
+                    //setnewChatData(response.data.new_message);
+                    setChatData(prevChatData => [...prevChatData, response.data.new_message]);
+                    //console.log(newchatData)
+                    setInputValue('');
+
+                    scrollToBottom(100);
+                    
+                    // 送訊息到 chatid 這個聊天室
+                    socket.emit('send-message', inputValue.trim(), chatid);
+                })
+                .catch(error => {
+                    //console.error('API 請求失敗:', error);
+                });
+        } else {
+            console.log('請輸入有效值');
+        }
+    };
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -76,10 +85,10 @@ export default function Chatroom() {
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault(); 
+            e.preventDefault();
             handleSubmit();
-          }
-        };
+        }
+    };
 
     const scrollToBottom = (num) => {
         setTimeout(() => {
@@ -96,7 +105,7 @@ export default function Chatroom() {
         console.log('click')
         const selectedFile = e.target.files[0];
         const formData = new FormData();
-        formData.append('image', selectedFile); 
+        formData.append('image', selectedFile);
 
         if (selectedFile) {
             const isImage = selectedFile.type.startsWith('image/');
@@ -108,65 +117,69 @@ export default function Chatroom() {
                     const base64Image = reader.result;
                     //console.log('Base64 image:', base64Image);             
                     const body = formData;
-                    axios.post(`${hostname}/chat/sendpic/${chatid}`, body,{
+                    axios.post(`${hostname}/chat/sendpic/${chatid}`, body, {
                         headers: {
-                            'Authorization':  `Bearer ${token}`
+                            'Authorization': `Bearer ${token}`
                         }
                     })
-                    .then(response => {
-                    //console.log(response.data.new_message)
-                    const timestamp = new Date().toISOString();
-                    const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
-                    const newpic = {message_type: 'pic', timestamp:timestamp, photo:base64Image,sender_id:userId, _id:randomNumber}
-                    //setChatData(prevChatData => [...prevChatData, response.data.new_message]);
-                    //console.log(newpic)
-                    setChatData(prevChatData => [...prevChatData, newpic]);
+                        .then(response => {
+                            //console.log(response.data.new_message)
+                            const timestamp = new Date().toISOString();
+                            const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
+                            const newpic = { message_type: 'pic', timestamp: timestamp, photo: base64Image, sender_id: userId, _id: randomNumber }
+                            //setChatData(prevChatData => [...prevChatData, response.data.new_message]);
+                            //console.log(newpic)
+                            setChatData(prevChatData => [...prevChatData, newpic]);
 
-            
-                    setTimeout(() => {
-                        const chatBox = document.querySelector('.private-message-chat-room-container');
-                        chatBox.scrollTop = chatBox.scrollHeight;
-                    }, 100); 
-                    })
-            
-                    .catch(error => {
-                    console.error('API 請求失败:', error);
-                    });
-        
+
+                            setTimeout(() => {
+                                const chatBox = document.querySelector('.private-message-chat-room-container');
+                                chatBox.scrollTop = chatBox.scrollHeight;
+                            }, 100);
+                        })
+
+                        .catch(error => {
+                            console.error('API 請求失败:', error);
+                        });
+
                 };
-                } else {
+            } else {
                 alert('請選擇圖片檔案 (JPG 或 PNG)');
             }
         }
-    };       
-    
+    };
 
-    
+
+
     useEffect(() => {
         axios.get(`${hostname}/chat/detail/${chatid}`, {
             headers: {
-                'Authorization':  `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => {
-            setChatPhoto(response.data);
-            setChatData(response.data.messages);
-            scrollToBottom(0); 
-            //console.log(response)
-        })
-        .catch(error => {
-            //console.error('API 請求失敗:', error);
-        });
+            .then(response => {
+                setChatPhoto(response.data);
+                setChatData(response.data.messages);
+                scrollToBottom(0);
+                //console.log(response)
+
+                // 點進 detail 的時候，指定好 room (chatid)，之後就可以收到即時的訊息
+                socket.emit("join-room", chatid);
+                // console.log("[FE] A user join room:", chatid);
+            })
+            .catch(error => {
+                //console.error('API 請求失敗:', error);
+            });
     }, [hostname, chatid, token]);
 
     return (
         <div>
-            {chatData &&  (
+            {chatData && (
                 <>
-                    <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload}/>
-                    <ChatRoomInput 
-                        handleInputChange={handleInputChange} 
-                        inputValue={inputValue} 
+                    <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload} />
+                    <ChatRoomInput
+                        handleInputChange={handleInputChange}
+                        inputValue={inputValue}
                         handleSubmit={handleSubmit}
                         handleKeyDown={handleKeyDown}
                         handleFileInputChange={handleFileInputChange}
