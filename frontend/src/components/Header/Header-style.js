@@ -58,7 +58,7 @@ export const HeaderLogo = styled.div `
 
     border-radius: 50%;
 
-    background-image: url(logo.png);
+    background-image: url(/logo.png);
     background-size: 80%;
     background-position: center;
     background-repeat: no-repeat;

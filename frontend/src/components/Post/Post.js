@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
     PostWrapper,
+    PostTopBar,
+    PostInfoContainer,
+    PostInfo,
     PostIcon,
     PostTitle,
     PostPreview,
@@ -60,37 +63,45 @@ export default function Post({ post, onClick, showDivider }) {
     
     return (
         <PostWrapper onClick={onClick} showDivider={showDivider}>
-            <div style={{display: 'flex', alignItems: 'center', gap: '7px'}}>
+            <PostTopBar>
                 <Tag type={post ? post.type : samplePost.type} />
                 {/* post.status && renderStatus() */}
-                {post && post.datetime && post.end_time && 
-                    <>
-                        <Icon.Time />
-                        <div>{post.datetime.substring(0, 10)} - {post.end_time.substring(0, 10)}</div>
-                    </>
-                }
-                {post && post.location &&
-                    <>
-                        <PostIcon src='location' />
-                        <div>{post.location}</div>
-                    </>
-                }
-                {post && (post.budget || post.price) && post.currency && 
-                    <>
-                        <Icon.Money />
-                        <div>{post.budget || post.price.$numberDecimal} {post.currency}</div>
-                    </>
-                }
-                {post && post.people_lb && post.people_ub && 
-                    <>
-                        <Icon.People />
-                        <div>{post.people_lb} - {post.people_ub}</div>
-                    </>
-                }
-                
+                <PostInfoContainer>
+                    {post && post.datetime && post.end_time && 
+                        <PostInfo>
+                            <PostIcon>
+                                <Icon.Time />
+                            </PostIcon>
+                            <div>{post.datetime.substring(0, 10)} - {post.end_time.substring(0, 10)}</div>
+                        </PostInfo>
+                    }
+                    {post && post.location &&
+                        <PostInfo>
+                            <PostIcon>
+                                <Icon.Location />
+                            </PostIcon>
+                            <div>{post.location}</div>
+                        </PostInfo>
+                    }
+                    {post && (post.budget || post.price) && post.currency && 
+                        <PostInfo>
+                            <PostIcon>
+                                <Icon.Money />
+                            </PostIcon>
+                            <div>{post.budget || post.price.$numberDecimal} {post.currency}</div>
+                        </PostInfo>
+                    }
+                    {post && post.people_lb && post.people_ub && 
+                        <PostInfo>
+                            <PostIcon>
+                                <Icon.People />
+                            </PostIcon>
+                            <div>{post.people_lb} - {post.people_ub}</div>
+                        </PostInfo>
+                    }
+                </PostInfoContainer>
                 {renderStatus()}
-
-            </div>
+            </PostTopBar>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
                 <PostTitle>{post ? post.title : samplePost.title}</PostTitle>
                 <PostPreview>{post ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview>
