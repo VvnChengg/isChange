@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../api';
 
 import {
+    HomeContainer,
     PostContainer,
     SpinContainer,
     NoContent,
+    HomeTopBar,
     PostSelector
 } from './home-style';
 
@@ -173,37 +175,41 @@ export default function Home({ keyword, search, setSearch }) {
     }, [type, sort, filters]);
 
     return (
-        <PostContainer>
-            <PostTypeSelector type={type} setType={setType} />
+        <HomeContainer>
+            <HomeTopBar>
+                <PostTypeSelector type={type} setType={setType} />
+                <PostSelector onClick={() => setShowSideBar(!showSideBar)}>
+                    {showSideBar ? <Icon.Close /> : <Icon.Selector />}
+                </PostSelector>
+                <SideBar
+                    showSideBar={showSideBar}
+                    type={type}
+                    sort={sort}
+                    setSort={setSort}
+                    filters={filters}
+                    setFilters={setFilters}
+                    filterOptions={filterOptions}
+                />
+            </HomeTopBar>
             {isLoading ?
                 <SpinContainer>
                     <Spin />
-                </SpinContainer>
-                : (toRenderPosts.length === 0 ?
-                    <NoContent>
-                        <FormattedMessage id='home.noContent' />
-                    </NoContent>
-                    : toRenderPosts.map((post, index) => 
-                    <Post
-                        key={post._id}
-                        post={post}
-                        showDivider={index !== toRenderPosts.length - 1}
-                        onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
-                    />
-                ))
+                </SpinContainer> :
+                <PostContainer>
+                    {toRenderPosts.length === 0 ?
+                        <NoContent>
+                            <FormattedMessage id='home.noContent' />
+                        </NoContent>
+                        : toRenderPosts.map((post, index) => 
+                        <Post
+                            key={post._id}
+                            post={post}
+                            showDivider={index !== toRenderPosts.length - 1}
+                            onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
+                        />
+                    )}
+                </PostContainer>
             }
-            <PostSelector onClick={() => setShowSideBar(!showSideBar)}>
-                {showSideBar ? <Icon.Close /> : <Icon.Selector />}
-            </PostSelector>
-            <SideBar
-                showSideBar={showSideBar}
-                type={type}
-                sort={sort}
-                setSort={setSort}
-                filters={filters}
-                setFilters={setFilters}
-                filterOptions={filterOptions}
-            />
-        </PostContainer>
+        </HomeContainer>
     )
 }
