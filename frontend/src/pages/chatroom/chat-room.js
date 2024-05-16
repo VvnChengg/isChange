@@ -138,6 +138,8 @@ export default function Chatroom() {
                                 const chatBox = document.querySelector('.private-message-chat-room-container');
                                 chatBox.scrollTop = chatBox.scrollHeight;
                             }, 100);
+                            
+                            socket.emit('send-message', response.data.new_message, chatid);
                         })
 
                         .catch(error => {
