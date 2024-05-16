@@ -21,10 +21,17 @@ export default function Chatroom() {
     const [inputValue, setInputValue] = useState('');
     let lastExecutionTime = 0;
 
-    socket.on("receive-message", newMsg => {
-        // ToDo: 從這裡取得即時的訊息 newMsg，馬上顯示到畫面上！
-        console.log("[FE] Received message:", newMsg);
-    });
+    useEffect(() => {
+        socket.on("receive-message", newMsg => {
+            setChatData(prevChatData => [...prevChatData, newMsg]);
+            console.log("[FE] Received message:", newMsg);
+        });
+    
+        return () => {
+            socket.off("receive-message");
+        };
+    
+    }, []);
 
     const handleDownload = (imageUrl) => {
         const link = document.createElement('a');
@@ -53,7 +60,6 @@ export default function Chatroom() {
 
         if (inputValue.trim() !== '') {
             const body = { content: inputValue.trim(), };
-            //console.log(body)
 
             axios.post(`${hostname}/chat/sendtext/${chatid}`, body, {
                 headers: {
@@ -61,15 +67,12 @@ export default function Chatroom() {
                 }
             })
                 .then(response => {
-                    //setnewChatData(response.data.new_message);
                     setChatData(prevChatData => [...prevChatData, response.data.new_message]);
-                    //console.log(newchatData)
                     setInputValue('');
-
                     scrollToBottom(100);
-                    
+                    //console.log(response.data.new_message)
                     // 送訊息到 chatid 這個聊天室
-                    socket.emit('send-message', inputValue.trim(), chatid);
+                    socket.emit('send-message', response.data.new_message, chatid);
                 })
                 .catch(error => {
                     //console.error('API 請求失敗:', error);
@@ -102,7 +105,6 @@ export default function Chatroom() {
     };
 
     const handleFileInputChange = (e) => {
-        console.log('click')
         const selectedFile = e.target.files[0];
         const formData = new FormData();
         formData.append('image', selectedFile);
@@ -115,7 +117,6 @@ export default function Chatroom() {
                 reader.readAsDataURL(selectedFile);
                 reader.onload = () => {
                     const base64Image = reader.result;
-                    //console.log('Base64 image:', base64Image);             
                     const body = formData;
                     axios.post(`${hostname}/chat/sendpic/${chatid}`, body, {
                         headers: {
@@ -129,6 +130,7 @@ export default function Chatroom() {
                             const newpic = { message_type: 'pic', timestamp: timestamp, photo: base64Image, sender_id: userId, _id: randomNumber }
                             //setChatData(prevChatData => [...prevChatData, response.data.new_message]);
                             //console.log(newpic)
+
                             setChatData(prevChatData => [...prevChatData, newpic]);
 
 
