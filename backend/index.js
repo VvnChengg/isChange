@@ -26,6 +26,7 @@ const tourRoutes = require("./src/routes/tour.js");
 const memberAuthRoutes = require("./src/routes/memberAuth");
 const memberRoutes = require("./src/routes/member");
 const productRoutes = require("./src/routes/product");
+const commonRoutes = require("./src/routes/common");
 
 // app.use('/api/名稱', 路徑)
 app.use("/api/chat", chatRoutes);
@@ -34,6 +35,7 @@ app.use("/api/tour", tourRoutes);
 app.use("/api/member-auth", memberAuthRoutes);
 app.use("/api/member", memberRoutes);
 app.use("/api/trans", productRoutes);
+app.use("/api/common", commonRoutes);
 
 // 啟動 HTTP 伺服器
 const server = app.listen(process.env.PORT || 3000, () =>
