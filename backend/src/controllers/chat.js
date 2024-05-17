@@ -93,8 +93,13 @@ const getChatDetail = async (req, res) => {
             return res.status(404).json({ error: "Chat not found." });
         }
 
-        const chatToId = chat.first_person.toString() === userId ? chat.second_person : chat.first_person;
+        // 檢查使用者是否為聊天成員
+        if (![chat.first_person, chat.second_person].includes(userId)) {
+            return res.status(400).json({ error: "You are not one of the members in this chat." });
+        }
 
+        // 聊天對象
+        const chatToId = chat.first_person.toString() === userId ? chat.second_person : chat.first_person;
         const chatTo = await Member.findById(chatToId);
 
         const messages = await Message.find({ chat_id: cid });
