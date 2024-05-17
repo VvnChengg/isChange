@@ -4,7 +4,7 @@ const validateToken = require("../../src/middlewares/validateToken");
 
 const router = express.Router();
 
-router.post('/favorite', commonApi.addToFavorite);
-router.get('/favorite/:user_id', commonApi.viewFavorite);
+router.post('/favorite', validateToken, commonApi.addToFavorite);
+router.get('/favorite/:user_id', validateToken, commonApi.viewFavorite);
 
 module.exports = router;
