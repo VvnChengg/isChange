@@ -302,9 +302,8 @@ const updatePost = async (req, res, next) => {
     article_region_en: article_region_en,
     article_region_zh: article_region_zh,
     content: req.body.content,
-    article_pic: article_pic,
+    status: req.body.status,
   };
-
   let post = await Article.findById(pid);
   try {
     if (
