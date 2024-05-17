@@ -57,7 +57,7 @@ const createChat = async (req, res) => {
             last_message: null,
             last_sender: userId,
             last_update: Date.now(),
-            stranger: true // phase 1: accept all chat
+            stranger: true // phase 3: default is stranger
         });
 
         // console.log(newChat)
@@ -82,69 +82,44 @@ const createChat = async (req, res) => {
 const getChatDetail = async (req, res) => {
     try {
         const { cid } = req.params;
-        const { userId } = req.body; // 使用者的 member._id, 如果是 object 就轉成 string
-        const chat = await Chat.findById(cid);
+        const { userId } = req.body;
 
-        // 檢查 chat 是否存在
+        const [chat, member] = await Promise.all([
+            Chat.findById(cid),
+            Member.findById(userId)
+        ]);
+
         if (!chat) {
-            return res.status(404).json({ error: "This chat doesn't exist." });
+            return res.status(404).json({ error: "Chat not found." });
         }
 
-        // 檢查使用者是不是聊天成員
-        if (userId != chat.first_person.toString() && userId != chat.second_person.toString()) {
-            return res.status(400).json({ error: "You are not one of members in this chat." });
+        // 檢查使用者是否為聊天成員
+        if (![chat.first_person, chat.second_person].includes(userId)) {
+            return res.status(400).json({ error: "You are not one of the members in this chat." });
         }
 
-        // 聊天對象的 id
-        let chat_to_id;
-        if (userId == chat.first_person.toString()) {
-            chat_to_id = chat.second_person;
-        } else {
-            chat_to_id = chat.first_person;
-        }
-
-        // 找出聊天對象，回傳照片跟 username
-        const member = await Member.findById(chat_to_id);
-        // Convert member photo data to base64
-        let photoBase64 = null;
-        if (member.photo && member.photo.contentType) {
-            photoBase64 = `data:${member.photo.contentType
-                };base64,${member.photo.data.toString("base64")}`;
-        }
+        // 聊天對象
+        const chatToId = chat.first_person.toString() === userId ? chat.second_person : chat.first_person;
+        const chatTo = await Member.findById(chatToId);
 
         const messages = await Message.find({ chat_id: cid });
-        const msgData = [];
 
-        // 一筆一筆挑出聊天來看
-        for (const msg of messages) {
-            if (msg.message_type === ("pic")) {
-                // console.log("Handle photo msg .......");
-                // Convert photo data to base64
-                let photoConvert = null;
-                if (msg.photo && msg.photo.contentType) {
-                    photoConvert = `data:${msg.photo.contentType
-                        };base64,${msg.photo.data.toString("base64")}`;
-                }
-                // 覆蓋掉原本要回傳的 messages 裡的 photo（不改到資料庫）
-                msgData.push(
-                    {
-                        _id: msg._id,
-                        message_type: msg.message_type,
-                        timestamp: msg.timestamp,
-                        content: msg.content,
-                        photo: photoConvert,
-                        sender_id: msg.sender_id,
-                        read: msg.read
-                    })
-            } else {
-                // 文字訊息就沒差，直接回傳就好
-                msgData.push(msg)
-            }
-        }
+        const msgData = messages.map(msg => ({
+            _id: msg._id,
+            message_type: msg.message_type,
+            timestamp: msg.timestamp,
+            content: msg.content,
+            photo: msg.message_type === "pic" ? `data:${msg.photo.contentType};base64,${msg.photo.data.toString("base64")}` : null,
+            sender_id: msg.sender_id,
+            read: msg.read
+        }));
+
+        // 將對方傳來的訊息設置為已讀
+        await Message.updateMany({ chat_id: cid, sender_id: { $ne: userId }, read: false }, { read: true });
 
         res.status(200).json({
-            chat_to_photo: photoBase64,
-            chat_to_username: member.username,
+            chat_to_photo: chatTo.photo ? `data:${chatTo.photo.contentType};base64,${chatTo.photo.data?.toString("base64")}` : null,
+            chat_to_username: chatTo.username,
             messages: msgData
         });
     } catch (error) {
@@ -171,12 +146,15 @@ const getChatList = async (req, res) => {
                 message: "You don't have any chat."
             });
         } else {
+            let unread = 0;
             // 一筆一筆挑出聊天來看
             for (const chatId of user.chat_ids) {
                 const chat = await Chat.findById(chatId);
 
                 if (!chat) {
                     console.log("There are non-exist chat in your chat_ids.")
+                } else {
+                    unread = await Message.countDocuments({ chat_id: chatId, sender_id: { $ne: userId }, read: false });
                 }
 
                 // 確定聊天對象的 id
@@ -206,8 +184,10 @@ const getChatList = async (req, res) => {
                     last_message: chat.last_message,
                     last_sender: chat.last_sender,
                     last_update: chat.last_update,
-                    stranger: chat.stranger
+                    stranger: chat.stranger,
+                    unread_cnt: unread
                 });
+                // console.log(member.username, unread);
             }
             res.status(200).json({ chats: chatData });
         }
@@ -226,14 +206,14 @@ const sendTextMsg = async (req, res) => {
         // 確保 content 和 userId 是有效的
         if (!content || !userId) {
             return res.status(400).json({
-                message: 'Invalid content or userId.',
+                message: "Invalid content or userId.",
             });
         }
 
         // 找出聊天，並檢查 chat 是否存在
         const chat = await Chat.findById(cid);
         if (!chat) {
-            return res.status(404).json({ error: "This chat doesn't exist." });
+            return res.status(404).json({ error: "Chat not found." });
         }
 
         // 檢查使用者是不是聊天成員
@@ -259,10 +239,10 @@ const sendTextMsg = async (req, res) => {
         await Chat.findByIdAndUpdate(cid, updateChat);
 
         // 回傳新訊息
-        res.status(200).json({ new_message: newMessage});
+        res.status(200).json({ new_message: newMessage });
     } catch (error) {
-        console.error('Failed to send message:', error);
-        res.status(500).json({ error: 'Failed to send message' });
+        console.error("Failed to send message:", error);
+        res.status(500).json({ error: "Failed to send message" });
     }
 };
 
@@ -277,14 +257,14 @@ const sendPic = async (req, res) => {
         // 確保 userId 是有效的
         if (!userId) {
             return res.status(400).json({
-                message: 'Invalid userId.',
+                message: "Invalid userId.",
             });
         }
 
         // 找出聊天，並檢查 chat 是否存在
         const chat = await Chat.findById(cid);
         if (!chat) {
-            return res.status(404).json({ error: "This chat doesn't exist." });
+            return res.status(404).json({ error: "Chat not found." });
         }
 
         // 檢查使用者是不是聊天成員
@@ -343,12 +323,32 @@ const sendPic = async (req, res) => {
         // 回傳新訊息
         res.status(200).json({ new_message: returnMessage });
     } catch (error) {
-        console.error('Failed to send message:', error);
-        res.status(500).json({ error: 'Failed to send message' });
+        console.error("Failed to send message:", error);
+        res.status(500).json({ error: "Failed to send message" });
     }
 };
 
-// 刪除聊天 ok
+// PATCH 接受陌生訊息 ok
+const acceptStranger = async (req, res) => {
+    try {
+        const { cid } = req.params;
+
+        // 找出聊天，並檢查 chat 是否存在
+        const chat = await Chat.findById(cid);
+        if (!chat) {
+            return res.status(404).json({ error: "Chat not found." });
+        }
+
+        await chat.updateOne({ stranger: false });
+
+        return res.status(200).json({ msg: "Chat updated successfully." });
+    } catch (error) {
+        console.error("Failed to update chat:", error);
+        res.status(500).json({ error: "Failed to update chat" });
+    }
+};
+
+// DELETE 刪除聊天 ok
 const deleteChat = async (req, res) => {
     try {
         const { cid } = req.params;
@@ -357,7 +357,7 @@ const deleteChat = async (req, res) => {
         const chat = await Chat.findById(cid);
         // 檢查 chat 是否存在
         if (!chat) {
-            return res.status(404).json({ error: "This chat doesn't exist." });
+            return res.status(404).json({ error: "Chat not found." });
         }
         const { first_person, second_person } = chat;
 
@@ -370,10 +370,10 @@ const deleteChat = async (req, res) => {
         // 刪除聊天本身
         await Chat.findByIdAndDelete(cid);
 
-        return res.status(200).json({ msg: 'Chat deleted successfully.' });
+        return res.status(200).json({ msg: "Chat deleted successfully." });
     } catch (error) {
-        console.error('Failed to delete chat:', error);
-        res.status(500).json({ error: 'Failed to delete chat' });
+        console.error("Failed to delete chat:", error);
+        res.status(500).json({ error: "Failed to delete chat" });
     }
 };
 
@@ -384,5 +384,6 @@ module.exports = {
     getChatDetail,
     sendTextMsg,
     sendPic,
+    acceptStranger,
     deleteChat
 };
