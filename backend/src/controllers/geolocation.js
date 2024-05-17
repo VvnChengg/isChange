@@ -120,17 +120,17 @@ const filterDistance = async (req, res) => {
   let model;
 
   switch (type) {
-    case "event":
+    case "tour":
       model = Event;
       break;
-    case "article":
+    case "post":
       model = Article;
       break;
-    case "product":
+    case "trans":
       model = Product;
       break;
-    default:
-      return res.status(400).json({ error: "Invalid type" });
+    // default:
+    //   return res.status(400).json({ error: "Invalid type" });
   }
 
   // const data = await Product.find({});
@@ -142,7 +142,7 @@ const filterDistance = async (req, res) => {
     .then((data) => {
       const items = [];
       switch (type) {
-        case "product":
+        case "trans":
           data.forEach((product) => {
             const item = {
               _id: product._id,
@@ -163,7 +163,7 @@ const filterDistance = async (req, res) => {
             items.push(item);
           });
           break;
-        case "event":
+        case "tour":
           data.forEach((event) => {
             const item = {
               _id: event._id,
@@ -183,7 +183,7 @@ const filterDistance = async (req, res) => {
             items.push(item);
           });
           break;
-        case "article":
+        case "post":
           data.forEach((article) => {
             const item = {
               _id: article._id,
@@ -238,13 +238,13 @@ const sortDistance = (req, res) => {
   let model;
 
   switch (type) {
-    case "event":
+    case "tour":
       model = Event;
       break;
     case "post":
       model = Article;
       break;
-    case "product":
+    case "trans":
       model = Product;
       break;
     default:
@@ -258,7 +258,7 @@ const sortDistance = (req, res) => {
     .then((data) => {
       const items = [];
       switch (type) {
-        case "product":
+        case "trans":
           data.forEach((product) => {
             const item = {
               _id: product._id,
@@ -279,7 +279,7 @@ const sortDistance = (req, res) => {
             items.push(item);
           });
           break;
-        case "event":
+        case "tour":
           data.forEach((event) => {
             const item = {
               _id: event._id,
@@ -299,7 +299,7 @@ const sortDistance = (req, res) => {
             items.push(item);
           });
           break;
-        case "article":
+        case "post":
           data.forEach((article) => {
             const item = {
               _id: article._id,
