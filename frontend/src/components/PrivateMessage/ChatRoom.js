@@ -4,6 +4,8 @@ import React from 'react';
 import './ChatRoom.css';
 import { Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css'; 
 
 export default function ChatRoom({ chatData, chatPhoto, userId, handleDownload }) {
   let lastDate = null;
@@ -46,7 +48,7 @@ export default function ChatRoom({ chatData, chatPhoto, userId, handleDownload }
                       ></p>
                     ) : message.message_type === 'pic' ? (
                       <div>
-                        <img
+                        <LazyLoadImage
                           src={message.photo}
                           alt='pic'
                           className='private-message-pic-content'

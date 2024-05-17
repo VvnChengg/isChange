@@ -23,6 +23,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "google-auth-library": "^9.9.0",
+    "geoip2-api": "^1.0.3",
     "joi": "^17.12.3",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
