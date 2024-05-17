@@ -34,15 +34,11 @@ const googleSignIn = async (req, res) => {
         .json({ error: "此帳號已註冊，請使用原本的帳號登入" });
     }
 
-    // // Generate token for the user
-    // const token = jwt.sign(
-    //   { userId: user.user_id },
-    //   process.env.JWT_SECRET_KEY,
-    //   {
-    //     expiresIn: "6h",
-    //   }
-    // );
-    res.cookie("token", tokenId, { httpOnly: true, secure: true });
+    // Generate token for the user
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "6h",
+    });
+    res.cookie("token", token, { httpOnly: true, secure: true });
 
     return res.status(200).json({
       status: "success",
@@ -50,7 +46,7 @@ const googleSignIn = async (req, res) => {
       data: {
         user_id: user.user_id,
         email: user.email,
-        access_token: tokenId,
+        access_token: token,
       },
     });
   } catch (error) {
