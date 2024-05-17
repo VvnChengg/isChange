@@ -310,6 +310,9 @@ const updatePost = async (req, res, next) => {
     if (
       !Boolean(updates.article_title) &&
       !Boolean(updates.content) &&
+      !Boolean(updates.location) &&
+      !Boolean(updates.article_region_en) &&
+      !Boolean(updates.article_region_zh) &&
       !Boolean(updates.article_pic)
     ) {
       return res.status(400).json({ message: "沒有收到任何需要更新的資料" });
