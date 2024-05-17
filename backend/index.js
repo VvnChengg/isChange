@@ -17,8 +17,6 @@ const io = require("socket.io")(socketPort, {
 
 require("dotenv").config(); // 加了這行就可以抓到 port
 
-const app = express();
-
 // Middleware
 app.use(cors());
 app.use(express.json());
