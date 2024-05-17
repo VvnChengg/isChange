@@ -12,10 +12,7 @@ const validatePost = Joi.object({
 // 修改文章時的驗證(不會更新所有欄位，所以沒有設定必填)
 const validatePut = Joi.object({
     article_title: Joi.string().max(30),
-    article_pic: Joi.string().uri()
-    // post_date: Joi.date(),
-    // content: Joi.string().max(2000),
-    // status: Joi.string().valid('draft', 'complete')
+    content: Joi.string().max(2000)
 }).unknown(true);
 
 
