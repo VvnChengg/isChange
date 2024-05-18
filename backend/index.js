@@ -26,7 +26,7 @@ const tourRoutes = require("./src/routes/tour.js");
 const memberAuthRoutes = require("./src/routes/memberAuth");
 const memberRoutes = require("./src/routes/member");
 const productRoutes = require("./src/routes/product");
-const geoRoutes = require("./src/routes/geolocation");
+const geoRoutes = require("./src/routes/geolocation.js");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
