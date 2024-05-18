@@ -73,7 +73,7 @@ export const loginApi = {
 
     // SSO
     sso_login: (tokenId) =>{
-        return axios.post(`http://localhost:3000/api/sso/googleSignIn`, {
+        return axios.post(`${hostname}/sso/googleSignIn`, {
             tokenId: tokenId
         })
         .then(res =>{

@@ -120,6 +120,8 @@ const en = {
     'login.passwordChangeFailed': 'Reset password failed, please try again',
     'login.resetPwd': 'Reset password',
     'login.invalidEmailInput': 'Invalid email input format',
+    'login.error': 'Login failed, please try again',
+    'login.errorGoogleAccount': 'This account has already been registered, please use the original account to login',
 
     'register.tryAgain': 'Please try again',
     'register.emailRegistered': 'Email is registered',

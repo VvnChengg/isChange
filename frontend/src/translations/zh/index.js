@@ -120,6 +120,8 @@ const zh = {
     'login.passwordChangeFailed': '重設密碼失敗，請再試一次',
     'login.resetPwd': '重設密碼',
     'login.invalidEmailInput': '無效的電子信箱格式',
+    'login.error': '登入失敗，請再試一次',
+    'login.errorGoogleAccount': '此帳號已註冊，請使用原本的帳號登入',
 
     'register.tryAgain': '請再試一次',
     'register.emailRegistered': '電子信箱已被註冊',

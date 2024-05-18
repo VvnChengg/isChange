@@ -8,7 +8,7 @@ import { collectApi } from "../../api/collectAPi";
 
 export default function CollectPost({ post, user_id, token, size, className}) {
 
-    console.log(post);
+    // console.log(post);
     const [imgSrc, setImgSrc] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const intl = useIntl();
