@@ -225,7 +225,7 @@ export function FormImage({ title, placeholder, text, setText, setImagePreviewUr
                 style={{ display: 'none' }}
                 placeholder={placeholder}
             />
-            {imagePreviewUrl && <img src={imagePreviewUrl} alt="Image preview" style={{ maxWidth: '20vh', maxHeight: '20vh', objectFit: 'contain' }} />}
+            {imagePreviewUrl && <img src={imagePreviewUrl} alt="Image preview" loading="lazy" style={{ maxWidth: '20vh', maxHeight: '20vh', objectFit: 'contain' }} />}
 
         </FormTextBox>
     )
