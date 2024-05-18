@@ -41,6 +41,8 @@ const zh = {
     'sidebar.hot': '熱門',
     'sidebar.new': '最新',
     'sidebar.following': '追蹤中',
+    'sidebar.close': '距離最近',
+    'sidebar.far': '距離最遠',
 
     'sidebar.transSort': '交易排序',
     'sidebar.priceLow': '價格最低',
@@ -81,7 +83,7 @@ const zh = {
     'option.complete': '揪團完成',
     'option.end': '已結束',
 
-    'sidebar.region': '地區篩選',
+    'sidebar.distance': '距離篩選',
 
 
     /* pages */

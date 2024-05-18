@@ -41,6 +41,8 @@ const en = {
     'sidebar.hot': 'Hot',
     'sidebar.new': 'New',
     'sidebar.following': 'Following',
+    'sidebar.close': 'Closest',
+    'sidebar.far': 'Farthest',
 
     'sidebar.transSort': 'Product Sort',
     'sidebar.priceLow': 'Low price',
@@ -81,7 +83,7 @@ const en = {
     'option.complete': 'Complete',
     'option.end': 'End',
 
-    'sidebar.region': 'Region',
+    'sidebar.distance': 'Distance Filter',
 
 
     /* pages */
