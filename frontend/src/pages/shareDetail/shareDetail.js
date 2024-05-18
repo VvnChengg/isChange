@@ -9,6 +9,9 @@ import { useToken } from '../../hooks/useToken';
 // import LikeButton from "./likeButton";
 import { toast } from 'react-toastify';
 
+import CollectPost from '../../components/CollectPost/CollectPost';
+import { Spin } from 'antd';
+
 export default function MyComponent() {
   // const [post, setPost] = useState()
   
@@ -31,6 +34,11 @@ export default function MyComponent() {
 
   const token = useToken();
   const { pid } = useParams();
+
+  // 這塊是收藏文章用的
+  const user_id = localStorage.getItem('user_id');
+  const [post, setPost] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   const getMemberInfo = async () => {
     const memberInfo = await viewApi.getMember(token);
@@ -56,6 +64,11 @@ export default function MyComponent() {
     setPhoto(postInfo.item.coverPhoto);
     setLikes(postInfo.item.like_count);
     setIsLiked(postInfo.item.is_liked);
+
+    // 這塊是收藏文章用的
+    setPost(postInfo.item);
+
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -91,6 +104,10 @@ export default function MyComponent() {
   //   .catch(err => console.log(err));
   // }
 
+  if(isLoading){
+    return <Spin />;
+  }
+
   return (
     <div className='flex-container'>
       <div className='detail-container'>
@@ -113,6 +130,16 @@ export default function MyComponent() {
                     src='https://cdn.builder.io/api/v1/image/assets/TEMP/16cdf560b23133dfbbb7f1e9d8a8d9d5dc38c7a3f7de3296dcf78eef77d45513?'
                   />
                   <div className='location-text'>瑞典，斯德哥爾摩</div>
+
+                  {post.creator_id !== user_id && 
+                    <CollectPost 
+                        post={post}
+                        user_id={user_id}
+                        token={token}
+                        size="8%"
+                    />
+                  }
+
                 </div>
               </div>
               <div className='content-info'>
@@ -149,6 +176,7 @@ export default function MyComponent() {
                   loading='lazy'
                   src='/icons/shareButton.png'
                 /></button>
+                
               </div>
             </div>
         </div>

@@ -209,6 +209,8 @@ const en = {
     'post.createSuccess': 'Create post successfully',
     'post.createFail': 'Create post failed',
     'post.articlePicture':'Post Picture',
+    'post.collectSuccess': 'Collect post successfully',
+    'post.collectCancelSucess': 'Cancel collect post successfully',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',
@@ -232,6 +234,8 @@ const en = {
     'tour.status': 'Status',
     'tour.createSuccess': 'Create tour successfully',
     'tour.createFail': 'Create tour failed',
+    'tour.collectSuccess': 'Collect tour successfully',
+    'tour.collectCancelSucess': 'Cancel collect tour successfully',
     
     'trans.type': 'Type',
     'trans.sell': 'Sell',

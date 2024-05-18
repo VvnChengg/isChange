@@ -209,6 +209,8 @@ const zh = {
     'post.createSuccess': '創建文章成功',
     'post.createFail': '創建文章失敗',
     'post.articlePicture':'文章圖片',
+    'post.collectSuccess': '成功收藏文章',
+    'post.collectCancelSucess': '成功取消收藏文章',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',
@@ -232,6 +234,8 @@ const zh = {
     'tour.status': '揪團狀態',
     'tour.createSuccess': '創建揪團成功',
     'tour.createFail': '創建揪團失敗',
+    'tour.collectSuccess': '成功收藏揪團',
+    'tour.collectCancelSucess': '成功取消收藏揪團',
 
 
     'trans.type': '交易類別',
