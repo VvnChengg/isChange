@@ -24,14 +24,6 @@ export default function Post({ post, onClick, showDivider }) {
         content: 'this is a sample post :D'
     }
 
-    /*
-    function renderStatus() {
-        if the post is product or tour
-            return (
-                <Tag type={status} />
-            )
-    }
-    */
     useEffect(() => {
         if (post && post.coverPhoto) {
             isValidImageBase64(post.coverPhoto).then(isValid => {
@@ -41,6 +33,26 @@ export default function Post({ post, onClick, showDivider }) {
             });
         }
     }, [post]);
+
+    function getLocation() {
+        if (!post) return;
+        
+        if (intl.locale === 'en') {
+            if (post.artical_region_en && post.artical_region_en[0])
+                return post.artical_region_en.join(', ');
+            else if (post.destination_en && post.destination_en[0])
+                return post.destination_en.join(', ');
+            else if (post.transaction_region_en && post.transaction_region_en[0])
+                return post.transaction_region_en.join(', ');
+        } else if (intl.locale === 'zh') {
+            if (post.artical_region_zh && post.artical_region_zh[0])
+                return post.artical_region_zh.join(', ');
+            else if (post.destination_zh && post.destination_zh[0])
+                return post.destination_zh.join(', ');
+            else if (post.transaction_region_zh && post.transaction_region_zh[0])
+                return post.transaction_region_zh.join(', ');
+        }
+    }
 
     function renderStatus() {
         if (post && (post.type === 'trans' || post.type === 'tour')) {
@@ -77,22 +89,10 @@ export default function Post({ post, onClick, showDivider }) {
                             <div>{post.datetime.substring(0, 10)} - {post.end_time.substring(0, 10)}</div>
                         </PostInfo>
                     }
-                    {intl.locale === 'en' &&
-                        ((post.artical_region_en && post.artical_region_en[0]) ||
-                        (post.destination_en && post.destination_en[0]) ||
-                        (post.transaction_region_en && post.transaction_region_en[0])) &&
+                    {getLocation() && 
                         <PostInfo>
                             <Icon.Location />
-                            {post.transaction_region_en.join(', ')}
-                        </PostInfo>
-                    }
-                    {intl.locale === 'zh' &&
-                        ((post.artical_region_zh && post.artical_region_zh[0]) ||
-                        (post.destination_zh && post.destination_zh[0]) ||
-                        (post.transaction_region_zh && post.transaction_region_zh[0])) &&
-                        <PostInfo>
-                            <Icon.Location />
-                            {post.transaction_region_zh.join(', ')}
+                            {getLocation()}
                         </PostInfo>
                     }
                     {post && (post.budget || post.price) && post.currency && 

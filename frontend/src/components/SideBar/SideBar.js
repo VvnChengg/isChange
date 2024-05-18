@@ -11,7 +11,14 @@ import {
     SideBarOption
 } from './SideBar-style.js';
 
-export default function SideBar({ showSideBar, type, sort, setSort, filters, setFilters, filterOptions }) {
+export default function SideBar({
+    showSideBar,
+    type,
+    sort, setSort,
+    radius, setRadius,
+    filters, setFilters,
+    filterOptions })
+{
     const sortOptions = {
         general: ['new', 'hot', /* 'suggest', 'following' */],
         distance: ['close', 'far'],
@@ -60,9 +67,11 @@ export default function SideBar({ showSideBar, type, sort, setSort, filters, set
                 </SideBarTitle>
                 <InputNumber
                     addonAfter='km'
-                    defaultValue={10037}
+                    defaultValue={40075}
                     min={1}
-                    max={10037}
+                    max={40075}
+                    value={radius}
+                    onPressEnter={e=> setRadius(e.target.value)}
                 />
                 {type === 'trans' &&
                     <>

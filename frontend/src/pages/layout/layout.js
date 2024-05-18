@@ -3,7 +3,13 @@ import { LayoutWrapper } from './layout-style.js';
 
 import Header from '../../components/Header';
 
-export default function Layout({ language, setLanguage, keyword, setKeyword, setSearch }) {
+export default function Layout({
+    language, setLanguage,
+    keyword, setKeyword,
+    setSearch, setType,
+    setSort, setRadius,
+    setFilters, filterOptions
+}) {
     return (
         <LayoutWrapper>
             <Header
@@ -12,6 +18,11 @@ export default function Layout({ language, setLanguage, keyword, setKeyword, set
                 keyword={keyword}
                 setKeyword={setKeyword}
                 setSearch={setSearch}
+                setType={setType}
+                setSort={setSort}
+                setRadius={setRadius}
+                setFilters={setFilters}
+                filterOptions={filterOptions}
             />
             <Outlet />
         </LayoutWrapper>

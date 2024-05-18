@@ -52,9 +52,27 @@ import TransDetail from './pages/transDetail';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
+  const filterOptions = {
+    trans: {
+        productType: ['kitchen', 'living room', 'restroom', 'cosmetic','clothing', 'others'],
+        transactionWay: ['sell', 'purchase', 'lend', 'borrow'],
+        status: ['in stock', 'reserved', 'sold'],
+        currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
+    },
+    tour: {
+        status: ['ongoing', 'complete', 'end'],
+        currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
+    }
+  }
+
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
   const [keyword, setKeyword] = useState('');
   const [search, setSearch] = useState(false);
+  const [type, setType] = useState('all');
+  const [sort, setSort] = useState('new');
+  const [radius, setRadius] = useState(40075);
+  const [filters, setFilters] = useState(filterOptions);
+
   const oauth_cliend_id = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
 
   useEffect(() => {
@@ -73,9 +91,21 @@ function App() {
                 <Routes>
                   <Route
                     path='/'
-                    element={<Layout language={language} setLanguage={setLanguage} keyword={keyword} setKeyword={setKeyword} setSearch={setSearch} />}
+                    element={
+                      <Layout
+                        language={language} setLanguage={setLanguage}
+                        keyword={keyword} setKeyword={setKeyword} setType={setType}
+                        setSearch={setSearch} setSort={setSort} setRadius={setRadius}
+                        setFilters={setFilters} filterOptions={filterOptions}
+                      />}
                   >
-                    <Route path='' element={<Home keyword={keyword} search={search} setSearch={setSearch} />} />
+                    <Route path='' element={
+                      <Home
+                        keyword={keyword} search={search} setSearch={setSearch}
+                        type={type} setType={setType} sort={sort} setSort={setSort}
+                        radius={radius} setRadius={setRadius} filters={filters} setFilters={setFilters}
+                        filterOptions={filterOptions}
+                      />} />
                     <Route path='login' element={<LoginForm />} />
                     <Route path='register' element={<Register />} />
                     <Route path='edit' element={<Edit />} />

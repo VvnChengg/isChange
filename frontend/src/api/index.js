@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 import { toast } from 'react-toastify';
 
 const hostname = process.env.REACT_APP_API_HOSTNAME;
@@ -30,6 +31,17 @@ export const api = {
             axios.get(hostname + '/geo/sort')
                 .then(res => res.data)
                 .catch(err => console.log(err))
+        )
+    },
+    filterGeoPosts: (radius) => {
+        return (
+            axios.get(hostname + '/geo/filter?radius=' + radius)
+                .then(res => res.data)
+                .catch(err => {
+                    if (err.response.data.message === '沒有找到任何內容')
+                        throw (err.response.data.message);
+                    else console.log(err);
+                })
         )
     },
     searchPosts: (keyword) => {

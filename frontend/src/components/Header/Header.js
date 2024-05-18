@@ -18,13 +18,23 @@ import Icon from '../Icon';
 import { Input } from 'antd';
 const { Search } = Input;
 
-export default function Header({ language, setLanguage, keyword, setKeyword, setSearch }) {
+export default function Header({
+    language, setLanguage,
+    keyword, setKeyword,
+    setSearch, setType,
+    setSort, setRadius,
+    setFilters, filterOptions
+}) {
     const navigate = useNavigate();
     const token = window.localStorage.getItem('access_token');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     function onClickTitle() {
         setKeyword('');
+        setSort('new');
+        setType('all');
+        setRadius(10037);
+        setFilters(filterOptions);
         navigate('/');
     }
 

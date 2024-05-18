@@ -17,32 +17,19 @@ import Post from '../../components/Post';
 import SideBar from '../../components/SideBar';
 import Icon from '../../components/Icon';
 
-import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 
-export default function Home({ keyword, search, setSearch }) {
+export default function Home({
+    keyword, search, setSearch,
+    type, setType, sort, setSort,
+    radius, setRadius, filters, setFilters,
+    filterOptions
+}) {
     const navigate = useNavigate();
 
-    const filterOptions = {
-        trans: {
-            productType: ['kitchen', 'living room', 'restroom', 'cosmetic','clothing', 'others'],
-            transactionWay: ['sell', 'purchase', 'lend', 'borrow'],
-            status: ['in stock', 'reserved', 'sold'],
-            currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
-        },
-        tour: {
-            status: ['ongoing', 'complete', 'end'],
-            currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
-        }
-    }
-
     const [showSideBar, setShowSideBar] = useState(false);
-
-    const [type, setType] = useState('all');
-    const [sort, setSort] = useState('new');
-    const [filters, setFilters] = useState(filterOptions);
     
     const [posts, setPosts] = useState([]);
     const [hotPosts, setHotPosts] = useState([]);
@@ -96,8 +83,8 @@ export default function Home({ keyword, search, setSearch }) {
     function renderPosts() {
         let tempPosts = posts.slice();
         if (sort === 'hot') tempPosts = hotPosts.slice();
-        else if (sort === 'close') tempPosts = geoPosts.slice();
-        else if (sort === 'far') tempPosts = geoPosts.slice().reverse();
+        else if (sort === 'close' || radius !== 40075) tempPosts = geoPosts.slice().reverse();
+        else if (sort === 'far') tempPosts = geoPosts.slice();
 
         // filter type
         tempPosts = tempPosts.filter(post => type === 'all' || post.type === type);
@@ -125,28 +112,48 @@ export default function Home({ keyword, search, setSearch }) {
             setIsLoading(false);
         });
 
-        setIsLoading(true);
+        // setIsLoading(true);
         api.getHotPosts()
         .then(res => {
             setHotPosts(res);
-            setIsLoading(false);
+            // setIsLoading(false);
         })
         .catch(err => {
             console.log(err);
-            setIsLoading(false);
+            // setIsLoading(false);
         });
 
-        setIsLoading(true);
+        // setIsLoading(true);
         api.getGeoPosts()
         .then(res => {
             setGeoPosts(res);
-            setIsLoading(false);
+            // setIsLoading(false);
         })
         .catch(err => {
             console.log(err);
-            setIsLoading(false);
+            // setIsLoading(false);
         });
     }, []);
+
+    // filter geo posts
+    useEffect(() => {
+        if (radius !== 40075) {
+            setIsLoading(true);
+            api.filterGeoPosts(radius * 1000)
+            .then(res => {
+                setGeoPosts(res);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                if (err === '沒有找到任何內容') {
+                    setToRenderPosts([]);
+                    setGeoPosts([]);
+                }
+                console.log(err);
+                setIsLoading(false);
+            });
+        } else setGeoPosts(posts);
+    }, [radius]);
 
     // search posts
     useEffect(() => {
@@ -187,7 +194,9 @@ export default function Home({ keyword, search, setSearch }) {
 
     useEffect(() => {
         setToRenderPosts(renderPosts());
-    }, [type, sort, filters]);
+    }, [type, sort, filters, geoPosts]);
+
+    // console.log(isLoading, toRenderPosts.length)
 
     return (
         <HomeContainer>
@@ -201,6 +210,8 @@ export default function Home({ keyword, search, setSearch }) {
                     type={type}
                     sort={sort}
                     setSort={setSort}
+                    radius={radius}
+                    setRadius={setRadius}
                     filters={filters}
                     setFilters={setFilters}
                     filterOptions={filterOptions}
