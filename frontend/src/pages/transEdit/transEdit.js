@@ -77,7 +77,7 @@ export default function TransEdit() {
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
 
-                console.log(data);
+                // console.log(data);
             
                 setTrans({
                     rent_start_time: rent_start_time,
@@ -105,7 +105,6 @@ export default function TransEdit() {
                     region_object: (intl.locale === 'en' ? data.trans.transaction_region_en : data.trans.transaction_region_zh).join(', ')
 
                 });
-                // toast.success(`${intl.formatMessage({ id:'trans.viewPageSuccess' })}`);
             }
         }catch(e){
             toast.error(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
@@ -148,7 +147,6 @@ export default function TransEdit() {
             trans.location = location;
         }
 
-        console.log(trans);
         try{
             const data = await transApi.editTrans(trans, token);
             // console.log(data);

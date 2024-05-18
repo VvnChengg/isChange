@@ -5,6 +5,7 @@ import { AiOutlineMail } from 'https://esm.sh/react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import './PrivateList.css';
 import { FormattedMessage } from 'react-intl';
+import { Spin } from 'antd';
 
 
 function formatDate(dateString) {
@@ -26,9 +27,8 @@ function ChatRoomList({ rooms }) {
       navigate('/chatroom/'+chatid);
     };
     if (!rooms) {
-      return (
-      <p> Loading... </p>
-      )};
+      return <Spin />;
+    };
 
     if ( rooms && rooms.length === 0) {
       return (

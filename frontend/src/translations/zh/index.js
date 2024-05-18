@@ -41,6 +41,8 @@ const zh = {
     'sidebar.hot': '熱門',
     'sidebar.new': '最新',
     'sidebar.following': '追蹤中',
+    'sidebar.close': '距離最近',
+    'sidebar.far': '距離最遠',
 
     'sidebar.transSort': '交易排序',
     'sidebar.priceLow': '價格最低',
@@ -81,7 +83,7 @@ const zh = {
     'option.complete': '揪團完成',
     'option.end': '已結束',
 
-    'sidebar.region': '地區篩選',
+    'sidebar.distance': '距離篩選',
 
 
     /* pages */
@@ -118,6 +120,8 @@ const zh = {
     'login.passwordChangeFailed': '重設密碼失敗，請再試一次',
     'login.resetPwd': '重設密碼',
     'login.invalidEmailInput': '無效的電子信箱格式',
+    'login.error': '登入失敗，請再試一次',
+    'login.errorGoogleAccount': '此帳號已註冊，請使用原本的帳號登入',
 
     'register.tryAgain': '請再試一次',
     'register.emailRegistered': '電子信箱已被註冊',
@@ -207,6 +211,8 @@ const zh = {
     'post.createSuccess': '創建文章成功',
     'post.createFail': '創建文章失敗',
     'post.articlePicture':'文章圖片',
+    'post.collectSuccess': '成功收藏文章',
+    'post.collectCancelSucess': '成功取消收藏文章',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',
@@ -230,6 +236,8 @@ const zh = {
     'tour.status': '揪團狀態',
     'tour.createSuccess': '創建揪團成功',
     'tour.createFail': '創建揪團失敗',
+    'tour.collectSuccess': '成功收藏揪團',
+    'tour.collectCancelSucess': '成功取消收藏揪團',
 
 
     'trans.type': '交易類別',

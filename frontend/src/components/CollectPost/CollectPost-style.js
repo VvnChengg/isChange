@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledImg = styled.img`
-    max-width: 4%;
+    max-width: ${props => props.size || '4%'};
     height: auto;
     margin: 1%;
     object-fit: contain;
@@ -14,4 +14,5 @@ export const StyledImg = styled.img`
     @media (max-width: 768px) {
         max-width: 10%;
     }
+
 `;

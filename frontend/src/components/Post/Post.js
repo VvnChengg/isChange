@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useIntl } from 'react-intl';
 import {
     PostWrapper,
     PostTopBar,
@@ -14,6 +15,7 @@ import Tag from '../Tag';
 import Icon from '../Icon';
 
 export default function Post({ post, onClick, showDivider }) {
+    const intl = useIntl();
     const [coverPhoto, setCoverPhoto] = useState(null);
 
     const samplePost = {
@@ -22,14 +24,6 @@ export default function Post({ post, onClick, showDivider }) {
         content: 'this is a sample post :D'
     }
 
-    /*
-    function renderStatus() {
-        if the post is product or tour
-            return (
-                <Tag type={status} />
-            )
-    }
-    */
     useEffect(() => {
         if (post && post.coverPhoto) {
             isValidImageBase64(post.coverPhoto).then(isValid => {
@@ -39,6 +33,26 @@ export default function Post({ post, onClick, showDivider }) {
             });
         }
     }, [post]);
+
+    function getLocation() {
+        if (!post) return;
+        
+        if (intl.locale === 'en') {
+            if (post.artical_region_en && post.artical_region_en[0])
+                return post.artical_region_en.join(', ');
+            else if (post.destination_en && post.destination_en[0])
+                return post.destination_en.join(', ');
+            else if (post.transaction_region_en && post.transaction_region_en[0])
+                return post.transaction_region_en.join(', ');
+        } else if (intl.locale === 'zh') {
+            if (post.article_region_zh && post.article_region_zh[0])
+                return post.article_region_zh.join(', ');
+            else if (post.destination_zh && post.destination_zh[0])
+                return post.destination_zh.join(', ');
+            else if (post.transaction_region_zh && post.transaction_region_zh[0])
+                return post.transaction_region_zh.join(', ');
+        }
+    }
 
     function renderStatus() {
         if (post && (post.type === 'trans' || post.type === 'tour')) {
@@ -75,12 +89,10 @@ export default function Post({ post, onClick, showDivider }) {
                             <div>{post.datetime.substring(0, 10)} - {post.end_time.substring(0, 10)}</div>
                         </PostInfo>
                     }
-                    {post && post.location &&
+                    {getLocation() && 
                         <PostInfo>
-                            <PostIcon>
-                                <Icon.Location />
-                            </PostIcon>
-                            <div>{post.location}</div>
+                            <Icon.Location />
+                            {getLocation()}
                         </PostInfo>
                     }
                     {post && (post.budget || post.price) && post.currency && 
@@ -104,7 +116,7 @@ export default function Post({ post, onClick, showDivider }) {
             </PostTopBar>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
                 <PostTitle>{post ? post.title : samplePost.title}</PostTitle>
-                {/* <PostPreview>{post ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview> */}
+                <PostPreview>{post && post.content ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview>
             </div>
             {coverPhoto ? <PostImage src={coverPhoto} /> : ''}
         </PostWrapper>

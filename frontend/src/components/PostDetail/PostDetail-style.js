@@ -27,6 +27,10 @@ export const PostDetailTitle = styled.div `
 
     white-space: nowrap;
     overflow: hidden;
+
+    @media screen and (max-width: 500px) {
+        font-size: 20px;
+    }
 `
 
 export const PostDetailRow = styled.div `
@@ -36,6 +40,13 @@ export const PostDetailRow = styled.div `
     gap: 5px;
 
     color: ${props => props.theme.text};
+
+    @media screen and (max-width: 500px) {
+        height: 15px;
+        font-size: 14px;
+        line-height: 15px;
+        margin-bottom: 0.2px;
+    }
 `
 
 export const PostDetailIcon = styled.div `
@@ -54,4 +65,8 @@ export const PostDetailIcon = styled.div `
 
 export const PostDetailContent = styled.div `
     text-align: left;
+    
+    @media screen and (max-width: 500px) {
+        font-size: 14px;
+    }
 `

@@ -17,6 +17,10 @@ export const DetailContainer = styled.div `
     > * {
         width: 100%;
     }
+
+    @media screen and (max-width: 500px) {
+        width: 90%;
+    }
 `
 
 export const DetailButtonContainer = styled.div `

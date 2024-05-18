@@ -86,7 +86,6 @@ export const transApi = {
         const file = data.product_pic === "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
-        console.log(JSON.stringify(data.location));
         formData.append('product_title', data.trans_title);
         formData.append('product_pic', file); // Assuming data.product_pic is a File or Blob object
         formData.append('description', data.trans_intro);
@@ -118,39 +117,5 @@ export const transApi = {
                 return err
             });
 
-    },
-
-    collectTrans: (tid, user_id, token) => {
-        return axios.post(`${hostname}/trans/collect`,
-            {
-                tid: tid,
-                user_id: user_id
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                return err
-            });
-    },
-
-    getCollectTrans: (user_id, token) => {
-        return axios.get(`${hostname}/trans/collect/${user_id}`,
-        {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(res => {
-            return res.data
-        })
-        .catch(err => {
-            return err
-        });
     },
 }

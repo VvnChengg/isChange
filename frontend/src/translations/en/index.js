@@ -41,6 +41,8 @@ const en = {
     'sidebar.hot': 'Hot',
     'sidebar.new': 'New',
     'sidebar.following': 'Following',
+    'sidebar.close': 'Closest',
+    'sidebar.far': 'Farthest',
 
     'sidebar.transSort': 'Product Sort',
     'sidebar.priceLow': 'Low price',
@@ -81,7 +83,7 @@ const en = {
     'option.complete': 'Complete',
     'option.end': 'End',
 
-    'sidebar.region': 'Region',
+    'sidebar.distance': 'Distance Filter',
 
 
     /* pages */
@@ -118,6 +120,8 @@ const en = {
     'login.passwordChangeFailed': 'Reset password failed, please try again',
     'login.resetPwd': 'Reset password',
     'login.invalidEmailInput': 'Invalid email input format',
+    'login.error': 'Login failed, please try again',
+    'login.errorGoogleAccount': 'This account has already been registered, please use the original account to login',
 
     'register.tryAgain': 'Please try again',
     'register.emailRegistered': 'Email is registered',
@@ -207,6 +211,8 @@ const en = {
     'post.createSuccess': 'Create post successfully',
     'post.createFail': 'Create post failed',
     'post.articlePicture':'Post Picture',
+    'post.collectSuccess': 'Collect post successfully',
+    'post.collectCancelSucess': 'Cancel collect post successfully',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',
@@ -230,6 +236,8 @@ const en = {
     'tour.status': 'Status',
     'tour.createSuccess': 'Create tour successfully',
     'tour.createFail': 'Create tour failed',
+    'tour.collectSuccess': 'Collect tour successfully',
+    'tour.collectCancelSucess': 'Cancel collect tour successfully',
     
     'trans.type': 'Type',
     'trans.sell': 'Sell',

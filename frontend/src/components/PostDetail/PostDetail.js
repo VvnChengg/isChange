@@ -20,7 +20,6 @@ import Tag from '../Tag';
 import Icon from '../Icon';
 
 export default function PostDetail({ post }) {
-    console.log(post);
     // 部署到服務器上時應該url就可以用了, 現在因為URL是local端 API會報錯
     const url = window.location.href;
     // const url = "https://www.facebook.com/?locale=zh_TW";

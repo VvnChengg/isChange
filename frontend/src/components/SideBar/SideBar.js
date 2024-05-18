@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 
-import { Checkbox, Col, Row } from 'antd';
+import { Checkbox, Col, Row, InputNumber } from 'antd';
 
 import {
     SideBarWrapper,
@@ -11,9 +11,17 @@ import {
     SideBarOption
 } from './SideBar-style.js';
 
-export default function SideBar({ showSideBar, type, sort, setSort, filters, setFilters, filterOptions }) {
+export default function SideBar({
+    showSideBar,
+    type,
+    sort, setSort,
+    radius, setRadius,
+    filters, setFilters,
+    filterOptions })
+{
     const sortOptions = {
         general: ['new', 'hot', /* 'suggest', 'following' */],
+        distance: ['close', 'far'],
         trans: ['priceLow', 'priceHigh'],
         tour: [
             // ['distanceLow', 'distanceHigh'],
@@ -41,6 +49,30 @@ export default function SideBar({ showSideBar, type, sort, setSort, filters, set
                         </div>
                     )}
                 </SideBarOptionsContainer>
+                <SideBarOptionsContainer>
+                    {sortOptions.distance.map((option, index) => 
+                        <div key={option} style={{display: 'flex'}}>
+                            <SideBarOption
+                                selected={sort === option}
+                                onClick={() => setSort(option)}
+                            >
+                                <FormattedMessage id={`sidebar.${option}`}/>
+                            </SideBarOption>
+                            {index !== sortOptions.general.length - 1 && '｜'}
+                        </div>
+                    )}
+                </SideBarOptionsContainer>
+                <SideBarTitle>
+                    <FormattedMessage id='sidebar.distance' />
+                </SideBarTitle>
+                <InputNumber
+                    addonAfter='km'
+                    defaultValue={40075}
+                    min={1}
+                    max={40075}
+                    value={radius}
+                    onPressEnter={e=> setRadius(e.target.value)}
+                />
                 {type === 'trans' &&
                     <>
                         <SideBarTitle>
@@ -141,9 +173,6 @@ export default function SideBar({ showSideBar, type, sort, setSort, filters, set
                         )}
                     </>
                 }
-                {/* <SideBarTitle>
-                    <FormattedMessage id='sidebar.region' />
-                </SideBarTitle> */}
             </SideBarContainer>
         </SideBarWrapper>
     )
