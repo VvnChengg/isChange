@@ -47,6 +47,7 @@ const googleSignIn = async (req, res) => {
         user_id: user.user_id,
         email: user.email,
         access_token: token,
+        source: user.source,
       },
     });
   } catch (error) {
