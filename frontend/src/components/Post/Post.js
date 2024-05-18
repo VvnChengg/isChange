@@ -45,8 +45,8 @@ export default function Post({ post, onClick, showDivider }) {
             else if (post.transaction_region_en && post.transaction_region_en[0])
                 return post.transaction_region_en.join(', ');
         } else if (intl.locale === 'zh') {
-            if (post.artical_region_zh && post.artical_region_zh[0])
-                return post.artical_region_zh.join(', ');
+            if (post.article_region_zh && post.article_region_zh[0])
+                return post.article_region_zh.join(', ');
             else if (post.destination_zh && post.destination_zh[0])
                 return post.destination_zh.join(', ');
             else if (post.transaction_region_zh && post.transaction_region_zh[0])
