@@ -7,6 +7,10 @@
   width: 40%; 
   max-height: 100vh; /* 更改最大高度 */
   overflow-y: auto; /* 添加垂直滾動條 */
+
+  @media screen and (max-width: 500px) {
+    width: 85%;
+  }
 }
 
 
