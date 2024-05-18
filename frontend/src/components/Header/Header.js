@@ -33,7 +33,7 @@ export default function Header({
         setKeyword('');
         setSort('new');
         setType('all');
-        setRadius(10037);
+        setRadius(40075);
         setFilters(filterOptions);
         navigate('/');
     }
