@@ -104,7 +104,7 @@ export default function Post({ post, onClick, showDivider }) {
             </PostTopBar>
             <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
                 <PostTitle>{post ? post.title : samplePost.title}</PostTitle>
-                <PostPreview>{post ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview>
+                {/* <PostPreview>{post ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview> */}
             </div>
             {coverPhoto ? <PostImage src={coverPhoto} /> : ''}
         </PostWrapper>

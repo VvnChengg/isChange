@@ -67,28 +67,28 @@ export default function MyComponent() {
       getInfo();
   }, []);
 
-  function PressLike() {
-    console.log(post.likes);
-    console.log(post.isLiked);
+  // function PressLike() {
+  //   console.log(post.likes);
+  //   console.log(post.isLiked);
     
-    console.log(pid);
-    api.pressLike(pid)
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
-    window.location.reload()
-  }
+  //   console.log(pid);
+  //   api.pressLike(pid)
+  //   .then(res => console.log(res))
+  //   .catch(err => console.log(err));
+  //   window.location.reload()
+  // }
 
-  function PressShare() {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url)
-        .then(() => {
-            console.log('URL copied to clipboard:', url);
-            toast.success(`${'URL copied to clipboard'}`);
-        })
-        .catch((error) => {
-            console.error('Failed to copy URL:', error);
-        });
-  }
+  // function PressShare() {
+  //   const url = window.location.href;
+  //   navigator.clipboard.writeText(url)
+  //       .then(() => {
+  //           console.log('URL copied to clipboard:', url);
+  //           toast.success(`${'URL copied to clipboard'}`);
+  //       })
+  //       .catch((error) => {
+  //           console.error('Failed to copy URL:', error);
+  //       });
+  // }
 
   // function PressComment() {
   //   console.log(post);

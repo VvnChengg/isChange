@@ -37,6 +37,7 @@ import ShareToEdit from './pages/shareToEdit';
 import ShareEdit from './pages/shareEdit';
 import ShareToDelete from './pages/shareToDelete';
 import SelfPost from './pages/allSelfPost/selfPost';
+import Comment from './pages/comment';
 
 // tour
 import TourCreate from './pages/tourCreate';
@@ -92,6 +93,7 @@ function App() {
                       <Route path='to-edit' element={<ShareToEdit />} />
                       <Route path='edit/:pid' element={<ShareEdit />} />
                       <Route path='to-delete' element={<ShareToDelete />} />
+                      <Route path='comment/:pid' element={<Comment />} />
                     </Route>
                     <Route path='tour'>
                       <Route path='create' element={<TourCreate />} />
