@@ -6,6 +6,7 @@ require("dotenv").config(); // 加了這行就可以抓到 ipdata api key
 // filter：取得附近文章、揪團、商品
 const filterDistanceAll = async (req, res) => {
   const { longitude, latitude, radius } = req.body;
+  // console.log(longitude, latitude, radius);
   const radius_int = parseInt(radius);
   try {
     // 取得文章資訊
