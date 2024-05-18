@@ -25,6 +25,7 @@ const filterDistanceAll = async (req, res) => {
       },
       {
         $project: {
+          _id: 1,
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
@@ -33,6 +34,7 @@ const filterDistanceAll = async (req, res) => {
           article_region_en: "$article_region_en",
           article_region_zh: "$article_region_zh",
           datetime: "$post_date",
+          distance: "$dist.calculated",
         },
       },
     ]);
@@ -52,13 +54,22 @@ const filterDistanceAll = async (req, res) => {
       },
       {
         $project: {
+          _id: 1,
           title: "$event_title",
           content: "$event_intro",
           type: { $literal: "tour" },
+          event_pic: "$event_pic",
           location: "$location",
           destination_en: "$destination_en",
           destination_zh: "$destination_zh",
+          distance: "$dist.calculated",
+          currency: "$currency",
+          budget: "$budget",
           datetime: "$start_time",
+          end_time: "$end_time",
+          people_lb: "$people_lb",
+          people_ub: "$people_ub",
+          creator_id: "$creator_id",
         },
       },
     ]);
@@ -78,6 +89,7 @@ const filterDistanceAll = async (req, res) => {
       },
       {
         $project: {
+          _id: 1,
           title: "$product_title",
           content: "$description",
           type: { $literal: "trans" },
@@ -86,12 +98,23 @@ const filterDistanceAll = async (req, res) => {
           transaction_region_en: "$transaction_region_en",
           transaction_region_zh: "$transaction_region_zh",
           datetime: "$post_time",
+          distance: "$dist.calculated",
+          currency: "$currency",
+          price: "$price",
+          product_type: "$product_type",
+          period: "$period",
+          status: "$status",
+          transaction_way: "$transaction_way",
         },
       },
     ]);
 
     // 合併所有結果
     let result = [...articles, ...events, ...products];
+
+    result.sort((a, b) => {
+      return b.distance - a.distance;
+    });
 
     if (result.length === 0) {
       return res.status(404).json({ message: "沒有找到任何內容" });
@@ -123,6 +146,7 @@ const sortDistanceAll = async (req, res) => {
       },
       {
         $project: {
+          _id: 1,
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
@@ -131,6 +155,7 @@ const sortDistanceAll = async (req, res) => {
           article_region_en: "$article_region_en",
           article_region_zh: "$article_region_zh",
           datetime: "$post_date",
+          distance: "$dist.calculated",
         },
       },
     ]);
@@ -150,13 +175,22 @@ const sortDistanceAll = async (req, res) => {
       },
       {
         $project: {
+          _id: 1,
           title: "$event_title",
           content: "$event_intro",
           type: { $literal: "tour" },
+          event_pic: "$event_pic",
           location: "$location",
           destination_en: "$destination_en",
           destination_zh: "$destination_zh",
+          distance: "$dist.calculated",
+          currency: "$currency",
+          budget: "$budget",
           datetime: "$start_time",
+          end_time: "$end_time",
+          people_lb: "$people_lb",
+          people_ub: "$people_ub",
+          creator_id: "$creator_id",
         },
       },
     ]);
@@ -176,6 +210,7 @@ const sortDistanceAll = async (req, res) => {
       },
       {
         $project: {
+          _id: 1,
           title: "$product_title",
           content: "$description",
           type: { $literal: "trans" },
@@ -184,12 +219,23 @@ const sortDistanceAll = async (req, res) => {
           transaction_region_en: "$transaction_region_en",
           transaction_region_zh: "$transaction_region_zh",
           datetime: "$post_time",
+          distance: "$dist.calculated",
+          currency: "$currency",
+          price: "$price",
+          product_type: "$product_type",
+          period: "$period",
+          status: "$status",
+          transaction_way: "$transaction_way",
         },
       },
     ]);
 
     // 合併所有結果
     let result = [...articles, ...events, ...products];
+
+    result.sort((a, b) => {
+      return b.distance - a.distance;
+    });
 
     if (result.length === 0) {
       return res.status(404).json({ message: "沒有找到任何內容" });
