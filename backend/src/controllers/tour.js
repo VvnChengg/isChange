@@ -4,6 +4,8 @@ const MemberModel = require("../models/member.js");
 class tourApi {
   async createTour(req, res) {
     try {
+      console.log("tour file: ", req.file);
+
       let { location, destination_en, destination_zh } = req.body;
       if (typeof location === "string") {
         location = JSON.parse(location);
@@ -28,8 +30,16 @@ class tourApi {
         budget,
       } = req.body;
 
+      const event_pic = req.file
+        ? {
+            data: req.file.buffer,
+            contentType: req.file.mimetype,
+          }
+        : null; // 判斷是否有文件被上傳
+
       const payload = {
         event_title,
+        event_pic,
         event_intro,
         location,
         destination_en,
@@ -67,6 +77,18 @@ class tourApi {
       const { eid } = req.params;
       const tourDetail = await TourModel.findById(eid);
 
+      // Convert image data to base64
+      let photoBase64 = null;
+      if (tourDetail.event_pic && tourDetail.event_pic.contentType) {
+        photoBase64 = `data:${
+          tourDetail.event_pic.contentType
+        };base64,${tourDetail.event_pic.data.toString("base64")}`;
+      }
+
+      let responseTour = tourDetail.toObject(); // Convert the Mongoose document to a plain JavaScript object
+      delete tourDetail.event_pic;
+      tourDetail.event_pic = photoBase64;
+
       if (!tourDetail) {
         return res.status(404).json({
           success: false,
@@ -82,10 +104,8 @@ class tourApi {
           message: "此揪團的發布者不存在",
         });
       }
-      const responseTour = {
-        ...tourDetail._doc,
-        creator_username: member.username,
-      };
+
+      responseTour.creator_username = member.username;
 
       return res.status(200).json({
         tour: responseTour,
@@ -108,6 +128,18 @@ class tourApi {
 
       const tour = await TourModel.findById(eid);
       console.log("tour creator_id", tour.creator_id);
+
+      // Convert image data to base64
+      let photoBase64 = null;
+      if (tour.product_pic && tour.product_pic.contentType) {
+        photoBase64 = `data:${
+          tour.product_pic.contentType
+        };base64,${tour.product_pic.data.toString("base64")}`;
+      }
+
+      let responseTour = tour.toObject(); // Convert the Mongoose document to a plain JavaScript object
+      delete responseTour.event_pic;
+      responseTour.event_pic = photoBase64;
 
       if (userId != tour.creator_id) {
         return res.status(401).json({
@@ -141,6 +173,13 @@ class tourApi {
     try {
       const { eid } = req.params;
       const { userId } = req.body;
+      const event_pic = req.file
+        ? {
+            data: req.file.buffer,
+            contentType: req.file.mimetype,
+          }
+        : null; // 判斷是否有文件被上傳
+        
       let { location, destination_en, destination_zh } = req.body;
       if (typeof location === "string") {
         location = JSON.parse(location);
@@ -155,7 +194,7 @@ class tourApi {
       }
       const payload = {
         ...req.body,
-        product_pic,
+        event_pic,
         location,
         destination_en,
         destination_zh,

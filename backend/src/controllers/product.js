@@ -1,5 +1,4 @@
 const ProductModel = require("../models/product.js");
-const FavoriteModel = require("../models/favorite.js");
 const MemberModel = require("../models/member.js");
 
 class productApi {
@@ -273,6 +272,7 @@ class productApi {
         message: "分享商品失敗",
       });
     }
+  }
 }
 
 module.exports = new productApi();
