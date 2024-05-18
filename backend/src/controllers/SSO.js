@@ -4,6 +4,7 @@ const client = new OAuth2Client(process.env.GOOGLE_OAUTH_ID);
 const jwt = require("jsonwebtoken");
 const MemberAuth = require("../models/member-auth");
 const Member = require("../models/member");
+const randomstring = require("randomstring");
 
 // Google Sign-In Authentication
 const googleSignIn = async (req, res) => {
@@ -47,6 +48,7 @@ const googleSignIn = async (req, res) => {
         user_id: user.user_id,
         email: user.email,
         access_token: token,
+        source: user.source,
       },
     });
   } catch (error) {
@@ -56,8 +58,16 @@ const googleSignIn = async (req, res) => {
 };
 
 const createNewUser = async (email, name) => {
+  //避免username重複，在後面加上兩位數亂碼
+  const code = randomstring.generate({
+    length: 2,
+    charset: "numeric",
+  });
+
+  name_with_code = name + code;
+
   const user = await Member.create({
-    username: name,
+    username: name_with_code,
   });
 
   const userAuth = await MemberAuth.create({
