@@ -25,6 +25,13 @@ export const api = {
                 .catch(err => console.log(err))
         )
     },
+    getGeoPosts: () => {
+        return (
+            axios.get(hostname + '/geo/sort')
+                .then(res => res.data)
+                .catch(err => console.log(err))
+        )
+    },
     searchPosts: (keyword) => {
         return (
             axios.get(hostname + '/post/search?keyword=' + keyword)

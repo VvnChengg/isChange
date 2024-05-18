@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useIntl } from 'react-intl';
 import {
     PostWrapper,
     PostTopBar,
@@ -14,6 +15,7 @@ import Tag from '../Tag';
 import Icon from '../Icon';
 
 export default function Post({ post, onClick, showDivider }) {
+    const intl = useIntl();
     const [coverPhoto, setCoverPhoto] = useState(null);
 
     const samplePost = {
@@ -75,12 +77,22 @@ export default function Post({ post, onClick, showDivider }) {
                             <div>{post.datetime.substring(0, 10)} - {post.end_time.substring(0, 10)}</div>
                         </PostInfo>
                     }
-                    {post && post.location &&
+                    {intl.locale === 'en' &&
+                        ((post.artical_region_en && post.artical_region_en[0]) ||
+                        (post.destination_en && post.destination_en[0]) ||
+                        (post.transaction_region_en && post.transaction_region_en[0])) &&
                         <PostInfo>
-                            <PostIcon>
-                                <Icon.Location />
-                            </PostIcon>
-                            <div>{post.location}</div>
+                            <Icon.Location />
+                            {post.transaction_region_en.join(', ')}
+                        </PostInfo>
+                    }
+                    {intl.locale === 'zh' &&
+                        ((post.artical_region_zh && post.artical_region_zh[0]) ||
+                        (post.destination_zh && post.destination_zh[0]) ||
+                        (post.transaction_region_zh && post.transaction_region_zh[0])) &&
+                        <PostInfo>
+                            <Icon.Location />
+                            {post.transaction_region_zh.join(', ')}
                         </PostInfo>
                     }
                     {post && (post.budget || post.price) && post.currency && 

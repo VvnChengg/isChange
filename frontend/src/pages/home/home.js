@@ -46,6 +46,7 @@ export default function Home({ keyword, search, setSearch }) {
     
     const [posts, setPosts] = useState([]);
     const [hotPosts, setHotPosts] = useState([]);
+    const [geoPosts, setGeoPosts] = useState([]);
     const [toRenderPosts, setToRenderPosts] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -95,6 +96,8 @@ export default function Home({ keyword, search, setSearch }) {
     function renderPosts() {
         let tempPosts = posts.slice();
         if (sort === 'hot') tempPosts = hotPosts.slice();
+        else if (sort === 'close') tempPosts = geoPosts.slice();
+        else if (sort === 'far') tempPosts = geoPosts.slice().reverse();
 
         // filter type
         tempPosts = tempPosts.filter(post => type === 'all' || post.type === type);
@@ -111,6 +114,18 @@ export default function Home({ keyword, search, setSearch }) {
     // get posts
     useEffect(() => {
         setIsLoading(true);
+        api.getAllPosts()
+        .then(res => {
+            setPosts(res);
+            setToRenderPosts(res);
+            setIsLoading(false);
+        })
+        .catch(err => {
+            console.log(err);
+            setIsLoading(false);
+        });
+
+        setIsLoading(true);
         api.getHotPosts()
         .then(res => {
             setHotPosts(res);
@@ -120,12 +135,11 @@ export default function Home({ keyword, search, setSearch }) {
             console.log(err);
             setIsLoading(false);
         });
-        
+
         setIsLoading(true);
-        api.getAllPosts()
+        api.getGeoPosts()
         .then(res => {
-            setPosts(res);
-            setToRenderPosts(res);
+            setGeoPosts(res);
             setIsLoading(false);
         })
         .catch(err => {
@@ -165,6 +179,7 @@ export default function Home({ keyword, search, setSearch }) {
         }
     }, [search, keyword]);
 
+    // initialize sort
     useEffect(() => {
         setSort('new');
         setFilters(filterOptions);
