@@ -31,10 +31,8 @@ const memberAuthRoutes = require("./src/routes/memberAuth");
 const memberRoutes = require("./src/routes/member");
 const productRoutes = require("./src/routes/product");
 const ssoRoutes = require("./src/routes/SSO");
+const commonRoutes = require("./src/routes/common");
 const geoRoutes = require("./src/routes/geolocation");
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // app.use('/api/名稱', 路徑)
 app.use("/api/chat", chatRoutes);
@@ -44,6 +42,7 @@ app.use("/api/member-auth", memberAuthRoutes);
 app.use("/api/member", memberRoutes);
 app.use("/api/trans", productRoutes);
 app.use("/api/sso", ssoRoutes);
+app.use("/api/common", commonRoutes);
 app.use("/api/geo", geoRoutes);
 
 // 啟動 HTTP 伺服器
