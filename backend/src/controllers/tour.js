@@ -131,10 +131,10 @@ class tourApi {
 
       // Convert image data to base64
       let photoBase64 = null;
-      if (tour.product_pic && tour.product_pic.contentType) {
+      if (tour.event_pic && tour.event_pic.contentType) {
         photoBase64 = `data:${
-          tour.product_pic.contentType
-        };base64,${tour.product_pic.data.toString("base64")}`;
+          tour.event_pic.contentType
+        };base64,${tour.event_pic.data.toString("base64")}`;
       }
 
       let responseTour = tour.toObject(); // Convert the Mongoose document to a plain JavaScript object
