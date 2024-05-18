@@ -6,9 +6,7 @@ const Member = require("../models/member");
 const checkChat = async (req, res) => {
     try {
         const { receiver_id } = req.params;
-        const { userId } = req.body; // 使用者的 member._id, 如果是 object 就轉成 string
-
-        // console.log(userId, receiver_id)
+        const { userId } = req.body;
 
         const chat = await Chat.findOne({
             $or: [
@@ -16,8 +14,6 @@ const checkChat = async (req, res) => {
                 { first_person: receiver_id, second_person: userId }
             ]
         });
-
-        // console.log(chat)
 
         if (!chat) {
             return res.status(200).json({
@@ -41,8 +37,6 @@ const createChat = async (req, res) => {
     try {
         const { userId, receiver_id } = req.body;
 
-        // console.log(userId, receiver_id)
-
         const receiver = await Member.findById(receiver_id);
         if (!receiver) {
             res.status(404).json({
@@ -59,8 +53,6 @@ const createChat = async (req, res) => {
             last_update: Date.now(),
             stranger: true // phase 3: default is stranger
         });
-
-        // console.log(newChat)
 
         // 更新兩個使用者的聊天 ID 列表
         await Member.updateMany(
@@ -94,7 +86,7 @@ const getChatDetail = async (req, res) => {
         }
 
         // 檢查使用者是否為聊天成員
-        if (![chat.first_person, chat.second_person].includes(userId)) {
+        if (![chat.first_person.toString(), chat.second_person.toString()].includes(userId.toString())) {
             return res.status(400).json({ error: "You are not one of the members in this chat." });
         }
 
@@ -131,7 +123,7 @@ const getChatDetail = async (req, res) => {
 // GET 聊天列表 ok
 const getChatList = async (req, res) => {
     try {
-        const userId = req.body.userId;  // 使用者透過 token 或是某方式，抓自己的 member._id
+        const userId = req.body.userId;
 
         // 直接從 user 的 chat_ids list 抓出聊天
         const user = await Member.findById(userId);
