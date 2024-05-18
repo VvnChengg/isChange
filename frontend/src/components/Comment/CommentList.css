@@ -7,17 +7,22 @@
   width: 40%; 
   max-height: 100vh; /* 更改最大高度 */
   overflow-y: auto; /* 添加垂直滾動條 */
-
-  @media screen and (max-width: 500px) {
-    width: 85%;
-  }
 }
 
 
 .private-message-chat-room-title {
   top: 2%; /* 相對於父元素，距離頂部 */
   color: #008CD9;
-  font-size: 40px;
+  /* font-size: 40px; */
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 130%;
+
+  display: flex;
+  align-items: center;
+
+  white-space: nowrap;
+  overflow: hidden;
 }
   
 .private-message-chat-list-table {

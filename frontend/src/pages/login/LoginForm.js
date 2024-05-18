@@ -11,7 +11,12 @@ import Button from '../../components/Button';
 
 import { loginApi } from '../../api/loginApi';
 
+import { GoogleLogin } from '@react-oauth/google';
+
+import { toast } from 'react-toastify';
+
 const LoginForm = () => {
+  const oauth_cliend_id = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
   const intl = useIntl();
   const navigate = useNavigate();
 
@@ -25,10 +30,9 @@ const LoginForm = () => {
   const getUserInfoFromDatabase = async (email) => {
     try {
       const data = await loginApi.login_or_register(email);
-      // console.log(data);
+
       if (data && data.error) {
-        // Handle error in data
-        // console.error('Error in data:', data.error);
+        toast.error(intl.formatMessage({ id: 'login.error' }));
       } else {
         setShowPasswordForm(true);
       }
@@ -41,11 +45,8 @@ const LoginForm = () => {
         // console.log('電子信箱建立新帳號:', email);
         navigate('/register');
 
-      } else {
-        // console.error('Error getting user info:', error);
       }
       
-      // navigate('/register'); //因為現在可以判斷成功登入，但找不到使用者會噴錯，有點偷吃步但之後應該要改掉
     }
   }
 
@@ -53,10 +54,28 @@ const LoginForm = () => {
     await getUserInfoFromDatabase(email); // 假設這個函數是用來從資料庫中獲取使用者資訊的
   };
 
-  const handleUseGoogleAuth = () => {
-    // 實現使用 Google 登入的邏輯
-    console.log('使用 Google 登入');
-  };
+
+  const responseGoogle = async (response) => {
+    console.log(response);
+    const tokenId = response.credential;
+
+    if(tokenId){
+      try{
+        const data = await loginApi.sso_login(tokenId);
+        if(data.status === 'success'){
+          navigate('/');
+        }
+      }catch(error){
+        console.log(error);
+        if(error.response.data.error === '此帳號已註冊，請使用原本的帳號登入'){
+          toast.error(intl.formatMessage({ id: 'login.errorGoogleAccount' }));
+        }else{
+          toast.error(intl.formatMessage({ id: 'login.error' }));
+        }
+    }
+  }
+}
+
 
   return (
     <>
@@ -78,16 +97,20 @@ const LoginForm = () => {
               <FormattedMessage id='login.or' />
             </label>
             
-            <Button
-              style={{ width: '60%', height: '35px', margin: 'auto' }}
-              secondary={true}
-              onClick={handleUseGoogleAuth}
-              text={intl.formatMessage({ id: 'login.useGoogleLogin' })}
-            />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                  <GoogleLogin
+                    clientId={oauth_cliend_id}
+                    buttonText={intl.formatMessage({ id: 'login.useGoogleLogin' })}
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                  />
+            </div>
+
           </div>
         </>
       )}
-      {showPasswordForm && <LoginFormPwd email={email} />} {/* 根據狀態來決定是否渲染密碼表單 */}
+      {showPasswordForm && <LoginFormPwd email={email} />}
     </>
   );
 };

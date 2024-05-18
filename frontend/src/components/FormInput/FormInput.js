@@ -232,7 +232,7 @@ export function FormImage({ title, placeholder, text, setText, setImagePreviewUr
 }
 
 
-export function FormLocation({ type, title, placeholder, value, setValue, inputValue, setInputValue,
+export function FormLocation({ type, title, placeholder, value, defaultValue, setValue, inputValue, setInputValue,
     setRegionCountry_Latitude_Longitute }) {
     // console.log(GOOGLE_MAPS_API_KEY);
 
@@ -322,6 +322,7 @@ export function FormLocation({ type, title, placeholder, value, setValue, inputV
     const [options, setOptions] = React.useState([]);
     const loaded = React.useRef(false);
 
+
     if (typeof window !== 'undefined' && !loaded.current) {
         if (!document.querySelector('#google-maps')) {
             loadScript(
@@ -333,7 +334,8 @@ export function FormLocation({ type, title, placeholder, value, setValue, inputV
 
         loaded.current = true;
     }
-
+    
+    
     const fetch = React.useMemo(
         () =>
             debounce((request, callback) => {
@@ -346,44 +348,52 @@ export function FormLocation({ type, title, placeholder, value, setValue, inputV
     React.useEffect(() => {
         let active = true;
 
-        if (!autocompleteService.current && window.google) {
-            autocompleteService.current =
-                new window.google.maps.places.AutocompleteService();
-        }
-        if (!autocompleteService.current) {
-            return undefined;
-        }
-        if (inputValue === '') {
-            setOptions(value ? [value] : []);
-            return undefined;
-        }
-
-        fetch({ input: inputValue }, (results) => {
-            if (active) {
-                let newOptions = [];
-
-                if (value) {
-                    newOptions = [value];
+        try{
+            if(window.google.maps.places !== undefined) {
+        
+                if (!autocompleteService.current && window.google) {
+                    autocompleteService.current =
+                        new window.google.maps.places.AutocompleteService();
                 }
-
-                if (results) {
-                    newOptions = [...newOptions, ...results];
+                if (!autocompleteService.current) {
+                    return undefined;
                 }
-
-                setOptions(newOptions);
-            }
-        });
-
-        return () => {
-            active = false;
-        };
+                if (inputValue === '') {
+                    setOptions(value ? [value] : []);
+                    return undefined;
+                }
+        
+                fetch({ input: inputValue }, (results) => {
+                    if (active) {
+                        let newOptions = [];
+        
+                        if (value) {
+                            newOptions = [value];
+                        }
+        
+                        if (results) {
+                            newOptions = [...newOptions, ...results];
+                        }
+        
+                        setOptions(newOptions);
+                    }
+                });
+        
+                return () => {
+                    active = false;
+                };
+            }    
+        }catch(error) {
+            console.log(error);
+        }
     }, [value, inputValue]);
 
     React.useEffect(() => {
         // 這裡的代碼只有在 `value` 變化時才會運行
+        // console.log("value");
         // console.log(value);
 
-        if (value !== null && value !== undefined && value.description !== undefined && value.description !== null) {
+        if (value !== null && value !== undefined  && value.description !== undefined && value.description !== null) {
             // 這邊可以轉經緯度, 但還沒確定有沒要用所以先註解掉
             const geocoder = new window.google.maps.Geocoder();
             geocoder.geocode({ address: value.description }, (results, status) => {
@@ -401,11 +411,11 @@ export function FormLocation({ type, title, placeholder, value, setValue, inputV
                             // console.log(region_en);
                             // console.log(region_zh);
                             setRegionCountry_Latitude_Longitute({
-                                region_string: value.description,
-                                transaction_region_zh: region_zh,
-                                transaction_region_en: region_en,
-                                latitude: latitude,
+                                destination_string: value.description,
+                                destination_zh_string: region_zh,
+                                destination_en_string: region_en,
                                 longitude: longitude,
+                                latitude: latitude,
                             })
                         } catch (error) {
                             console.log(error);
@@ -439,8 +449,11 @@ export function FormLocation({ type, title, placeholder, value, setValue, inputV
             }}
 
             getOptionLabel={(option) =>
-                typeof option === 'string' ? option : option.description
+                typeof option === 'string' ? option :
+                Array.isArray(option) ? option.join(', ') :
+                option.description
             }
+
             filterOptions={(x) => x}
             options={options}
             autoComplete
@@ -449,6 +462,7 @@ export function FormLocation({ type, title, placeholder, value, setValue, inputV
             value={value}
             noOptionsText="No locations"
             onChange={(event, newValue) => {
+                console.log(newValue);
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);
             }}
@@ -478,10 +492,10 @@ export function FormLocation({ type, title, placeholder, value, setValue, inputV
             )}
             renderOption={(props, option) => {
                 const matches =
-                    option.structured_formatting.main_text_matched_substrings || [];
-
+                option?.structured_formatting?.main_text_matched_substrings || [];
+        
                 const parts = parse(
-                    option.structured_formatting.main_text,
+                    option?.structured_formatting?.main_text,
                     matches.map((match) => [match.offset, match.offset + match.length]),
                 );
 
@@ -502,7 +516,7 @@ export function FormLocation({ type, title, placeholder, value, setValue, inputV
                                     </Box>
                                 ))}
                                 <Typography variant="body2" color="text.secondary">
-                                    {option.structured_formatting.secondary_text}
+                                    {option?.structured_formatting?.secondary_text}
                                 </Typography>
                             </Grid>
                         </Grid>

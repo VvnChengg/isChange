@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CreateContainer = styled.div `
+export const DetailContainer = styled.div `
     width: 50%;
     height: calc(100% - 80px);
 
@@ -17,13 +17,9 @@ export const CreateContainer = styled.div `
     > * {
         width: 100%;
     }
-
-    @media screen and (max-width: 500px) {
-        width: 90%;
-    }
 `
 
-export const CreateButtonContainer = styled.div `
+export const DetailButtonContainer = styled.div `
     display: flex;
     justify-content: space-between;
 `

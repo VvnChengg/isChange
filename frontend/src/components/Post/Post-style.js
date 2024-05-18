@@ -16,17 +16,53 @@ export const PostWrapper = styled.div `
     cursor: pointer;
 `
 
+export const PostTopBar = styled.div `
+    display: flex;
+    align-items: center;
+    gap: 7px;
+`
+
+export const PostInfoContainer = styled.div `
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    @media screen and (max-width: 500px) {
+        display: block;
+    }
+`
+
+export const PostInfo = styled.div `
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    float: left;
+
+    @media screen and (max-width: 500px) {
+        gap: 5px;
+    }
+`
+
 export const PostIcon = styled.div `
     width: 20px;
     height: 20px;
 
     margin-left: 5px;
 
-    background-image: url('/icons/${props => props.src}.png');
-    background-size: cover;
+    & svg {
+        width: 100%;
+        height: 100%;
+    }
+    
+    & path {
+        fill: ${props => props.theme.text};
+    }
 `
 
 export const PostTitle = styled.div `
+    width: 100%;
+
     font-weight: 800;
     font-size: 28px;
     line-height: 130%;
@@ -36,6 +72,11 @@ export const PostTitle = styled.div `
 
     white-space: nowrap;
     overflow: hidden;
+
+    @media screen and (max-width: 500px) {
+        font-size: 24px;
+       // overflow: scroll;
+    }
 `
 
 export const PostPreview = styled.div `
@@ -50,6 +91,10 @@ export const PostPreview = styled.div `
 
     white-space: nowrap;
     overflow: hidden;
+
+    @media screen and (max-width: 500px) {
+        font-size: 16px;
+    }
 `
 
 export const PostImage = styled.img `

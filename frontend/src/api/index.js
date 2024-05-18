@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 import { toast } from 'react-toastify';
 
 const hostname = process.env.REACT_APP_API_HOSTNAME;
@@ -23,6 +24,24 @@ export const api = {
             axios.get(hostname + '/post/hot')
                 .then(res => res.data)
                 .catch(err => console.log(err))
+        )
+    },
+    getGeoPosts: () => {
+        return (
+            axios.get(hostname + '/geo/sort')
+                .then(res => res.data)
+                .catch(err => console.log(err))
+        )
+    },
+    filterGeoPosts: (radius) => {
+        return (
+            axios.get(hostname + '/geo/filter?radius=' + radius)
+                .then(res => res.data)
+                .catch(err => {
+                    if (err.response.data.message === '沒有找到任何內容')
+                        throw (err.response.data.message);
+                    else console.log(err);
+                })
         )
     },
     searchPosts: (keyword) => {
@@ -148,6 +167,7 @@ export const api = {
             })
                 .then(res => {
                     toast.success(`${res.data.message}`);
+                    console.log(res);
                     return res.data;
                 })
                 .catch(err => {
@@ -157,6 +177,46 @@ export const api = {
                 })
         )
     },
+    commentPost: (comment) => {
+        const token = window.localStorage.getItem('access_token');
+        // const formData = new FormData();
+
+        // formData.append('pid', comment.pID);
+        // formData.append('content', comment.content);
+        // formData.append('datetime', comment.datetime);
+        // formData.append('userId', window.localStorage.getItem('user_id'));
+        console.log('commenttt');
+        console.log(comment.pID);
+        
+        const pid = comment.pID;
+        const content = comment.content;
+        const datetime = comment.datetime;
+        console.log('formData');
+        // console.log(userID);
+        // const commentInfo = {pid, content, datetime, userID}
+        console.log('formData');
+        // console.log(commentInfo);
+        return (
+            axios.post(hostname + '/post/comment', {
+            // commentInfo
+            pid: pid,
+            text: content
+            // datetime: datetime
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                // 'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then(res => {
+                return res.data;
+            })
+            .catch(err => {
+                throw err
+            })
+        )
+    },
+
     createTour: (tour) => {
         const token = window.localStorage.getItem('access_token');
 

@@ -70,4 +70,27 @@ export const loginApi = {
         });
     },
 
+
+    // SSO
+    sso_login: (tokenId) =>{
+        return axios.post(`${hostname}/sso/googleSignIn`, {
+            tokenId: tokenId
+        })
+        .then(res =>{
+            // console.log(res.data);
+            if(res.data.status === 'success'){
+                const now = new Date();
+                const expiryTime = now.getTime() + 3600000; // 設定token過期時間為 1 hour later    
+                localStorage.setItem('user_id', res.data.data.user_id);
+                localStorage.setItem('email', res.data.data.email);
+                localStorage.setItem('access_token', res.data.data.access_token);
+                localStorage.setItem('expiry_time', expiryTime.toString());
+            }
+            return res.data;
+        })
+        .catch(err =>{
+            throw err;
+        })
+    },
+
 };

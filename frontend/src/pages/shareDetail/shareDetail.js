@@ -8,17 +8,25 @@ import axios from 'axios';
 import { useToken } from '../../hooks/useToken';
 // import LikeButton from "./likeButton";
 import { toast } from 'react-toastify';
+import { useIntl } from 'react-intl';
+
+import {
+  DetailContainer,
+  DetailButtonContainer
+} from './shareDetail-style';
+
+import PostDetail from '../../components/PostDetail';
+import Button from '../../components/Button';
+
+import CollectPost from '../../components/CollectPost/CollectPost';
+import { Spin } from 'antd';
 
 export default function MyComponent() {
-  // const [post, setPost] = useState()
-  
-  let navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    let path = '/'; 
-    navigate(path);
-  };
+  const intl = useIntl();
+  // const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const user_id = localStorage.getItem('user_id');
 
-  // const hostname = 'http://localhost:3000/api';
   const [username, setUsername] = useState('');
   const [school, setSchool] = useState('');
   const [headshot, setHeadshot] = useState('');
@@ -31,6 +39,11 @@ export default function MyComponent() {
 
   const token = useToken();
   const { pid } = useParams();
+
+  // 這塊是收藏文章用的
+  // const user_id = localStorage.getItem('user_id');
+  const [post, setPost] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   const getMemberInfo = async () => {
     const memberInfo = await viewApi.getMember(token);
@@ -56,103 +69,63 @@ export default function MyComponent() {
     setPhoto(postInfo.item.coverPhoto);
     setLikes(postInfo.item.like_count);
     setIsLiked(postInfo.item.is_liked);
+
+    // 這塊是收藏文章用的
+    setPost(postInfo.item);
+
+    setIsLoading(false);
   }
 
   useEffect(() => {
       getInfo();
   }, []);
 
-  function PressLike() {
-    console.log(likes);
-    console.log(isLiked);
-    
-    console.log(pid);
-    api.pressLike(pid)
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
-    window.location.reload()
+
+  function contact() {
+    // console.log('contact');
+    // api: send msg
+    if(post.creator_username){
+        navigate(`/member/${post.creator_username}`);
+    }
   }
 
-  function PressShare() {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url)
-        .then(() => {
-            console.log('URL copied to clipboard:', url);
-            toast.success(`${'URL copied to clipboard'}`);
-        })
-        .catch((error) => {
-            console.error('Failed to copy URL:', error);
-        });
-  }
-
-  // function PressComment() {
-  //   console.log(post);
-  //   .then(res => console.log(res))
-  //   .catch(err => console.log(err));
+  // const post = {
+  //   title,
+  //   content,
+  //   photo,
+  //   likes,
+  //   isLiked,
+  //   pid,
   // }
 
+  if(isLoading){
+    return <Spin />;
+  }
+
   return (
-    <div className='flex-container'>
-      <div className='detail-container'>
-          <div className='left-section'>
-            <div className='flex-content'>
-              <div className='title-wrapper'>
-                <img
-                  className='title-img'
-                  loading='lazy'
-                  src='https://cdn.builder.io/api/v1/image/assets/TEMP/d164f973484caa9604cbdaa4c89940ea90cb5dc809b962688855cf182d497f1a?'
-                />
-                <div className='title-text'>{title}</div>
-              </div>
-              <div className='share-info'>
-                <div className='share-btn'>分享</div>
-                <div className='location-info'>
-                  <img
-                    className='location-img'
-                    loading='lazy'
-                    src='https://cdn.builder.io/api/v1/image/assets/TEMP/16cdf560b23133dfbbb7f1e9d8a8d9d5dc38c7a3f7de3296dcf78eef77d45513?'
+      <DetailContainer>
+          <PostDetail post={post} />
+          <DetailButtonContainer>
+              <Button
+                  text={intl.formatMessage({ id: 'back' })}
+                  secondary={true}
+                  onClick={() => navigate('/')}
+              />
+              {user_id !== post.creator_id && post.creator_username &&
+                  <Button
+                      text={intl.formatMessage({ id: 'tour.message' })}
+                      onClick={() => contact()}
                   />
-                  <div className='location-text'>瑞典，斯德哥爾摩</div>
-                </div>
-              </div>
-              <div className='content-info'>
-                <img
-                  loading='lazy'
-                  src={photo}
-                  className='inserted-figure'
-                />
-                {content}
-              </div>
-              <div>
-                likes: {likes}
-              </div>
-              <div className='button-group'>
-                {/* <LikeButton
-                  likes={likes}
-                  is_liked={isLiked}
-                  pid={pid} /> */}
-                {isLiked === true ?
-                <button className='icon-button' onClick={() => PressLike()}><img
-                  loading='lazy'
-                  src='/icons/heartFilled.png'
-                /></button> :
-                <button className='icon-button' onClick={() => PressLike()}><img
-                  loading='lazy'
-                  src='/icons/heartHollow.png'
-                /></button>
-                }
-                {/* <button className='icon-button' onClick={() => routeChange()}><img
-                  loading='lazy'
-                  src='/icons/commentButton.png'
-                /></button> */}
-                <button className='icon-button' onClick={() => PressShare()}><img
-                  loading='lazy'
-                  src='/icons/shareButton.png'
-                /></button>
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
+              }
+          </DetailButtonContainer>
+      </DetailContainer>
+      // {post.creator_id !== user_id && 
+      //   <CollectPost 
+      //       post={post}
+      //       user_id={user_id}
+      //       token={token}
+      //       size="8%"
+      //   />
+      // }
   );
 }

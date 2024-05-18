@@ -6,6 +6,7 @@ import axios from 'axios';
 import ChatRoom from '../../components/PrivateMessage/ChatRoom';
 import ChatRoomInput from '../../components/PrivateMessage/ChatRoomInput';
 import { useToken } from '../../hooks/useToken';
+import { Spin } from 'antd';
 
 import { io } from 'socket.io-client';
 const socket = io('http://localhost:8080');
@@ -190,9 +191,7 @@ export default function Chatroom() {
                     />
                 </>
             )}
-            {!chatData && (
-                <div>Loading...</div>
-            )}
+            {!chatData && <Spin />}
         </div>
     );
 }

@@ -15,17 +15,33 @@ import {
     StyledEmailIcon, 
     StyledLineIcon,
     StyledFacebookMessengerIcon,
-    StyledImg
+    StyledImg,
+    StyledLinkIcon,
+    StyledButton,
+    StyledButtonContainer
  } from './SharePage-style';
 
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
+
+import { toast } from 'react-toastify';
 
 
 export default function SharePage({url}) {
     const [modal2Open, setModal2Open] = useState(false);
     const intl = useIntl();
   
-    // console.log(url);
+    function PressShare() {
+        navigator.clipboard.writeText(url)
+            .then(() => {
+                // console.log('URL copied to clipboard:', url);
+                toast.success(`${intl.formatMessage({ id: 'CopyURLSuccess' })}`);
+            })
+            .catch((error) => {
+                // console.error('Failed to copy URL:', error);
+                toast.error(`${intl.formatMessage({ id: 'CopyURLFailed' })}`);
+                });
+      }
+    
     return (
         <>
             <StyledImg
@@ -42,25 +58,31 @@ export default function SharePage({url}) {
                 onCancel={() => setModal2Open(false)}
                 footer={null} 
             >
-                <FacebookShareButton url={url}>
-                    <StyledFacebookIcon round={true} />
-                </FacebookShareButton>
+                <StyledButtonContainer>
+                    <FacebookShareButton url={url}>
+                        <StyledFacebookIcon round={true} />
+                    </FacebookShareButton>
 
-                <FacebookMessengerShareButton url={url}>
-                    <StyledFacebookMessengerIcon round={true} />
-                </FacebookMessengerShareButton>
+                    <FacebookMessengerShareButton url={url}>
+                        <StyledFacebookMessengerIcon round={true} />
+                    </FacebookMessengerShareButton>
 
-                <TwitterShareButton url={url}>
-                    <StyledTwitterIcon round={true} />
-                </TwitterShareButton>
+                    <TwitterShareButton url={url}>
+                        <StyledTwitterIcon round={true} />
+                    </TwitterShareButton>
 
-                <EmailShareButton url={url}>
-                    <StyledEmailIcon round={true} />
-                </EmailShareButton>
+                    <EmailShareButton url={url}>
+                        <StyledEmailIcon round={true} />
+                    </EmailShareButton>
 
-                <LineShareButton url={url}>
-                    <StyledLineIcon round={true} />
-                </LineShareButton>            
+                    <LineShareButton url={url}>
+                        <StyledLineIcon round={true} />
+                    </LineShareButton>
+
+                    <StyledButton onClick={PressShare}>
+                        <StyledLinkIcon src="/icons/link.png" alt="Link Icon" />
+                    </StyledButton>
+                </StyledButtonContainer>
             </Modal>
         </>
     );

@@ -34,12 +34,12 @@ export default function TourCreate() {
 
         api.createTour(tour)
         .then(res => {
-            console.log(res);
+            // console.log(res);
             toast.success(res.message);
             navigate('/post/published');
         })
         .catch(err => {
-            console.log(err);
+            // console.log(err);
             toast.error(err.message);
         });
     }
@@ -51,6 +51,7 @@ export default function TourCreate() {
                 <Button
                     text={intl.formatMessage({ id: 'back' })}
                     secondary={true}
+                    onClick={() => window.history.back()}
                 />
                 <Button
                     text={intl.formatMessage({ id: 'tour.create' })}

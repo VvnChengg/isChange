@@ -41,6 +41,8 @@ const en = {
     'sidebar.hot': 'Hot',
     'sidebar.new': 'New',
     'sidebar.following': 'Following',
+    'sidebar.close': 'Closest',
+    'sidebar.far': 'Farthest',
 
     'sidebar.transSort': 'Product Sort',
     'sidebar.priceLow': 'Low price',
@@ -81,7 +83,7 @@ const en = {
     'option.complete': 'Complete',
     'option.end': 'End',
 
-    'sidebar.region': 'Region',
+    'sidebar.distance': 'Distance Filter',
 
 
     /* pages */
@@ -92,6 +94,8 @@ const en = {
     'back': 'Back',
     'loading': 'Loading',
     'shareToOthers': 'Share to others',
+    'CopyURLSuccess': 'Copy URL successfully',
+    'CopyURLFailed': 'Copy URL failed',
 
     'home.noContent': 'No Content',
 
@@ -116,6 +120,8 @@ const en = {
     'login.passwordChangeFailed': 'Reset password failed, please try again',
     'login.resetPwd': 'Reset password',
     'login.invalidEmailInput': 'Invalid email input format',
+    'login.error': 'Login failed, please try again',
+    'login.errorGoogleAccount': 'This account has already been registered, please use the original account to login',
 
     'register.tryAgain': 'Please try again',
     'register.emailRegistered': 'Email is registered',
@@ -205,6 +211,8 @@ const en = {
     'post.createSuccess': 'Create post successfully',
     'post.createFail': 'Create post failed',
     'post.articlePicture':'Post Picture',
+    'post.collectSuccess': 'Collect post successfully',
+    'post.collectCancelSucess': 'Cancel collect post successfully',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',
@@ -221,10 +229,15 @@ const en = {
     'tour.complete':'complete',
     'tour.end':'end',
     'tour.viewPageFailed': 'Failed to view tour page, please try again',
+    'tour.viewPageSuccess': 'View tour page successfully',
     'tour.checkEditFailed': 'Loading edit page failed, please try again',
     'tour.editSuccess': 'Edit tour successfully',
     'tour.editFailed': 'Edit tour failed, please try again',
     'tour.status': 'Status',
+    'tour.createSuccess': 'Create tour successfully',
+    'tour.createFail': 'Create tour failed',
+    'tour.collectSuccess': 'Collect tour successfully',
+    'tour.collectCancelSucess': 'Cancel collect tour successfully',
     
     'trans.type': 'Type',
     'trans.sell': 'Sell',
@@ -251,12 +264,18 @@ const en = {
     'trans.clothing': 'Clothing',
     'trans.others': 'Others',
     'trans.checkEditFailed': 'Loading edit page failed, please try again',
+    'trans.viewPageSuccess': 'View product page successfully',
     'trans.editSuccess': 'Edit product successfully',
     'trans.editFailed': 'Edit product failed, please try again',
     'trans.productPicture': 'Product Picture',
     'trans.productRegion': 'Product Region',
     'trans.productRegionHint': 'Please enter product region',
     'trans.viewPageFailed': 'Failed to view product page, please try again',
+    'trans.collectSuccess': 'Collect product successfully',
+    'trans.collectCancelSucess': 'Cancel collect product successfully',
+    'trans.collectFailed': 'Collect product failed',
+    'trans.getCollectFailed': 'Get collect product status failed',
+    
 
 
     /* alert */
