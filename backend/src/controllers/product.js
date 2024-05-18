@@ -158,9 +158,7 @@ class productApi {
 
       const trans = await ProductModel.findById(tid);
 
-      //   console.log("check before" + user_id);
-      //   console.log(trans.creator_id.toString());
-      if (user_id !== trans.creator_id.toString()) {
+      if (!user_id.equals(trans.creator_id)) {
         return res.status(401).json({
           success: false,
           message: "沒有權限編輯該交易",

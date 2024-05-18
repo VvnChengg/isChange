@@ -218,6 +218,12 @@ const getUserPosts = async (req, res, next) => {
 };
 
 const createPost = async (req, res, next) => {
+  const post = req.body;
+  const uId = req.body.userId;
+  if (!post) {
+    return res.status(400).json({ message: "未傳入文章創建資訊" });
+  }
+
   try {
     let { location, article_region_en, article_region_zh } = req.body;
     if (typeof location === "string") {
@@ -244,7 +250,7 @@ const createPost = async (req, res, next) => {
       article_region_zh: article_region_zh,
       content: post.content,
       article_pic: article_pic,
-      creator_id: post.user_id,
+      creator_id: uId,
       // article_region: post.location
     });
     await newPost.save();
