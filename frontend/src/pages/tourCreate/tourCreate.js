@@ -51,6 +51,7 @@ export default function TourCreate() {
                 <Button
                     text={intl.formatMessage({ id: 'back' })}
                     secondary={true}
+                    onClick={() => window.history.back()}
                 />
                 <Button
                     text={intl.formatMessage({ id: 'tour.create' })}
