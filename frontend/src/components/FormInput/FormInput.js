@@ -322,6 +322,7 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
     const [options, setOptions] = React.useState([]);
     const loaded = React.useRef(false);
 
+
     if (typeof window !== 'undefined' && !loaded.current) {
         if (!document.querySelector('#google-maps')) {
             loadScript(
@@ -333,7 +334,8 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
 
         loaded.current = true;
     }
-
+    
+    
     const fetch = React.useMemo(
         () =>
             debounce((request, callback) => {
@@ -346,41 +348,49 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
     React.useEffect(() => {
         let active = true;
 
-        if (!autocompleteService.current && window.google) {
-            autocompleteService.current =
-                new window.google.maps.places.AutocompleteService();
-        }
-        if (!autocompleteService.current) {
-            return undefined;
-        }
-        if (inputValue === '') {
-            setOptions(value ? [value] : []);
-            return undefined;
-        }
-
-        fetch({ input: inputValue }, (results) => {
-            if (active) {
-                let newOptions = [];
-
-                if (value) {
-                    newOptions = [value];
+        try{
+            if(window.google.maps.places !== undefined) {
+        
+                if (!autocompleteService.current && window.google) {
+                    autocompleteService.current =
+                        new window.google.maps.places.AutocompleteService();
                 }
-
-                if (results) {
-                    newOptions = [...newOptions, ...results];
+                if (!autocompleteService.current) {
+                    return undefined;
                 }
-
-                setOptions(newOptions);
-            }
-        });
-
-        return () => {
-            active = false;
-        };
+                if (inputValue === '') {
+                    setOptions(value ? [value] : []);
+                    return undefined;
+                }
+        
+                fetch({ input: inputValue }, (results) => {
+                    if (active) {
+                        let newOptions = [];
+        
+                        if (value) {
+                            newOptions = [value];
+                        }
+        
+                        if (results) {
+                            newOptions = [...newOptions, ...results];
+                        }
+        
+                        setOptions(newOptions);
+                    }
+                });
+        
+                return () => {
+                    active = false;
+                };
+            }    
+        }catch(error) {
+            console.log(error);
+        }
     }, [value, inputValue]);
 
     React.useEffect(() => {
         // 這裡的代碼只有在 `value` 變化時才會運行
+        // console.log("value");
         // console.log(value);
 
         if (value !== null && value !== undefined  && value.description !== undefined && value.description !== null) {
@@ -482,10 +492,10 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
             )}
             renderOption={(props, option) => {
                 const matches =
-                    option.structured_formatting.main_text_matched_substrings || [];
-
+                option?.structured_formatting?.main_text_matched_substrings || [];
+        
                 const parts = parse(
-                    option.structured_formatting.main_text,
+                    option?.structured_formatting?.main_text,
                     matches.map((match) => [match.offset, match.offset + match.length]),
                 );
 
@@ -506,7 +516,7 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
                                     </Box>
                                 ))}
                                 <Typography variant="body2" color="text.secondary">
-                                    {option.structured_formatting.secondary_text}
+                                    {option?.structured_formatting?.secondary_text}
                                 </Typography>
                             </Grid>
                         </Grid>

@@ -56,6 +56,7 @@ const LoginForm = () => {
 
 
   const responseGoogle = async (response) => {
+    console.log(response);
     const tokenId = response.credential;
 
     if(tokenId){
@@ -65,6 +66,7 @@ const LoginForm = () => {
           navigate('/');
         }
       }catch(error){
+        console.log(error);
         if(error.response.data.error === '此帳號已註冊，請使用原本的帳號登入'){
           toast.error(intl.formatMessage({ id: 'login.errorGoogleAccount' }));
         }else{

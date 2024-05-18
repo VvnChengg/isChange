@@ -11,11 +11,13 @@ import {
     FormImage,
     FormLocation
 } from '../FormInput';
-import Button from '../Button';
+
+import { Spin } from 'antd';
 
 export default function TransForm({ trans, setTrans }) {
     // console.log(trans);
     const intl = useIntl();
+    // const [isLoading, setIsLoading] = useState(true);
 
     function setTitle(input) {
         setTrans({
@@ -176,6 +178,11 @@ export default function TransForm({ trans, setTrans }) {
         setProductType(e.target.value)
     }
 
+    // if(isLoading){
+    //     return <Spin />;
+    // }
+
+
     return (
         <>
             <FormInput
@@ -193,6 +200,7 @@ export default function TransForm({ trans, setTrans }) {
                 inputValue={trans.destination_string}
                 setInputValue={setRegionString}
                 setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
+                // setIsLoading={setIsLoading}
             />
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.type' })}
