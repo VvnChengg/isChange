@@ -144,8 +144,7 @@ export default function PostDetail({ post }) {
                         {line}
                     </div>
                 ))}
-                {post.photo && <img src={post.photo} alt='product' />}
-                {post.product_pic && <img src={post.product_pic} alt='product' />}
+                {post.product_pic && <img src={post.product_pic} alt='product' style={{width: '100%', height: 'auto'}} />}
             </PostDetailContent>
         </PostDetailWrapper>
     )

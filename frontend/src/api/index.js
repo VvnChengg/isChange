@@ -51,8 +51,7 @@ export const api = {
             .catch(err => console.log(err))
         )
     },
-    createPost: (post) => {
-        const token = window.localStorage.getItem('access_token');
+    createPost: (post, token) => {
         function dataURLtoFile(dataurl, filename) {
             var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
                 bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -64,10 +63,16 @@ export const api = {
         const file = post.photo === "" ? "" : dataURLtoFile(post.photo, 'post.png');
         const formData = new FormData();
 
+
         formData.append('title', post.title);
         formData.append('content', post.content);
         formData.append('article_pic', file);
-        formData.append('user_id', window.localStorage.getItem('user_id'));
+        formData.append('userId', post.user_id);
+        formData.append('article_region_en', JSON.stringify(post.destination_en));
+        formData.append('article_region_zh', JSON.stringify(post.destination_zh));
+        formData.append('location', JSON.stringify(post.location));
+
+
 
         return axios.post(hostname + '/post/create',
             formData, {
@@ -80,6 +85,7 @@ export const api = {
                 return res.data;
             })
             .catch(err => {
+                console.log(err);
                 throw err
             });
     },
@@ -101,27 +107,39 @@ export const api = {
                 throw err
             });
     },
-    updatePost: (pID, post) => {
-        const token = window.localStorage.getItem('access_token');
+    updatePost: (pID, post, token) => {
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        const file = post.photo === "" ? "" : dataURLtoFile(post.photo, 'post.png');
+        const formData = new FormData();
+
+
+        formData.append('title', post.title);
+        formData.append('content', post.content);
+        formData.append('article_pic', file);
+        formData.append('userId', post.user_id);
+        formData.append('article_region_en', JSON.stringify(post.destination_en));
+        formData.append('article_region_zh', JSON.stringify(post.destination_zh));
+        formData.append('location', JSON.stringify(post.location));
 
         return (
-            axios.put(`${hostname}/post/${pID}`, {
-                title: post.title,
-                content: post.content,
-                //   photo: post.photo,
-            }, {
+            axios.put(`${hostname}/post/${pID}`, 
+                formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             })
                 .then(res => {
-                    toast.success(`更新成功！`);
                     return res.data;
                 })
                 .catch(err => {
-                    console.log(pID)
-                    console.log(post)
-                    console.log(err)
                     throw err
                 })
         )
@@ -144,17 +162,19 @@ export const api = {
             });
     },
     getPostDetail: (pID) => {
-        // const token = window.localStorage.getItem('access_token');
-        return axios.get(`${hostname}/post/detail/${pID}`)
-            .then(res => {
-                console.log(pID);
-                console.log(res);
-                return res.data;
-            })
-            .catch(err => {
-                console.log(err)
-                throw err;
-            });
+        const user_id = window.localStorage.getItem('user_id');
+        // console.log(user_id);
+        return axios.get(`${hostname}/post/detail/${pID}`, {
+            params: {
+                userId: user_id
+            }
+        })
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            throw err;
+        });
     },
     pressLike: (pID) => {
         const token = window.localStorage.getItem('access_token');

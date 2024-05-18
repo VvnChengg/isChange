@@ -200,7 +200,6 @@ export default function TransForm({ trans, setTrans }) {
                 inputValue={trans.destination_string}
                 setInputValue={setRegionString}
                 setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
-                // setIsLoading={setIsLoading}
             />
             <FormCheck
                 title={intl.formatMessage({ id: 'trans.type' })}

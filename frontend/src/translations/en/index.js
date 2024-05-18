@@ -213,6 +213,10 @@ const en = {
     'post.articlePicture':'Post Picture',
     'post.collectSuccess': 'Collect post successfully',
     'post.collectCancelSucess': 'Cancel collect post successfully',
+    'post.location': 'Location',
+    'post.inputLocation': 'Where are you?',
+    'post.editSuccess': 'Edit post successfully',
+    'post.editFailed': 'Edit post failed, please try again',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',

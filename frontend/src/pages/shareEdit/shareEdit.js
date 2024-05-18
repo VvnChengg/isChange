@@ -1,85 +1,170 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useIntl, FormattedMessage } from 'react-intl';
-import { ImageUploadDiv } from '../shareCreate/imageDiv'
+import { useIntl } from 'react-intl';
 import { useToken } from '../../hooks/useToken';
-// import './shareCreate-style.css';
 
 import {
   FormInput,
-  FormImage
+  FormImage,
+  FormLocation
 } from '../../components/FormInput';
 import Button from '../../components/Button';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
-// import { AiOutlineMail } from 'https://esm.sh/react-icons/ai';
-// import TextField from '@material-ui/core/TextField';
 import { api } from '../../api';
+import { toast } from 'react-toastify';
 
 
 export default function Share() {
   const intl = useIntl();
-  let navigate = useNavigate(); 
-  
+  let navigate = useNavigate();
+
   const { pid } = useParams();
-  const token = useToken();
   const user_id = localStorage.getItem('user_id');
-  
+  const token = useToken();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [post, setPost] = useState({
     title: '',
     content: '',
     photo: '',
-    // status: ['draft'],
+
+    region_object: '',
+    latitude: '',
+    longitude: '',
+    user_id: user_id,
   })
 
   const getInfo = async () => {
-    // const pid = "6617996b1067c62b7d704652";
-// const pid = "6617996b106";  // 文章ID格式錯誤
-// const pid = "6617996b1067c62b7d704650"; // 尚未發布文章
-    try{
+    try {
       const postInfo = await api.getPostDetail(pid);
-      console.log(postInfo);
-      console.log('aaa');
-      setPost(prevPost => ({ ...prevPost, ...postInfo.item }));
-    }catch(e){
-        alert(`${intl.formatMessage({ id: 'tour.checkEditFailed' })}`);
+
+      setPost(prevPost => ({
+        ...prevPost,
+        ...postInfo.item,
+        photo: postInfo.item.coverPhoto ? postInfo.item.coverPhoto : '',
+        region_object: (intl.locale === 'en' ? postInfo.item.article_region_en : postInfo.item.article_region_zh).join(', '),
+      }));
+      
+    } catch (e) {
+      alert(`${intl.formatMessage({ id: 'tour.checkEditFailed' })}`);
     }
+
+    setIsLoading(false);
+
   }
 
   useEffect(() => {
-      if(token && pid && user_id){
-        getInfo();
-      }
+    if (token && pid && user_id) {
+      getInfo();
+    }
   }, [token, pid, user_id])
 
   function setTitle(input) {
     setPost({
-        ...post,
-        title: input
+      ...post,
+      title: input
     });
   }
-  
+
   function setContent(input) {
-      setPost({
-          ...post,
-          content: input
-      });
+    setPost({
+      ...post,
+      content: input
+    });
   }
 
   function setPhoto(input) {
     setPost({
-        ...post,
-        photo: input
+      ...post,
+      photo: input
     });
   }
 
-  function onSubmit() {
-    console.log(post);
-    api.updatePost(pid, post)
-    .then(res => {
-      console.log(res)
-      navigate('/post/published');
+  //需要詳細地點object資料的時候才用
+  function setRegionObject(input) {
+    setPost({
+      ...post,
+      region_object: input
+    });
+  }
+
+  function setRegionString(input) {
+    setPost({
+      ...post,
+      destination_string: input
     })
-    .catch(err => console.log(err));
+  }
+
+  function setRegionCountry_Latitude_Longitute(input) {
+    setPost({
+      ...post,
+      destination_string: input.destination_string,
+      destination_zh_string: input.destination_zh_string,
+      destination_en_string: input.destination_en_string,
+      longitude: input.longitude,
+      latitude: input.latitude,
+    })
+  }
+
+
+  async function onSubmit() {
+    setIsSubmitting(true);
+    if (post.destination_en_string !== undefined || post.destination_zh_string !== undefined) {
+      // 送出前先把destination_en, destination_zh轉成後端需要的格式
+      let destination_en_string = post.destination_en_string;
+      let destination_zh_string = post.destination_zh_string;
+
+      // 如果只有一個destination, 則將其設為另一個語言的destination
+      if (typeof destination_en_string === 'undefined') {
+        destination_en_string = destination_zh_string;
+      }
+
+      if (typeof destination_zh_string === 'undefined') {
+        destination_zh_string = destination_en_string;
+      }
+
+      post.destination_en = destination_en_string.split(", ").map(item => item.trim());
+      post.destination_zh = destination_zh_string.split(", ").map(item => item.trim());
+    } else {
+      // 如果沒有輸入地點, 則把原本的地點設回去
+      post.destination_en = post.article_region_en
+      post.destination_zh = post.article_region_zh
+    }
+
+    if (post.longitude !== undefined && post.latitude !== undefined) {
+      // 把經緯度轉成後端需要的格式
+      let location = {
+        type: "Point",
+        coordinates: [Number(post.longitude), Number(post.latitude)]
+      };
+      post.location = location;
+    }
+
+    try {
+      const data = await api.updatePost(pid, post, token);
+      console.log(data);
+      if (data.message === '成功更新貼文') {
+        toast.success(`${intl.formatMessage({ id: 'post.editSuccess' })}`);
+        navigate('/post/published'); // redirect
+      } else {
+        toast.error(`${intl.formatMessage({ id: 'post.editFailed' })}`);
+      }
+    } catch (error) {
+      toast.error(`${intl.formatMessage({ id: 'post.editFailed' })}`);
+    }
+    setIsSubmitting(false);
+  }
+
+
+
+  if (isLoading) {
+    return (
+      <Spin />
+    );
   }
 
   return (
@@ -88,9 +173,18 @@ export default function Share() {
         <FormInput
           type='input'
           title={intl.formatMessage({ id: 'title' })}
-          placeholder={intl.formatMessage({ id: 'inputTitle' })}          
+          placeholder={intl.formatMessage({ id: 'inputTitle' })}
           text={post.title}
           setText={setTitle}
+        />
+        <FormLocation
+          title={intl.formatMessage({ id: 'post.location' })}
+          placeholder={intl.formatMessage({ id: 'post.inputLocation' })}
+          value={post.region_object}
+          setValue={setRegionObject}
+          inputValue={post.destination_string}
+          setInputValue={setRegionString}
+          setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
         />
         <FormInput
           type='textarea'
@@ -107,17 +201,26 @@ export default function Share() {
           imagePreviewUrl={post.photo}
           setImagePreviewUrl={setPhoto}
         />
-        {/* <ImageUploadDiv
-          photo={post.photo}
-          setPhoto={setPhoto} /> */}
-        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
             text={intl.formatMessage({ id: 'back' })}
             onClick={() => window.history.back()}
           />
           <Button
-            text={intl.formatMessage({ id: 'post.edit' })}
-            onClick={() => onSubmit()}
+            style={{
+              backgroundColor: isSubmitting ? '#ccc' : '',
+              color: isSubmitting ? '#888' : '',
+              cursor: isSubmitting ? 'not-allowed' : '',
+            }}
+
+            text={isSubmitting ?
+              <div>
+                <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                {intl.formatMessage({ id: 'loading' })}
+              </div>
+              : intl.formatMessage({ id: 'post.edit' })}
+
+            onClick={isSubmitting ? undefined : onSubmit}
           />
         </div>
       </div>

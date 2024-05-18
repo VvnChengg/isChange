@@ -213,6 +213,10 @@ const zh = {
     'post.articlePicture':'文章圖片',
     'post.collectSuccess': '成功收藏文章',
     'post.collectCancelSucess': '成功取消收藏文章',
+    'post.location': '地點',
+    'post.inputLocation': '請輸入地點',
+    'post.editSuccess': '編輯文章成功',
+    'post.editFailed': '編輯文章失敗，請再試一次',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',

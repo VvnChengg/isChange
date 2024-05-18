@@ -28,7 +28,6 @@ export default function TourCreate() {
 
     const [tour, setTour] = useState({
         event_title: '',
-        destination: '',
         people_lb: '',
         people_ub: '',
         budget: '',
@@ -38,7 +37,11 @@ export default function TourCreate() {
         event_intro: '',
         user_id: user_id,
         tid: tid,
-        status: 'ongoing'
+        status: 'ongoing',
+
+        destination_object: '',
+        latitude: '',
+        longitude: '',
     })
 
 
@@ -65,7 +68,13 @@ export default function TourCreate() {
                     data.tour.start_time = formatDate(data.tour.start_time);
                     data.tour.end_time = formatDate(data.tour.end_time);
                     console.log(data);
-                    setTour(prevTour => ({ ...prevTour, ...data.tour }));
+                    setTour(prevTour => ({ 
+                        ...prevTour,
+                        ...data.tour,
+                        longitude: data.tour.location.coordinates[0],
+                        latitude: data.tour.location.coordinates[1],
+                        region_object: (intl.locale === 'en' ? data.tour.destination_en : data.destination_zh).join(', ')
+                    }));
                     // toast.success(`${intl.formatMessage({ id: 'tour.viewPageSuccess' })}`);
                 }
     
