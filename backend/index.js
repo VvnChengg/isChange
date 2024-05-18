@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
@@ -15,17 +17,20 @@ const io = require("socket.io")(socketPort, {
 
 require("dotenv").config(); // 加了這行就可以抓到 port
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Routes
 const chatRoutes = require("./src/routes/chat");
 const postRoutes = require("./src/routes/post");
 const tourRoutes = require("./src/routes/tour.js");
 const memberAuthRoutes = require("./src/routes/memberAuth");
 const memberRoutes = require("./src/routes/member");
 const productRoutes = require("./src/routes/product");
+const ssoRoutes = require("./src/routes/SSO");
 const commonRoutes = require("./src/routes/common");
 const geoRoutes = require("./src/routes/geolocation");
 
@@ -36,6 +41,7 @@ app.use("/api/tour", tourRoutes);
 app.use("/api/member-auth", memberAuthRoutes);
 app.use("/api/member", memberRoutes);
 app.use("/api/trans", productRoutes);
+app.use("/api/sso", ssoRoutes);
 app.use("/api/common", commonRoutes);
 app.use("/api/geo", geoRoutes);
 
