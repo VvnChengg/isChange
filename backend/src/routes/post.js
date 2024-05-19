@@ -19,7 +19,7 @@ router.get('/hot', getAllPostsSortedByLikes);
 router.get('/search', searchPosts);
 router.get('/:uid', getUserPosts);
 router.post('/create', validateToken, upload.single('article_pic'), createPost);
-router.put('/:pid', validateToken, updatePost);
+router.put('/:pid', validateToken, upload.single('article_pic'), updatePost);
 router.get('/detail/:pid', checkTokenExist, getPostDetail);
 router.delete('/delete', validateToken, deleteContent);
 router.put('/like/:pid', validateToken, likePost);
