@@ -13,6 +13,7 @@ router.get("/chatlist", validateToken, chatController.getChatList);
 router.get("/detail/:cid", validateToken, chatController.getChatDetail);
 router.post("/sendtext/:cid", validateToken, chatController.sendTextMsg);
 router.post("/sendpic/:cid", upload.single("image"), validateToken, chatController.sendPic);
+router.patch("/accept/:cid", validateToken, chatController.acceptStranger); // phase 3
 router.delete("/delete/:cid", validateToken, chatController.deleteChat); // phase 3
 
 module.exports = router;

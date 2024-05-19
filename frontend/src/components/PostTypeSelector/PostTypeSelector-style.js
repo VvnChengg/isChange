@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 
 export const SelctorWrapper = styled.div `
-    position: fixed;
-        left: 20px;
-        top: 100px;
-
     display: flex;
     align-items: center;
     justify-content: center;

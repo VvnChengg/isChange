@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../api';
 
 import {
+    HomeContainer,
     PostContainer,
     SpinContainer,
     NoContent,
+    HomeTopBar,
     PostSelector
 } from './home-style';
 
@@ -15,35 +17,23 @@ import Post from '../../components/Post';
 import SideBar from '../../components/SideBar';
 import Icon from '../../components/Icon';
 
-import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 
-export default function Home({ keyword, search, setSearch }) {
+export default function Home({
+    keyword, search, setSearch,
+    type, setType, sort, setSort,
+    radius, setRadius, filters, setFilters,
+    filterOptions
+}) {
     const navigate = useNavigate();
 
-    const filterOptions = {
-        trans: {
-            productType: ['kitchen', 'living room', 'restroom', 'cosmetic','clothing', 'others'],
-            transactionWay: ['sell', 'purchase', 'lend', 'borrow'],
-            status: ['in stock', 'reserved', 'sold'],
-            currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
-        },
-        tour: {
-            status: ['ongoing', 'complete', 'end'],
-            currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
-        }
-    }
-
     const [showSideBar, setShowSideBar] = useState(false);
-
-    const [type, setType] = useState('all');
-    const [sort, setSort] = useState('new');
-    const [filters, setFilters] = useState(filterOptions);
     
     const [posts, setPosts] = useState([]);
     const [hotPosts, setHotPosts] = useState([]);
+    const [geoPosts, setGeoPosts] = useState([]);
     const [toRenderPosts, setToRenderPosts] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -93,6 +83,8 @@ export default function Home({ keyword, search, setSearch }) {
     function renderPosts() {
         let tempPosts = posts.slice();
         if (sort === 'hot') tempPosts = hotPosts.slice();
+        else if (sort === 'close' || radius !== 40075) tempPosts = geoPosts.slice().reverse();
+        else if (sort === 'far') tempPosts = geoPosts.slice();
 
         // filter type
         tempPosts = tempPosts.filter(post => type === 'all' || post.type === type);
@@ -109,17 +101,6 @@ export default function Home({ keyword, search, setSearch }) {
     // get posts
     useEffect(() => {
         setIsLoading(true);
-        api.getHotPosts()
-        .then(res => {
-            setHotPosts(res);
-            setIsLoading(false);
-        })
-        .catch(err => {
-            console.log(err);
-            setIsLoading(false);
-        });
-        
-        setIsLoading(true);
         api.getAllPosts()
         .then(res => {
             setPosts(res);
@@ -130,7 +111,49 @@ export default function Home({ keyword, search, setSearch }) {
             console.log(err);
             setIsLoading(false);
         });
+
+        // setIsLoading(true);
+        api.getHotPosts()
+        .then(res => {
+            setHotPosts(res);
+            // setIsLoading(false);
+        })
+        .catch(err => {
+            console.log(err);
+            // setIsLoading(false);
+        });
+
+        // setIsLoading(true);
+        api.getGeoPosts()
+        .then(res => {
+            setGeoPosts(res);
+            // setIsLoading(false);
+        })
+        .catch(err => {
+            console.log(err);
+            // setIsLoading(false);
+        });
     }, []);
+
+    // filter geo posts
+    useEffect(() => {
+        if (radius !== 40075) {
+            setIsLoading(true);
+            api.filterGeoPosts(radius * 1000)
+            .then(res => {
+                setGeoPosts(res);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                if (err === '沒有找到任何內容') {
+                    setToRenderPosts([]);
+                    setGeoPosts([]);
+                }
+                console.log(err);
+                setIsLoading(false);
+            });
+        } else setGeoPosts(posts);
+    }, [radius]);
 
     // search posts
     useEffect(() => {
@@ -163,6 +186,7 @@ export default function Home({ keyword, search, setSearch }) {
         }
     }, [search, keyword]);
 
+    // initialize sort
     useEffect(() => {
         setSort('new');
         setFilters(filterOptions);
@@ -170,40 +194,48 @@ export default function Home({ keyword, search, setSearch }) {
 
     useEffect(() => {
         setToRenderPosts(renderPosts());
-    }, [type, sort, filters]);
+    }, [type, sort, filters, geoPosts]);
+
+    // console.log(isLoading, toRenderPosts.length)
 
     return (
-        <PostContainer>
-            <PostTypeSelector type={type} setType={setType} />
+        <HomeContainer>
+            <HomeTopBar>
+                <PostTypeSelector type={type} setType={setType} />
+                <PostSelector onClick={() => setShowSideBar(!showSideBar)}>
+                    {showSideBar ? <Icon.Close /> : <Icon.Selector />}
+                </PostSelector>
+                <SideBar
+                    showSideBar={showSideBar}
+                    type={type}
+                    sort={sort}
+                    setSort={setSort}
+                    radius={radius}
+                    setRadius={setRadius}
+                    filters={filters}
+                    setFilters={setFilters}
+                    filterOptions={filterOptions}
+                />
+            </HomeTopBar>
             {isLoading ?
                 <SpinContainer>
                     <Spin />
-                </SpinContainer>
-                : (toRenderPosts.length === 0 ?
-                    <NoContent>
-                        <FormattedMessage id='home.noContent' />
-                    </NoContent>
-                    : toRenderPosts.map((post, index) => 
-                    <Post
-                        key={post._id}
-                        post={post}
-                        showDivider={index !== toRenderPosts.length - 1}
-                        onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
-                    />
-                ))
+                </SpinContainer> :
+                <PostContainer>
+                    {toRenderPosts.length === 0 ?
+                        <NoContent>
+                            <FormattedMessage id='home.noContent' />
+                        </NoContent>
+                        : toRenderPosts.map((post, index) => 
+                        <Post
+                            key={post._id}
+                            post={post}
+                            showDivider={index !== toRenderPosts.length - 1}
+                            onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
+                        />
+                    )}
+                </PostContainer>
             }
-            <PostSelector onClick={() => setShowSideBar(!showSideBar)}>
-                {showSideBar ? <Icon.Close /> : <Icon.Selector />}
-            </PostSelector>
-            <SideBar
-                showSideBar={showSideBar}
-                type={type}
-                sort={sort}
-                setSort={setSort}
-                filters={filters}
-                setFilters={setFilters}
-                filterOptions={filterOptions}
-            />
-        </PostContainer>
+        </HomeContainer>
     )
 }

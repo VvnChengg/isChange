@@ -14,6 +14,7 @@ import TransForm from '../../components/TransForm';
 import Button from '../../components/Button';
 import { transApi } from '../../api/transApi';
 import { useToken } from '../../hooks/useToken';
+import { toast } from 'react-toastify';
 
 export default function TransEdit() {
     const intl = useIntl();
@@ -30,21 +31,22 @@ export default function TransEdit() {
         transform_type: 'edit',
         trans_title: '',
         trans_type: 'sell',
-        product_type: 'others',
         currency: 'TWD',
         budget: '',
         rent_start_time: '',
         rent_end_time: '',
         trans_intro: '',
         user_id: user_id,
-        tid: tid,
 
-        product_pic: '',
-        transaction_region: '', //待補前端設計
+        product_type: 'kitchen',
+        product_pic: '', //待補前端設計
 
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
         price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
 
+        destination_object: '',
+        latitude: '',
+        longitude: '',
     })
 
     useEffect(() => {
@@ -75,7 +77,7 @@ export default function TransEdit() {
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
 
-                console.log(data.trans.status)
+                // console.log(data);
             
                 setTrans({
                     rent_start_time: rent_start_time,
@@ -95,33 +97,78 @@ export default function TransEdit() {
                     product_pic: data.trans.product_pic,
                     transform_type: 'edit',
                     trans_status: data.trans.status,
-                    // __v: data.__v
+
+                    transaction_region_en: data.trans.transaction_region_en,
+                    transaction_region_zh: data.trans.transaction_region_zh,
+                    longitude: data.trans.location.coordinates[0],
+                    latitude: data.trans.location.coordinates[1],
+                    region_object: (intl.locale === 'en' ? data.trans.transaction_region_en : data.trans.transaction_region_zh).join(', ')
+
                 });
             }
         }catch(e){
-            alert(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'trans.checkEditFailed' })}`);
         }
         setIsLoading(false);
     }
 
     async function onSubmit() {
-        // console.log(trans);
         setIsSubmitting(true);
+
+        
+        if(trans.destination_en_string !== undefined || trans.destination_zh_string !== undefined){
+            // 送出前先把destination_en, destination_zh轉成後端需要的格式
+            let destination_en_string = trans.destination_en_string;
+            let destination_zh_string = trans.destination_zh_string;
+        
+            // 如果只有一個destination, 則將其設為另一個語言的destination
+            if (typeof destination_en_string === 'undefined') {
+                destination_en_string = destination_zh_string;
+            }
+        
+            if (typeof destination_zh_string === 'undefined') {
+                destination_zh_string = destination_en_string;
+            }
+        
+            trans.destination_en = destination_en_string.split(", ").map(item => item.trim());
+            trans.destination_zh = destination_zh_string.split(", ").map(item => item.trim());
+        }else{
+            // 如果沒有輸入地點, 則把原本的地點設回去
+            trans.destination_en = trans.transaction_region_en
+            trans.destination_zh = trans.transaction_region_zh
+        }
+
+        if(trans.longitude !== undefined && trans.latitude !== undefined){
+            // 把經緯度轉成後端需要的格式
+            let location = {
+                type: "Point",
+                coordinates: [Number(trans.longitude), Number(trans.latitude)]
+            };
+            trans.location = location;
+        }
+
         try{
             const data = await transApi.editTrans(trans, token);
             // console.log(data);
             if(data.success){
-                alert(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
+                // alert(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
+                toast.success(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
                 navigate('/post/published'); // redirect
             }else{
-                alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
+                // alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
+                toast.error(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
             }
         }catch(e){
             // console.log(e);
-            alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
+            // alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
+            toast.error(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
         }
         setIsSubmitting(false)
         
+    }
+
+    if(isLoading){
+        return <Spin />;
     }
 
     return (
