@@ -87,7 +87,7 @@ const getAllPosts = async (req, res, next) => {
 
 const getPostDetail = async (req, res, next) => {
     const { pid } = req.params;
-    const { userId } = req.body;
+    const { userId } = req.query;
     let article, item;
     try {
         article = await Article.findById(pid);
@@ -117,7 +117,7 @@ const getPostDetail = async (req, res, next) => {
             content: article.content,
             type: "post",
             coverPhoto: convertToBase64(article.article_pic),
-            // location: article.location,
+            location: article.location,
             datetime: article.post_date,
             creator_id: article.creator_id,
             creator_username: member.username,
@@ -125,7 +125,9 @@ const getPostDetail = async (req, res, next) => {
             save_count: saveList.length,            // 收藏數
             is_liked: isLiked >= 0 ? true : false,   // 使用者是否有按讚
             is_saved: isSaved > 0 ? true : false,   // 使用者是否有收藏
-            comment_list: commentList               // 評論串
+            comment_list: commentList,               // 評論串
+            article_region_en: article.article_region_en,
+            article_region_zh: article.article_region_zh,
         };
     } catch (error) {
         if (error.name === "CastError") {
