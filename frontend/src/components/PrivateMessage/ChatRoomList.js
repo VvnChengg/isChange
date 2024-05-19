@@ -1,11 +1,12 @@
 // ChatRoomList.js 純框架
 
-import React from 'react';
+import React , {useState} from 'react';
 import { AiOutlineMail } from 'https://esm.sh/react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import './PrivateList.css';
 import { FormattedMessage } from 'react-intl';
 import { Spin } from 'antd';
+import Popup from '../StartPrivate/Popup';
 
 
 function formatDate(dateString) {
@@ -22,10 +23,30 @@ function formatDate(dateString) {
 
 function ChatRoomList({ rooms }) {
     const navigate = useNavigate();
-    
-    const handleRoomClick = (chatid) => {
-      navigate('/chatroom/'+chatid);
+    const [isOpen, setIsOpen] = useState(false);
+    const [popupData, setPopupData] = useState(null);
+    const userId = window.localStorage.getItem('user_id');
+
+    const togglePopup = () => {
+      setIsOpen(!isOpen);
     };
+  
+    const handleRoomClick = (roomdata) => {
+      const chatid = roomdata.chat_id;
+      const stranger = roomdata.stranger;
+      console.log(roomdata);
+      
+      
+      if (stranger && roomdata.first_person !== userId ) {
+        setPopupData(roomdata); 
+        setIsOpen(true); 
+      } else {
+        navigate('/chatroom/' + chatid);
+      }
+    };
+
+
+
     if (!rooms) {
       return <Spin />;
     };
@@ -44,7 +65,7 @@ function ChatRoomList({ rooms }) {
         <table className='private-message-chat-list-table'>
             {rooms.map((room, index) => (
               <React.Fragment key={`room_${index}`}>
-                <tbody className='private-message-a-chat' onClick={() => handleRoomClick(room.chat_id)}>
+                <tbody className='private-message-a-chat' onClick={() => handleRoomClick(room)}>
                 <tr>
                   <td rowSpan={2} style={{ width: '80px' }}>
                     <img src={room.chat_to_photo||'/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} style={{ width: '100%', borderRadius: '50%'}} />
@@ -72,6 +93,16 @@ function ChatRoomList({ rooms }) {
               </React.Fragment>
             ))}
         </table>
+        {isOpen && popupData && (
+        <Popup
+          other_id={popupData.first_person}
+          other_name={popupData.chat_to_username}
+          isOpen={isOpen}
+          onClose={togglePopup}
+          direction='Accept'
+          chatid={popupData.chat_id}
+        />
+        )}
       </div>
     );
 }

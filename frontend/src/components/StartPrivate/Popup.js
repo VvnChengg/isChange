@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createChat } from '../../api/createChatApi';
+import { acceptChat } from'../../api/acceptChatApi';
+import { deleteChat } from '../../api/deleteChatApi';
 import './StartPrivate.css';
 import { FormattedMessage } from 'react-intl';
 
 
 
-const Popup = ({ isOpen, onClose, other_id, other_name, direction }) => {
+const Popup = ({ isOpen, onClose, other_id, other_name, direction, chatid }) => {
   const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
 
@@ -22,12 +24,20 @@ const Popup = ({ isOpen, onClose, other_id, other_name, direction }) => {
   const handleButtonClick = async (action) => {
     if (isChecked) {
       if (action === 'confirm') {
+        if (direction==='Invite'){
         try {
           const newChatId = await createChat(userId, other_id, token);
           navigate('/chatroom/' + newChatId);
         } catch (error) {
           console.error('Error creating chat:', error);
         }
+        } else {
+          await acceptChat(chatid, token);        
+        } 
+      }
+      else {
+        // 刪除 api
+        await deleteChat(chatid, token);        
       }
       onClose();
     }
