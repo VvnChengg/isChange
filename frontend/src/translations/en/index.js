@@ -227,6 +227,7 @@ const en = {
     'tour.min': 'Min',
     'tour.max': 'Max',
     'tour.date': 'Date',
+    'tour.tourPicture':'Tour Picture',
     'tour.create': 'Create tour',
     'tour.edit': 'Edit tour',
     'tour.message': 'Contact team lead',
@@ -240,7 +241,7 @@ const en = {
     'tour.editFailed': 'Edit tour failed, please try again',
     'tour.status': 'Status',
     'tour.createSuccess': 'Create tour successfully',
-    'tour.createFail': 'Create tour failed',
+    'tour.createFailed': 'Create tour failed',
     'tour.collectSuccess': 'Collect tour successfully',
     'tour.collectCancelSucess': 'Cancel collect tour successfully',
     

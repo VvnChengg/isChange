@@ -68,16 +68,18 @@ export default function TourCreate() {
                     data.tour.start_time = formatDate(data.tour.start_time);
                     data.tour.end_time = formatDate(data.tour.end_time);
                     console.log(data);
+                    console.log(data.tour.destination_en);
+                    console.log(data.tour.destination_zh);
                     setTour(prevTour => ({ 
                         ...prevTour,
                         ...data.tour,
                         longitude: data.tour.location.coordinates[0],
                         latitude: data.tour.location.coordinates[1],
-                        region_object: (intl.locale === 'en' ? data.tour.destination_en : data.destination_zh).join(', ')
+                        region_object: (intl.locale === 'en' ? data.tour.destination_en : data.tour.destination_zh).join(', ')
                     }));
-                    // toast.success(`${intl.formatMessage({ id: 'tour.viewPageSuccess' })}`);
+                }else{
+                    toast.error(`${intl.formatMessage({ id: 'tour.viewPageFailed' })}`);
                 }
-    
             }
         }catch(e){
             toast.error(`${intl.formatMessage({ id: 'tour.viewPageFailed' })}`);
@@ -87,24 +89,52 @@ export default function TourCreate() {
 
 
     async function onSubmit() {
-        // console.log(tour);
 
-        // api: edit tour
+        setIsSubmitting(true);
+
+        if(tour.destination_en_string !== undefined || tour.destination_zh_string !== undefined){
+            // 送出前先把destination_en, destination_zh轉成後端需要的格式
+            let destination_en_string = tour.destination_en_string;
+            let destination_zh_string = tour.destination_zh_string;
+        
+            // 如果只有一個destination, 則將其設為另一個語言的destination
+            if (typeof destination_en_string === 'undefined') {
+                destination_en_string = destination_zh_string;
+            }
+        
+            if (typeof destination_zh_string === 'undefined') {
+                destination_zh_string = destination_en_string;
+            }
+        
+            tour.destination_en = destination_en_string.split(", ").map(item => item.trim());
+            tour.destination_zh = destination_zh_string.split(", ").map(item => item.trim());
+        }
+
+        if(tour.longitude !== undefined && tour.latitude !== undefined){
+            // 把經緯度轉成後端需要的格式
+            let location = {
+                type: "Point",
+                coordinates: [Number(tour.longitude), Number(tour.latitude)]
+            };
+            tour.location = location;
+        }
+
+        console.log(tour);
+
         try{
             const data = await tourApi.editTour(tour, token);
             if(data.success){
                 toast.success(`${intl.formatMessage({ id: 'tour.editSuccess' })}`);
-                navigate('/post/published');
+                // navigate('/post/published');
             }else{
-                // alert(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
                 toast.error(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
             }
         }
         catch(e){
-            // alert(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
             toast.error(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
         }
 
+        setIsSubmitting(false);
     }
 
     if (isLoading) {

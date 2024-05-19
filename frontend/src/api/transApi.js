@@ -27,7 +27,7 @@ export const transApi = {
         const file = data.product_pic === "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
-        console.log(JSON.stringify(data.destination_zh));
+        // console.log(JSON.stringify(data.destination_zh));
         formData.append('product_title', data.trans_title);
         formData.append('product_pic', file); // Assuming data.product_pic is a File or Blob object
         formData.append('description', data.trans_intro);
