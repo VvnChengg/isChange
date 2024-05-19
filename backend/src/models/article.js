@@ -23,7 +23,7 @@ const articleSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["draft", "complete"],
+    enum: ["draft", "complete", "delete"],
     default: "draft",
     required: true,
   },
@@ -35,7 +35,7 @@ const articleSchema = new Schema({
   like_by_user_ids: {
     type: [Schema.Types.ObjectId],
     ref: "Member",
-    default: []
+    default: [],
   },
   save_by_user_ids: {
     type: [Schema.Types.ObjectId],
@@ -65,6 +65,6 @@ const articleSchema = new Schema({
 });
 
 // article_region 換成經緯度後要加這行
-// articleSchema.index({ article_region: "2dsphere" });
+// articleSchema.index({ location: "2dsphere" });
 
 module.exports = mongoose.model("Article", articleSchema);
