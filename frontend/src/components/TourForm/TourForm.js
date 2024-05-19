@@ -5,12 +5,13 @@ import {
     FormRange,
     FormBudget,
     FormDate,
+    FormImage,
     FormLocation
 } from '../FormInput';
 import Button from '../Button';
 
 export default function TourForm({ tour, setTour }) {
-    console.log(tour)
+    // console.log(tour)
     const intl = useIntl();
 
     function setTitle(input) {
@@ -71,6 +72,13 @@ export default function TourForm({ tour, setTour }) {
         setTour({
             ...tour,
             status: input
+        });
+    }
+
+    function setImage(input) {
+        setTour({
+            ...tour,
+            event_pic: input
         });
     }
 
@@ -188,6 +196,13 @@ export default function TourForm({ tour, setTour }) {
                 placeholder={intl.formatMessage({ id: 'inputTextarea' })}
                 text={tour.event_intro}
                 setText={setIntro}
+            />
+            <FormImage
+                type='file'
+                title={intl.formatMessage({id: 'tour.tourPicture'})}
+                placeholder={intl.formatMessage({id: 'tour.tourPicture'})}
+                imagePreviewUrl={tour.event_pic}
+                setImagePreviewUrl={setImage}
             />
         </>
     )

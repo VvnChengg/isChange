@@ -227,6 +227,7 @@ const zh = {
     'tour.min': '最少',
     'tour.max': '最多',
     'tour.date': '日期',
+    'tour.tourPicture': '揪團圖片',
     'tour.create': '創建揪團',
     'tour.edit': '編輯揪團',
     'tour.message': '私訊主揪',
@@ -240,7 +241,7 @@ const zh = {
     'tour.editFailed': '編輯揪團失敗，請再試一次',
     'tour.status': '揪團狀態',
     'tour.createSuccess': '創建揪團成功',
-    'tour.createFail': '創建揪團失敗',
+    'tour.createFailed': '創建揪團失敗',
     'tour.collectSuccess': '成功收藏揪團',
     'tour.collectCancelSucess': '成功取消收藏揪團',
 

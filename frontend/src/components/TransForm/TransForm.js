@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl';
 
 import {
     FormInput,
-    FormRange,
     FormBudget,
     FormDate,
     FormCheck,
@@ -12,7 +11,6 @@ import {
     FormLocation
 } from '../FormInput';
 
-import { Spin } from 'antd';
 
 export default function TransForm({ trans, setTrans }) {
     // console.log(trans);
@@ -256,7 +254,6 @@ export default function TransForm({ trans, setTrans }) {
                 type='file'
                 title={intl.formatMessage({id: 'trans.productPicture'})}
                 placeholder={intl.formatMessage({id: 'trans.productPicture'})}
-                onFileChange={e => console.log(e.target.files)}
                 imagePreviewUrl={trans.product_pic}
                 setImagePreviewUrl={setImage}
             />

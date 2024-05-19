@@ -236,18 +236,4 @@ export const api = {
             })
         )
     },
-
-    createTour: (tour) => {
-        const token = window.localStorage.getItem('access_token');
-
-        return (
-            axios.post(hostname + '/tour/create', tour, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-                .then(res => res.data)
-                .catch(err => err)
-        )
-    }
 };
