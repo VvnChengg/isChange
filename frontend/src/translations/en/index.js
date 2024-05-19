@@ -109,6 +109,7 @@ const en = {
     'login.inputPassword': 'Please enter your password',
     'login.login': 'Login',
     'login.loginSuccess': 'Login successfully',
+    'login.loginFailed': 'Login failed, please try again',
     'login.wrongPassword': 'Wrong password',
     'login.forgotPwd': 'Forgot password?',
     'login.sendMail': 'Send Code',

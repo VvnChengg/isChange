@@ -39,7 +39,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       if (error_msg === '密碼錯誤') {
         toast.error(`${intl.formatMessage({ id: 'login.wrongPassword' })}`);
       } else {
-        toast.error(`${error.response.data.message}`);
+        toast.error(`${intl.formatMessage({ id: 'login.loginFail' })}`);
       }
     }
   };

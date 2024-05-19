@@ -17,35 +17,35 @@ import { useToken } from '../../hooks/useToken';
 import Button from '../../components/Button';
 
 const Edit = () => {
+    const token = useToken();
+    const accountSource = localStorage.getItem('source');
+
     const [showPasswordDiv, setShowPasswordDiv] = useState(false);
     const [showBasicInfoDiv, setShowBasicInfoDiv] = useState(false);
     const [showStudentVeri, setShowStudentVeri] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
-
     const [introText, setIntroText] = useState('');
-
     const [username, setUsername] = useState('');
     const [school, setSchool] = useState('');
     const [photo, setPhoto] = useState('');
     const [studentVeriStatus, setStudentVeriStatus] = useState(false);
-    const token = useToken();
 
     const [isLoading, setIsLoading] = useState(true);
 
     const getInfo = async () => {
         const memberInfo = await viewApi.getMember(token);
 
+        // console.log('memberInfo:', memberInfo);
         setUsername(memberInfo.username);
         setSchool(memberInfo.exchange_school_name);
         setPhoto(memberInfo.photo);
         setIntroText(memberInfo.intro);
         setStudentVeriStatus(memberInfo.student_verification);
-        // console.log('photo:'+memberInfo.photo);
         setIsLoading(false);
     }
 
     useEffect(() => {
-        if(token){
+        if (token) {
             getInfo();
         }
 
@@ -92,17 +92,25 @@ const Edit = () => {
 
                     <div className={editStyles.section1Right}>
                         <div className={editStyles.sectionHeading}>
-                            <FormattedMessage id='edit.changeBasicInfo'/>
+                            <FormattedMessage id='edit.changeBasicInfo' />
 
                         </div>
+
+
                         <div className={editStyles.actionButtonsDiv}>
                             <FormattedMessage id='edit.changePassword'>
                                 {(text) => <Button
-                                    style={{ marginBottom: '5%' }}
-                                    onClick={() => setShowPasswordDiv(true)}
+                                    style={{
+                                        marginBottom: '5%',
+                                        backgroundColor: accountSource !== 'credentials' ? '#ccc' : '',
+                                        color: accountSource !== 'credentials' ? '#888' : '',
+                                        cursor: accountSource !== 'credentials' ? 'not-allowed' : '',
+                                    }}
+                                    onClick={accountSource !== 'credentials' ? undefined : () => setShowPasswordDiv(true)}
                                     text={text}
                                 />}
                             </FormattedMessage>
+
 
                             <FormattedMessage id='edit.changeUsernameandSchool'>
                                 {(text) => <Button
@@ -112,14 +120,15 @@ const Edit = () => {
                                 />}
                             </FormattedMessage>
 
-                            <FormattedMessage id={studentVeriStatus? 'edit.studentVerified' : 'edit.studentVeri'}>
+                            <FormattedMessage id={studentVeriStatus ? 'edit.studentVerified' : 'edit.studentVeri'}>
                                 {(text) => <Button
-                                    style={{ marginBottom: '5%',
-                                    backgroundColor: studentVeriStatus ? '#ccc' : '',
-                                    color: studentVeriStatus ? '#888' : '',
-                                    cursor: studentVeriStatus ? 'not-allowed' : 'default',
+                                    style={{
+                                        marginBottom: '5%',
+                                        backgroundColor: studentVeriStatus ? '#ccc' : '',
+                                        color: studentVeriStatus ? '#888' : '',
+                                        cursor: studentVeriStatus ? 'not-allowed' : '',
                                     }}
-                                    onClick={studentVeriStatus? undefined : () => setShowStudentVeri(true)}
+                                    onClick={studentVeriStatus ? undefined : () => setShowStudentVeri(true)}
                                     // onClick={() => setShowStudentVeri(true)}
                                     text={text}
                                 />}

@@ -109,6 +109,7 @@ const zh = {
     'login.inputPassword': '請輸入密碼',
     'login.login': '登入',
     'login.loginSuccess': '登入成功',
+    'login.loginFailed': '登入失敗，請再試一次',
     'login.wrongPassword': '密碼錯誤',
     'login.forgotPwd': '忘記密碼？',
     'login.sendMail': '寄送驗證碼',
