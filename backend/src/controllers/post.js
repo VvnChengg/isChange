@@ -384,26 +384,40 @@ const deleteContent = async (req, res, next) => {
 
 const likePost = async (req, res, next) => {
   const pid = req.params.pid;
-  const uId = req.body.userId;
+  const { userId, type } = req.body;
   let res_message = "";
 
   if (!pid) {
-    return res.status(400).json({ message: "請傳入文章id" });
+    return res.status(400).json({ message: "請傳入要按讚的內容id" });
   }
 
   try {
     // 從資料庫取得貼文內容
-    let post = await Article.findById(pid);
+
+    switch (type) {
+      case "post":
+        model = Article;
+        break;
+      case "trans":
+        model = Product;
+        break;
+      case "tour":
+        model = Event;
+        break;
+      default:
+        return res.status(400).json({ message: "輸入的 type 不正確，請使用 post, trans 或 tour" });
+    }
+    let post = await model.findById(pid);
 
     if (!post) {
-      return res.status(404).json({ message: "貼文不存在" });
+      return res.status(404).json({ message: "找不到指定id的內容" });
     }
 
     // 存取按讚人員清單
     let like_list = post.like_by_user_ids;
 
     // 尋找目前使用者是否在清單中，是 -> 回傳索引值； 否 -> 回傳 -1
-    const liked = like_list.indexOf(uId);
+    let liked = like_list.indexOf(userId);
 
     if (liked > -1) {
       // 使用者原本有按讚
@@ -411,12 +425,12 @@ const likePost = async (req, res, next) => {
       res_message = "成功取消按讚";
     } else {
       // 使用者原本沒按讚
-      like_list.splice(like_list.length, 0, new mongoose.Types.ObjectId(uId));
+      like_list.splice(like_list.length, 0, new mongoose.Types.ObjectId(userId));
       res_message = "成功按讚";
     }
 
     // 更新資料庫內容
-    post = await Article.findByIdAndUpdate(pid, {
+    post = await model.findByIdAndUpdate(pid, {
       like_by_user_ids: like_list,
     });
     res.status(200).json({ message: res_message });
