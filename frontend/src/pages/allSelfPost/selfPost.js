@@ -1,7 +1,7 @@
 // selfPost.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PostContainer } from '../home/home-style';
+import { PostContainer, HomeContainer} from '../home/home-style';
 import Post from '../../components/Post';
 import DeleteButton from '../../components/Button/DeleteButton'; 
 import axios from 'axios';
@@ -82,6 +82,8 @@ export default function SelfPost() {
                     <p className="self-post-nothing-msg"> <FormattedMessage id='selfpost.nothingMsg' /></p>
                 </div>
             ) : (
+                <HomeContainer>
+
                 <PostContainer>
                     {posts.map((post, index) => (
                         <div key={`post${index}`} className="self-post-wrapper">
@@ -90,6 +92,8 @@ export default function SelfPost() {
                         </div>
                     ))}
                 </PostContainer>
+                </HomeContainer>
+
             )}
             {showConfirmPopup && ( 
                 <PopupOnly 
