@@ -109,7 +109,7 @@ export default function MyComponent() {
               <Button
                   text={intl.formatMessage({ id: 'back' })}
                   secondary={true}
-                  onClick={() => navigate('/')}
+                  onClick={() => window.history.back()}
               />
               {user_id !== post.creator_id && post.creator_username &&
                   <Button
@@ -119,13 +119,5 @@ export default function MyComponent() {
               }
           </DetailButtonContainer>
       </DetailContainer>
-      // {post.creator_id !== user_id && 
-      //   <CollectPost 
-      //       post={post}
-      //       user_id={user_id}
-      //       token={token}
-      //       size="8%"
-      //   />
-      // }
   );
 }

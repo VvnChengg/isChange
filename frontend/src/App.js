@@ -39,6 +39,9 @@ import ShareToDelete from './pages/shareToDelete';
 import SelfPost from './pages/allSelfPost/selfPost';
 import Comment from './pages/comment';
 
+// my collect post
+import MyCollectPost from './pages/myCollectPosts.js/myCollectPosts';
+
 // tour
 import TourCreate from './pages/tourCreate';
 import TourEdit from './pages/tourEdit';
@@ -51,6 +54,7 @@ import TransDetail from './pages/transDetail';
 
 // google login api
 import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 function App() {
   const filterOptions = {
@@ -124,6 +128,7 @@ function App() {
                       <Route path='edit/:pid' element={<ShareEdit />} />
                       <Route path='to-delete' element={<ShareToDelete />} />
                       <Route path='comment/:pid' element={<Comment />} />
+                      <Route path='mycollect' element={<MyCollectPost />} />
                     </Route>
                     <Route path='tour'>
                       <Route path='create' element={<TourCreate />} />

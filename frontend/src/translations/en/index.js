@@ -282,6 +282,8 @@ const en = {
     'trans.collectFailed': 'Collect product failed',
     'trans.getCollectFailed': 'Get collect product status failed',
     
+    /* collect */
+    'collect.getCollectFailed': 'Get collect list failed',
 
 
     /* alert */

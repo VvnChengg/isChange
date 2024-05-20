@@ -283,6 +283,9 @@ const zh = {
     'trans.collectFailed': '收藏商品失敗',
     'trans.getCollectFailed': '取得收藏商品狀態失敗',
 
+    /* collect */
+    'collect.getCollectFailed': '取得收藏列表失敗',
+
     /* alert */
     'alert.login': '請先登入',
 
