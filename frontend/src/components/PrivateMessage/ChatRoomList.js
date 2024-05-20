@@ -84,9 +84,12 @@ function ChatRoomList({ rooms }) {
                     }
                   </td>
                   <td colSpan={1} className='private-message-chat-status'>
-                    {room.stranger === true ? <span style={{ color: 'red' }}>
-                    <FormattedMessage id='msg.stranger' />
-                    </span> : null}
+                    {room.stranger === true ?
+                    <span style={{ color: 'red' }}>
+                      <FormattedMessage id='msg.stranger' />
+                    </span> :
+                    (room.unread_cnt === 0 ? null : <span className='private-message-chat-unread'>{room.unread_cnt}</span>)
+                    }
                   </td>
                 </tr>
                 </tbody>

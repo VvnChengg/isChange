@@ -57,6 +57,16 @@
   vertical-align: bottom; 
 }
 
+.private-message-chat-unread{
+  display: inline-block;
+  width: 24px; /* 设置宽度 */
+  height: 24px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  font-weight: bold;
+}
 
 .private-message-chat-name {
   color: #008CD9;
