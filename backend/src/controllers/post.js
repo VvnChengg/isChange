@@ -86,18 +86,18 @@ const getAllPosts = async (req, res, next) => {
 };
 
 const getPostDetail = async (req, res, next) => {
-    const { pid } = req.params;
-    const { userId } = req.query;
-    let article, item;
-    try {
-        article = await Article.findById(pid);
-        if (!article) {
-            return res.status(404).json({ message: "找不到此文章" });
-        }
-        // 取得按讚、收藏資料
-        const isLiked = article.like_by_user_ids.indexOf(userId);
-        const saveList = await Favorite.find({ item_id: pid, save_type: "Article" });
-        const isSaved = saveList.filter((save) => save.user_id.equals(userId)).length;
+  const { pid } = req.params;
+  const { userId } = req.query;
+  let article, item;
+  try {
+    article = await Article.findById(pid);
+    if (!article) {
+      return res.status(404).json({ message: "找不到此文章" });
+    }
+    // 取得按讚、收藏資料
+    const isLiked = article.like_by_user_ids.indexOf(userId);
+    const saveList = await Favorite.find({ item_id: pid, save_type: "Article" });
+    const isSaved = saveList.filter((save) => save.user_id.equals(userId)).length;
 
     // 取得評論資料
     const commentList = await getCommentList(pid);
@@ -111,31 +111,31 @@ const getPostDetail = async (req, res, next) => {
       });
     }
 
-        item = {
-            _id: article._id,
-            title: article.article_title,
-            content: article.content,
-            type: "post",
-            coverPhoto: convertToBase64(article.article_pic),
-            location: article.location,
-            datetime: article.post_date,
-            creator_id: article.creator_id,
-            creator_username: member.username,
-            like_count: article.like_by_user_ids.length,  // 按讚數
-            save_count: saveList.length,            // 收藏數
-            is_liked: isLiked >= 0 ? true : false,   // 使用者是否有按讚
-            is_saved: isSaved > 0 ? true : false,   // 使用者是否有收藏
-            comment_list: commentList,               // 評論串
-            article_region_en: article.article_region_en,
-            article_region_zh: article.article_region_zh,
-        };
-    } catch (error) {
-        if (error.name === "CastError") {
-            return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
-        }
-        return res.status(400).json({ message: error });
+    item = {
+      _id: article._id,
+      title: article.article_title,
+      content: article.content,
+      type: "post",
+      coverPhoto: convertToBase64(article.article_pic),
+      location: article.location,
+      datetime: article.post_date,
+      creator_id: article.creator_id,
+      creator_username: member.username,
+      like_count: article.like_by_user_ids.length,  // 按讚數
+      save_count: saveList.length,            // 收藏數
+      is_liked: isLiked >= 0 ? true : false,   // 使用者是否有按讚
+      is_saved: isSaved > 0 ? true : false,   // 使用者是否有收藏
+      comment_list: commentList,               // 評論串
+      article_region_en: article.article_region_en,
+      article_region_zh: article.article_region_zh,
+    };
+  } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
     }
-    return res.status(200).json({ item });
+    return res.status(400).json({ message: error });
+  }
+  return res.status(200).json({ item });
 };
 
 const getUserPosts = async (req, res, next) => {
@@ -236,9 +236,9 @@ const createPost = async (req, res, next) => {
     }
     const article_pic = req.file
       ? {
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-        }
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      }
       : null;
     let newPost = new Article({
       article_title: post.title,
@@ -279,9 +279,9 @@ const updatePost = async (req, res, next) => {
   }
   const article_pic = req.file
     ? {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      }
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    }
     : null;
   const updates = {
     article_title: req.body.title,
