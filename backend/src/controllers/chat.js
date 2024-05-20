@@ -91,7 +91,7 @@ const getChatDetail = async (req, res) => {
         }
 
         // 聊天對象
-        const chatToId = chat.first_person.toString() === userId ? chat.second_person : chat.first_person;
+        const chatToId = chat.first_person.toString() === userId.toString() ? chat.second_person : chat.first_person;
         const chatTo = await Member.findById(chatToId);
 
         const messages = await Message.find({ chat_id: cid });
