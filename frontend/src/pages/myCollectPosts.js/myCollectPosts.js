@@ -45,7 +45,7 @@ export default function MyCollectPosts() {
 
             }
         }catch(err){
-            console.log(err);
+            setPosts([]);
             toast.error(intl.formatMessage('collect.getFailed'));
         }
         setIsLoading(false);
@@ -62,7 +62,7 @@ export default function MyCollectPosts() {
             <PostContainer>
             {posts.length === 0 ?
                 <NoContent>
-                    {intl.formatMessage('home.noContent')}
+                    {intl.formatMessage({ id: 'home.noContent' })}
                 </NoContent>
                 :posts.map((post, index) => (
                     <div key={`post${index}`} className="self-post-wrapper">
