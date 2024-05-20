@@ -77,6 +77,13 @@ class tourApi {
       const { eid } = req.params;
       const tourDetail = await TourModel.findById(eid);
 
+      if (!tourDetail) {
+        return res.status(404).json({
+          success: false,
+          message: "找不到該揪團",
+        });
+      }
+
       // Convert image data to base64
       let photoBase64 = null;
       if (tourDetail.event_pic && tourDetail.event_pic.contentType) {
@@ -86,15 +93,8 @@ class tourApi {
       }
 
       let responseTour = tourDetail.toObject(); // Convert the Mongoose document to a plain JavaScript object
-      delete tourDetail.event_pic;
-      tourDetail.event_pic = photoBase64;
-
-      if (!tourDetail) {
-        return res.status(404).json({
-          success: false,
-          message: "找不到該揪團",
-        });
-      }
+      delete responseTour.event_pic;
+      responseTour.event_pic = photoBase64;
 
       // 取得揪團發布者的資料
       const member = await MemberModel.findById(tourDetail.creator_id);
@@ -202,7 +202,7 @@ class tourApi {
 
       const tour = await TourModel.findById(eid);
 
-      if (!userId.equals(tour.creator_id)) {
+      if (userId !== tour.creator_id.toString()) {
         console.log("userId", userId);
         return res.status(401).json({
           success: false,
