@@ -8,13 +8,19 @@ import { useIntl } from 'react-intl';
 
 
 const MenuWrapper = styled.div`
-    position: fixed;
-    left: 0.5%;
-    bottom: 72px; // adjust this value as needed
-    transform: 'translate(-50%, -50%)';
+    bottom: 50px; // adjust this value as needed
     z-index: 1000;
     white-space: nowrap;
+    position: absolute;
 `;
+
+const Wrapper = styled.div`
+    position: relative;
+    display: inline-block;
+    z-index: 1000;
+    bottom: 10px;
+`;
+
 
 export default function PersonalPostButton (){
     
@@ -32,12 +38,10 @@ export default function PersonalPostButton (){
     return (
         token && 
         <>
+        <Wrapper>
         <Button
             style = {{
                 width: '100px',
-                position: "fixed",
-                left: "1%",
-                bottom: "20px",
                 zIndex: "1000",
             }}
             text = {intl.formatMessage({ id: 'personalbutton.title'})}
@@ -49,6 +53,7 @@ export default function PersonalPostButton (){
                 setIsOpen = {setIsMenuOpen}
             />
         </MenuWrapper>
+        </Wrapper>
         </>
 
     )

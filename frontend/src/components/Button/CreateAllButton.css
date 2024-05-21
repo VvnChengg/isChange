@@ -1,25 +1,26 @@
 .circle-button-container {
-    position: fixed;
-    bottom: 20px; /* 距離底部的距離 */
-    left: 20px; /* 距離左邊的距離 */
-    
-  }
+    z-index: 1000;
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+}
 
-.main-button{
+.main-button {
     height: 30px;
     width: 30px;
     font-size: 50px;
     color: #008CD9;
 }
-  
+
+.main-button:hover {
+    color: #66C2FF;
+    cursor: pointer;
+}
 
 .sub-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     position: absolute;
-    bottom: 50px; 
-    left: 0;
+    bottom: 50px;
+    width: 200px;     
 }
   
 .sub-button {
@@ -35,4 +36,14 @@
     margin-right: 5px;
     font-size: 30px;
     color: #008CD9;
+}
+
+.sub-text {
+    color: black;
+  }
+
+.centered-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

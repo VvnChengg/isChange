@@ -4,35 +4,43 @@ import { MdArticle, MdTravelExplore, MdOutlineCurrencyExchange } from 'react-ico
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import './CreateAllButton.css'
+import { Menu } from 'antd';
 
 const CreateAllButton = () => {
   const navigate = useNavigate();
   const [showSubButtons, setShowSubButtons] = useState(false);
 
+
   const toggleSubButtons = () => {
     setShowSubButtons(!showSubButtons);
   };
 
-
   return (
-    <div className="circle-button-container">
-      <button  style={{backgroundColor:'transparent', borderColor:'transparent'}} onClick={toggleSubButtons}>
-        <FaPlusCircle className="main-button"  /> 
-      </button>
-      {showSubButtons && (
-        <div className="sub-buttons">
-          <button className="sub-button" onClick={() => navigate('/post/create')} >
+  <div className="circle-button-container">
+    {showSubButtons && (
+      <Menu className="sub-buttons">
+        <Menu.Item key="1" onClick={() => navigate('/post/create')}>
+          <div className="centered-content">
             <MdArticle className="sub-icon" />  <FormattedMessage id='tag.post' />
-          </button>
-          <button className="sub-button" onClick={() => navigate('/tour/create')}>
+          </div>
+        </Menu.Item>
+        <Menu.Item key="2" onClick={() => navigate('/tour/create')}>
+          <div className="centered-content">
             <MdTravelExplore className="sub-icon" />  <FormattedMessage id='tag.tour' />
-          </button>
-          <button className="sub-button" onClick={() => navigate('/trans/create')}>
+          </div>
+        </Menu.Item>
+        <Menu.Item key="3" onClick={() => navigate('/trans/create')}>
+          <div className="centered-content">
             <MdOutlineCurrencyExchange className="sub-icon" />  <FormattedMessage id='tag.trans' />
-          </button>
-        </div>
-      )}
-    </div>
+          </div>
+        </Menu.Item>
+      </Menu>
+    )}
+
+    <button style={{ backgroundColor: 'transparent', borderColor: 'transparent' }} onClick={toggleSubButtons}>
+      <FaPlusCircle className="main-button" />
+    </button>
+  </div>
   );
 };
 
