@@ -8,6 +8,7 @@ export const PostDetailWrapper = styled.div`
     
     margin-bottom: 20px;
     padding: 30px;
+    padding-right: 0px;
 
     border: 2px solid #008CD9;
     border-radius: 20px;
@@ -16,9 +17,36 @@ export const PostDetailWrapper = styled.div`
     flex-direction: column;
     gap: 10px;
 
-    overflow-x: scroll;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
 `
+
+export const InnerWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    padding-right: 30px; // adjust this value as needed
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: darkgrey;
+        border-radius: 10px;
+        background-clip: padding-box;
+        border: 2px solid transparent;
+    }
+`;
 
 export const PostDetailTitle = styled.div`
     font-weight: 800;
@@ -36,6 +64,15 @@ export const PostDetailTitle = styled.div`
     }
 
     min-height: 50px;
+`
+export const PostDetailButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+
+    @media (min-width: 600px) {
+        flex-direction: row;
+    }
+
 `
 
 export const PostDetailRow = styled.div`
@@ -77,5 +114,9 @@ export const PostDetailContent = styled.div`
 `
 
 export const PostDetailImage = styled.img`
-    max-height: 70%;
+    max-width: 50%;
+
+    @media screen and (max-width: 1024px) {
+        max-width: 70%;
+    }
 `;
