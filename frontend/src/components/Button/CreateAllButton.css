@@ -1,7 +1,6 @@
 .circle-button-container {
     z-index: 1000;
     position: relative;
-    display: inline-block;
     margin-left: 10px;
 }
 
@@ -20,7 +19,10 @@
 .sub-buttons {
     position: absolute;
     bottom: 50px;
-    width: 200px;     
+    width: 100px;
+    border: 1px solid #008cd9;
+    border-inline-end: 1px solid #008cd9 !important;
+    border-radius: 8px;
 }
   
 .sub-button {
@@ -47,3 +49,13 @@
     align-items: center;
     justify-content: center;
 }
+
+
+/* .sub-buttons .ant-menu-item {
+    border-bottom: 1px solid #008cd9;
+    border-radius: 0;
+}
+
+.sub-buttons .ant-menu-item:last-child {
+    border-bottom: none;
+} */

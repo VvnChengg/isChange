@@ -1,7 +1,6 @@
-import { Menu } from 'antd';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { StyledMenu } from './PersonalMenu-style';
 
 function getItem(label, key, icon, children, type) {
     return { key, icon, children, label, type };
@@ -30,12 +29,8 @@ export function PersonalMenu({ isOpen, setIsOpen}) {
     return (
         <>
         {isOpen &&
-          <Menu
+          <StyledMenu
             onClick={onClick}
-            style={{
-              borderRadius: '5px',
-              width: '100%',
-            }}
             defaultSelectedKeys={['1']}
             defaultOpenKeys={['sub1']}
             mode='inline'

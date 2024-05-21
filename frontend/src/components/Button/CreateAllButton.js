@@ -21,17 +21,22 @@ const CreateAllButton = () => {
       <Menu className="sub-buttons">
         <Menu.Item key="1" onClick={() => navigate('/post/create')}>
           <div className="centered-content">
-            <MdArticle className="sub-icon" />  <FormattedMessage id='tag.post' />
+            {/* <MdArticle className="sub-icon" />   */}
+            <FormattedMessage id='tag.post' />
           </div>
         </Menu.Item>
+        <Menu.Divider />
         <Menu.Item key="2" onClick={() => navigate('/tour/create')}>
           <div className="centered-content">
-            <MdTravelExplore className="sub-icon" />  <FormattedMessage id='tag.tour' />
+            {/* <MdTravelExplore className="sub-icon" />   */}
+            <FormattedMessage id='tag.tour' />
           </div>
         </Menu.Item>
+        <Menu.Divider />
         <Menu.Item key="3" onClick={() => navigate('/trans/create')}>
           <div className="centered-content">
-            <MdOutlineCurrencyExchange className="sub-icon" />  <FormattedMessage id='tag.trans' />
+            {/* <MdOutlineCurrencyExchange className="sub-icon" />   */}
+            <FormattedMessage id='tag.trans' />
           </div>
         </Menu.Item>
       </Menu>

@@ -86,8 +86,8 @@ const zh = {
     'sidebar.distance': '距離篩選',
 
     'personalbutton.title': '我的貼文',
-    'personalbutton.myPost': '已發布貼文',
-    'personalbutton.myCollect': '已收藏貼文',
+    'personalbutton.myPost': '已發布',
+    'personalbutton.myCollect': '已收藏',
     
 
 
