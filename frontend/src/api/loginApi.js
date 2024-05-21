@@ -45,6 +45,10 @@ export const loginApi = {
                 localStorage.setItem('source', res.data.data.source);
                 localStorage.setItem('expiry_time', expiryTime.toString());
 
+                setTimeout(() => {
+                }, 1000);
+            
+
                 return res.data;
             }
             return res.data;

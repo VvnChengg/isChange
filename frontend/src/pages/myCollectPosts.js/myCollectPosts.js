@@ -8,8 +8,6 @@ import {
     PostContainer,
     SpinContainer,
     NoContent,
-    HomeTopBar,
-    PostSelector
 } from '../home/home-style';
 import { toast } from 'react-toastify';
 import { useIntl } from 'react-intl';
@@ -39,7 +37,6 @@ export default function MyCollectPosts() {
             const data = await collectApi.getMyCollectPostList(user_id, token);
 
             if(data.success){
-                console.log(data);
                 setPosts(data.result);
             }else{
 
@@ -53,7 +50,9 @@ export default function MyCollectPosts() {
 
     if(isLoading){
         return (
-            <Spin/>
+            <SpinContainer>
+                <Spin/>
+            </SpinContainer>
         )
     }
 

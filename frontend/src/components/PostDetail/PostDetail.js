@@ -10,7 +10,8 @@ import {
     PostDetailTitle,
     PostDetailRow,
     PostDetailIcon,
-    PostDetailContent
+    PostDetailContent,
+    PostDetailImage
 } from './PostDetail-style.js';
 
 import SharePage from '../../components/SharePage';
@@ -22,7 +23,6 @@ import Icon from '../Icon';
 export default function PostDetail({ post }) {
     // 部署到服務器上時應該url就可以用了, 現在因為URL是local端 API會報錯
     const url = window.location.href;
-    // const url = "https://www.facebook.com/?locale=zh_TW";
 
     const token = localStorage.getItem('access_token');
     const user_id = localStorage.getItem('user_id');
@@ -32,22 +32,24 @@ export default function PostDetail({ post }) {
     // 判斷 token 是否過期
     useEffect(() => {
         const now = new Date();
-        if (now.getTime() > Number(expiryTime)) {
-            toast.error(intl.formatMessage({ id: 'token.Expiry' }));
-            localStorage.clear();
-            return
+        if(token && user_id && expiryTime){
+            if (now.getTime() > Number(expiryTime)) {
+                toast.error(intl.formatMessage({ id: 'token.Expiry' }));
+                localStorage.clear();
+                return
+            }    
         }
     }, [expiryTime, token, user_id]);
 
 
-
-
+    console.log(post.title);
 
     return (
         <PostDetailWrapper>
             <PostDetailTitle>
                 {post.title || post.event_title || post.trans_title}
             </PostDetailTitle>
+
 
             
             <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -57,7 +59,7 @@ export default function PostDetail({ post }) {
                     isLiked={post.isLiked}
                     pid={post.pid}
                 />
-                {post.creator_id !== user_id && 
+                {user_id && post.creator_id !== user_id && 
                     <CollectPost 
                         post={post}
                         user_id={user_id}
@@ -144,7 +146,9 @@ export default function PostDetail({ post }) {
                         {line}
                     </div>
                 ))}
-                {post.product_pic && <img src={post.product_pic} alt='product' style={{width: '100%', height: 'auto'}} />}
+                {post.product_pic && <PostDetailImage src={post.product_pic} alt='product_image'/>}
+                {post.event_pic && <PostDetailImage src={post.event_pic} alt='event_image'/>}
+                {post.coverPhoto && <PostDetailImage src={post.coverPhoto} alt='post_image' />}
             </PostDetailContent>
         </PostDetailWrapper>
     )

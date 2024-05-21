@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import DropdownMenu from './DropdownMenu';
 import DropdownMenustyles from '../../styles/DropdownMenu.module.css';
@@ -26,8 +27,8 @@ export default function Header({
     setFilters, filterOptions
 }) {
     const navigate = useNavigate();
-    const token = window.localStorage.getItem('access_token');
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const { token, setToken } = useContext(AuthContext);
 
     function onClickTitle() {
         setKeyword('');
@@ -45,6 +46,7 @@ export default function Header({
 
     function logout() {
         window.localStorage.clear(); //改掉的原因是因為login登入時不只有access_token，還有其他資料
+        setToken(null);
         navigate('/login');
     }
 

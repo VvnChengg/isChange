@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PostDetailWrapper = styled.div `
+export const PostDetailWrapper = styled.div`
     width: 100%;
     min-height: 70%;
 
@@ -15,9 +15,12 @@ export const PostDetailWrapper = styled.div `
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    overflow-x: scroll;
+    overflow-y: auto;
 `
 
-export const PostDetailTitle = styled.div `
+export const PostDetailTitle = styled.div`
     font-weight: 800;
     font-size: 28px;
     line-height: 130%;
@@ -31,9 +34,11 @@ export const PostDetailTitle = styled.div `
     @media screen and (max-width: 500px) {
         font-size: 20px;
     }
+
+    min-height: 50px;
 `
 
-export const PostDetailRow = styled.div `
+export const PostDetailRow = styled.div`
     height: 25px;
     margin-bottom: 2px;
     display: flex;
@@ -49,7 +54,7 @@ export const PostDetailRow = styled.div `
     }
 `
 
-export const PostDetailIcon = styled.div `
+export const PostDetailIcon = styled.div`
     height: 100%;
     aspect-ratio: 1 / 1;
 
@@ -63,10 +68,14 @@ export const PostDetailIcon = styled.div `
     }
 `
 
-export const PostDetailContent = styled.div `
+export const PostDetailContent = styled.div`
     text-align: left;
     
     @media screen and (max-width: 500px) {
         font-size: 14px;
     }
 `
+
+export const PostDetailImage = styled.img`
+    max-height: 70%;
+`;

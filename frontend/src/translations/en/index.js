@@ -85,6 +85,10 @@ const en = {
 
     'sidebar.distance': 'Distance Filter',
 
+    'personalbutton.title': 'My Post',
+    'personalbutton.myPost': 'Published Post',
+    'personalbutton.myCollect': 'Collected Post',
+
 
     /* pages */
     'title': 'Title',

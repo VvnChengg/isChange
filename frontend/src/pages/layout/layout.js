@@ -3,6 +3,8 @@ import { LayoutWrapper } from './layout-style.js';
 
 import Header from '../../components/Header';
 
+import PersonalPostButton from '../../components/PersonalPostButton';
+
 export default function Layout({
     language, setLanguage,
     keyword, setKeyword,
@@ -10,6 +12,7 @@ export default function Layout({
     setSort, setRadius,
     setFilters, filterOptions
 }) {
+    
     return (
         <LayoutWrapper>
             <Header
@@ -24,6 +27,7 @@ export default function Layout({
                 setFilters={setFilters}
                 filterOptions={filterOptions}
             />
+            <PersonalPostButton />
             <Outlet />
         </LayoutWrapper>
     )
