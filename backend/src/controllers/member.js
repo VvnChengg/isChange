@@ -340,6 +340,148 @@ const deleteTestMember = async (req, res) => {
   }
 };
 
+const followUser = async (req, res) => {
+  const { userId } = req.body;
+  const { anotherUser } = req.query; // anotherUser is the username
+
+  try {
+    // Find the user who is performing the follow/unfollow action
+    const user = await Member.findOne({ _id: userId });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Find the user who is being followed/unfollowed
+    const userA = await Member.findOne({ username: anotherUser });
+    if (!userA) {
+      return res.status(404).json({ error: "Another user not found" });
+    }
+
+    let follow_list = user.follow_ids.map((id) => id.toString());
+
+    // Check if the user is already following userA
+    if (follow_list.includes(userA._id.toString())) {
+      // If already following, unfollow
+      user.follow_ids = follow_list.filter((id) => id !== userA._id.toString());
+      res_message = "成功取消追蹤";
+    } else {
+      // If not following yet, follow
+      user.follow_ids.push(userA._id);
+      res_message = "成功追蹤";
+    }
+
+    // Save the updated user object to the database
+    await user.save();
+
+    res.status(200).json({ message: res_message });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getUserPosts = async (req, res, next) => {
+  let articles, events, products;
+  let result = [];
+  const { username } = req.query;
+
+  try {
+    const member = await Member.findOne({ username: username });
+    articles = await Article.find({ creator_id: member._id });
+    events = await Event.find({ creator_id: member._id });
+    products = await Product.find({ creator_id: member._id });
+
+    // 抽取文章需要的資訊並統一格式
+    articles.forEach((article) => {
+      const item = {
+        _id: article._id,
+        title: article.article_title,
+        content: article.content,
+        type: "post",
+        coverPhoto: convertToBase64(article.article_pic),
+        // location: article.location,
+        datetime: article.post_date,
+      };
+      result.push(item);
+    });
+
+    events.forEach((event) => {
+      const item = {
+        _id: event._id,
+        title: event.event_title,
+        content: event.event_intro,
+        type: "tour",
+        coverPhoto: convertToBase64(event.event_pic),
+        // location: event.location,
+        datetime: event.start_time,
+        currency: event.currency,
+        budget: event.budget,
+        end_time: event.end_time,
+        people_lb: event.people_lb,
+        people_ub: event.people_ub,
+        status: event.status,
+      };
+      result.push(item);
+    });
+
+    // 抽取商品需要的資訊並統一格式
+    products.forEach((product) => {
+      const item = {
+        _id: product._id,
+        title: product.product_title,
+        content: product.description,
+        type: "trans",
+        coverPhoto: convertToBase64(product.product_pic),
+        // location: product.location,
+        datetime: product.post_time,
+        currency: product.currency,
+        price: product.price,
+        product_type: product.product_type,
+        period: product.period,
+        status: product.status,
+        transaction_way: product.transaction_way,
+      };
+      result.push(item);
+    });
+
+    // 依時間倒序排序
+    result.sort((a, b) => {
+      return new Date(b.datetime) - new Date(a.datetime);
+    });
+  } catch (err) {
+    return next(err);
+  }
+  if (result.length <= 0) {
+    return res.status(500).json({ message: "使用者無創建任何內容" });
+  }
+  return res.status(200).json({ result });
+};
+
+const getFollowingList = async (req, res) => {
+  const { userId } = req.body;
+
+  try {
+    const user = await Member.findById(userId).populate(
+      "follow_ids",
+      "_id username photo"
+    );
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const followingList = user.follow_ids.map((followedUser) => ({
+      _id: followedUser._id,
+      username: followedUser.username,
+      photo: followedUser.photo,
+    }));
+
+    res.status(200).json(followingList);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error fetching followed users");
+  }
+};
+
 module.exports = {
   showMember,
   modifyMember,
@@ -347,4 +489,7 @@ module.exports = {
   studentVerificationCode,
   studentVerification,
   deleteTestMember,
+  followUser,
+  getUserPosts,
+  getFollowingList,
 };
