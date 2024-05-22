@@ -96,8 +96,13 @@ const getPostDetail = async (req, res, next) => {
     }
     // 取得按讚、收藏資料
     const isLiked = article.like_by_user_ids.indexOf(userId);
-    const saveList = await Favorite.find({ item_id: pid, save_type: "Article" });
-    const isSaved = saveList.filter((save) => save.user_id.equals(userId)).length;
+    const saveList = await Favorite.find({
+      item_id: pid,
+      save_type: "Article",
+    });
+    const isSaved = saveList.filter(
+      (save) => save.user_id.toString() === userId.toString()
+    ).length;
 
     // 取得評論資料
     const commentList = await getCommentList(pid);
@@ -121,11 +126,11 @@ const getPostDetail = async (req, res, next) => {
       datetime: article.post_date,
       creator_id: article.creator_id,
       creator_username: member.username,
-      like_count: article.like_by_user_ids.length,  // 按讚數
-      save_count: saveList.length,            // 收藏數
-      is_liked: isLiked >= 0 ? true : false,   // 使用者是否有按讚
-      is_saved: isSaved > 0 ? true : false,   // 使用者是否有收藏
-      comment_list: commentList,               // 評論串
+      like_count: article.like_by_user_ids.length, // 按讚數
+      save_count: saveList.length, // 收藏數
+      is_liked: isLiked >= 0 ? true : false, // 使用者是否有按讚
+      is_saved: isSaved > 0 ? true : false, // 使用者是否有收藏
+      comment_list: commentList, // 評論串
       article_region_en: article.article_region_en,
       article_region_zh: article.article_region_zh,
     };
@@ -236,9 +241,9 @@ const createPost = async (req, res, next) => {
     }
     const article_pic = req.file
       ? {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      }
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
+        }
       : null;
     let newPost = new Article({
       article_title: post.title,
@@ -279,9 +284,9 @@ const updatePost = async (req, res, next) => {
   }
   const article_pic = req.file
     ? {
-      data: req.file.buffer,
-      contentType: req.file.mimetype,
-    }
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      }
     : null;
   const updates = {
     article_title: req.body.title,
@@ -307,7 +312,7 @@ const updatePost = async (req, res, next) => {
     }
 
     // 檢查使用者是否有權限編輯文章
-    if (!post.creator_id.equals(uId)) {
+    if (post.creator_id.toString() !== uId.toString()) {
       return res.status(401).json({ message: "您沒有權限編輯此文章" });
     }
 
@@ -367,7 +372,7 @@ const deleteContent = async (req, res, next) => {
     }
 
     // 檢查使用者是否有權限刪除文章
-    if (!deleteItem.creator_id.equals(userId)) {
+    if (deleteItem.creator_id.toString() !== userId.toString()) {
       return res.status(401).json({ message: "您沒有權限刪除此" + itemType });
     }
     deleteItem = await model.findByIdAndDelete(id);
@@ -405,7 +410,9 @@ const likePost = async (req, res, next) => {
         model = Event;
         break;
       default:
-        return res.status(400).json({ message: "輸入的 type 不正確，請使用 post, trans 或 tour" });
+        return res
+          .status(400)
+          .json({ message: "輸入的 type 不正確，請使用 post, trans 或 tour" });
     }
     let post = await model.findById(pid);
 
@@ -425,7 +432,11 @@ const likePost = async (req, res, next) => {
       res_message = "成功取消按讚";
     } else {
       // 使用者原本沒按讚
-      like_list.splice(like_list.length, 0, new mongoose.Types.ObjectId(userId));
+      like_list.splice(
+        like_list.length,
+        0,
+        new mongoose.Types.ObjectId(userId)
+      );
       res_message = "成功按讚";
     }
 
