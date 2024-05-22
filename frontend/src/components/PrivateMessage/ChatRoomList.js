@@ -34,7 +34,7 @@ function ChatRoomList({ rooms }) {
     const handleRoomClick = (roomdata) => {
       const chatid = roomdata.chat_id;
       const stranger = roomdata.stranger;
-      console.log(roomdata);
+      //console.log(roomdata);
       
       
       if (stranger && roomdata.first_person !== userId ) {
