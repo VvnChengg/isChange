@@ -449,7 +449,20 @@ async function getCommentList(pid) {
   }
   try {
     const comments = await Comment.find({ _id: { $in: post.comment_ids } });
-    return comments;
+    const creatorList = comments?.map(item => item.commentor_id);
+    const creatorInfo = await Member.find({ _id: { $in: creatorList } }, { username: 1, photo: 1 });
+    const result = comments.map(comment => {
+      const info = creatorInfo.find(info => info._id.equals(comment.commentor_id));
+      return {
+        _id: comment._id,
+        comment_content: comment.content,
+        comment_created_at: comment.created_at,
+        username: info ? info.username : null,
+        photo: info ? convertToBase64(info.photo) : null,
+      };
+    });
+    return result;
+
   } catch (err) {
     throw new Error(err);
   }
