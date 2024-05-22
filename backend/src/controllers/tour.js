@@ -141,7 +141,7 @@ class tourApi {
       delete responseTour.event_pic;
       responseTour.event_pic = photoBase64;
 
-      if (userId != tour.creator_id) {
+      if (userId.toString() !== tour.creator_id.toString()) {
         return res.status(401).json({
           success: false,
           message: "沒有權限編輯該揪團",
@@ -179,7 +179,7 @@ class tourApi {
             contentType: req.file.mimetype,
           }
         : null; // 判斷是否有文件被上傳
-        
+
       let { location, destination_en, destination_zh } = req.body;
       if (typeof location === "string") {
         location = JSON.parse(location);
@@ -202,7 +202,7 @@ class tourApi {
 
       const tour = await TourModel.findById(eid);
 
-      if (userId !== tour.creator_id.toString()) {
+      if (userId.toString() !== tour.creator_id.toString()) {
         console.log("userId", userId);
         return res.status(401).json({
           success: false,
@@ -238,7 +238,7 @@ class tourApi {
 
       // 檢查編輯者是否為該揪團的創建者
       const tour = await TourModel.findById(event_id);
-      if (userId != tour.creator_id) {
+      if (userId.toString() !== tour.creator_id.toString()) {
         return res.status(401).json({
           success: false,
           message: "沒有權限編輯該揪團",
