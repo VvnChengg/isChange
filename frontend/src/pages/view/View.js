@@ -111,7 +111,7 @@ export const ViewWithUid = () => {
       other_uid={other_uid}
       />
       <ViewMemberSelfIntro intro={intro}/>
-      <ViewMemberPost />
+      {/* <ViewMemberPost /> */}
     </div>
   );
 }
