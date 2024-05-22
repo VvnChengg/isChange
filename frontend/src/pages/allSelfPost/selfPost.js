@@ -105,7 +105,6 @@ export default function SelfPost() {
                     postTypeToDelete = {selectedPostType}
                 />
             )}
-            <CreateAllButton></CreateAllButton>
         </>
     )
 }
