@@ -133,7 +133,7 @@ export default function TransDetail() {
                 <Button
                     text={intl.formatMessage({ id: 'back' })}
                     secondary={true}
-                    onClick = {() => navigate('/')}
+                    onClick = {() => window.history.back()}
                 />
                 {user_id !== trans.creator_id && trans.creator_username &&
                     <Button

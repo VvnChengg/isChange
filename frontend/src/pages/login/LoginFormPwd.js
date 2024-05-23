@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../../App';
 import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
 import { FormattedMessage } from 'react-intl';
 import { useIntl } from 'react-intl';
@@ -20,6 +21,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const intl = useIntl();
+  const { setToken } = useContext(AuthContext);
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -31,6 +33,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       const data = await loginApi.login(email, password);
       if (data.status === 'success') {
         toast.success(`${intl.formatMessage({ id: 'login.loginSuccess' })}`);
+        setToken(data.data.access_token);
         navigate('/');
       }
     } catch (error) {
@@ -39,7 +42,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       if (error_msg === '密碼錯誤') {
         toast.error(`${intl.formatMessage({ id: 'login.wrongPassword' })}`);
       } else {
-        toast.error(`${error.response.data.message}`);
+        toast.error(`${intl.formatMessage({ id: 'login.loginFail' })}`);
       }
     }
   };

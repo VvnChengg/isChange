@@ -12,12 +12,15 @@ import Button from '../../components/Button';
 import { transApi } from '../../api/transApi';
 import { useToken } from '../../hooks/useToken';
 import { toast } from 'react-toastify';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 export default function TransCreate() {
     const intl = useIntl();
     const token = useToken();
     const user_id = localStorage.getItem('user_id');
     const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [trans, setTrans] = useState({
         transform_type: 'create',
@@ -31,7 +34,7 @@ export default function TransCreate() {
         user_id: user_id,
 
         product_type: 'kitchen',
-        product_pic: '', //待補前端設計
+        product_pic: '',
 
         price_lb: '', // price_lb目前是沒使用到的變數, 但之後可能會用到先留著
         price_ub: '', // price_ub目前是沒使用到的變數, 但之後可能會用到先留著
@@ -42,6 +45,7 @@ export default function TransCreate() {
     })
 
     async function onSubmit() {
+        setIsSubmitting(true);
 
         if(trans.destination_en_string !== undefined || trans.destination_zh_string !== undefined){
             // 送出前先把destination_en, destination_zh轉成後端需要的格式
@@ -82,6 +86,8 @@ export default function TransCreate() {
         catch(e){
             toast.error(intl.formatMessage({ id: 'trans.createFail'}));
         }
+
+        setIsSubmitting(false);
     }
 
     return (
@@ -94,8 +100,18 @@ export default function TransCreate() {
                     onClick={() => window.history.back()}
                 />
                 <Button
-                    text={intl.formatMessage({ id: 'trans.create' })}
-                    onClick={() => onSubmit()}
+                    style={{
+                        backgroundColor: isSubmitting ? '#ccc' : '',
+                        color: isSubmitting ? '#888' : '',
+                        cursor: isSubmitting ? 'not-allowed' : '',
+                    }}
+                    text={isSubmitting?
+                        <div>
+                        <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: 'white' }} spin />} />
+                        {intl.formatMessage({ id: 'loading' })}
+                        </div> 
+                        : intl.formatMessage({ id: 'trans.create' })}
+                    onClick={isSubmitting ? undefined : onSubmit}
                 />
             </CreateButtonContainer>
         </CreateContainer>

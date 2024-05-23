@@ -1,5 +1,6 @@
 .isChange {
   width: 40%;
+  height: 90%;
   margin: 2rem auto;
   padding: 1.5rem;
   border: 1px solid #ccc;
@@ -12,6 +13,7 @@
   display: flex;
   justify-content: space-between;
   margin: 10%;
+  height: 20%;
 }
 
 .profileLeft, .profileCenter, .profileRight {
@@ -32,6 +34,7 @@
 .introduction,
 .post {
   margin-bottom: 20px;
+  height: 80%;
 }
 
 footer {
@@ -100,6 +103,7 @@ footer {
 
 .postContainer {
   position: relative;
+  height: 80%;
 }
 
 .postLabel {
@@ -116,4 +120,75 @@ footer {
   .isChange {
     width: 80%;
   }
+}
+
+
+.selfPostWrapper {
+  width: 100%;
+  height: 80%;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  border-style: solid;
+  border-color: black;
+  padding: 10px 10px 0px 10px; /* Add padding-top */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.scrollableDiv {
+  height: 80%;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.7) transparent;
+}
+
+/* For Chrome, Safari and Opera */
+.scrollableDiv::-webkit-scrollbar {
+  width: 12px;
+}
+
+.scrollableDiv::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollableDiv::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.7);
+  border-radius: 20px;
+  border: 3px solid transparent;
+}
+
+
+.buttonContainer {
+  justify-content: space-between;
+}
+
+.changePageButton {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  border-right: #ccc 1px solid;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .changePageButton {
+    font-size: 12px;
+    padding: 10px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.changePageButton:hover {
+  background-color: #45a049; /* Darker green */
+}
+
+.changePageButton:active {
+  background-color: #2e7d32; /* Even darker green */
 }

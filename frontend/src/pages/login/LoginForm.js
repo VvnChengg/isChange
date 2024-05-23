@@ -56,17 +56,18 @@ const LoginForm = () => {
 
 
   const responseGoogle = async (response) => {
-    console.log(response);
+    // console.log(response);
     const tokenId = response.credential;
 
     if(tokenId){
       try{
         const data = await loginApi.sso_login(tokenId);
+        // console.log(data);
         if(data.status === 'success'){
           navigate('/');
         }
       }catch(error){
-        console.log(error);
+        // console.log(error);
         if(error.response.data.error === '此帳號已註冊，請使用原本的帳號登入'){
           toast.error(intl.formatMessage({ id: 'login.errorGoogleAccount' }));
         }else{

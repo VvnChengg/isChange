@@ -29,8 +29,10 @@ export const PostContainer = styled.div `
     flex-direction: column;
     align-items: center;
 
-    @media screen and (max-width: 500px) {
+
+    @media screen and (max-width: 768px) {
         overflow: scroll;
+        padding-bottom: 100px;
     }
 `
 
