@@ -7,7 +7,7 @@ const { validatePut } = require("../middlewares/post");
 const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
-// const sharp = require('sharp');
+const sharp = require('sharp');
 
 
 const getAllPosts = async (req, res, next) => {
@@ -816,8 +816,14 @@ const getImage = async (req, res) => {
       ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
       ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
     ];
-    // 如果找到了圖片，將其寫入响应
-    console.log(images);
+    // 測試壓縮圖片用的
+    // let post = await Article.findById("6648f06ee94efb2b30f6521c");
+    // let updates = {
+    //   article_pic: await compressImage(post.article_pic)
+    // };
+    // console.log("updates.article_pic", post.article_pic);
+    // post = await Article.findByIdAndUpdate("6648e7645fe4372dd1c6f444", updates, { new: true });
+    // console.log("post", post.article_pic);
     return res.status(200).json({ images });
   }
   catch (error) {
@@ -828,17 +834,32 @@ const getImage = async (req, res) => {
 
 
 
-// async function compressImage(image) {
-//   let photoBase64 = null;
-//   if (image && image.contentType) {
-//     const compressedBuffer = await sharp(image.data)
-//       .resize({ width: 800 }) // 调整宽度以压缩图片，保持合适的大小
-//       .toBuffer();
+async function compressImage(image) {
+  let photoBase64 = null;
+  try {
+    if (image && image.contentType) {
+      const base64Data = image.data; // 从数据库中获取的 Base64 数据
+      const imageBuffer = Buffer.from(base64Data, 'base64');
 
-//     photoBase64 = `data:${image.contentType};base64,${compressedBuffer.toString('base64')}`;
-//   }
-//   return photoBase64;
-// }
+      const compressedBuffer = await sharp(imageBuffer)
+        .resize({ width: 50, withoutEnlargement: true }) // 调整宽度以压缩图片，保持合适的大小
+        // .toFormat('jpeg') // 选择一种常见的压缩格式，如 jpeg
+        .jpeg({ quality: 80 }) // 设置压缩质量（0-100）
+        .toBuffer();
+
+      // photoBase64 = `data:${image.contentType};base64,${compressedBuffer.toString('base64')}`;
+      image = {
+        data:compressedBuffer.toString('base64'),
+        contentType: 'image/jpeg'
+      }
+      return image
+      // return photoBase64;
+    }
+  } catch (error) {
+    console.error('Error compressing image:', error);
+    throw new Error('Image compression failed');
+  }
+}
 
 
 
