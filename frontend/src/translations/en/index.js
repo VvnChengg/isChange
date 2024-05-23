@@ -167,6 +167,13 @@ const en = {
     'view.studentUnverified': 'Unverified Student',
     'view.publishedArticles': 'Published Articles',
     'view.sendPrivateMessage': 'Private Message',
+    'view.follow': 'Follow',
+    'view.unfollow': 'Unfollow',
+    'view.followSuccess': 'Follow successfully',
+    'view.followCancelSuccess': 'Unfollow successfully',
+    'view.followError': 'Please try again',
+    'view.checkFollowFailed': 'Failed to check follow status, please try again',
+    'view.followingList': 'Following List',
 
     'edit.changePassword': 'Password',
     'edit.changeUsernameandSchool': 'Other Information',

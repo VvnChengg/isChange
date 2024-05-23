@@ -22,6 +22,7 @@ import LoginForm from './pages/login';
 import Register from './pages/register';
 import Edit from './pages/edit';
 import { ViewWithUid, ViewWithoutUid } from './pages/view';
+import Following from './pages/following';
 
 // chat
 import PrivateMessageList from './pages/private-messages';
@@ -125,6 +126,7 @@ function App() {
                     <Route path='edit' element={<Edit />} />
                     <Route path='member' element={<ViewWithoutUid />} />
                     <Route path='member/:other_username' element={<ViewWithUid />} />
+                    <Route path='member/following' element={<Following />} />
                     <Route path='chat-list' element={<PrivateMessageList />} />
                     <Route path='chatroom/:chatid' element={<Chatroom />} />
                     <Route path='testing' element={<StartPrivate />} />

@@ -7,7 +7,6 @@ function getItem(label, key, icon, children, type) {
 }
 
 function DropdownMenu({ isOpen, setIsOpen, token, navigate, logout }) {
-  console.log('token:', token);
   const intl = useIntl();
 
   const onClick = (e) => {

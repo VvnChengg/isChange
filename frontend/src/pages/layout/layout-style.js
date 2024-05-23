@@ -21,7 +21,7 @@ export const Footer = styled.div`
     position: fixed;
     left: 0;
     bottom: 0;
-    alignItems: center;
+    align-items: center;
 
 
     @media (max-width: 768px) {
