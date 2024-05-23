@@ -20,7 +20,10 @@ router.patch(
   memberController.studentVerificationCode
 );
 router.patch("/stud-ver", validateToken, memberController.studentVerification);
-router.get("/:uid", memberController.showMemberDetail); //非會員也可以查看資料
 router.delete("/delete", memberController.deleteTestMember); //後端測試用
+router.put("/follow/:uid", validateToken, memberController.followUser);
+router.get("/posts/:uid", memberController.getUserPosts);
+router.get("/followers", validateToken, memberController.getFollowingList);
+router.get("/:uid", memberController.showMemberDetail); //非會員也可以查看資料
 
 module.exports = router;
