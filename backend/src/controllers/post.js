@@ -96,15 +96,21 @@ const getPostDetail = async (req, res, next) => {
     if (!article) {
       return res.status(404).json({ message: "找不到此文章" });
     }
-    // 取得按讚、收藏資料
-    const isLiked = article.like_by_user_ids.indexOf(userId);
+
+    let isLiked, isSaved = -1;
+    if (userId) {
+      // 取得按讚、收藏資料
+      isLiked = article.like_by_user_ids.indexOf(userId);
+      isSaved = saveList.filter(
+        (save) => save.user_id.toString() === userId.toString()
+      ).length;
+    }
+
     const saveList = await Favorite.find({
       item_id: pid,
       save_type: "Article",
     });
-    const isSaved = saveList.filter(
-      (save) => save.user_id.toString() === userId.toString()
-    ).length;
+
 
     // 取得評論資料
     const commentList = await getCommentList(pid);
