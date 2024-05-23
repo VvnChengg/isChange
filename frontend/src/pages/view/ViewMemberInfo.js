@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'; // 匯入 useHistory 鉤子
 import { useIntl } from 'react-intl';
 import Button from '../../components/Button';
 import StartPrivate from '../../components/StartPrivate/StartPrivate';
+import FollowMemberButton from '../../components/FollowMemberButton';
 
 // 包含使用者的大頭貼、使用者名稱、學校名稱
 const ViewMemberInfo = ({photo, username, school, student_veri, other_username, other_uid}) => {
@@ -51,11 +52,18 @@ const ViewMemberInfo = ({photo, username, school, student_veri, other_username, 
             receiver_id={other_uid}
           />
         }
+        { other_username && token &&
+          <FollowMemberButton
+            username={other_username}
+            token={token}
+          />
+        }
+          
         { !other_username && 
-        <Button 
-        text={intl.formatMessage({ id: 'view.publishedArticles' })} 
-        style={{marginTop: '10px'}}
-        onClick={() => navigate('/post/published')}
+          <Button 
+          text={intl.formatMessage({ id: 'view.publishedArticles' })} 
+          style={{marginTop: '10px'}}
+          onClick={() => navigate('/post/published')}
         />
         }
       </div>

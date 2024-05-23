@@ -9,7 +9,7 @@ export const viewApi = {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(res => {
-            console.log(res);
+            // console.log(res);
             return res.data
         })
         .catch(err => {
@@ -27,6 +27,30 @@ export const viewApi = {
         })
         .catch(err => {
             // console.log(err)
+            return err
+        });
+    },
+
+    changeFollowStatus: (username, token) => {
+        return axios.put(`${hostname}/member/follow/${username}`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            return err
+        });
+    },
+
+    getFollowingList: (token) => {
+        return axios.get(`${hostname}/member/followers`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
             return err
         });
     }

@@ -30,14 +30,6 @@ export default function PersonalPostButton() {
         token &&
         <>
             <Wrapper>
-                {/* <Button
-                    style={{
-                        width: '100px',
-                        zIndex: "1000",
-                    }}
-                    text={intl.formatMessage({ id: 'personalbutton.title' })}
-                    onClick={onClick}
-                /> */}
                 <button style={{ backgroundColor: 'transparent', borderColor: 'transparent' }} onClick={onClick}>
                     <StyledMdArticle/>
                 </button>

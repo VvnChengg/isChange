@@ -168,6 +168,13 @@ const zh = {
     'view.studentUnverified': '未驗證學生身份',
     'view.publishedArticles': '已發佈文章',
     'view.sendPrivateMessage': '私訊',
+    'view.follow': '追蹤',
+    'view.unfollow': '取消追蹤',
+    'view.followSuccess': '成功追蹤',
+    'view.followCancelSuccess': '成功取消追蹤',
+    'view.followError': '發生錯誤，請再試一次',
+    'view.checkFollowFailed': '讀取追蹤狀態失敗，請再試一次',
+    'view.followingList': '追蹤名單',
 
     'edit.changePassword': '修改密碼',
     'edit.changeUsernameandSchool': '修改其他資訊',

@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 
 import PersonalPostButton from '../../components/PersonalPostButton';
 import CreateAllButton from '../../components/Button/CreateAllButton.js';
+import GetFollowingList from '../../components/GetFollowingList';
 import { AuthContext } from '../../App';
 import { useContext } from 'react';
 
@@ -39,6 +40,7 @@ export default function Layout({
                 <Footer>
                     <CreateAllButton />
                     <PersonalPostButton />
+                    <GetFollowingList />
                 </Footer>
             }
             <Outlet />
