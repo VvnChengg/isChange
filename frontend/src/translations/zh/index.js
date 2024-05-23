@@ -213,6 +213,13 @@ const zh = {
     'post.articlePicture':'文章圖片',
     'post.collectSuccess': '成功收藏文章',
     'post.collectCancelSucess': '成功取消收藏文章',
+    'post.likeSuccess': '成功按讚文章',
+    'post.likeCancelSucess': '成功取消按讚文章',
+    'post.likeFailed': '按讚文章失敗',
+    'post.commentSuccess': '成功留言',
+    'post.commentDeleteSucess': '成功刪除留言',
+    'post.commentFailed': '留言失敗',
+    'post.noComment': '尚無留言',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',
@@ -238,6 +245,9 @@ const zh = {
     'tour.createFail': '創建揪團失敗',
     'tour.collectSuccess': '成功收藏揪團',
     'tour.collectCancelSucess': '成功取消收藏揪團',
+    'tour.likeSuccess': '成功按讚揪團',
+    'tour.likeCancelSucess': '成功取消按讚揪團',
+    'tour.likeFailed': '按讚揪團失敗',
 
 
     'trans.type': '交易類別',
@@ -276,6 +286,9 @@ const zh = {
     'trans.collectCancelSucess': '成功取消收藏商品',
     'trans.collectFailed': '收藏商品失敗',
     'trans.getCollectFailed': '取得收藏商品狀態失敗',
+    'trans.likeSuccess': '成功按讚商品',
+    'trans.likeCancelSucess': '成功取消按讚商品',
+    'trans.likeFailed': '按讚商品失敗',
 
     /* alert */
     'alert.login': '請先登入',

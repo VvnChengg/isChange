@@ -1,4 +1,4 @@
-.private-message-container {
+.comment-container {
   position: fixed;
   top: 16%; /* 相對於父元素，距離頂部10% */
   bottom: 10%; /* 相對於父元素，距離底部10% */
@@ -10,7 +10,7 @@
 }
 
 
-.private-message-chat-room-title {
+.comment-title {
   top: 2%; /* 相對於父元素，距離頂部 */
   color: #008CD9;
   /* font-size: 40px; */
@@ -25,40 +25,31 @@
   overflow: hidden;
 }
   
-.private-message-chat-list-table {
+.comment-list-table {
   border-collapse: collapse;
   border: 1px solid #008CD9;
   width: 100%;
   overflow: auto;
 }
 
-.private-message-a-chat {
+.comment-a-comment {
   height: 40px;
 }
 
-.private-message-bottom {
+.comment-bottom {
   border-bottom: 1px solid #008CD9;
 }
 
-.private-message-chat-time,
-.private-message-chat-status {
+.comment-time {
   font-size: 15px;
   color: #999;
   text-align: right;
   width: 20%;
-}
-
-
-.private-message-chat-time{
   vertical-align: top; 
 }
 
-.private-message-chat-status {
-  vertical-align: bottom; 
-}
 
-
-.private-message-chat-name {
+.comment-name {
   color: #008CD9;
   font-size: 20px;
   vertical-align: top; 
@@ -66,7 +57,7 @@
 }
 
 
-.private-message-chat-text {
+.comment-text {
   font-size: 20px;
   vertical-align: bottom;
   max-width: 0;

@@ -9,12 +9,14 @@ import { useParams } from 'react-router-dom';
 
 function CommentList() {
   const [comments, setComments] = useState('');
+  const [postTitle, setPostTitle] = useState('');
   const token = useToken();
   //const userId = window.localStorage.getItem('user_id');
   const { pid } = useParams();
 
   const getInfo = async () => {
     const postInfo = await api.getPostDetail(pid);
+    setPostTitle(postInfo.item.title);
     setComments(postInfo.item.comment_list);
   }
 
@@ -22,7 +24,7 @@ function CommentList() {
       getInfo();
   }, []);
 
-  const commentInfo = {pid, comments};
+  const commentInfo = {pid, postTitle, comments};
 
   return (
     <div>

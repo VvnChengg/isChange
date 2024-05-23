@@ -52,11 +52,13 @@ export default function PostDetail({ post }) {
             
             <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <SharePage url={url}/>
-                <LikePost 
-                    likes={post.likes}
-                    isLiked={post.isLiked}
-                    pid={post.pid}
-                />
+                {post.creator_id !== user_id && 
+                    <LikePost 
+                        post={post}
+                        user_id={user_id}
+                        token={token}
+                    />
+                }
                 {post.creator_id !== user_id && 
                     <CollectPost 
                         post={post}
@@ -144,7 +146,8 @@ export default function PostDetail({ post }) {
                         {line}
                     </div>
                 ))}
-                {post.photo && <img src={post.photo} alt='product' />}
+                {post.coverPhoto && <img src={post.coverPhoto} alt='product' />}
+                {post.event_pic && <img src={post.event_pic} alt='product' />}
                 {post.product_pic && <img src={post.product_pic} alt='product' />}
             </PostDetailContent>
         </PostDetailWrapper>

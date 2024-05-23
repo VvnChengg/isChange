@@ -213,6 +213,13 @@ const en = {
     'post.articlePicture':'Post Picture',
     'post.collectSuccess': 'Collect post successfully',
     'post.collectCancelSucess': 'Cancel collect post successfully',
+    'post.likeSuccess': 'Like post successfully',
+    'post.likeCancelSucess': 'Cancel like post successfully',
+    'post.likeFailed': 'Like post failed',
+    'post.commentSuccess': 'Comment post successfully',
+    'post.commentCancelSucess': 'Cancel comment post successfully',
+    'post.commentFailed': 'Comment post failed',
+    'post.noComment': 'No comment now',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',
@@ -238,7 +245,10 @@ const en = {
     'tour.createFail': 'Create tour failed',
     'tour.collectSuccess': 'Collect tour successfully',
     'tour.collectCancelSucess': 'Cancel collect tour successfully',
-    
+    'tour.likeSuccess': 'Like tour successfully',
+    'tour.likeCancelSucess': 'Cancel like tour successfully',
+    'tour.likeFailed': 'Like tour failed',
+
     'trans.type': 'Type',
     'trans.sell': 'Sell',
     'trans.buy': 'Buy',
@@ -275,8 +285,9 @@ const en = {
     'trans.collectCancelSucess': 'Cancel collect product successfully',
     'trans.collectFailed': 'Collect product failed',
     'trans.getCollectFailed': 'Get collect product status failed',
-    
-
+    'trans.likeSuccess': 'Like product successfully',
+    'trans.likeCancelSucess': 'Cancel like product successfully',
+    'trans.likeFailed': 'Like product failed',
 
     /* alert */
     'alert.login': 'Please login',

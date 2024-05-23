@@ -135,7 +135,6 @@ export const api = {
         })
             .then(res => {
                 console.log(pID);
-                console.log(res.data.message);
                 toast.success(`${res.data.message}`);
                 return res.data;
             })
@@ -144,8 +143,12 @@ export const api = {
             });
     },
     getPostDetail: (pID) => {
-        // const token = window.localStorage.getItem('access_token');
-        return axios.get(`${hostname}/post/detail/${pID}`)
+        const user_id = window.localStorage.getItem('user_id');
+        return axios.get(`${hostname}/post/detail/${pID}`, {
+            params:{
+                userId: user_id,
+            }
+        })
             .then(res => {
                 console.log(pID);
                 console.log(res);
@@ -156,11 +159,14 @@ export const api = {
                 throw err;
             });
     },
-    pressLike: (pID) => {
+    pressLike: (pID, user_id, type) => {
         const token = window.localStorage.getItem('access_token');
 
         return (
-            axios.put(`${hostname}/post/like/${pID}`, { pID }, {
+            axios.put(`${hostname}/post/like/${pID}`, { 
+                userID: user_id,
+                type: type
+             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -179,33 +185,20 @@ export const api = {
     },
     commentPost: (comment) => {
         const token = window.localStorage.getItem('access_token');
-        // const formData = new FormData();
-
-        // formData.append('pid', comment.pID);
-        // formData.append('content', comment.content);
-        // formData.append('datetime', comment.datetime);
-        // formData.append('userId', window.localStorage.getItem('user_id'));
-        console.log('commenttt');
-        console.log(comment.pID);
-        
+        const userID = window.localStorage.getItem('user_id');
         const pid = comment.pID;
         const content = comment.content;
         const datetime = comment.datetime;
-        console.log('formData');
-        // console.log(userID);
-        // const commentInfo = {pid, content, datetime, userID}
-        console.log('formData');
-        // console.log(commentInfo);
         return (
             axios.post(hostname + '/post/comment', {
             // commentInfo
             pid: pid,
-            text: content
-            // datetime: datetime
+            text: content,
+            datetime: datetime,
+            userId: userID
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,
-                // 'Content-Type': 'multipart/form-data'
             }
         })
             .then(res => {
