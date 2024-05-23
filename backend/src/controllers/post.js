@@ -26,7 +26,7 @@ const getAllPosts = async (req, res, next) => {
         title: article.article_title,
         content: article.content,
         type: "post",
-        coverPhoto: convertToBase64(article.article_pic),
+        // coverPhoto: convertToBase64(article.article_pic),
         // location: article.location,
         datetime: article.post_date,
       };
@@ -40,7 +40,7 @@ const getAllPosts = async (req, res, next) => {
         title: event.event_title,
         content: event.event_intro,
         type: "tour",
-        coverPhoto: convertToBase64(event.event_pic),
+        // coverPhoto: convertToBase64(event.event_pic),
         // location: event.location,
         datetime: event.start_time,
         currency: event.currency,
@@ -62,7 +62,7 @@ const getAllPosts = async (req, res, next) => {
         transaction_region_zh: product.transaction_region_zh,
         transaction_region_en: product.transaction_region_en,
         type: "trans",
-        coverPhoto: convertToBase64(product.product_pic),
+        // coverPhoto: convertToBase64(product.product_pic),
         // location: product.location,
         datetime: product.post_time,
         currency: product.currency,
@@ -782,7 +782,7 @@ const chunkedImage = async (req, res, next) => {
         ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
       ];
       // 如果找到了圖片，將其寫入响应
-      console.log(images);
+      //console.log(images);
       if (images.length > 0) {
         res.write(JSON.stringify(images));
         res.write("\n"); // 每批之間增加一個換行符作為分隔
