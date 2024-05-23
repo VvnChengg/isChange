@@ -7,8 +7,8 @@ import {
     PostInfo,
     PostIcon,
     PostTitle,
-    PostPreview,
-    PostImage
+    PostPreview
+    
 } from './Post-style.js';
 
 import Tag from '../Tag';
@@ -16,23 +16,12 @@ import Icon from '../Icon';
 
 export default function Post({ post, onClick, showDivider }) {
     const intl = useIntl();
-    const [coverPhoto, setCoverPhoto] = useState(null);
 
     const samplePost = {
         type: 'post',
         title: 'SAMPLE',
         content: 'this is a sample post :D'
     }
-
-    useEffect(() => {
-        if (post && post.coverPhoto) {
-            isValidImageBase64(post.coverPhoto).then(isValid => {
-                if (isValid) {
-                    setCoverPhoto(post.coverPhoto);
-                }
-            });
-        }
-    }, [post]);
 
     function getLocation() {
         if (!post) return;
@@ -63,23 +52,10 @@ export default function Post({ post, onClick, showDivider }) {
         return null;
     }
 
-    function isValidImageBase64(str) {
-        return new Promise((resolve) => {
-            // Create new image element
-            var img = new Image();
-            // Set the img src to the base64 string
-            img.src = str;
-            // Validate the image
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
-        });
-    }
-    
     return (
-        <PostWrapper onClick={onClick} showDivider={showDivider}>
+        <div onClick={onClick} showDivider={showDivider}>
             <PostTopBar>
                 <Tag type={post ? post.type : samplePost.type} />
-                {/* post.status && renderStatus() */}
                 <PostInfoContainer>
                     {post && post.datetime && post.end_time && 
                         <PostInfo>
@@ -118,7 +94,8 @@ export default function Post({ post, onClick, showDivider }) {
                 <PostTitle>{post ? post.title : samplePost.title}</PostTitle>
                 <PostPreview>{post && post.content ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview>
             </div>
-            {coverPhoto ? <PostImage src={coverPhoto} /> : ''}
-        </PostWrapper>
+        </div>
     )
 }
+
+

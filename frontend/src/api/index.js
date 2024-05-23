@@ -229,5 +229,16 @@ export const api = {
                 .then(res => res.data)
                 .catch(err => err)
         )
-    }
+    },
+
+    getImage: (imageIds) => {
+        //console.log(imageIds);
+        return (
+            axios.post(hostname + '/post/getPhoto'
+            ,{ imageIds: imageIds,})
+                .then(res => res.data.images)
+                .catch(err => err)
+        )
+    },
+
 };
