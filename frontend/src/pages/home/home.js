@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api';
@@ -16,14 +16,16 @@ import { PostWrapper } from '../../components/Post/Post-style'
 
 import AsyncImage from '../../components/Post/AsyncImage';
 import PostTypeSelector from '../../components/PostTypeSelector';
-import Post from '../../components/Post';
-import PostPhoto from '../../components/Post/PostPhoto';
+//import Post from '../../components/Post';
+//import PostPhoto from '../../components/Post/PostPhoto';
 import SideBar from '../../components/SideBar';
 import Icon from '../../components/Icon';
 
 import { Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
+const Post = lazy(() => import('../../components/Post'));
+const PostPhoto = lazy(() => import('../../components/Post/PostPhoto'));
 
 export default function Home({
     keyword, search, setSearch,
@@ -202,20 +204,18 @@ export default function Home({
     }, [type, sort, filters, geoPosts]);
 
     //console.log(isLoading, toRenderPosts.length)
-    // 建立顯示文章的id列表
-    
+    console.log('目前抓到的文章',toRenderPosts.length)
     const imageIds = toRenderPosts.map(post => post._id);
-    //console.log(imageIds.length);
+    console.log('目前抓到的圖片',imageIds.length);
     //console.log(imageIds);
 
 
     // get picture
-    
     useEffect(() => {
         // setIsLoading(true);
         api.getImage(imageIds)
         .then(res => {
-            console.log(res)
+            //console.log(res)
             setImages(res); // 設置返回的圖片數據
             // setIsLoading(false); // 加載結束
         })
@@ -250,10 +250,9 @@ export default function Home({
                     filterOptions={filterOptions}
                 />
             </HomeTopBar>
-            {isLoading ?
-                <SpinContainer>
+                {/* <SpinContainer>
                     <Spin />
-                </SpinContainer> :
+                </SpinContainer> : */}
                 <PostContainer>
                     {toRenderPosts.length === 0 ?
                         <NoContent>
@@ -262,15 +261,17 @@ export default function Home({
                         : toRenderPosts.map((post, index) => (
                             <React.Fragment key={post._id}>
                                 <PostWrapper showDivider={index !== toRenderPosts.length - 1} onClick={() => navigate(`/${post.type}/detail/${post._id}`)}>
-                                    <Post post={post} showDivider={index !== toRenderPosts.length - 1} />
-                                    {/* <PostPhoto src={post.coverPhoto} /> */}
-                                    <AsyncImage src={getCoverPhotoByPid(post._id)} />
+                                    <Suspense fallback={<div>Loading post...</div>}>
+                                        <Post post={post} showDivider={index !== toRenderPosts.length - 1} />
+                                    </Suspense>
+                                    <Suspense fallback={<div>Loading photo...</div>}>
+                                        <PostPhoto src={getCoverPhotoByPid(post._id)} />
+                                    </Suspense>
                                 </PostWrapper>
                             </React.Fragment>
                         ))
                     }
                 </PostContainer>
-            }
         </HomeContainer>
     )
 }
