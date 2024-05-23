@@ -7,7 +7,7 @@ const { validatePut } = require("../middlewares/post");
 const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
-const { Readable } = require('stream');
+// const sharp = require('sharp');
 
 
 const getAllPosts = async (req, res, next) => {
@@ -243,9 +243,9 @@ const createPost = async (req, res, next) => {
     }
     const article_pic = req.file
       ? {
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-        }
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      }
       : null;
     let newPost = new Article({
       article_title: post.title,
@@ -286,9 +286,9 @@ const updatePost = async (req, res, next) => {
   }
   const article_pic = req.file
     ? {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      }
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    }
     : null;
   const updates = {
     article_title: req.body.title,
@@ -795,6 +795,47 @@ const chunkedImage = async (req, res, next) => {
   }
 };
 
+const getImage = async (req, res) => {
+  const { imageIds } = req.body;
+  try {
+    const [articleImages, eventImages, productImages] = await Promise.all([
+      Article.find({ _id: { $in: imageIds } }, { _id: 1, article_pic: 1 }),
+      Event.find({ _id: { $in: imageIds } }, { _id: 1, event_pic: 1 }),
+      Product.find({ _id: { $in: imageIds } }, { _id: 1, product_pic: 1 })
+    ]);
+
+    // 合併結果
+    const images = [
+      ...articleImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.article_pic) })),
+      ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
+      ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
+    ];
+    // 如果找到了圖片，將其寫入响应
+    console.log(images);
+    return res.status(200).json({ images });
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).send('Server Error');
+  }
+};
+
+
+
+// async function compressImage(image) {
+//   let photoBase64 = null;
+//   if (image && image.contentType) {
+//     const compressedBuffer = await sharp(image.data)
+//       .resize({ width: 800 }) // 调整宽度以压缩图片，保持合适的大小
+//       .toBuffer();
+
+//     photoBase64 = `data:${image.contentType};base64,${compressedBuffer.toString('base64')}`;
+//   }
+//   return photoBase64;
+// }
+
+
+
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
@@ -807,3 +848,4 @@ exports.collectProduct = collectProduct;
 exports.getAllPostsSortedByLikes = getAllPostsSortedByLikes;
 exports.searchPosts = searchPosts;
 exports.chunkedImage = chunkedImage;
+exports.getImage = getImage;

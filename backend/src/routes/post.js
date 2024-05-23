@@ -11,7 +11,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // 載入controller.
-var { getAllPosts, getUserPosts, createPost, updatePost, getPostDetail, deleteContent, likePost, commentPost, collectProduct, getAllPostsSortedByLikes, searchPosts, chunkedImage } = require("../controllers/post");
+var { getAllPosts, getUserPosts, createPost, updatePost, getPostDetail, deleteContent, likePost, commentPost, collectProduct, getAllPostsSortedByLikes, searchPosts, chunkedImage, getImage } = require("../controllers/post");
 
 // 指定route對應的controller
 router.get('/all', getAllPosts);
@@ -26,4 +26,5 @@ router.put('/like/:pid', validateToken, likePost);
 router.post('/comment', validateToken, commentPost);
 router.post('/save/:pid', validateToken, collectProduct);
 router.post('/coverPhotos', chunkedImage);
+router.post('/getPhoto', getImage);
 module.exports = router;
