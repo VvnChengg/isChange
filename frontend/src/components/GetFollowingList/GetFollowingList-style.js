@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { MdPerson } from 'react-icons/md';
+import { MdPersonAdd } from 'react-icons/md';
 
 
-export const StyledMdPerson = styled(MdPerson)`
+export const StyledMdPerson = styled(MdPersonAdd)`
     height: 32px;
     width: 32px;
     font-size: 30px;
