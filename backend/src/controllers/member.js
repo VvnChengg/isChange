@@ -474,20 +474,34 @@ const getFollowingList = async (req, res) => {
       "follow_ids",
       "_id username photo"
     );
+
     if (!user) {
-      throw new Error("User not found");
+      return res.status(404).json({ message: "User not found" });
     }
 
-    const followingList = user.follow_ids.map((followedUser) => ({
-      _id: followedUser._id,
-      username: followedUser.username,
-      photo: followedUser.photo,
-    }));
+    const followingList = user.follow_ids.map((followedUser) => {
+      let photoBase64 = null;
+      if (
+        followedUser.photo &&
+        followedUser.photo.contentType &&
+        followedUser.photo.data
+      ) {
+        photoBase64 = `data:${
+          followedUser.photo.contentType
+        };base64,${followedUser.photo.data.toString("base64")}`;
+      }
+
+      return {
+        _id: followedUser._id,
+        username: followedUser.username,
+        photo: photoBase64,
+      };
+    });
 
     res.status(200).json(followingList);
   } catch (error) {
     console.error(error);
-    throw new Error("Error fetching followed users");
+    res.status(500).json({ message: "Error fetching followed users" });
   }
 };
 
