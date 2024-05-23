@@ -15,72 +15,16 @@ const getAllPosts = async (req, res, next) => {
   let result = [];
   try {
     // 取得所有文章、活動、商品資訊
-    articles = await Article.find({});
-    events = await Event.find({});
-    products = await Product.find({});
+    articles = await Article.find({}, { article_pic: 0 });
+    events = await Event.find({}, { event_pic: 0 });
+    products = await Product.find({}, { product_pic: 0 });
 
-    // 抽取文章需要的資訊並統一格式
-    articles.forEach((article) => {
-      const item = {
-        _id: article._id,
-        title: article.article_title,
-        content: article.content,
-        type: "post",
-        coverPhoto: convertToBase64(article.article_pic),
-        // location: article.location,
-        datetime: article.post_date,
-      };
-      result.push(item);
-    });
+    result = formatContentList(articles, events, products, { withPhoto: false })
 
-    // 抽取活動需要的資訊並統一格式
-    events.forEach((event) => {
-      const item = {
-        _id: event._id,
-        title: event.event_title,
-        content: event.event_intro,
-        type: "tour",
-        coverPhoto: convertToBase64(event.event_pic),
-        // location: event.location,
-        datetime: event.start_time,
-        currency: event.currency,
-        budget: event.budget,
-        end_time: event.end_time,
-        people_lb: event.people_lb,
-        people_ub: event.people_ub,
-        status: event.status,
-      };
-      result.push(item);
-    });
-
-    // 抽取商品需要的資訊並統一格式
-    products.forEach((product) => {
-      const item = {
-        _id: product._id,
-        title: product.product_title,
-        content: product.description,
-        transaction_region_zh: product.transaction_region_zh,
-        transaction_region_en: product.transaction_region_en,
-        type: "trans",
-        coverPhoto: convertToBase64(product.product_pic),
-        // location: product.location,
-        datetime: product.post_time,
-        currency: product.currency,
-        price: product.price,
-        productType: product.product_type,
-        period: product.period,
-        status: product.status,
-        transactionWay: product.transaction_way,
-      };
-      result.push(item);
-    });
     if (result.length <= 0) {
       return res.status(500).json({ message: "資料庫中無任何內容" });
     }
-    // 依時間倒序排序
-    result.sort((a, b) => {
-      return new Date(b.datetime) - new Date(a.datetime);
-    });
+
   } catch (err) {
     return next(err);
   }
@@ -157,73 +101,20 @@ const getUserPosts = async (req, res, next) => {
   const searchId = req.params.uid;
   // const uId = req.body.userId;
   try {
-    articles = await Article.find({ creator_id: searchId });
-    events = await Event.find({ creator_id: searchId });
-    products = await Product.find({ creator_id: searchId });
+    articles = await Article.find({ creator_id: searchId }, { article_pic: 0 });
+    events = await Event.find({ creator_id: searchId }, { event_pic: 0 });
+    products = await Product.find({ creator_id: searchId }, { product_pic: 0 });
 
-    // 抽取文章需要的資訊並統一格式
-    articles.forEach((article) => {
-      const item = {
-        _id: article._id,
-        title: article.article_title,
-        content: article.content,
-        type: "post",
-        coverPhoto: convertToBase64(article.article_pic),
-        // location: article.location,
-        datetime: article.post_date,
-      };
-      result.push(item);
-    });
+    result = formatContentList(articles, events, products, { withPhoto: false });
+    
+    if (result.length <= 0) {
+      return res.status(500).json({ message: "使用者無創建任何內容" });
+    }
 
-    events.forEach((event) => {
-      const item = {
-        _id: event._id,
-        title: event.event_title,
-        content: event.event_intro,
-        type: "tour",
-        coverPhoto: convertToBase64(event.event_pic),
-        // location: event.location,
-        datetime: event.start_time,
-        currency: event.currency,
-        budget: event.budget,
-        end_time: event.end_time,
-        people_lb: event.people_lb,
-        people_ub: event.people_ub,
-        status: event.status,
-      };
-      result.push(item);
-    });
-
-    // 抽取商品需要的資訊並統一格式
-    products.forEach((product) => {
-      const item = {
-        _id: product._id,
-        title: product.product_title,
-        content: product.description,
-        type: "trans",
-        coverPhoto: convertToBase64(product.product_pic),
-        // location: product.location,
-        datetime: product.post_time,
-        currency: product.currency,
-        price: product.price,
-        product_type: product.product_type,
-        period: product.period,
-        status: product.status,
-        transaction_way: product.transaction_way,
-      };
-      result.push(item);
-    });
-
-    // 依時間倒序排序
-    result.sort((a, b) => {
-      return new Date(b.datetime) - new Date(a.datetime);
-    });
   } catch (err) {
     return next(err);
   }
-  if (result.length <= 0) {
-    return res.status(500).json({ message: "使用者無創建任何內容" });
-  }
+
   return res.status(200).json({ result });
 };
 
@@ -586,7 +477,6 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
-          coverPhoto: "$article_pic",
           location: "$article_region",
           datetime: "$post_date",
           likesCount: {
@@ -604,6 +494,12 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           type: { $literal: "tour" },
           location: "$destination",
           datetime: "$start_time",
+          currency: "$currency",
+          budget: "$budget",
+          end_time: "$end_time",
+          people_lb: "$people_lb",
+          people_ub: "$people_ub",
+          status: "$status",
           likesCount: {
             $size: { $ifNull: ["$like_by_user_ids", []] }, // 如果 like_by_user_ids 不存在，使用空数组
           },
@@ -617,9 +513,14 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           title: "$product_title",
           content: "$description",
           type: { $literal: "trans" },
-          coverPhoto: "$product_pic",
           location: "$transaction_region",
           datetime: "$post_time",
+          currency: "$currency",
+          price: "$price",
+          productType: "$product_type",
+          period: "$period",
+          status: "$status",
+          transactionWay: "$transaction_way",
           likesCount: {
             $size: { $ifNull: ["$like_by_user_ids", []] }, // 如果 like_by_user_ids 不存在，使用空数组
           },
@@ -659,79 +560,25 @@ const searchPosts = async (req, res) => {
         { article_title: { $regex: searchRegex } },
         { content: { $regex: searchRegex } },
       ],
-    });
+    }, { article_pic: 0 });
     let events = await Event.find({
       $or: [
         { event_title: { $regex: searchRegex } },
         { event_intro: { $regex: searchRegex } },
       ],
-    });
+    }, { event_pic: 0 });
     let products = await Product.find({
       $or: [
         { product_title: { $regex: searchRegex } },
         { description: { $regex: searchRegex } },
       ],
-    });
+    }, { product_pic: 0 });
 
-    articles.forEach((article) => {
-      const item = {
-        _id: article._id,
-        title: article.article_title,
-        content: article.content,
-        type: "post",
-        coverPhoto: convertToBase64(article.article_pic),
-        // location: article.location,
-        datetime: article.post_date,
-      };
-      result.push(item);
-    });
-
-    events.forEach((event) => {
-      const item = {
-        _id: event._id,
-        title: event.event_title,
-        content: event.event_intro,
-        type: "tour",
-        coverPhoto: convertToBase64(event.event_pic),
-        // location: event.location,
-        datetime: event.start_time,
-        currency: event.currency,
-        budget: event.budget,
-        end_time: event.end_time,
-        people_lb: event.people_lb,
-        people_ub: event.people_ub,
-        status: event.status,
-      };
-      result.push(item);
-    });
-
-    products.forEach((product) => {
-      const item = {
-        _id: product._id,
-        title: product.product_title,
-        content: product.description,
-        type: "trans",
-        coverPhoto: convertToBase64(product.product_pic),
-        // location: product.location,
-        datetime: product.post_time,
-        currency: product.currency,
-        price: product.price,
-        product_type: product.product_type,
-        period: product.period,
-        status: product.status,
-        transaction_way: product.transaction_way,
-      };
-      result.push(item);
-    });
+    result = formatContentList(articles, events, products, { withPhoto: false });
 
     if (result.length === 0) {
       return res.status(200).json({ message: "資料庫中無任何內容" });
     }
-
-    // 依時間倒序排序
-    result.sort((a, b) => {
-      return new Date(b.datetime) - new Date(a.datetime);
-    });
 
     return res.status(200).json({ result });
   } catch (err) {
@@ -770,9 +617,9 @@ const chunkedImage = async (req, res, next) => {
       console.log('Processing batchIds:', batchIds); // 確認當前批次的 ID
       // 使用 Promise.all 並行執行三個查詢
       const [articleImages, eventImages, productImages] = await Promise.all([
-        Article.find({ _id: { $in: batchIds } }, { _id:1, article_pic: 1 }),
-        Event.find({ _id: { $in: batchIds } }, { _id:1, event_pic: 1 }),
-        Product.find({ _id: { $in: batchIds } }, { _id:1, product_pic: 1 })
+        Article.find({ _id: { $in: batchIds } }, { _id: 1, article_pic: 1 }),
+        Event.find({ _id: { $in: batchIds } }, { _id: 1, event_pic: 1 }),
+        Product.find({ _id: { $in: batchIds } }, { _id: 1, product_pic: 1 })
       ]);
 
       // 合併結果
@@ -782,7 +629,7 @@ const chunkedImage = async (req, res, next) => {
         ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
       ];
       // 如果找到了圖片，將其寫入响应
-      console.log(images);
+      //console.log(images);
       if (images.length > 0) {
         res.write(JSON.stringify(images));
         res.write("\n"); // 每批之間增加一個換行符作為分隔
@@ -849,7 +696,7 @@ async function compressImage(image) {
 
       // photoBase64 = `data:${image.contentType};base64,${compressedBuffer.toString('base64')}`;
       image = {
-        data:compressedBuffer.toString('base64'),
+        data: compressedBuffer.toString('base64'),
         contentType: 'image/jpeg'
       }
       return image
@@ -861,6 +708,70 @@ async function compressImage(image) {
   }
 }
 
+function formatContentList(articles, events, products, withPhoto) {
+
+  let result = [];
+  // 抽取文章需要的資訊並統一格式
+  articles.forEach((article) => {
+    const item = {
+      _id: article._id,
+      title: article.article_title,
+      content: article.content,
+      type: "post",
+      coverPhoto: withPhoto ? convertToBase64(article.article_pic) : null,
+      location: article.location,
+      datetime: article.post_date,
+    };
+    result.push(item);
+  });
+
+  // 抽取活動需要的資訊並統一格式
+  events.forEach((event) => {
+    const item = {
+      _id: event._id,
+      title: event.event_title,
+      content: event.event_intro,
+      type: "tour",
+      coverPhoto: withPhoto ? convertToBase64(event.event_pic) : null,
+      location: event.location,
+      datetime: event.start_time,
+      currency: event.currency,
+      budget: event.budget,
+      end_time: event.end_time,
+      people_lb: event.people_lb,
+      people_ub: event.people_ub,
+      status: event.status,
+    };
+    result.push(item);
+  });
+
+  // 抽取商品需要的資訊並統一格式
+  products.forEach((product) => {
+    const item = {
+      _id: product._id,
+      title: product.product_title,
+      content: product.description,
+      transaction_region_zh: product.transaction_region_zh,
+      transaction_region_en: product.transaction_region_en,
+      type: "trans",
+      coverPhoto: withPhoto ? convertToBase64(product.product_pic) : null,
+      location: product.location,
+      datetime: product.post_time,
+      currency: product.currency,
+      price: product.price,
+      productType: product.product_type,
+      period: product.period,
+      status: product.status,
+      transactionWay: product.transaction_way,
+    };
+    result.push(item);
+  });
+  // 依時間倒序排序
+  result.sort((a, b) => {
+    return new Date(b.datetime) - new Date(a.datetime);
+  });
+  return result;
+}
 
 
 exports.getAllPosts = getAllPosts;
