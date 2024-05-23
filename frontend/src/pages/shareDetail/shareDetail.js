@@ -20,16 +20,16 @@ import { Spin } from 'antd';
 export default function MyComponent() {
   const intl = useIntl();
   const navigate = useNavigate();
-  const user_id = localStorage.getItem('user_id');
-
   // const [username, setUsername] = useState('');
   // const [school, setSchool] = useState('');
   // const [headshot, setHeadshot] = useState('');
-  const token = useToken();
+
+  const token = localStorage.getItem('access_token');
+  const user_id = localStorage.getItem('user_id');
+  const expiryTime = localStorage.getItem('expiry_time');
   const { pid } = useParams();
 
   // 這塊是收藏文章用的
-  // const user_id = localStorage.getItem('user_id');
   const [post, setPost] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -45,6 +45,19 @@ export default function MyComponent() {
   //       getMemberInfo();
   //   }
   // }, [token]);
+
+  // 判斷 token 是否過期
+  useEffect(() => {
+    const now = new Date();
+    if(token && user_id && expiryTime){
+        if (now.getTime() > Number(expiryTime)) {
+            toast.error(intl.formatMessage({ id: 'token.Expiry' }));
+            localStorage.clear();
+            return
+        }    
+    }
+}, [expiryTime, token, user_id]);
+
 
   const getInfo = async () => {
     // const pid = "6617996b1067c62b7d704652";
@@ -80,7 +93,7 @@ export default function MyComponent() {
               <Button
                   text={intl.formatMessage({ id: 'back' })}
                   secondary={true}
-                  onClick={() => navigate('/')}
+                  onClick={() => window.history.back()}
               />
               {user_id !== post.creator_id && post.creator_username &&
                   <Button

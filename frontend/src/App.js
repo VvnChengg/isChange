@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { IntlProvider } from 'react-intl';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 /* translations */
@@ -21,7 +21,7 @@ import Home from './pages/home';
 import LoginForm from './pages/login';
 import Register from './pages/register';
 import Edit from './pages/edit';
-import {ViewWithUid, ViewWithoutUid} from './pages/view';
+import { ViewWithUid, ViewWithoutUid } from './pages/view';
 
 // chat
 import PrivateMessageList from './pages/private-messages';
@@ -39,6 +39,9 @@ import ShareToDelete from './pages/shareToDelete';
 import SelfPost from './pages/allSelfPost/selfPost';
 import Comment from './pages/comment';
 
+// my collect post
+import MyCollectPost from './pages/myCollectPosts.js/myCollectPosts';
+
 // tour
 import TourCreate from './pages/tourCreate';
 import TourEdit from './pages/tourEdit';
@@ -52,17 +55,20 @@ import TransDetail from './pages/transDetail';
 // google login api
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+export const AuthContext = React.createContext();
+
 function App() {
+
   const filterOptions = {
     trans: {
-        productType: ['kitchen', 'living room', 'restroom', 'cosmetic','clothing', 'others'],
-        transactionWay: ['sell', 'purchase', 'lend', 'borrow'],
-        status: ['in stock', 'reserved', 'sold'],
-        currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
+      productType: ['kitchen', 'living room', 'restroom', 'cosmetic', 'clothing', 'others'],
+      transactionWay: ['sell', 'purchase', 'lend', 'borrow'],
+      status: ['in stock', 'reserved', 'sold'],
+      currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
     },
     tour: {
-        status: ['ongoing', 'complete', 'end'],
-        currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
+      status: ['ongoing', 'complete', 'end'],
+      currency: ['USD', 'GBP', 'EUR', 'TWD', 'CAD', 'AUD']
     }
   }
 
@@ -73,6 +79,8 @@ function App() {
   const [sort, setSort] = useState('new');
   const [radius, setRadius] = useState(40075);
   const [filters, setFilters] = useState(filterOptions);
+  const [token, setToken] = useState(localStorage.getItem('access_token') || '');
+
 
   const oauth_cliend_id = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
 
@@ -80,14 +88,19 @@ function App() {
     localStorage.setItem('language', language);
   }, [language]);
 
+  useEffect(() => {
+    setToken(token);
+  }, [localStorage.getItem('access_token')]);
+
   return (
-    <GoogleOAuthProvider clientId={oauth_cliend_id}>
-      <IntlProvider locale={language} messages={translations[language]}>
-        <ThemeProvider theme={lightTheme}>
-          <ToastContainer 
-            position='bottom-right'
-          />
-          <Router>
+    <AuthContext.Provider value={{ token, setToken }}>
+      <GoogleOAuthProvider clientId={oauth_cliend_id}>
+        <IntlProvider locale={language} messages={translations[language]}>
+          <ThemeProvider theme={lightTheme}>
+            <ToastContainer
+              position='bottom-right'
+            />
+            <Router>
               <div className="App">
                 <Routes>
                   <Route
@@ -112,9 +125,9 @@ function App() {
                     <Route path='edit' element={<Edit />} />
                     <Route path='member' element={<ViewWithoutUid />} />
                     <Route path='member/:other_username' element={<ViewWithUid />} />
-                    <Route path='chat-list' element={<PrivateMessageList/>}/>
-                    <Route path='chatroom/:chatid' element={<Chatroom/>} />
-                    <Route path='testing' element={<StartPrivate/>} />
+                    <Route path='chat-list' element={<PrivateMessageList />} />
+                    <Route path='chatroom/:chatid' element={<Chatroom />} />
+                    <Route path='testing' element={<StartPrivate />} />
                     <Route path='post'>
                       <Route path='detail/:pid' element={<ShareDetail />} />
                       <Route path='create' element={<ShareCreate />} />
@@ -124,6 +137,7 @@ function App() {
                       <Route path='edit/:pid' element={<ShareEdit />} />
                       <Route path='to-delete' element={<ShareToDelete />} />
                       <Route path='comment/:pid' element={<Comment />} />
+                      <Route path='mycollect' element={<MyCollectPost />} />
                     </Route>
                     <Route path='tour'>
                       <Route path='create' element={<TourCreate />} />
@@ -142,6 +156,7 @@ function App() {
           </ThemeProvider>
         </IntlProvider>
       </GoogleOAuthProvider>
+    </AuthContext.Provider>
   );
 }
 

@@ -48,6 +48,23 @@
   vertical-align: top; 
 }
 
+<<<<<<< HEAD
+=======
+.private-message-chat-status {
+  vertical-align: bottom; 
+}
+
+.private-message-chat-unread{
+  display: inline-block;
+  width: 24px; /* 设置宽度 */
+  height: 24px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  font-weight: bold;
+}
+>>>>>>> 705d401da562d948dbd870785380de4711ba63b8
 
 .comment-name {
   color: #008CD9;

@@ -23,18 +23,13 @@ const StartPrivate = ( {receiver_id, receiver_name} ) => {
   const hostname = process.env.REACT_APP_API_HOSTNAME;
   
   useEffect(() => {
-    //const userId = window.localStorage.getItem('user_id');
-    // console.log(userId)
     const token = window.localStorage.getItem('access_token');
     if(receiver_id){
-      // 發送 API 請求
       axios.get(`${hostname}/chat/check/${receiver_id}` ,{headers: {
         'Authorization':  `Bearer ${token}`
     }})
       .then(response => {
-        // 數據取得
         setchatId(response.data.chat_id);
-        //console.log(ischatId)
       })     
         .catch(error => {
           console.error('API 請求失敗:', error);
@@ -47,7 +42,6 @@ const StartPrivate = ( {receiver_id, receiver_name} ) => {
   }, [ischatId]);
 
   const togglePopup = () => {
-    //console.log(ischatId);
     if (ischatId === null) { // 檢查是否已有chat
       setIsOpen(!isOpen);
     } else {

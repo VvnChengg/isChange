@@ -85,6 +85,10 @@ const en = {
 
     'sidebar.distance': 'Distance Filter',
 
+    'personalbutton.title': 'My Post',
+    'personalbutton.myPost': 'PUBLISHED',
+    'personalbutton.myCollect': 'COLLECTED',
+
 
     /* pages */
     'title': 'Title',
@@ -109,6 +113,7 @@ const en = {
     'login.inputPassword': 'Please enter your password',
     'login.login': 'Login',
     'login.loginSuccess': 'Login successfully',
+    'login.loginFailed': 'Login failed, please try again',
     'login.wrongPassword': 'Wrong password',
     'login.forgotPwd': 'Forgot password?',
     'login.sendMail': 'Send Code',
@@ -220,6 +225,10 @@ const en = {
     'post.commentCancelSucess': 'Cancel comment post successfully',
     'post.commentFailed': 'Comment post failed',
     'post.noComment': 'No comment now',
+    'post.location': 'Location',
+    'post.inputLocation': 'Where are you?',
+    'post.editSuccess': 'Edit post successfully',
+    'post.editFailed': 'Edit post failed, please try again',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',
@@ -229,6 +238,7 @@ const en = {
     'tour.min': 'Min',
     'tour.max': 'Max',
     'tour.date': 'Date',
+    'tour.tourPicture':'Tour Picture',
     'tour.create': 'Create tour',
     'tour.edit': 'Edit tour',
     'tour.message': 'Contact team lead',
@@ -242,7 +252,7 @@ const en = {
     'tour.editFailed': 'Edit tour failed, please try again',
     'tour.status': 'Status',
     'tour.createSuccess': 'Create tour successfully',
-    'tour.createFail': 'Create tour failed',
+    'tour.createFailed': 'Create tour failed',
     'tour.collectSuccess': 'Collect tour successfully',
     'tour.collectCancelSucess': 'Cancel collect tour successfully',
     'tour.likeSuccess': 'Like tour successfully',
@@ -288,6 +298,10 @@ const en = {
     'trans.likeSuccess': 'Like product successfully',
     'trans.likeCancelSucess': 'Cancel like product successfully',
     'trans.likeFailed': 'Like product failed',
+    
+    /* collect */
+    'collect.getCollectFailed': 'Get collect list failed',
+
 
     /* alert */
     'alert.login': 'Please login',

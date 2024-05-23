@@ -9,7 +9,7 @@ import { useToken } from '../../hooks/useToken';
 import { Spin } from 'antd';
 
 import { io } from 'socket.io-client';
-const socket = io('http://localhost:8080');
+const socket = io(process.env.REACT_APP_SOCKET_SERVER_URL);
 
 export default function Chatroom() {
     const { chatid } = useParams();
@@ -25,7 +25,8 @@ export default function Chatroom() {
     useEffect(() => {
         socket.on("receive-message", newMsg => {
             setChatData(prevChatData => [...prevChatData, newMsg]);
-            console.log("[FE] Received message:", newMsg);
+            scrollToBottom(100);
+            // console.log("[FE] Received message:", newMsg);
         });
     
         return () => {

@@ -17,14 +17,16 @@ export const collectApi = {
                 }
             })
             .then(res => {
+                console.log(res);
                 return res.data
             })
             .catch(err => {
+                console.log(err);
                 return err
             });
     },
 
-    getCollectPost: (user_id, token) => {
+    getMyCollectPost: (user_id, token) => {
         return axios.get(`${hostname}/common/favorite/${user_id}`,
         {
             headers: {
@@ -38,4 +40,20 @@ export const collectApi = {
             return err
         });
     },
+
+    getMyCollectPostList: (user_id, token) => {
+        return axios.get(`${hostname}/common/favorite_list/${user_id}`,
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            return err
+        });
+
+    }
 }

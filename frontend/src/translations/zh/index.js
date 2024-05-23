@@ -85,6 +85,11 @@ const zh = {
 
     'sidebar.distance': '距離篩選',
 
+    'personalbutton.title': '我的貼文',
+    'personalbutton.myPost': '已發布',
+    'personalbutton.myCollect': '已收藏',
+    
+
 
     /* pages */
     'title': '標題',
@@ -109,6 +114,7 @@ const zh = {
     'login.inputPassword': '請輸入密碼',
     'login.login': '登入',
     'login.loginSuccess': '登入成功',
+    'login.loginFailed': '登入失敗，請再試一次',
     'login.wrongPassword': '密碼錯誤',
     'login.forgotPwd': '忘記密碼？',
     'login.sendMail': '寄送驗證碼',
@@ -220,6 +226,10 @@ const zh = {
     'post.commentDeleteSucess': '成功刪除留言',
     'post.commentFailed': '留言失敗',
     'post.noComment': '尚無留言',
+    'post.location': '地點',
+    'post.inputLocation': '請輸入地點',
+    'post.editSuccess': '編輯文章成功',
+    'post.editFailed': '編輯文章失敗，請再試一次',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',
@@ -229,6 +239,7 @@ const zh = {
     'tour.min': '最少',
     'tour.max': '最多',
     'tour.date': '日期',
+    'tour.tourPicture': '揪團圖片',
     'tour.create': '創建揪團',
     'tour.edit': '編輯揪團',
     'tour.message': '私訊主揪',
@@ -242,7 +253,7 @@ const zh = {
     'tour.editFailed': '編輯揪團失敗，請再試一次',
     'tour.status': '揪團狀態',
     'tour.createSuccess': '創建揪團成功',
-    'tour.createFail': '創建揪團失敗',
+    'tour.createFailed': '創建揪團失敗',
     'tour.collectSuccess': '成功收藏揪團',
     'tour.collectCancelSucess': '成功取消收藏揪團',
     'tour.likeSuccess': '成功按讚揪團',
@@ -289,6 +300,9 @@ const zh = {
     'trans.likeSuccess': '成功按讚商品',
     'trans.likeCancelSucess': '成功取消按讚商品',
     'trans.likeFailed': '按讚商品失敗',
+
+    /* collect */
+    'collect.getCollectFailed': '取得收藏列表失敗',
 
     /* alert */
     'alert.login': '請先登入',

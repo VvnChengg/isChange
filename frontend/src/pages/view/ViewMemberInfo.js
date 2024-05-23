@@ -12,6 +12,7 @@ const ViewMemberInfo = ({photo, username, school, student_veri, other_username, 
   const navigate = useNavigate();
   const [showEditImage, setShowEditImage] = useState('');
   const intl = useIntl();
+  const token = localStorage.getItem('access_token');
 
   useEffect(() => {
     if(photo){
@@ -44,11 +45,11 @@ const ViewMemberInfo = ({photo, username, school, student_veri, other_username, 
       </div>
       <div className={viewStyles.profileRight}>
         {showEditImage && <EditProfileButton className={viewStyles.viewbutton} onClick={handleEditProfileClick}/>}
-        { other_username &&
-        <StartPrivate
-        receiver_name={other_username}
-        receiver_id={other_uid}
-        />
+        { other_username && token &&
+          <StartPrivate
+            receiver_name={other_username}
+            receiver_id={other_uid}
+          />
         }
         { !other_username && 
         <Button 

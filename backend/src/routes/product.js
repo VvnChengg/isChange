@@ -13,7 +13,5 @@ router.put('/edit/:tid', validateToken, upload.single('product_pic'), productApi
 router.delete('/delete', validateToken, productApi.deleteProduct);
 router.get('/detail/:tid', productApi.productDetail);
 router.get('/share/:tid', productApi.shareProduct);
-router.post('/collect', validateToken, productApi.collectProduct);
-router.get('/collect/:user_id', validateToken, productApi.viewCollection);
 
 module.exports = router;
