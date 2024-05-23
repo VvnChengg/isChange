@@ -14,7 +14,7 @@ import {
 } from './home-style';
 import { PostWrapper } from '../../components/Post/Post-style'
 
-
+import AsyncImage from '../../components/Post/AsyncImage';
 import PostTypeSelector from '../../components/PostTypeSelector';
 import Post from '../../components/Post';
 import PostPhoto from '../../components/Post/PostPhoto';
@@ -212,16 +212,16 @@ export default function Home({
     // get picture
     
     useEffect(() => {
-        setIsLoading(true);
+        // setIsLoading(true);
         api.getImage(imageIds)
         .then(res => {
             console.log(res)
             setImages(res); // 設置返回的圖片數據
-            setIsLoading(false); // 加載結束
+            // setIsLoading(false); // 加載結束
         })
         .catch(err => {
             console.log(err);
-            setIsLoading(false);
+            // setIsLoading(false);
         });
     }, [toRenderPosts]); 
 
@@ -263,7 +263,8 @@ export default function Home({
                             <React.Fragment key={post._id}>
                                 <PostWrapper showDivider={index !== toRenderPosts.length - 1} onClick={() => navigate(`/${post.type}/detail/${post._id}`)}>
                                     <Post post={post} showDivider={index !== toRenderPosts.length - 1} />
-                                    <PostPhoto src={post.coverPhoto} />
+                                    {/* <PostPhoto src={post.coverPhoto} /> */}
+                                    <AsyncImage src={getCoverPhotoByPid(post._id)} />
                                 </PostWrapper>
                             </React.Fragment>
                         ))

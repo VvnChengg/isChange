@@ -15,9 +15,9 @@ const getAllPosts = async (req, res, next) => {
   let result = [];
   try {
     // 取得所有文章、活動、商品資訊
-    articles = await Article.find({});
-    events = await Event.find({});
-    products = await Product.find({});
+    articles = await Article.find({},{article_pic:0});
+    events = await Event.find({},{event_pic:0});
+    products = await Product.find({},{product_pic:0});
 
     // 抽取文章需要的資訊並統一格式
     articles.forEach((article) => {
