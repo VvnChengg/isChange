@@ -6,6 +6,10 @@ const randomstring = require("randomstring");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
+const Article = require("../models/article");
+const Event = require("../models/event");
+const Product = require("../models/product");
+
 //查看自己的個人資料（Member)
 const showMember = async (req, res) => {
   const { userId } = req.body;
@@ -342,7 +346,8 @@ const deleteTestMember = async (req, res) => {
 
 const followUser = async (req, res) => {
   const { userId } = req.body;
-  const { anotherUser } = req.query; // anotherUser is the username
+  const anotherUser = req.params.uid; // anotherUser is the username
+  console.log(anotherUser);
 
   try {
     // Find the user who is performing the follow/unfollow action
@@ -380,10 +385,15 @@ const followUser = async (req, res) => {
   }
 };
 
+const convertToBase64 = (buffer, contentType) => {
+  if (!buffer || !contentType) return null;
+  return `data:${contentType};base64,${buffer.toString("base64")}`;
+};
+
 const getUserPosts = async (req, res, next) => {
   let articles, events, products;
   let result = [];
-  const { username } = req.query;
+  const username = req.params.uid;
 
   try {
     const member = await Member.findOne({ username: username });
@@ -458,7 +468,9 @@ const getUserPosts = async (req, res, next) => {
 };
 
 const getFollowingList = async (req, res) => {
+  console.log(req.body, "getFollowingList called");
   const { userId } = req.body;
+  console.log("getFollowingList called with userId:", userId);
 
   try {
     const user = await Member.findById(userId).populate(
