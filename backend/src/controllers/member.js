@@ -176,12 +176,12 @@ const showMemberDetail = async (req, res) => {
   }
   try {
     const observed_user = await Member.findOne({ username: observed_username });
-    const observed_user_auth = await MemberAuth.findOne({
-      user_id: observed_user._id,
-    });
     if (!observed_user) {
       return res.status(404).json({ error: "User not found" });
     }
+    const observed_user_auth = await MemberAuth.findOne({
+      user_id: observed_user._id,
+    });
 
     // Convert photo data to base64
     let photoBase64 = null;
@@ -468,9 +468,7 @@ const getUserPosts = async (req, res, next) => {
 };
 
 const getFollowingList = async (req, res) => {
-  console.log(req.body, "getFollowingList called");
   const { userId } = req.body;
-  console.log("getFollowingList called with userId:", userId);
 
   try {
     const user = await Member.findById(userId).populate(
