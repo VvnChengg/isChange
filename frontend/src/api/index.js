@@ -216,7 +216,6 @@ export const api = {
             })
         )
     },
-
     createTour: (tour) => {
         const token = window.localStorage.getItem('access_token');
 
@@ -230,7 +229,6 @@ export const api = {
                 .catch(err => err)
         )
     },
-
     getImage: (imageIds) => {
         //console.log(imageIds);
         return (
@@ -240,6 +238,4 @@ export const api = {
                 .catch(err => err)
         )
     },
-
-};
 };
