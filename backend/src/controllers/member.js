@@ -182,6 +182,9 @@ const showMemberDetail = async (req, res) => {
     const observed_user_auth = await MemberAuth.findOne({
       user_id: observed_user._id,
     });
+    if (!observed_user_auth) {
+      return res.status(404).json({ error: "User auth not found" });
+    }
 
     // Convert photo data to base64
     let photoBase64 = null;
@@ -232,36 +235,41 @@ const transporter = nodemailer.createTransport({
 const studentVerificationCode = async (req, res) => {
   const { userId, exchange_school_email } = req.body;
 
-  // 檢查信箱是否已被使用
-  const user = await Member.findOne({
-    exchange_school_email: exchange_school_email,
-  });
-  if (user && !user._id == userId) {
-    return res.status(400).json({ error: "Email已被使用" });
-  }
+  try {
+    // 檢查信箱是否已被使用
+    const user = await Member.findOne({
+      exchange_school_email: exchange_school_email,
+    });
+    if (user && !user._id == userId) {
+      return res.status(400).json({ error: "Email已被使用" });
+    }
 
-  // Generate a random verification code
-  const code = randomstring.generate({
-    length: 6,
-    charset: "numeric",
-  });
+    // Generate a random verification code
+    const code = randomstring.generate({
+      length: 6,
+      charset: "numeric",
+    });
 
-  const user_auth = await MemberAuth.findOne({ user_id: userId });
+    const user_auth = await MemberAuth.findOne({ user_id: userId });
 
-  if (user_auth.student_verification) {
-    return res
-      .status(400)
-      .json({ status: "failed", message: "已完成認證，無法再次認證" });
-  } else {
-    await Member.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          exchange_school_email: exchange_school_email,
-          verification_code: code,
-        },
-      }
-    );
+    if (user_auth.student_verification) {
+      return res
+        .status(400)
+        .json({ status: "failed", message: "已完成認證，無法再次認證" });
+    } else {
+      await Member.updateOne(
+        { _id: userId },
+        {
+          $set: {
+            exchange_school_email: exchange_school_email,
+            verification_code: code,
+          },
+        }
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to send verification code" });
   }
 
   // send email
