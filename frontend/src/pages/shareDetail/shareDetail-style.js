@@ -17,6 +17,23 @@ export const DetailContainer = styled.div `
     > * {
         width: 100%;
     }
+
+    @media (max-width: 600px) {
+        max-width: 80%;
+    }
+
+    @media (min-width: 600px) and (max-width: 900px) {
+        max-width: 80%;
+    }
+
+    @media (min-width: 900px) and (max-width: 1200px) {
+        max-width: 80%;
+    }
+
+    @media (min-width: 1200px) {
+        max-width: 60%;
+    }
+
 `
 
 export const DetailButtonContainer = styled.div `

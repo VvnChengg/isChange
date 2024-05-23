@@ -5,12 +5,13 @@ import {
     FormRange,
     FormBudget,
     FormDate,
+    FormImage,
     FormLocation
 } from '../FormInput';
 import Button from '../Button';
 
 export default function TourForm({ tour, setTour }) {
-    console.log(tour.status)
+    // console.log(tour)
     const intl = useIntl();
 
     function setTitle(input) {
@@ -74,6 +75,40 @@ export default function TourForm({ tour, setTour }) {
         });
     }
 
+    function setImage(input) {
+        setTour({
+            ...tour,
+            event_pic: input
+        });
+    }
+
+    //需要詳細地點object資料的時候才用
+    function setRegionObject(input) {
+        setTour({
+            ...tour,
+            region_object: input
+        });
+    }
+
+    function setRegionString(input){
+        setTour({
+            ...tour,
+            destination_string: input
+        })
+    }
+
+    function setRegionCountry_Latitude_Longitute(input){
+        setTour({
+            ...tour,
+            destination_string: input.destination_string,
+            destination_zh_string: input.destination_zh_string,
+            destination_en_string: input.destination_en_string,
+            longitude: input.longitude,
+            latitude: input.latitude,
+        })
+    }
+    
+
     const statusOptions = [
         {
             value: 'ongoing',
@@ -123,15 +158,15 @@ export default function TourForm({ tour, setTour }) {
             }
 
 
-            {/* <FormLocation
+            <FormLocation
                 title={intl.formatMessage({ id: 'tour.destination' })}
                 placeholder={intl.formatMessage({ id: 'tour.inputDestination' })}
-                value = {trans.transaction_region}
+                value = {tour.region_object}
                 setValue = {setRegionObject}
-                inputValue={trans.transaction_region_string}
+                inputValue={tour.destination_string}
                 setInputValue={setRegionString}
                 setRegionCountry_Latitude_Longitute={setRegionCountry_Latitude_Longitute}
-            /> */}
+            />
 
             <FormRange
                 title={intl.formatMessage({ id: 'tour.people' })}
@@ -161,6 +196,13 @@ export default function TourForm({ tour, setTour }) {
                 placeholder={intl.formatMessage({ id: 'inputTextarea' })}
                 text={tour.event_intro}
                 setText={setIntro}
+            />
+            <FormImage
+                type='file'
+                title={intl.formatMessage({id: 'tour.tourPicture'})}
+                placeholder={intl.formatMessage({id: 'tour.tourPicture'})}
+                imagePreviewUrl={tour.event_pic}
+                setImagePreviewUrl={setImage}
             />
         </>
     )

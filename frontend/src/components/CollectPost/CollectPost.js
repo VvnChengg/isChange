@@ -6,9 +6,8 @@ import { useIntl } from "react-intl";
 import { collectApi } from "../../api/collectAPi";
 
 
-export default function CollectPost({ post, user_id, token, size, className}) {
+export default function CollectPost({ post, user_id, token, size}) {
 
-    // console.log(post);
     const [imgSrc, setImgSrc] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const intl = useIntl();
@@ -20,7 +19,6 @@ export default function CollectPost({ post, user_id, token, size, className}) {
                 try{
                     const data = await collectApi.collectPost(post_id, user_id, "Product", token);
 
-                    // console.log(data);
 
                     if(data.favId){
                         toast.success(`${intl.formatMessage({id: 'trans.collectSuccess'})}`);
@@ -66,7 +64,7 @@ export default function CollectPost({ post, user_id, token, size, className}) {
                         setImgSrc('/icons/collect.png');
                     }
                 }catch(err){
-                    toast.error(`${intl.formatMessage({id: 'post.collectFailed'})}`);
+                    toast.error(`${intl.formatMessage({id: 'post.getCollectFailed'})}`);
                 }
             }
             
@@ -76,9 +74,10 @@ export default function CollectPost({ post, user_id, token, size, className}) {
     const getCollectPost = async () => {
         setIsLoading(true);
         try{
-            const data = await collectApi.getCollectPost(user_id, token);
-
+            const data = await collectApi.getMyCollectPost(user_id, token);
+            
             if(data.success){
+
                 const hasPostId = data.favorite.some(item => item.item_id === post_id);
                 if(hasPostId) {
                     setImgSrc('/icons/collectFilled.png');

@@ -72,8 +72,6 @@ export const StyledButton = styled.button`
     border: none; // 移除邊框
     background: transparent; // 設定背景為透明
     cursor: pointer; // 設定游標為手指
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+    min-width: 50px; // 設定最小寬度為 50 像素
 `;

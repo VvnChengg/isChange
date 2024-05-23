@@ -11,6 +11,8 @@ import ViewMemberInfo from './ViewMemberInfo';
 
 import { viewApi } from '../../api/viewApi';
 import { useToken } from '../../hooks/useToken';
+import { useIntl } from 'react-intl';
+import { toast } from 'react-toastify';
 
 
 export const ViewWithoutUid = () => {
@@ -22,6 +24,8 @@ export const ViewWithoutUid = () => {
   const token = useToken();
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const intl = useIntl();
 
   // 先讀取使用者資料
   const getInfo = async () =>{
@@ -68,6 +72,11 @@ export const ViewWithUid = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
+  const intl = useIntl();
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [postLoading, setPostLoading] = useState(true);
+
   // 先讀取使用者資料
   const getOtherMemberInfo = async () =>{
     const memberInfo = await viewApi.getOtherMember(other_username);
@@ -80,13 +89,29 @@ export const ViewWithUid = () => {
     setStudentVeri(memberInfo.student_verification);
     setOtherUid(memberInfo._id);
     // console.log(memberInfo._id);
-
     setIsLoading(false);
   }
+
+  async function getPostList(){
+    try{
+      const data = await viewApi.getOtherMemberPosts(other_username);
+      if(data){
+          setPosts(data.result);
+      }else{
+          toast.error(intl.formatMessage('view.getPostFailed'));
+      }
+    }catch(err){
+      setPosts([]);
+      toast.error(intl.formatMessage('view.getPostFailed'));
+    }
+    setPostLoading(false);
+  }
+
 
   useEffect(() => {
     if(other_username){
       getOtherMemberInfo();
+      getPostList();
     }
   }, [other_username]);
 
@@ -96,13 +121,22 @@ export const ViewWithUid = () => {
     }
   }, [other_uid]);
 
+
   if (isLoading) {
     return <Spin />;
   }
 
   return (
     <div className={viewStyles.isChange}>
-      <ViewMemberInfo 
+      <div className={viewStyles.buttonContainer}>
+        <button onClick={() => setPage(1)} className={viewStyles.changePageButton}>
+          {intl.formatMessage( {id:'view.viewIntro'} )}
+        </button>
+        <button onClick={() => setPage(2)} className={viewStyles.changePageButton}>
+          {intl.formatMessage( {id:'view.viewPost'} )}
+        </button>
+      </div>      
+    <ViewMemberInfo 
       photo={photo} 
       username={username} 
       school={school} 
@@ -110,8 +144,17 @@ export const ViewWithUid = () => {
       other_username={other_username}
       other_uid={other_uid}
       />
-      <ViewMemberSelfIntro intro={intro}/>
-      <ViewMemberPost />
+      
+      {page === 1 && (
+        <ViewMemberSelfIntro intro={intro}/>
+      )}
+
+      {page === 2 && (
+        <ViewMemberPost 
+          posts={posts}
+          postLoading={postLoading}
+        />
+      )}
     </div>
   );
 }

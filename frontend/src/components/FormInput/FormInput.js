@@ -44,7 +44,7 @@ export function FormInput({ type, title, placeholder, text, setText, defaultStat
                         onChange={e => setText(e.target.value)}
                         placeholder={placeholder}
                     /> :
-                    type === 'temporary input' ? //地點不能用所以先這樣設, 之後要拿掉
+                    type === 'temporary input' ?
                     <div></div>:
                     <FormTextarea
                         value={text}
@@ -71,6 +71,7 @@ export function FormRange({ title, placeholder, unit, range, setRange }) {
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ width: '90%', display: 'flex', justifyContent: 'space-between' }}>
                     <FormTextInput
+                        type="number"
                         value={range[0]}
                         onChange={e => {
                             var newRange = [...range];
@@ -81,6 +82,7 @@ export function FormRange({ title, placeholder, unit, range, setRange }) {
                     />
                     <div>—</div>
                     <FormTextInput
+                        type="number"
                         value={range[1]}
                         onChange={e => {
                             var newRange = [...range];
@@ -225,7 +227,7 @@ export function FormImage({ title, placeholder, text, setText, setImagePreviewUr
                 style={{ display: 'none' }}
                 placeholder={placeholder}
             />
-            {imagePreviewUrl && <img src={imagePreviewUrl} alt="Image preview" style={{ maxWidth: '20vh', maxHeight: '20vh', objectFit: 'contain' }} />}
+            {imagePreviewUrl && <img src={imagePreviewUrl} alt="Image preview" loading="lazy" style={{ maxWidth: '20vh', maxHeight: '20vh', objectFit: 'contain' }} />}
 
         </FormTextBox>
     )
