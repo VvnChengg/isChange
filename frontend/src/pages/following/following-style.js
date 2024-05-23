@@ -29,6 +29,13 @@ export const FollowingItem = styled.div`
   padding: 10px;
   border-bottom: 1px solid #ccc;
   margin: 10px 0;
+  justify-content: space-between;
+
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  
 `;
 
 export const Avatar = styled.img`

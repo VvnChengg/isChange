@@ -174,6 +174,8 @@ const en = {
     'view.followError': 'Please try again',
     'view.checkFollowFailed': 'Failed to check follow status, please try again',
     'view.followingList': 'Following List',
+    'view.viewIntro': 'View Introduction',
+    'view.viewPost': 'View Post',
 
     'edit.changePassword': 'Password',
     'edit.changeUsernameandSchool': 'Other Information',

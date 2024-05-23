@@ -3,11 +3,13 @@ import { viewApi } from "../../api/viewApi";
 import { useState, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { toast } from "react-toastify";
+import { LoadingOutlined } from '@ant-design/icons';
 
 
 export default function FollowMemberButton({ username, token }) {
     const intl = useIntl();
     const [isFollowing, setIsFollowing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     async function changeFollowStatus() {
         try{
@@ -37,17 +39,26 @@ export default function FollowMemberButton({ username, token }) {
         }catch(err){
             toast.error(intl.formatMessage({ id: 'view.checkFollowFailed' }));
         }
+        setIsLoading(false);
     }
 
     useEffect(() => {
         getFollowingList();
     }, []);
 
-    const buttonText = isFollowing ? intl.formatMessage({ id: 'view.unfollow' }) : intl.formatMessage({ id: 'view.follow' });
+    const buttonText = 
+    isLoading ? 
+    <div>
+        <LoadingOutlined/> {intl.formatMessage({ id: 'loading' })}
+    </div>
+    : isFollowing ? intl.formatMessage({ id: 'view.unfollow' }) : intl.formatMessage({ id: 'view.follow' });
 
     return (
         <Button
             style={{
+                backgroundColor: isLoading ? '#ccc' : '',
+                color: isLoading ? '#888' : '',
+                cursor: isLoading ? 'not-allowed' : '',
                 width: 'auto',
                 minWidth: '100px',
                 padding: '5px 10px',

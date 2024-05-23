@@ -15,12 +15,15 @@ import { useToken } from '../../hooks/useToken';
 import { useIntl } from 'react-intl';
 import { Spin } from 'antd';
 
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Following(){
     const token = useToken();
     const [following, setFollowing] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const intl = useIntl();
+    const navigate = useNavigate();
     
       async function getFollowingList(){
         try{
@@ -62,14 +65,16 @@ export default function Following(){
           <FollowingListContainer>
             {following.map((user) => (
               <FollowingItem key={user._id}>
-                <Avatar src={user.photo || '/icons/profile.png'} alt={`${user.username}'s avatar`} onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} />
-                <Username>{user.username}</Username>
+                <div onClick={() => navigate(`/member/${user.username}`)}>
+                  <Avatar src={user.photo || '/icons/profile.png'} alt={`${user.username}'s avatar`} onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} />
+                  <Username>{user.username}</Username>
+                </div>
                 <UnfollowButton onClick={() => changeFollowStatus(user.username)}>
                   {intl.formatMessage({ id: 'view.unfollow' })}
                 </UnfollowButton>
               </FollowingItem>
             ))}
           </FollowingListContainer>
-        </Container>
-      );
+      </Container>
+    );
 }

@@ -175,6 +175,8 @@ const zh = {
     'view.followError': '發生錯誤，請再試一次',
     'view.checkFollowFailed': '讀取追蹤狀態失敗，請再試一次',
     'view.followingList': '追蹤名單',
+    'view.viewIntro': '查看自我介紹',
+    'view.viewPost': '查看文章',
 
     'edit.changePassword': '修改密碼',
     'edit.changeUsernameandSchool': '修改其他資訊',

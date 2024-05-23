@@ -31,6 +31,18 @@ export const viewApi = {
         });
     },
 
+    getOtherMemberPosts: (username) => {
+        return axios.get(`${hostname}/member/posts/${username}`)
+        .then(res => {
+            // console.log(res);
+            return res.data
+        })
+        .catch(err => {
+            // console.log(err)
+            return err
+        });
+    },
+
     changeFollowStatus: (username, token) => {
         return axios.put(`${hostname}/member/follow/${username}`, {}, {
             headers: { Authorization: `Bearer ${token}` }
@@ -53,5 +65,5 @@ export const viewApi = {
         .catch(err => {
             return err
         });
-    }
+    },
 }
