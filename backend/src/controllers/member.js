@@ -347,7 +347,6 @@ const deleteTestMember = async (req, res) => {
 const followUser = async (req, res) => {
   const { userId } = req.body;
   const anotherUser = req.params.uid; // anotherUser is the username
-  console.log(anotherUser);
 
   try {
     // Find the user who is performing the follow/unfollow action
