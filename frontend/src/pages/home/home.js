@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api';
@@ -11,9 +12,12 @@ import {
     HomeTopBar,
     PostSelector
 } from './home-style';
+import { PostWrapper } from '../../components/Post/Post-style'
+
 
 import PostTypeSelector from '../../components/PostTypeSelector';
 import Post from '../../components/Post';
+import PostPhoto from '../../components/Post/PostPhoto';
 import SideBar from '../../components/SideBar';
 import Icon from '../../components/Icon';
 
@@ -35,6 +39,7 @@ export default function Home({
     const [hotPosts, setHotPosts] = useState([]);
     const [geoPosts, setGeoPosts] = useState([]);
     const [toRenderPosts, setToRenderPosts] = useState([]);
+    const [images, setImages] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -196,7 +201,35 @@ export default function Home({
         setToRenderPosts(renderPosts());
     }, [type, sort, filters, geoPosts]);
 
-    // console.log(isLoading, toRenderPosts.length)
+    //console.log(isLoading, toRenderPosts.length)
+    // 建立顯示文章的id列表
+    
+    const imageIds = toRenderPosts.map(post => post._id);
+    //console.log(imageIds.length);
+    //console.log(imageIds);
+
+
+    // get picture
+    
+    useEffect(() => {
+        setIsLoading(true);
+        api.getImage(imageIds)
+        .then(res => {
+            console.log(res)
+            setImages(res); // 設置返回的圖片數據
+            setIsLoading(false); // 加載結束
+        })
+        .catch(err => {
+            console.log(err);
+            setIsLoading(false);
+        });
+    }, [toRenderPosts]); 
+
+    function getCoverPhotoByPid(pid) {
+        const item = images.find(element => element.pid === pid);
+        return item ? item.coverPhoto : null;
+    }
+    
 
     return (
         <HomeContainer>
@@ -226,14 +259,15 @@ export default function Home({
                         <NoContent>
                             <FormattedMessage id='home.noContent' />
                         </NoContent>
-                        : toRenderPosts.map((post, index) => 
-                        <Post
-                            key={post._id}
-                            post={post}
-                            showDivider={index !== toRenderPosts.length - 1}
-                            onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
-                        />
-                    )}
+                        : toRenderPosts.map((post, index) => (
+                            <React.Fragment key={post._id}>
+                                <PostWrapper showDivider={index !== toRenderPosts.length - 1} onClick={() => navigate(`/${post.type}/detail/${post._id}`)}>
+                                    <Post post={post} showDivider={index !== toRenderPosts.length - 1} />
+                                    <PostPhoto src={post.coverPhoto} />
+                                </PostWrapper>
+                            </React.Fragment>
+                        ))
+                    }
                 </PostContainer>
             }
         </HomeContainer>

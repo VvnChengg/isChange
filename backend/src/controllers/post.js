@@ -7,6 +7,8 @@ const { validatePut } = require("../middlewares/post");
 const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
+const sharp = require('sharp');
+
 
 const getAllPosts = async (req, res, next) => {
   let articles, events, products;
@@ -94,15 +96,21 @@ const getPostDetail = async (req, res, next) => {
     if (!article) {
       return res.status(404).json({ message: "找不到此文章" });
     }
-    // 取得按讚、收藏資料
-    const isLiked = article.like_by_user_ids.indexOf(userId);
+
+    let isLiked, isSaved = -1;
+    if (userId) {
+      // 取得按讚、收藏資料
+      isLiked = article.like_by_user_ids.indexOf(userId);
+      isSaved = saveList.filter(
+        (save) => save.user_id.toString() === userId.toString()
+      ).length;
+    }
+
     const saveList = await Favorite.find({
       item_id: pid,
       save_type: "Article",
     });
-    const isSaved = saveList.filter(
-      (save) => save.user_id.toString() === userId.toString()
-    ).length;
+
 
     // 取得評論資料
     const commentList = await getCommentList(pid);
@@ -241,9 +249,9 @@ const createPost = async (req, res, next) => {
     }
     const article_pic = req.file
       ? {
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-        }
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      }
       : null;
     let newPost = new Article({
       article_title: post.title,
@@ -284,9 +292,9 @@ const updatePost = async (req, res, next) => {
   }
   const article_pic = req.file
     ? {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      }
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    }
     : null;
   const updates = {
     article_title: req.body.title,
@@ -460,7 +468,20 @@ async function getCommentList(pid) {
   }
   try {
     const comments = await Comment.find({ _id: { $in: post.comment_ids } });
-    return comments;
+    const creatorList = comments?.map(item => item.commentor_id);
+    const creatorInfo = await Member.find({ _id: { $in: creatorList } }, { username: 1, photo: 1 });
+    const result = comments.map(comment => {
+      const info = creatorInfo.find(info => info._id.equals(comment.commentor_id));
+      return {
+        _id: comment._id,
+        comment_content: comment.content,
+        comment_created_at: comment.created_at,
+        username: info ? info.username : null,
+        photo: info ? convertToBase64(info.photo) : null,
+      };
+    });
+    return result;
+
   } catch (err) {
     throw new Error(err);
   }
@@ -730,6 +751,118 @@ function convertToBase64(image) {
   return photoBase64;
 }
 
+const chunkedImage = async (req, res, next) => {
+  const { imageIds } = req.body;
+  const BATCH_SIZE = 2;
+  console.log("imageIds: ", imageIds);
+
+  // 初始化响应头，设置为分块传输编码
+  res.writeHead(200, {
+    'Content-Type': 'application/json',
+    'Transfer-Encoding': 'chunked'
+  });
+
+  let startIndex = 0;
+  try {
+
+    while (startIndex < imageIds.length) {
+      const batchIds = imageIds.slice(startIndex, startIndex + BATCH_SIZE);
+      console.log('Processing batchIds:', batchIds); // 確認當前批次的 ID
+      // 使用 Promise.all 並行執行三個查詢
+      const [articleImages, eventImages, productImages] = await Promise.all([
+        Article.find({ _id: { $in: batchIds } }, { _id:1, article_pic: 1 }),
+        Event.find({ _id: { $in: batchIds } }, { _id:1, event_pic: 1 }),
+        Product.find({ _id: { $in: batchIds } }, { _id:1, product_pic: 1 })
+      ]);
+
+      // 合併結果
+      const images = [
+        ...articleImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.article_pic) })),
+        ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
+        ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
+      ];
+      // 如果找到了圖片，將其寫入响应
+      console.log(images);
+      if (images.length > 0) {
+        res.write(JSON.stringify(images));
+        res.write("\n"); // 每批之間增加一個換行符作為分隔
+      }
+
+      // 更新起始索引
+      startIndex += BATCH_SIZE;
+      // await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  } finally {
+    // 結束响应
+    res.end();
+  }
+};
+
+const getImage = async (req, res) => {
+  const { imageIds } = req.body;
+  try {
+    const [articleImages, eventImages, productImages] = await Promise.all([
+      Article.find({ _id: { $in: imageIds } }, { _id: 1, article_pic: 1 }),
+      Event.find({ _id: { $in: imageIds } }, { _id: 1, event_pic: 1 }),
+      Product.find({ _id: { $in: imageIds } }, { _id: 1, product_pic: 1 })
+    ]);
+
+    // 合併結果
+    const images = [
+      ...articleImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.article_pic) })),
+      ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
+      ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
+    ];
+    // 測試壓縮圖片用的
+    // let post = await Article.findById("6648f06ee94efb2b30f6521c");
+    // let updates = {
+    //   article_pic: await compressImage(post.article_pic)
+    // };
+    // console.log("updates.article_pic", post.article_pic);
+    // post = await Article.findByIdAndUpdate("6648e7645fe4372dd1c6f444", updates, { new: true });
+    // console.log("post", post.article_pic);
+    return res.status(200).json({ images });
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).send('Server Error');
+  }
+};
+
+
+
+async function compressImage(image) {
+  let photoBase64 = null;
+  try {
+    if (image && image.contentType) {
+      const base64Data = image.data; // 从数据库中获取的 Base64 数据
+      const imageBuffer = Buffer.from(base64Data, 'base64');
+
+      const compressedBuffer = await sharp(imageBuffer)
+        .resize({ width: 50, withoutEnlargement: true }) // 调整宽度以压缩图片，保持合适的大小
+        // .toFormat('jpeg') // 选择一种常见的压缩格式，如 jpeg
+        .jpeg({ quality: 80 }) // 设置压缩质量（0-100）
+        .toBuffer();
+
+      // photoBase64 = `data:${image.contentType};base64,${compressedBuffer.toString('base64')}`;
+      image = {
+        data:compressedBuffer.toString('base64'),
+        contentType: 'image/jpeg'
+      }
+      return image
+      // return photoBase64;
+    }
+  } catch (error) {
+    console.error('Error compressing image:', error);
+    throw new Error('Image compression failed');
+  }
+}
+
+
+
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
@@ -741,3 +874,5 @@ exports.commentPost = commentPost;
 exports.collectProduct = collectProduct;
 exports.getAllPostsSortedByLikes = getAllPostsSortedByLikes;
 exports.searchPosts = searchPosts;
+exports.chunkedImage = chunkedImage;
+exports.getImage = getImage;
