@@ -586,7 +586,7 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
-          coverPhoto: "$article_pic",
+          // coverPhoto: "$article_pic",
           location: "$article_region",
           datetime: "$post_date",
           likesCount: {
@@ -604,6 +604,12 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           type: { $literal: "tour" },
           location: "$destination",
           datetime: "$start_time",
+          currency: "$currency",
+          budget: "$budget",
+          end_time: "$end_time",
+          people_lb: "$people_lb",
+          people_ub: "$people_ub",
+          status: "$status",
           likesCount: {
             $size: { $ifNull: ["$like_by_user_ids", []] }, // 如果 like_by_user_ids 不存在，使用空数组
           },
@@ -620,6 +626,13 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           coverPhoto: "$product_pic",
           location: "$transaction_region",
           datetime: "$post_time",
+          currency: "$currency",
+          price: "$price",
+          productType: "$product_type",
+          period: "$period",
+          status: "$status",
+          transactionWay: "$transaction_way",
+
           likesCount: {
             $size: { $ifNull: ["$like_by_user_ids", []] }, // 如果 like_by_user_ids 不存在，使用空数组
           },
