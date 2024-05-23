@@ -7,6 +7,8 @@ const { validatePut } = require("../middlewares/post");
 const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
+const { Readable } = require('stream');
+
 
 const getAllPosts = async (req, res, next) => {
   let articles, events, products;
@@ -460,7 +462,20 @@ async function getCommentList(pid) {
   }
   try {
     const comments = await Comment.find({ _id: { $in: post.comment_ids } });
-    return comments;
+    const creatorList = comments?.map(item => item.commentor_id);
+    const creatorInfo = await Member.find({ _id: { $in: creatorList } }, { username: 1, photo: 1 });
+    const result = comments.map(comment => {
+      const info = creatorInfo.find(info => info._id.equals(comment.commentor_id));
+      return {
+        _id: comment._id,
+        comment_content: comment.content,
+        comment_created_at: comment.created_at,
+        username: info ? info.username : null,
+        photo: info ? convertToBase64(info.photo) : null,
+      };
+    });
+    return result;
+
   } catch (err) {
     throw new Error(err);
   }
@@ -730,6 +745,56 @@ function convertToBase64(image) {
   return photoBase64;
 }
 
+const chunkedImage = async (req, res, next) => {
+  const { imageIds } = req.body;
+  const BATCH_SIZE = 2;
+  console.log("imageIds: ", imageIds);
+
+  // 初始化响应头，设置为分块传输编码
+  res.writeHead(200, {
+    'Content-Type': 'application/json',
+    'Transfer-Encoding': 'chunked'
+  });
+
+  let startIndex = 0;
+  try {
+
+    while (startIndex < imageIds.length) {
+      const batchIds = imageIds.slice(startIndex, startIndex + BATCH_SIZE);
+      console.log('Processing batchIds:', batchIds); // 確認當前批次的 ID
+      // 使用 Promise.all 並行執行三個查詢
+      const [articleImages, eventImages, productImages] = await Promise.all([
+        Article.find({ _id: { $in: batchIds } }, { _id:1, article_pic: 1 }),
+        Event.find({ _id: { $in: batchIds } }, { _id:1, event_pic: 1 }),
+        Product.find({ _id: { $in: batchIds } }, { _id:1, product_pic: 1 })
+      ]);
+
+      // 合併結果
+      const images = [
+        ...articleImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.article_pic) })),
+        ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
+        ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
+      ];
+      // 如果找到了圖片，將其寫入响应
+      console.log(images);
+      if (images.length > 0) {
+        res.write(JSON.stringify(images));
+        res.write("\n"); // 每批之間增加一個換行符作為分隔
+      }
+
+      // 更新起始索引
+      startIndex += BATCH_SIZE;
+      // await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  } finally {
+    // 結束响应
+    res.end();
+  }
+};
+
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
@@ -741,3 +806,4 @@ exports.commentPost = commentPost;
 exports.collectProduct = collectProduct;
 exports.getAllPostsSortedByLikes = getAllPostsSortedByLikes;
 exports.searchPosts = searchPosts;
+exports.chunkedImage = chunkedImage;
