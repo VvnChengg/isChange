@@ -28,6 +28,7 @@ const en = {
     'msg.userNotEntered': 'No message now!',
     'msg.stranger':'Stranger!!',
     'msg.input':'Type Here!!',
+    'msg.nothingMsg':'No chat found!',
 
 
     'selfpost.edit':'Edit',

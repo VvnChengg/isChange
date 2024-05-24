@@ -7,6 +7,10 @@ import './PrivateList.css';
 import { FormattedMessage } from 'react-intl';
 import { Spin } from 'antd';
 import Popup from '../StartPrivate/Popup';
+import {
+  SpinContainer,
+  NoContent,
+} from '../../pages/home/home-style';
 
 
 function formatDate(dateString) {
@@ -45,17 +49,20 @@ function ChatRoomList({ rooms }) {
       }
     };
 
+    console.log(rooms)
 
-
-    if (!rooms) {
-      return <Spin />;
-    };
-
-    if ( rooms && rooms.length === 0) {
+    if (rooms === undefined) {
+      return( 
+        <Spin />)
+    } 
+    else if ( rooms === null) {
       return (
-      <p> No Chat Now!! </p>)
-      }; 
-
+      <div className="private-message-container"> 
+        <p className="self-post-nothing-msg"> <FormattedMessage id='msg.nothingMsg' /></p>
+      </div>
+      )
+    }
+    else {
     return (
       <div className='private-message-container'>
         <h1 className='private-message-chat-room-title' style={{display:'flex', alignItems: 'center'}}> 
@@ -108,6 +115,7 @@ function ChatRoomList({ rooms }) {
         )}
       </div>
     );
-}
+    } 
+};
 
 export default ChatRoomList;

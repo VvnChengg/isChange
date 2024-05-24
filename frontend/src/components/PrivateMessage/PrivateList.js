@@ -6,7 +6,7 @@ import ChatRoomList from './ChatRoomList';
 import { useToken } from '../../hooks/useToken';
 
 function PrivateList() {
-  const [rooms, setRooms] = useState(null);
+  const [rooms, setRooms] = useState();
   const hostname = process.env.REACT_APP_API_HOSTNAME;
   const token = useToken();
   //const userId = window.localStorage.getItem('user_id');

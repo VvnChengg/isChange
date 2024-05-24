@@ -28,6 +28,8 @@ const zh = {
     'msg.userNotEntered': '使用者尚未輸入信息',
     'msg.stranger':'陌生！！',
     'msg.input':'輸入訊息！！',
+    'msg.nothingMsg':'沒有聊天!',
+
 
 
     'selfpost.edit':'編輯',
