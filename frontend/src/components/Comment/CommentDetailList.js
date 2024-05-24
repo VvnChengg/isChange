@@ -55,37 +55,35 @@ function CommentDetailList({ pid, comments }) {
 
     return (
       <div className='comment-container'>
-        <table className='comment-list-table'>
+        <div className='comment-list-table'>
             {comments.map((comment, index) => (
-              <React.Fragment key={`comment_${index}`}>
-                <tbody className='comment-a-comment' >
-                <tr>
-                  <td rowSpan={2} style={{ width: '80px' }}>
-                    <img src={comment.photo||'/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} style={{ width: '100%', borderRadius: '50%'}} />
-                  </td>
-                  <td colSpan={1} className='comment-name' style={{textAlign:'left'}}>{comment.username}</td>
-                  <td colSpan={2} className='comment-time'>{formatDate(comment.comment_created_at)}</td>
-                </tr>
-                <tr className='comment-bottom'>
-                  <td  className='comment-text' colSpan={2} style={{textAlign:'left'}}>
-                      <span>{comment.comment_content}</span>
-                  </td>
+              <div className='comment-a-comment' key={`comment_${index}`}>
+                  <div style={{ display: 'flex'}}>
+                    <img src={comment.photo || '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} style={{ width: '40px', borderRadius: '50%'}} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div className='comment-name' style={{textAlign:'left'}}>{comment.username}</div>
+                      <div className='comment-text' style={{textAlign:'left'}}>
+                        {comment.content}
+                      </div>
+                    </div>
+                  </div>
+                  <div className='comment-time'>{formatDate(comment.created_at)}</div>
                   {/* <DeleteButton onClick={(event) => onDelete(post._id, post.type, event)} /> */}
-                </tr>
-                </tbody>
-              </React.Fragment>
+              </div>
             ))}
             { comments && comments.length === 0 ?
-              <p> {intl.formatMessage({ id: 'post.noComment' })} </p> : <p></p>
+              <p> {intl.formatMessage({ id: 'post.noComment' })} </p> : <p />
             }
-            <Input.TextArea
-              autoSize={{ minRows: 1, maxRows: 3 }} // 自動調整大小，最多變為三行
-              onChange={e => setContent(e.target.value)}
-              value={content}
-              style={{ width: '90%' , borderRadius:0}}
-            />
-            <Button type="primary" icon={<SendOutlined />} style={{ borderRadius:0}} onClick={() => onSubmit()}></Button>
-        </table>
+            <div style={{display: 'flex', width: '100%'}}>
+              <Input.TextArea
+                autoSize={{ minRows: 1, maxRows: 3 }} // 自動調整大小，最多變為三行
+                onChange={e => setContent(e.target.value)}
+                value={content}
+                style={{ borderRadius: 0 }}
+              />
+              <Button type="primary" icon={<SendOutlined />} style={{ borderRadius:0}} onClick={() => onSubmit()} />
+            </div>
+        </div>
       </div>
     );
 }

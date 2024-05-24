@@ -1,10 +1,7 @@
 .comment-container {
-  width: calc(100% - 60px);
+  width: 100%;
   max-height: 100vh; /* 更改最大高度 */
   overflow-y: auto; /* 添加垂直滾動條 */
-
-  position: absolute;
-  bottom: 30px;
 }
   
 .comment-list-table {
@@ -14,7 +11,12 @@
 }
 
 .comment-a-comment {
+  width: 100%;
   height: 40px;
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 5px;
 }
 
 .comment-bottom {
@@ -41,7 +43,6 @@
 .comment-text {
   font-size: 20px;
   vertical-align: bottom;
-  max-width: 0;
   white-space: nowrap; 
   overflow: hidden; 
   text-overflow: ellipsis; 

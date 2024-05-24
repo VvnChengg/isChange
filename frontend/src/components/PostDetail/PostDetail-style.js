@@ -23,7 +23,6 @@ export const PostDetailWrapper = styled.div`
         width: 10px;
     }
 
-
     &::-webkit-scrollbar-thumb {
         background-color: transparent;
     }
@@ -35,6 +34,10 @@ export const InnerWrapper = styled.div`
     height: 100%;
     padding-right: 30px; // adjust this value as needed
     overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     &::-webkit-scrollbar {
         width: 10px;
