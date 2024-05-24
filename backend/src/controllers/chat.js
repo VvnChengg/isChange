@@ -110,7 +110,7 @@ const getChatDetail = async (req, res) => {
         await Message.updateMany({ chat_id: cid, sender_id: { $ne: userId }, read: false }, { read: true });
 
         res.status(200).json({
-            chat_to_photo: chatTo.photo ? `data:${chatTo.photo.contentType};base64,${chatTo.photo.data?.toString("base64")}` : null,
+            chat_to_photo: (chatTo.photo && chatTo.photo.contentType) ? `data:${chatTo.photo.contentType};base64,${chatTo.photo.data?.toString("base64")}` : null,
             chat_to_username: chatTo.username,
             messages: msgData
         });
@@ -159,16 +159,10 @@ const getChatList = async (req, res) => {
 
                 // 找出聊天對象，回傳照片和使用者名稱
                 const member = await Member.findById(chat_to_id);
-                // Convert photo data to base64
-                let photoBase64 = null;
-                if (member.photo && member.photo.contentType) {
-                    photoBase64 = `data:${member.photo.contentType
-                        };base64,${member.photo.data.toString("base64")}`;
-                }
 
                 // 將資料添加到 chatData 中
                 chatData.push({
-                    chat_to_photo: photoBase64,
+                    chat_to_photo: (member.photo && member.photo.contentType) ? `data:${member.photo.contentType};base64,${member.photo.data?.toString("base64")}` : null, // photoBase64,
                     chat_to_username: member.username,
                     chat_id: chat._id,
                     first_person: chat.first_person,
@@ -176,7 +170,7 @@ const getChatList = async (req, res) => {
                     last_message: chat.last_message,
                     last_sender: chat.last_sender,
                     last_update: chat.last_update,
-                    stranger: chat.stranger,
+                    stranger: chat.first_person.toString() === userId.toString() ? false : chat.stranger,
                     unread_cnt: unread
                 });
                 // console.log(member.username, unread);
