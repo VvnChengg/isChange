@@ -36,13 +36,11 @@ export default function Layout({
                 filterOptions={filterOptions}
             />
 
-            {token &&
-                <Footer>
-                    <CreateAllButton />
-                    <PersonalPostButton />
-                    <GetFollowingList />
-                </Footer>
-            }
+            <Footer>
+                <CreateAllButton />
+                <PersonalPostButton />
+                <GetFollowingList />
+            </Footer>
             <Outlet />
         </LayoutWrapper>
     )

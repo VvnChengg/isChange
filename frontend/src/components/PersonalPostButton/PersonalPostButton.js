@@ -27,7 +27,6 @@ export default function PersonalPostButton() {
 
 
     return (
-        token &&
         <>
             <Wrapper>
                 <button style={{ backgroundColor: 'transparent', borderColor: 'transparent' }} onClick={onClick}>

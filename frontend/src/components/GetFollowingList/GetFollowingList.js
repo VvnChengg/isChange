@@ -12,7 +12,6 @@ export default function GetFollowingList() {
     }
 
     return(
-        token &&
         <button style={{ backgroundColor: 'transparent', borderColor: 'transparent' }} onClick={onClick}>
             <StyledMdPerson />
         </button>

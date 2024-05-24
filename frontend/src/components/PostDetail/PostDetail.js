@@ -58,6 +58,7 @@ export default function PostDetail({ post }) {
                 <PostDetailButtonContainer>
                     <SharePage url={url} />
                     <LikePost
+                        post={post}
                         likes={post.likes}
                         isLiked={post.isLiked}
                         pid={post.pid}
