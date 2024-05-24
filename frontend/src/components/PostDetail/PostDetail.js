@@ -18,7 +18,8 @@ import {
 
 import SharePage from '../../components/SharePage';
 import LikePost from '../../components/LikePost';
-import CollectPost from '../CollectPost/CollectPost.js';
+import CollectPost from '../CollectPost/CollectPost';
+import CommentDetailList from '../Comment/CommentDetailList';
 import Tag from '../Tag';
 import Icon from '../Icon';
 
@@ -43,18 +44,12 @@ export default function PostDetail({ post }) {
         }
     }, [expiryTime, token, user_id]);
 
-
-    console.log(post.title);
-
     return (
         <PostDetailWrapper>
             <InnerWrapper>
                 <PostDetailTitle>
                     {post.title || post.event_title || post.trans_title}
                 </PostDetailTitle>
-
-
-
                 <PostDetailButtonContainer>
                     <SharePage url={url} />
                     <LikePost
@@ -154,6 +149,7 @@ export default function PostDetail({ post }) {
                     {post.event_pic && <PostDetailImage src={post.event_pic} alt='event_image' />}
                     {post.coverPhoto && <PostDetailImage src={post.coverPhoto} alt='post_image' />}
                 </PostDetailContent>
+                {post.comment_list && <CommentDetailList pid={post._id} comments={post.comment_list}/>}
             </InnerWrapper>
         </PostDetailWrapper>
     )

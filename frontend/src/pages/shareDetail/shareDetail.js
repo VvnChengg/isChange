@@ -60,13 +60,8 @@ export default function MyComponent() {
 
 
   const getInfo = async () => {
-    // const pid = "6617996b1067c62b7d704652";
-// const pid = "6617996b106";  // 文章ID格式錯誤
-// const pid = "6617996b1067c62b7d704650"; // 尚未發布文章
     const postInfo = await api.getPostDetail(pid);
     setPost(postInfo.item);
-    console.log('post');
-    console.log(postInfo.item);
     setIsLoading(false);
   }
 

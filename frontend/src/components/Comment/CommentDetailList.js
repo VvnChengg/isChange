@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 import './CommentList.css';
-import { FormattedMessage } from 'react-intl';
 import { Button, Input, Space } from 'antd';
 import { SendOutlined} from '@ant-design/icons';
 import { api } from '../../api';
 import { useIntl } from 'react-intl';
+import { Spin } from 'antd';
 // import DeleteButton from '../../components/Button/DeleteButton'; 
 
 function formatDate(dateString) {
@@ -21,17 +21,14 @@ function formatDate(dateString) {
   return formattedDate;
 }
 
-function CommentDetailList({ commentInfo }) {
-    const pID = commentInfo.pid;
-    const title = commentInfo.postTitle;
-    const comments = commentInfo.comments;
+function CommentDetailList({ pid, comments }) {
     const intl = useIntl();
     const [content, setContent] = useState('');
 
     async function onSubmit() {
       try {
         const datetime = formatDate(Date.now());
-        const comment = {pID, content, datetime};
+        const comment = {pid, content, datetime};
         await api.commentPost(comment);
         alert(intl.formatMessage({ id: 'post.commentSuccess' }));
         window.location.reload()
@@ -53,15 +50,11 @@ function CommentDetailList({ commentInfo }) {
 
     if (!comments) {
       return (
-      <p> Loading... </p>
+      <Spin />
       )};
 
     return (
       <div className='comment-container'>
-        <h1 className='comment-title' style={{display:'flex', alignItems: 'center'}}> 
-          {/* <AiOutlineMail style={{ marginRight: '1vh', verticalAlign: 'middle' }}/>  */}
-          {title}
-        </h1>
         <table className='comment-list-table'>
             {comments.map((comment, index) => (
               <React.Fragment key={`comment_${index}`}>

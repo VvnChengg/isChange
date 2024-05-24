@@ -163,19 +163,15 @@ export const api = {
     getPostDetail: (pID) => {
         const user_id = window.localStorage.getItem('user_id');
         return axios.get(`${hostname}/post/detail/${pID}`, {
-            params:{
+            params: {
                 userId: user_id,
             }
         })
-            .then(res => {
-                console.log(pID);
-                console.log(res);
-                return res.data;
-            })
-            .catch(err => {
-                console.log(err)
-                throw err;
-            });
+        .then(res => res.data)
+        .catch(err => {
+            console.log(err)
+            throw err;
+        });
     },
     pressLike: (pID, user_id, type) => {
         const token = window.localStorage.getItem('access_token');
@@ -209,22 +205,22 @@ export const api = {
         const datetime = comment.datetime;
         return (
             axios.post(hostname + '/post/comment', {
-            // commentInfo
-            pid: pid,
-            text: content,
-            datetime: datetime,
-            userId: userID
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            }
-        })
-            .then(res => {
-                return res.data;
+                // commentInfo
+                pid: pid,
+                text: content,
+                datetime: datetime,
+                userId: userID
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
             })
-            .catch(err => {
-                throw err
-            })
-        )
+                .then(res => {
+                    return res.data;
+                })
+                .catch(err => {
+                    throw err
+                })
+            )
     },
 };
