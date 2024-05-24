@@ -332,7 +332,7 @@ const likePost = async (req, res, next) => {
     post = await model.findByIdAndUpdate(pid, {
       like_by_user_ids: like_list,
     });
-    res.status(200).json({ message: res_message, like_count: post.like_by_user_ids.length });
+    res.status(200).json({ message: res_message, like_count: like_list.length });
   } catch (err) {
     if (err.name === "CastError") {
       return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
