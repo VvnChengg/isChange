@@ -7,15 +7,16 @@ import {
     PostInfo,
     PostIcon,
     PostTitle,
-    PostPreview
-    
+    PostPreview,
+    PostImage
 } from './Post-style.js';
 
 import Tag from '../Tag';
 import Icon from '../Icon';
 
-export default function Post({ post, onClick, showDivider }) {
+export default function Post({ post, onClick, showDivider, photoList }) {
     const intl = useIntl();
+    const [coverPhoto, setCoverPhoto] = useState(null);
 
     const samplePost = {
         type: 'post',
@@ -23,6 +24,7 @@ export default function Post({ post, onClick, showDivider }) {
         content: 'this is a sample post :D'
     }
 
+    
     function getLocation() {
         if (!post) return;
         
@@ -52,10 +54,51 @@ export default function Post({ post, onClick, showDivider }) {
         return null;
     }
 
+    function isValidImageBase64(str) {
+        return new Promise((resolve) => {
+            var img = new Image();
+            img.src = str;
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+        });
+    }
+
+    async function getCoverPhotoByPid(pid) {
+        const item = photoList.find(element => element.pid === pid);
+        // console.log(item.coverPhoto)
+        return item ? item.coverPhoto : null;
+    }
+
+    async function handleGetCoverPhoto(pid) {
+        try {
+            const coverPhoto = await getCoverPhotoByPid(pid);
+            return coverPhoto;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+    
+    useEffect(() => {
+        if (post) {
+            handleGetCoverPhoto(post._id).then(coverPhoto => {
+                if (coverPhoto) {
+                    isValidImageBase64(coverPhoto).then(isValid => {
+                        if (isValid) {
+                            setCoverPhoto(coverPhoto);
+                        }
+                    });
+                }
+            });
+        }
+    }, [post, photoList]);
+
+    
     return (
-        <div onClick={onClick} showDivider={showDivider}>
+        <PostWrapper onClick={onClick} showDivider={showDivider}>
             <PostTopBar>
                 <Tag type={post ? post.type : samplePost.type} />
+                {/* post.status && renderStatus() */}
                 <PostInfoContainer>
                     {post && post.datetime && post.end_time && 
                         <PostInfo>
@@ -94,7 +137,8 @@ export default function Post({ post, onClick, showDivider }) {
                 <PostTitle>{post ? post.title : samplePost.title}</PostTitle>
                 <PostPreview>{post && post.content ? post.content.substring(0, 25) : samplePost.content.substring(0, 25)}......</PostPreview>
             </div>
-        </div>
+            {coverPhoto ? <PostImage src={coverPhoto} /> : ''}
+        </PostWrapper>
     )
 }
 
