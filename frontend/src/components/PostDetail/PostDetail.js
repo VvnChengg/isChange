@@ -63,7 +63,7 @@ export default function PostDetail({ post }) {
                         isLiked={post.isLiked}
                         pid={post.pid}
                     />
-                    {user_id && post.creator_id !== user_id &&
+                    {post.creator_id !== user_id &&
                         <CollectPost
                             post={post}
                             user_id={user_id}
