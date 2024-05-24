@@ -50,7 +50,7 @@ export default function TourDetail() {
         }
         
         try{
-            const data = await tourApi.viewTour(tid);
+            const data = await tourApi.viewTour(tid,user_id);
             // console.log(data);
             if(data.success){
                 data.tour.start_time = formatDate(data.tour.start_time);

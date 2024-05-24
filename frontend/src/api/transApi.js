@@ -3,8 +3,12 @@ import axios from "axios";
 const hostname = process.env.REACT_APP_API_HOSTNAME;
 
 export const transApi = {
-    viewTrans: (tid) => {
-        return axios.get(`${hostname}/trans/detail/${tid}`)
+    viewTrans: (tid, user_id) => {
+        return axios.get(`${hostname}/trans/detail/${tid}`, {
+            params: {
+                user_id: user_id
+            },
+        })
             .then(res => {
                 return res.data
             })

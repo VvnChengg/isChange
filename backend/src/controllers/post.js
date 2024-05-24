@@ -8,7 +8,8 @@ const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
 const sharp = require('sharp');
-
+const common = require('./common');
+const getReactionInfo = common.getReactionInfo;
 
 const getAllPosts = async (req, res, next) => {
   let articles, events, products;
@@ -41,20 +42,7 @@ const getPostDetail = async (req, res, next) => {
       return res.status(404).json({ message: "找不到此文章" });
     }
 
-    let isLiked, isSaved = -1;
-    if (userId) {
-      // 取得按讚、收藏資料
-      isLiked = article.like_by_user_ids.indexOf(userId);
-      isSaved = saveList.filter(
-        (save) => save.user_id.toString() === userId.toString()
-      ).length;
-    }
-
-    const saveList = await Favorite.find({
-      item_id: pid,
-      save_type: "Article",
-    });
-
+    let {isLiked, isSaved, saveList} = await getReactionInfo(article, userId, "Article");
 
     // 取得評論資料
     const commentList = await getCommentList(pid);
