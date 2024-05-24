@@ -178,5 +178,24 @@ class commonApi {
             });
         }
     }
+    async getReactionInfo(item, userId, type) {
+        const like_by_user_ids = item.like_by_user_ids;
+        const itemId = item._id;
+        let isLiked, isSaved = -1;
+
+        const saveList = await FavoriteModel.find({
+            item_id: itemId,
+            save_type: type,
+        });
+
+        if (userId) {
+            // 取得按讚、收藏資料
+            isLiked = like_by_user_ids.indexOf(userId);
+            isSaved = saveList.filter(
+                (save) => save.user_id.toString() === userId.toString()
+            ).length;
+        }
+        return isLiked, isSaved, saveList;
+    }
 }
 module.exports = new commonApi();
