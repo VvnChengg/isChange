@@ -7,9 +7,9 @@ const { validatePut } = require("../middlewares/post");
 const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
-const sharp = require('sharp');
 const common = require('./common');
 const getReactionInfo = common.getReactionInfo;
+// const sharp = require('sharp');  // 還沒有用到的模組，但有些人載入似乎會有問題，所以先comment掉
 
 const getAllPosts = async (req, res, next) => {
   let articles, events, products;
