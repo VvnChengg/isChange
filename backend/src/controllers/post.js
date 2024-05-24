@@ -8,7 +8,8 @@ const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
 const sharp = require('sharp');
-
+const common = require('./common');
+const getReactionInfo = common.getReactionInfo;
 
 const getAllPosts = async (req, res, next) => {
   let articles, events, products;
@@ -41,20 +42,7 @@ const getPostDetail = async (req, res, next) => {
       return res.status(404).json({ message: "找不到此文章" });
     }
 
-    let isLiked, isSaved = -1;
-    if (userId) {
-      // 取得按讚、收藏資料
-      isLiked = article.like_by_user_ids.indexOf(userId);
-      isSaved = saveList.filter(
-        (save) => save.user_id.toString() === userId.toString()
-      ).length;
-    }
-
-    const saveList = await Favorite.find({
-      item_id: pid,
-      save_type: "Article",
-    });
-
+    let {isLiked, isSaved, saveList} = await getReactionInfo(article, userId, "Article");
 
     // 取得評論資料
     const commentList = await getCommentList(pid);
@@ -193,6 +181,7 @@ const updatePost = async (req, res, next) => {
     article_region_en: article_region_en,
     article_region_zh: article_region_zh,
     content: req.body.content,
+    article_pic: article_pic,
     status: req.body.status,
   };
   let post = await Article.findById(pid);
@@ -343,7 +332,7 @@ const likePost = async (req, res, next) => {
     post = await model.findByIdAndUpdate(pid, {
       like_by_user_ids: like_list,
     });
-    res.status(200).json({ message: res_message });
+    res.status(200).json({ message: res_message, like_count: post.like_by_user_ids.length });
   } catch (err) {
     if (err.name === "CastError") {
       return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });

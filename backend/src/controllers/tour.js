@@ -1,5 +1,7 @@
 const TourModel = require("../models/event.js");
 const MemberModel = require("../models/member.js");
+const common = require('./common');
+const getReactionInfo = common.getReactionInfo;
 
 class tourApi {
   async createTour(req, res) {
@@ -75,6 +77,7 @@ class tourApi {
   async checkTourDetail(req, res) {
     try {
       const { eid } = req.params;
+      const { userId } = req.query;
       const tourDetail = await TourModel.findById(eid);
 
       if (!tourDetail) {
@@ -92,9 +95,19 @@ class tourApi {
         };base64,${tourDetail.event_pic.data.toString("base64")}`;
       }
 
+      let {isLiked, isSaved, saveList} = await getReactionInfo(tourDetail, userId, "Event");
+
       let responseTour = tourDetail.toObject(); // Convert the Mongoose document to a plain JavaScript object
       delete responseTour.event_pic;
-      responseTour.event_pic = photoBase64;
+
+      responseTour = {
+        ...responseTour,
+        event_pic: photoBase64,
+        like_count: responseTour.like_by_user_ids.length,
+        save_count: saveList.length,
+        is_liked: isLiked >= 0 ? true : false, // 使用者是否有按讚
+        is_saved: isSaved > 0 ? true : false, // 使用者是否有收藏
+      };
 
       // 取得揪團發布者的資料
       const member = await MemberModel.findById(tourDetail.creator_id);

@@ -59,9 +59,8 @@ export default function PostDetail({ post }) {
                     <SharePage url={url} />
                     <LikePost
                         post={post}
-                        likes={post.likes}
-                        isLiked={post.isLiked}
-                        pid={post.pid}
+                        user_id={user_id}
+                        token={token}
                     />
                     {user_id && post.creator_id !== user_id &&
                         <CollectPost

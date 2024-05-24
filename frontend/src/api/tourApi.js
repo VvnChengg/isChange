@@ -4,8 +4,12 @@ const hostname = process.env.REACT_APP_API_HOSTNAME;
 
 
 export const tourApi = {
-    viewTour: (tid) => {
-        return axios.get(`${hostname}/tour/detail/${tid}`)
+    viewTour: (tid, user_id) => {
+        return axios.get(`${hostname}/tour/detail/${tid}`, {
+            params: {
+                userId: user_id
+            },
+        })
             .then(res => {
                 return res.data
             })

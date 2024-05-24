@@ -75,7 +75,7 @@ export default function TransDetail() {
 
     async function viewPost() {
         try{
-            const data = await transApi.viewTrans(tid);
+            const data = await transApi.viewTrans(tid, user_id);
             // console.log(data);
             // console.log(data.trans.product_title);
             // console.log(data.trans.currency);
