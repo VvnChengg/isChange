@@ -19,8 +19,6 @@ export default function PrivateMessageList() {
     }, []);
 
     return (
-        <div>
-            <PrivateList />
-        </div>
+        <PrivateList />
     );
 }
