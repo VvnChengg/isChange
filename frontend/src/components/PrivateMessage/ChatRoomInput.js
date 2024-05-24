@@ -4,7 +4,6 @@ import React, { useState, useRef } from 'react';
 import './ChatRoom.css';
 import { Button, Input, Space } from 'antd';
 import { CameraOutlined ,SendOutlined} from '@ant-design/icons';
-// import { FormattedMessage } from 'react-intl';
 
 export default function ChatRoomInput({ handleInputChange, inputValue, handleSubmit, handleKeyDown, handleFileInputChange}) {
   const [inputRows, setInputRows] = useState(0);
@@ -17,10 +16,6 @@ export default function ChatRoomInput({ handleInputChange, inputValue, handleSub
   const handleButtonClick = () => {
     fileInputRef2.current.click();
   };
-
-  const test = () =>{
-    fileInputRef2.current.click(); 
-  }
   
   return (
       <div className='private-message-input-box'>
@@ -28,7 +23,7 @@ export default function ChatRoomInput({ handleInputChange, inputValue, handleSub
           <Button
             type="primary"
             icon={<CameraOutlined />}
-            style={{ width: '10%', borderRadius: 0 }}
+            style={{ width: '10%', borderRadius: 0, backgroundColor: '#008CD9' }}
             onClick={handleButtonClick}
           >
           </Button>
@@ -46,11 +41,10 @@ export default function ChatRoomInput({ handleInputChange, inputValue, handleSub
             onKeyDown={handleKeyDown}
             rows={inputRows} 
             onResize={handleResize} 
-            style={{ width: '100%' , borderRadius:0}}
+            style={{ width: '100%' , borderRadius:0 }}
           />     
-          <Button type="primary" icon={<SendOutlined />} style={{ width: '10%' , borderRadius:0}} onClick={handleSubmit}></Button>
+          <Button type="primary" icon={<SendOutlined />} style={{ width: '10%' , borderRadius: 0, backgroundColor: '#008CD9'}} onClick={handleSubmit}></Button>
         </Space.Compact>
       </div>
-
   );
 }

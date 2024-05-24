@@ -14,7 +14,7 @@ import {
   ChatRoomAvatar,
   ChatRoomContent,
   ChatRoomRow,
-} from './ChatRoom-style';
+} from './ChatRoomList-style';
 
 
 function formatDate(dateString) {
