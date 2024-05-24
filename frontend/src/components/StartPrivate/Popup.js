@@ -32,12 +32,14 @@ const Popup = ({ isOpen, onClose, other_id, other_name, direction, chatid }) => 
           console.error('Error creating chat:', error);
         }
         } else {
-          await acceptChat(chatid, token);        
+          await acceptChat(chatid, token);
+          navigate('/chatroom/' + chatid);
         } 
       }
-      else {
+      else if  (direction === 'Accept') {
         // 刪除 api
-        await deleteChat(chatid, token);        
+        await deleteChat(chatid, token);
+        window.location.reload();        
       }
       onClose();
     }
