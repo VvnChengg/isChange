@@ -7,9 +7,9 @@ const { validatePut } = require("../middlewares/post");
 const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
-const sharp = require('sharp');
 const common = require('./common');
 const getReactionInfo = common.getReactionInfo;
+// const sharp = require('sharp');  // 還沒有用到的模組，但有些人載入似乎會有問題，所以先comment掉
 
 const getAllPosts = async (req, res, next) => {
   let articles, events, products;
@@ -332,7 +332,7 @@ const likePost = async (req, res, next) => {
     post = await model.findByIdAndUpdate(pid, {
       like_by_user_ids: like_list,
     });
-    res.status(200).json({ message: res_message, like_count: post.like_by_user_ids.length });
+    res.status(200).json({ message: res_message, like_count: like_list.length });
   } catch (err) {
     if (err.name === "CastError") {
       return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });

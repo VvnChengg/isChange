@@ -21,11 +21,11 @@ export default function LikePost({post, user_id, token}) {
                             if(res.message === "成功按讚"){
                                 toast.success(`${intl.formatMessage({id: 'trans.likeSuccess'})}`);
                                 setImgSrc('/icons/heartFilled.png');
-                                setLikes(likes+1);
+                                setLikes(res.like_count);
                             }else{
                                 toast.success(`${intl.formatMessage({id: 'trans.likeCancelSucess'})}`);
                                 setImgSrc('/icons/heartHollow.png');
-                                setLikes(likes-1);
+                                setLikes(res.like_count);
                             }
                         })
                         .catch(err => {
@@ -43,11 +43,11 @@ export default function LikePost({post, user_id, token}) {
                             if(res.message === "成功按讚"){
                                 toast.success(`${intl.formatMessage({id: 'tour.likeSuccess'})}`);
                                 setImgSrc('/icons/heartFilled.png');
-                                setLikes(likes+1);
+                                setLikes(res.like_count);
                             }else{
                                 toast.success(`${intl.formatMessage({id: 'tour.likeCancelSucess'})}`);
                                 setImgSrc('/icons/heartHollow.png');
-                                setLikes(likes-1);
+                                setLikes(res.like_count);
                             }
                         })
                         .catch(err => {
@@ -66,11 +66,11 @@ export default function LikePost({post, user_id, token}) {
                             if(res.message === "成功按讚"){
                                 toast.success(`${intl.formatMessage({id: 'post.likeSuccess'})}`);
                                 setImgSrc('/icons/heartFilled.png');
-                                setLikes(likes+1);
+                                setLikes(res.like_count);
                             }else{
                                 toast.success(`${intl.formatMessage({id: 'post.likeCancelSucess'})}`);
                                 setImgSrc('/icons/heartHollow.png');
-                                setLikes(likes-1);
+                                setLikes(res.like_count);
                             }
                         })
                         .catch(err => {
