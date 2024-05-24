@@ -17,6 +17,14 @@ export const CreateContainer = styled.div `
     > * {
         width: 100%;
     }
+
+    @media screen and (max-width: 500px) {
+        width: 90%;
+        height: calc(100% - 130px);
+        padding-bottom: 20px;
+        display: block;
+        overflow: scroll;
+    }
 `
 
 export const CreateButtonContainer = styled.div `
