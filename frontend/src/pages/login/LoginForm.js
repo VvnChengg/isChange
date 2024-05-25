@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { useIntl } from 'react-intl';
@@ -23,6 +24,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [showPasswordForm, setShowPasswordForm] = useState(false); // 狀態用於顯示/隱藏密碼表單
 
+  const { setToken } = useContext(AuthContext);
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -62,8 +64,9 @@ const LoginForm = () => {
     if(tokenId){
       try{
         const data = await loginApi.sso_login(tokenId);
-        // console.log(data);
+
         if(data.status === 'success'){
+          setToken(data.data.access_token);
           navigate('/');
         }
       }catch(error){

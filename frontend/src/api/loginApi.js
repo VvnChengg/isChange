@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 
 const hostname = process.env.REACT_APP_API_HOSTNAME;
 
