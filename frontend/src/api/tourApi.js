@@ -4,8 +4,12 @@ const hostname = process.env.REACT_APP_API_HOSTNAME;
 
 
 export const tourApi = {
-    viewTour: (tid) => {
-        return axios.get(`${hostname}/tour/detail/${tid}`)
+    viewTour: (tid, user_id) => {
+        return axios.get(`${hostname}/tour/detail/${tid}`, {
+            params: {
+                userId: user_id
+            },
+        })
             .then(res => {
                 return res.data
             })
@@ -49,7 +53,7 @@ export const tourApi = {
                 formData.append(key, file);
             } else if (key === 'user_id') {
                 formData.append('userId', value);
-            } else if(key === 'save_by_user_ids' || key === 'like_by_user_ids'){
+            } else if (key === 'save_by_user_ids' || key === 'like_by_user_ids') {
                 return
             }
             else {

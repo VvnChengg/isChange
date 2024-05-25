@@ -39,9 +39,11 @@ export default function TourDetail() {
 
     useEffect(() => {
         // api: get tour detail
-        viewTour();
+        if(tid){
+            viewTour();
+        }
 
-    }, []);
+    }, [tid, user_id]);
 
     async function viewTour() {
         function formatDate(dateString) {
@@ -50,7 +52,7 @@ export default function TourDetail() {
         }
         
         try{
-            const data = await tourApi.viewTour(tid);
+            const data = await tourApi.viewTour(tid,user_id);
             // console.log(data);
             if(data.success){
                 data.tour.start_time = formatDate(data.tour.start_time);
