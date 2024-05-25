@@ -9,11 +9,8 @@ function PrivateList() {
   const [rooms, setRooms] = useState();
   const hostname = process.env.REACT_APP_API_HOSTNAME;
   const token = useToken();
-  //const userId = window.localStorage.getItem('user_id');
 
   useEffect(() => {
-    
-
     axios.get(`${hostname}/chat/chatlist`, {
       headers: {
         'Authorization':  `Bearer ${token}`
@@ -27,11 +24,7 @@ function PrivateList() {
   }, [hostname, token]);
 
   return (
-    <div>
-      <div className='chatRoomListContainer'>
-        <ChatRoomList rooms={rooms} />
-      </div>
-    </div>
+    <ChatRoomList rooms={rooms} />
   );
 }
 

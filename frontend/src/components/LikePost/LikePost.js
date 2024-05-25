@@ -81,6 +81,8 @@ export default function LikePost({post, user_id, token}) {
                     toast.error(`${intl.formatMessage({id: 'post.likeFailed'})}`);
                 }
             }
+        }else{
+            toast.error(`${intl.formatMessage({id: 'token.pleaseLogIn'})}`);
         }
       }
 

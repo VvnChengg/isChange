@@ -1,11 +1,9 @@
 .private-message-container {
-  position: fixed;
-  top: 16%; /* 相對於父元素，距離頂部10% */
-  bottom: 10%; /* 相對於父元素，距離底部10% */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40%; 
-  max-height: 100vh; /* 更改最大高度 */
+  position: absolute;
+  top: 100px;
+
+  width: 50%; 
+  max-height: 100%; /* 更改最大高度 */
   overflow-y: auto; /* 添加垂直滾動條 */
 
   @media screen and (max-width: 500px) {
@@ -13,57 +11,29 @@
   }
 }
 
-
 .private-message-chat-room-title {
   top: 2%; /* 相對於父元素，距離頂部 */
   color: #008CD9;
-  font-size: 40px;
-}
-  
-.private-message-chat-list-table {
-  border-collapse: collapse;
-  border: 1px solid #008CD9;
-  width: 100%;
-  overflow: auto;
-}
+  font-size: 35px;
 
-.private-message-a-chat {
-  height: 40px;
-}
-
-.private-message-bottom {
-  border-bottom: 1px solid #008CD9;
+  @media screen and (max-width: 500px) {
+    font-size: 30px;
+  }
 }
 
 .private-message-chat-time,
 .private-message-chat-status {
   font-size: 15px;
   color: #999;
-  text-align: right;
-  width: 20%;
 }
-
-
-.private-message-chat-time{
-  vertical-align: top; 
-}
-
-.private-message-chat-status {
-  vertical-align: bottom; 
-}
-
 
 .private-message-chat-name {
   color: #008CD9;
   font-size: 20px;
-  vertical-align: top; 
-  width: 60%;
 }
-
 
 .private-message-chat-text {
   font-size: 20px;
-  vertical-align: bottom;
   max-width: 0;
   white-space: nowrap; 
   overflow: hidden; 

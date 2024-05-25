@@ -179,8 +179,8 @@ export default function Chatroom() {
     }, [hostname, chatid, token]);
 
     return (
-        <div>
-            {chatData && (
+        <>
+            {chatData ? (
                 <>
                     <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload} />
                     <ChatRoomInput
@@ -191,8 +191,8 @@ export default function Chatroom() {
                         handleFileInputChange={handleFileInputChange}
                     />
                 </>
-            )}
-            {!chatData && <Spin />}
-        </div>
+            )
+            : <Spin />}
+        </>
     );
 }
