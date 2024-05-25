@@ -7,7 +7,7 @@ const { validatePut } = require("../middlewares/post");
 const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
-const common = require('./common');
+const common = require("./common");
 const getReactionInfo = common.getReactionInfo;
 // const sharp = require('sharp');  // 還沒有用到的模組，但有些人載入似乎會有問題，所以先comment掉
 
@@ -20,12 +20,13 @@ const getAllPosts = async (req, res, next) => {
     events = await Event.find({}, { event_pic: 0 });
     products = await Product.find({}, { product_pic: 0 });
 
-    result = formatContentList(articles, events, products, { withPhoto: false })
+    result = formatContentList(articles, events, products, {
+      withPhoto: false,
+    });
 
     if (result.length <= 0) {
       return res.status(500).json({ message: "資料庫中無任何內容" });
     }
-
   } catch (err) {
     return next(err);
   }
@@ -42,7 +43,11 @@ const getPostDetail = async (req, res, next) => {
       return res.status(404).json({ message: "找不到此文章" });
     }
 
-    let {isLiked, isSaved, saveList} = await getReactionInfo(article, userId, "Article");
+    let { isLiked, isSaved, saveList } = await getReactionInfo(
+      article,
+      userId,
+      "Article"
+    );
 
     // 取得評論資料
     const commentList = await getCommentList(pid);
@@ -63,6 +68,8 @@ const getPostDetail = async (req, res, next) => {
       type: "post",
       coverPhoto: convertToBase64(article.article_pic),
       location: article.location,
+      article_region_en: article.article_region_en,
+      article_region_zh: article.article_region_zh,
       datetime: article.post_date,
       creator_id: article.creator_id,
       creator_username: member.username,
@@ -93,12 +100,13 @@ const getUserPosts = async (req, res, next) => {
     events = await Event.find({ creator_id: searchId }, { event_pic: 0 });
     products = await Product.find({ creator_id: searchId }, { product_pic: 0 });
 
-    result = formatContentList(articles, events, products, { withPhoto: false });
-    
+    result = formatContentList(articles, events, products, {
+      withPhoto: false,
+    });
+
     if (result.length <= 0) {
       return res.status(500).json({ message: "使用者無創建任何內容" });
     }
-
   } catch (err) {
     return next(err);
   }
@@ -128,9 +136,9 @@ const createPost = async (req, res, next) => {
     }
     const article_pic = req.file
       ? {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      }
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
+        }
       : null;
     let newPost = new Article({
       article_title: post.title,
@@ -171,9 +179,9 @@ const updatePost = async (req, res, next) => {
   }
   const article_pic = req.file
     ? {
-      data: req.file.buffer,
-      contentType: req.file.mimetype,
-    }
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      }
     : null;
   const updates = {
     article_title: req.body.title,
@@ -332,7 +340,9 @@ const likePost = async (req, res, next) => {
     post = await model.findByIdAndUpdate(pid, {
       like_by_user_ids: like_list,
     });
-    res.status(200).json({ message: res_message, like_count: like_list.length });
+    res
+      .status(200)
+      .json({ message: res_message, like_count: like_list.length });
   } catch (err) {
     if (err.name === "CastError") {
       return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
@@ -348,10 +358,15 @@ async function getCommentList(pid) {
   }
   try {
     const comments = await Comment.find({ _id: { $in: post.comment_ids } });
-    const creatorList = comments?.map(item => item.commentor_id);
-    const creatorInfo = await Member.find({ _id: { $in: creatorList } }, { username: 1, photo: 1 });
-    const result = comments.map(comment => {
-      const info = creatorInfo.find(info => info._id.equals(comment.commentor_id));
+    const creatorList = comments?.map((item) => item.commentor_id);
+    const creatorInfo = await Member.find(
+      { _id: { $in: creatorList } },
+      { username: 1, photo: 1 }
+    );
+    const result = comments.map((comment) => {
+      const info = creatorInfo.find((info) =>
+        info._id.equals(comment.commentor_id)
+      );
       return {
         _id: comment._id,
         comment_content: comment.content,
@@ -361,7 +376,6 @@ async function getCommentList(pid) {
       };
     });
     return result;
-
   } catch (err) {
     throw new Error(err);
   }
@@ -544,26 +558,37 @@ const searchPosts = async (req, res) => {
     // 正則表達，'i'代表不區分大小寫
     const searchRegex = new RegExp(keyword, "i");
 
-    let articles = await Article.find({
-      $or: [
-        { article_title: { $regex: searchRegex } },
-        { content: { $regex: searchRegex } },
-      ],
-    }, { article_pic: 0 });
-    let events = await Event.find({
-      $or: [
-        { event_title: { $regex: searchRegex } },
-        { event_intro: { $regex: searchRegex } },
-      ],
-    }, { event_pic: 0 });
-    let products = await Product.find({
-      $or: [
-        { product_title: { $regex: searchRegex } },
-        { description: { $regex: searchRegex } },
-      ],
-    }, { product_pic: 0 });
+    let articles = await Article.find(
+      {
+        $or: [
+          { article_title: { $regex: searchRegex } },
+          { content: { $regex: searchRegex } },
+        ],
+      },
+      { article_pic: 0 }
+    );
+    let events = await Event.find(
+      {
+        $or: [
+          { event_title: { $regex: searchRegex } },
+          { event_intro: { $regex: searchRegex } },
+        ],
+      },
+      { event_pic: 0 }
+    );
+    let products = await Product.find(
+      {
+        $or: [
+          { product_title: { $regex: searchRegex } },
+          { description: { $regex: searchRegex } },
+        ],
+      },
+      { product_pic: 0 }
+    );
 
-    result = formatContentList(articles, events, products, { withPhoto: false });
+    result = formatContentList(articles, events, products, {
+      withPhoto: false,
+    });
 
     if (result.length === 0) {
       return res.status(200).json({ message: "資料庫中無任何內容" });
@@ -594,28 +619,36 @@ const chunkedImage = async (req, res, next) => {
 
   // 初始化响应头，设置为分块传输编码
   res.writeHead(200, {
-    'Content-Type': 'application/json',
-    'Transfer-Encoding': 'chunked'
+    "Content-Type": "application/json",
+    "Transfer-Encoding": "chunked",
   });
 
   let startIndex = 0;
   try {
-
     while (startIndex < imageIds.length) {
       const batchIds = imageIds.slice(startIndex, startIndex + BATCH_SIZE);
-      console.log('Processing batchIds:', batchIds); // 確認當前批次的 ID
+      console.log("Processing batchIds:", batchIds); // 確認當前批次的 ID
       // 使用 Promise.all 並行執行三個查詢
       const [articleImages, eventImages, productImages] = await Promise.all([
         Article.find({ _id: { $in: batchIds } }, { _id: 1, article_pic: 1 }),
         Event.find({ _id: { $in: batchIds } }, { _id: 1, event_pic: 1 }),
-        Product.find({ _id: { $in: batchIds } }, { _id: 1, product_pic: 1 })
+        Product.find({ _id: { $in: batchIds } }, { _id: 1, product_pic: 1 }),
       ]);
 
       // 合併結果
       const images = [
-        ...articleImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.article_pic) })),
-        ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
-        ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
+        ...articleImages.map((img) => ({
+          pid: img._id,
+          coverPhoto: convertToBase64(img.article_pic),
+        })),
+        ...eventImages.map((img) => ({
+          pid: img._id,
+          coverPhoto: convertToBase64(img.event_pic),
+        })),
+        ...productImages.map((img) => ({
+          pid: img._id,
+          coverPhoto: convertToBase64(img.product_pic),
+        })),
       ];
       // 如果找到了圖片，將其寫入响应
       //console.log(images);
@@ -630,7 +663,7 @@ const chunkedImage = async (req, res, next) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   } finally {
     // 結束响应
     res.end();
@@ -643,14 +676,23 @@ const getImage = async (req, res) => {
     const [articleImages, eventImages, productImages] = await Promise.all([
       Article.find({ _id: { $in: imageIds } }, { _id: 1, article_pic: 1 }),
       Event.find({ _id: { $in: imageIds } }, { _id: 1, event_pic: 1 }),
-      Product.find({ _id: { $in: imageIds } }, { _id: 1, product_pic: 1 })
+      Product.find({ _id: { $in: imageIds } }, { _id: 1, product_pic: 1 }),
     ]);
 
     // 合併結果
     const images = [
-      ...articleImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.article_pic) })),
-      ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
-      ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
+      ...articleImages.map((img) => ({
+        pid: img._id,
+        coverPhoto: convertToBase64(img.article_pic),
+      })),
+      ...eventImages.map((img) => ({
+        pid: img._id,
+        coverPhoto: convertToBase64(img.event_pic),
+      })),
+      ...productImages.map((img) => ({
+        pid: img._id,
+        coverPhoto: convertToBase64(img.product_pic),
+      })),
     ];
     // 測試壓縮圖片用的
     // let post = await Article.findById("6648f06ee94efb2b30f6521c");
@@ -661,21 +703,18 @@ const getImage = async (req, res) => {
     // post = await Article.findByIdAndUpdate("6648e7645fe4372dd1c6f444", updates, { new: true });
     // console.log("post", post.article_pic);
     return res.status(200).json({ images });
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
-    return res.status(500).send('Server Error');
+    return res.status(500).send("Server Error");
   }
 };
-
-
 
 async function compressImage(image) {
   let photoBase64 = null;
   try {
     if (image && image.contentType) {
       const base64Data = image.data; // 从数据库中获取的 Base64 数据
-      const imageBuffer = Buffer.from(base64Data, 'base64');
+      const imageBuffer = Buffer.from(base64Data, "base64");
 
       const compressedBuffer = await sharp(imageBuffer)
         .resize({ width: 50, withoutEnlargement: true }) // 调整宽度以压缩图片，保持合适的大小
@@ -685,20 +724,19 @@ async function compressImage(image) {
 
       // photoBase64 = `data:${image.contentType};base64,${compressedBuffer.toString('base64')}`;
       image = {
-        data: compressedBuffer.toString('base64'),
-        contentType: 'image/jpeg'
-      }
-      return image
+        data: compressedBuffer.toString("base64"),
+        contentType: "image/jpeg",
+      };
+      return image;
       // return photoBase64;
     }
   } catch (error) {
-    console.error('Error compressing image:', error);
-    throw new Error('Image compression failed');
+    console.error("Error compressing image:", error);
+    throw new Error("Image compression failed");
   }
 }
 
 function formatContentList(articles, events, products, withPhoto) {
-
   let result = [];
   // 抽取文章需要的資訊並統一格式
   articles.forEach((article) => {
@@ -709,6 +747,8 @@ function formatContentList(articles, events, products, withPhoto) {
       type: "post",
       coverPhoto: withPhoto ? convertToBase64(article.article_pic) : null,
       location: article.location,
+      article_region_en: article.article_region_en,
+      article_region_zh: article.article_region_zh,
       datetime: article.post_date,
     };
     result.push(item);
@@ -723,6 +763,8 @@ function formatContentList(articles, events, products, withPhoto) {
       type: "tour",
       coverPhoto: withPhoto ? convertToBase64(event.event_pic) : null,
       location: event.location,
+      destination_en: event.destination_en,
+      destination_zh: event.destination_zh,
       datetime: event.start_time,
       currency: event.currency,
       budget: event.budget,
@@ -745,6 +787,8 @@ function formatContentList(articles, events, products, withPhoto) {
       type: "trans",
       coverPhoto: withPhoto ? convertToBase64(product.product_pic) : null,
       location: product.location,
+      transaction_region_en: product.transaction_region_en,
+      transaction_region_zh: product.transaction_region_zh,
       datetime: product.post_time,
       currency: product.currency,
       price: product.price,
@@ -761,7 +805,6 @@ function formatContentList(articles, events, products, withPhoto) {
   });
   return result;
 }
-
 
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
