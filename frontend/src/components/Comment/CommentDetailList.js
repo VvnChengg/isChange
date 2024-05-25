@@ -63,11 +63,11 @@ function CommentDetailList({ pid, comments }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <div className='comment-name' style={{textAlign:'left'}}>{comment.username}</div>
                       <div className='comment-text' style={{textAlign:'left'}}>
-                        {comment.content}
+                        {comment.comment_content}
                       </div>
                     </div>
                   </div>
-                  <div className='comment-time'>{formatDate(comment.created_at)}</div>
+                  <div className='comment-time'>{formatDate(comment.comment_created_at)}</div>
                   {/* <DeleteButton onClick={(event) => onDelete(post._id, post.type, event)} /> */}
               </div>
             ))}

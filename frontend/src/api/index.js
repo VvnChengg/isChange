@@ -163,7 +163,7 @@ export const api = {
     getPostDetail: (pID) => {
         const user_id = window.localStorage.getItem('user_id');
         return axios.get(`${hostname}/post/detail/${pID}`, {
-            params: {
+            query: {
                 userId: user_id,
             }
         })
@@ -200,7 +200,7 @@ export const api = {
     commentPost: (comment) => {
         const token = window.localStorage.getItem('access_token');
         const userID = window.localStorage.getItem('user_id');
-        const pid = comment.pID;
+        const pid = comment.pid;
         const content = comment.content;
         const datetime = comment.datetime;
         return (
