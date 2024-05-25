@@ -3,11 +3,11 @@ const Article = require("../models/article");
 const Product = require("../models/product");
 require("dotenv").config(); // 加了這行就可以抓到 ipdata api key
 
+
 // filter：取得附近文章、揪團、商品
 const filterDistanceAll = async (req, res) => {
   const { longitude, latitude } = req.body;
   const { radius } = req.query;
-  // console.log(longitude, latitude, radius);
   const radius_int = parseInt(radius);
   try {
     // 取得文章資訊
@@ -29,7 +29,7 @@ const filterDistanceAll = async (req, res) => {
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
-          coverPhoto: "$article_pic",
+          // coverPhoto: "$article_pic",
           location: "$location",
           article_region_en: "$article_region_en",
           article_region_zh: "$article_region_zh",
@@ -58,7 +58,7 @@ const filterDistanceAll = async (req, res) => {
           title: "$event_title",
           content: "$event_intro",
           type: { $literal: "tour" },
-          event_pic: "$event_pic",
+          // event_pic: "$event_pic",
           location: "$location",
           destination_en: "$destination_en",
           destination_zh: "$destination_zh",
@@ -93,7 +93,7 @@ const filterDistanceAll = async (req, res) => {
           title: "$product_title",
           content: "$description",
           type: { $literal: "trans" },
-          coverPhoto: "$product_pic",
+          // coverPhoto: "$product_pic",
           location: "$location",
           transaction_region_en: "$transaction_region_en",
           transaction_region_zh: "$transaction_region_zh",
@@ -150,7 +150,7 @@ const sortDistanceAll = async (req, res) => {
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
-          coverPhoto: "$article_pic",
+          // coverPhoto: "$article_pic",  
           location: "$location",
           article_region_en: "$article_region_en",
           article_region_zh: "$article_region_zh",
@@ -179,7 +179,7 @@ const sortDistanceAll = async (req, res) => {
           title: "$event_title",
           content: "$event_intro",
           type: { $literal: "tour" },
-          event_pic: "$event_pic",
+          // event_pic: "$event_pic",
           location: "$location",
           destination_en: "$destination_en",
           destination_zh: "$destination_zh",
@@ -214,7 +214,7 @@ const sortDistanceAll = async (req, res) => {
           title: "$product_title",
           content: "$description",
           type: { $literal: "trans" },
-          coverPhoto: "$product_pic",
+          // coverPhoto: "$product_pic",
           location: "$location",
           transaction_region_en: "$transaction_region_en",
           transaction_region_zh: "$transaction_region_zh",

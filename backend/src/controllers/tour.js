@@ -1,5 +1,7 @@
 const TourModel = require("../models/event.js");
 const MemberModel = require("../models/member.js");
+const common = require('./common');
+const getReactionInfo = common.getReactionInfo;
 
 class tourApi {
   async createTour(req, res) {
@@ -75,7 +77,15 @@ class tourApi {
   async checkTourDetail(req, res) {
     try {
       const { eid } = req.params;
+      const { userId } = req.query;
       const tourDetail = await TourModel.findById(eid);
+
+      if (!tourDetail) {
+        return res.status(404).json({
+          success: false,
+          message: "找不到該揪團",
+        });
+      }
 
       // Convert image data to base64
       let photoBase64 = null;
@@ -85,16 +95,19 @@ class tourApi {
         };base64,${tourDetail.event_pic.data.toString("base64")}`;
       }
 
-      let responseTour = tourDetail.toObject(); // Convert the Mongoose document to a plain JavaScript object
-      delete tourDetail.event_pic;
-      tourDetail.event_pic = photoBase64;
+      let {isLiked, isSaved, saveList} = await getReactionInfo(tourDetail, userId, "Event");
 
-      if (!tourDetail) {
-        return res.status(404).json({
-          success: false,
-          message: "找不到該揪團",
-        });
-      }
+      let responseTour = tourDetail.toObject(); // Convert the Mongoose document to a plain JavaScript object
+      delete responseTour.event_pic;
+
+      responseTour = {
+        ...responseTour,
+        event_pic: photoBase64,
+        like_count: responseTour.like_by_user_ids.length,
+        save_count: saveList.length,
+        is_liked: isLiked >= 0 ? true : false, // 使用者是否有按讚
+        is_saved: isSaved > 0 ? true : false, // 使用者是否有收藏
+      };
 
       // 取得揪團發布者的資料
       const member = await MemberModel.findById(tourDetail.creator_id);
@@ -141,7 +154,7 @@ class tourApi {
       delete responseTour.event_pic;
       responseTour.event_pic = photoBase64;
 
-      if (userId != tour.creator_id) {
+      if (userId.toString() !== tour.creator_id.toString()) {
         return res.status(401).json({
           success: false,
           message: "沒有權限編輯該揪團",
@@ -179,7 +192,7 @@ class tourApi {
             contentType: req.file.mimetype,
           }
         : null; // 判斷是否有文件被上傳
-        
+
       let { location, destination_en, destination_zh } = req.body;
       if (typeof location === "string") {
         location = JSON.parse(location);
@@ -202,7 +215,7 @@ class tourApi {
 
       const tour = await TourModel.findById(eid);
 
-      if (!userId.equals(tour.creator_id)) {
+      if (userId.toString() !== tour.creator_id.toString()) {
         console.log("userId", userId);
         return res.status(401).json({
           success: false,
@@ -238,7 +251,7 @@ class tourApi {
 
       // 檢查編輯者是否為該揪團的創建者
       const tour = await TourModel.findById(event_id);
-      if (userId != tour.creator_id) {
+      if (userId.toString() !== tour.creator_id.toString()) {
         return res.status(401).json({
           success: false,
           message: "沒有權限編輯該揪團",

@@ -7,78 +7,25 @@ const { validatePut } = require("../middlewares/post");
 const { default: mongoose } = require("mongoose");
 const moment = require("moment");
 const Favorite = require("../models/favorite");
+const common = require('./common');
+const getReactionInfo = common.getReactionInfo;
+// const sharp = require('sharp');  // 還沒有用到的模組，但有些人載入似乎會有問題，所以先comment掉
 
 const getAllPosts = async (req, res, next) => {
   let articles, events, products;
   let result = [];
   try {
     // 取得所有文章、活動、商品資訊
-    articles = await Article.find({});
-    events = await Event.find({});
-    products = await Product.find({});
+    articles = await Article.find({}, { article_pic: 0 });
+    events = await Event.find({}, { event_pic: 0 });
+    products = await Product.find({}, { product_pic: 0 });
 
-    // 抽取文章需要的資訊並統一格式
-    articles.forEach((article) => {
-      const item = {
-        _id: article._id,
-        title: article.article_title,
-        content: article.content,
-        type: "post",
-        coverPhoto: convertToBase64(article.article_pic),
-        // location: article.location,
-        datetime: article.post_date,
-      };
-      result.push(item);
-    });
+    result = formatContentList(articles, events, products, { withPhoto: false })
 
-    // 抽取活動需要的資訊並統一格式
-    events.forEach((event) => {
-      const item = {
-        _id: event._id,
-        title: event.event_title,
-        content: event.event_intro,
-        type: "tour",
-        coverPhoto: convertToBase64(event.event_pic),
-        // location: event.location,
-        datetime: event.start_time,
-        currency: event.currency,
-        budget: event.budget,
-        end_time: event.end_time,
-        people_lb: event.people_lb,
-        people_ub: event.people_ub,
-        status: event.status,
-      };
-      result.push(item);
-    });
-
-    // 抽取商品需要的資訊並統一格式
-    products.forEach((product) => {
-      const item = {
-        _id: product._id,
-        title: product.product_title,
-        content: product.description,
-        transaction_region_zh: product.transaction_region_zh,
-        transaction_region_en: product.transaction_region_en,
-        type: "trans",
-        coverPhoto: convertToBase64(product.product_pic),
-        // location: product.location,
-        datetime: product.post_time,
-        currency: product.currency,
-        price: product.price,
-        productType: product.product_type,
-        period: product.period,
-        status: product.status,
-        transactionWay: product.transaction_way,
-      };
-      result.push(item);
-    });
     if (result.length <= 0) {
       return res.status(500).json({ message: "資料庫中無任何內容" });
     }
-    // 依時間倒序排序
-    result.sort((a, b) => {
-      return new Date(b.datetime) - new Date(a.datetime);
-    });
+
   } catch (err) {
     return next(err);
   }
@@ -87,22 +34,15 @@ const getAllPosts = async (req, res, next) => {
 
 const getPostDetail = async (req, res, next) => {
   const { pid } = req.params;
-  const { userId } = req.body;
+  const { userId } = req.query;
   let article, item;
   try {
     article = await Article.findById(pid);
     if (!article) {
       return res.status(404).json({ message: "找不到此文章" });
     }
-    // 取得按讚、收藏資料
-    const isLiked = article.like_by_user_ids.indexOf(userId);
-    const saveList = await Favorite.find({
-      item_id: pid,
-      save_type: "Article",
-    });
-    const isSaved = saveList.filter((save) =>
-      save.user_id.equals(userId)
-    ).length;
+
+    let {isLiked, isSaved, saveList} = await getReactionInfo(article, userId, "Article");
 
     // 取得評論資料
     const commentList = await getCommentList(pid);
@@ -122,7 +62,7 @@ const getPostDetail = async (req, res, next) => {
       content: article.content,
       type: "post",
       coverPhoto: convertToBase64(article.article_pic),
-      // location: article.location,
+      location: article.location,
       datetime: article.post_date,
       creator_id: article.creator_id,
       creator_username: member.username,
@@ -131,6 +71,8 @@ const getPostDetail = async (req, res, next) => {
       is_liked: isLiked >= 0 ? true : false, // 使用者是否有按讚
       is_saved: isSaved > 0 ? true : false, // 使用者是否有收藏
       comment_list: commentList, // 評論串
+      article_region_en: article.article_region_en,
+      article_region_zh: article.article_region_zh,
     };
   } catch (error) {
     if (error.name === "CastError") {
@@ -147,73 +89,20 @@ const getUserPosts = async (req, res, next) => {
   const searchId = req.params.uid;
   // const uId = req.body.userId;
   try {
-    articles = await Article.find({ creator_id: searchId });
-    events = await Event.find({ creator_id: searchId });
-    products = await Product.find({ creator_id: searchId });
+    articles = await Article.find({ creator_id: searchId }, { article_pic: 0 });
+    events = await Event.find({ creator_id: searchId }, { event_pic: 0 });
+    products = await Product.find({ creator_id: searchId }, { product_pic: 0 });
 
-    // 抽取文章需要的資訊並統一格式
-    articles.forEach((article) => {
-      const item = {
-        _id: article._id,
-        title: article.article_title,
-        content: article.content,
-        type: "post",
-        coverPhoto: convertToBase64(article.article_pic),
-        // location: article.location,
-        datetime: article.post_date,
-      };
-      result.push(item);
-    });
+    result = formatContentList(articles, events, products, { withPhoto: false });
+    
+    if (result.length <= 0) {
+      return res.status(500).json({ message: "使用者無創建任何內容" });
+    }
 
-    events.forEach((event) => {
-      const item = {
-        _id: event._id,
-        title: event.event_title,
-        content: event.event_intro,
-        type: "tour",
-        coverPhoto: convertToBase64(event.event_pic),
-        // location: event.location,
-        datetime: event.start_time,
-        currency: event.currency,
-        budget: event.budget,
-        end_time: event.end_time,
-        people_lb: event.people_lb,
-        people_ub: event.people_ub,
-        status: event.status,
-      };
-      result.push(item);
-    });
-
-    // 抽取商品需要的資訊並統一格式
-    products.forEach((product) => {
-      const item = {
-        _id: product._id,
-        title: product.product_title,
-        content: product.description,
-        type: "trans",
-        coverPhoto: convertToBase64(product.product_pic),
-        // location: product.location,
-        datetime: product.post_time,
-        currency: product.currency,
-        price: product.price,
-        product_type: product.product_type,
-        period: product.period,
-        status: product.status,
-        transaction_way: product.transaction_way,
-      };
-      result.push(item);
-    });
-
-    // 依時間倒序排序
-    result.sort((a, b) => {
-      return new Date(b.datetime) - new Date(a.datetime);
-    });
   } catch (err) {
     return next(err);
   }
-  if (result.length <= 0) {
-    return res.status(500).json({ message: "使用者無創建任何內容" });
-  }
+
   return res.status(200).json({ result });
 };
 
@@ -239,9 +128,9 @@ const createPost = async (req, res, next) => {
     }
     const article_pic = req.file
       ? {
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-        }
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      }
       : null;
     let newPost = new Article({
       article_title: post.title,
@@ -282,9 +171,9 @@ const updatePost = async (req, res, next) => {
   }
   const article_pic = req.file
     ? {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      }
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    }
     : null;
   const updates = {
     article_title: req.body.title,
@@ -292,6 +181,7 @@ const updatePost = async (req, res, next) => {
     article_region_en: article_region_en,
     article_region_zh: article_region_zh,
     content: req.body.content,
+    article_pic: article_pic,
     status: req.body.status,
   };
   let post = await Article.findById(pid);
@@ -310,7 +200,7 @@ const updatePost = async (req, res, next) => {
     }
 
     // 檢查使用者是否有權限編輯文章
-    if (!post.creator_id.equals(uId)) {
+    if (post.creator_id.toString() !== uId.toString()) {
       return res.status(401).json({ message: "您沒有權限編輯此文章" });
     }
 
@@ -370,7 +260,7 @@ const deleteContent = async (req, res, next) => {
     }
 
     // 檢查使用者是否有權限刪除文章
-    if (!deleteItem.creator_id.equals(userId)) {
+    if (deleteItem.creator_id.toString() !== userId.toString()) {
       return res.status(401).json({ message: "您沒有權限刪除此" + itemType });
     }
     deleteItem = await model.findByIdAndDelete(id);
@@ -387,26 +277,42 @@ const deleteContent = async (req, res, next) => {
 
 const likePost = async (req, res, next) => {
   const pid = req.params.pid;
-  const uId = req.body.userId;
+  const { userId, type } = req.body;
   let res_message = "";
 
   if (!pid) {
-    return res.status(400).json({ message: "請傳入文章id" });
+    return res.status(400).json({ message: "請傳入要按讚的內容id" });
   }
 
   try {
     // 從資料庫取得貼文內容
-    let post = await Article.findById(pid);
+
+    switch (type) {
+      case "post":
+        model = Article;
+        break;
+      case "trans":
+        model = Product;
+        break;
+      case "tour":
+        model = Event;
+        break;
+      default:
+        return res
+          .status(400)
+          .json({ message: "輸入的 type 不正確，請使用 post, trans 或 tour" });
+    }
+    let post = await model.findById(pid);
 
     if (!post) {
-      return res.status(404).json({ message: "貼文不存在" });
+      return res.status(404).json({ message: "找不到指定id的內容" });
     }
 
     // 存取按讚人員清單
     let like_list = post.like_by_user_ids;
 
     // 尋找目前使用者是否在清單中，是 -> 回傳索引值； 否 -> 回傳 -1
-    const liked = like_list.indexOf(uId);
+    let liked = like_list.indexOf(userId);
 
     if (liked > -1) {
       // 使用者原本有按讚
@@ -414,15 +320,19 @@ const likePost = async (req, res, next) => {
       res_message = "成功取消按讚";
     } else {
       // 使用者原本沒按讚
-      like_list.splice(like_list.length, 0, new mongoose.Types.ObjectId(uId));
+      like_list.splice(
+        like_list.length,
+        0,
+        new mongoose.Types.ObjectId(userId)
+      );
       res_message = "成功按讚";
     }
 
     // 更新資料庫內容
-    post = await Article.findByIdAndUpdate(pid, {
+    post = await model.findByIdAndUpdate(pid, {
       like_by_user_ids: like_list,
     });
-    res.status(200).json({ message: res_message });
+    res.status(200).json({ message: res_message, like_count: like_list.length });
   } catch (err) {
     if (err.name === "CastError") {
       return res.status(400).json({ message: "pid 無法轉換成 ObjectId" });
@@ -438,7 +348,20 @@ async function getCommentList(pid) {
   }
   try {
     const comments = await Comment.find({ _id: { $in: post.comment_ids } });
-    return comments;
+    const creatorList = comments?.map(item => item.commentor_id);
+    const creatorInfo = await Member.find({ _id: { $in: creatorList } }, { username: 1, photo: 1 });
+    const result = comments.map(comment => {
+      const info = creatorInfo.find(info => info._id.equals(comment.commentor_id));
+      return {
+        _id: comment._id,
+        comment_content: comment.content,
+        comment_created_at: comment.created_at,
+        username: info ? info.username : null,
+        photo: info ? convertToBase64(info.photo) : null,
+      };
+    });
+    return result;
+
   } catch (err) {
     throw new Error(err);
   }
@@ -543,7 +466,6 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
-          coverPhoto: "$article_pic",
           location: "$article_region",
           datetime: "$post_date",
           likesCount: {
@@ -561,6 +483,12 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           type: { $literal: "tour" },
           location: "$destination",
           datetime: "$start_time",
+          currency: "$currency",
+          budget: "$budget",
+          end_time: "$end_time",
+          people_lb: "$people_lb",
+          people_ub: "$people_ub",
+          status: "$status",
           likesCount: {
             $size: { $ifNull: ["$like_by_user_ids", []] }, // 如果 like_by_user_ids 不存在，使用空数组
           },
@@ -574,9 +502,14 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
           title: "$product_title",
           content: "$description",
           type: { $literal: "trans" },
-          coverPhoto: "$product_pic",
           location: "$transaction_region",
           datetime: "$post_time",
+          currency: "$currency",
+          price: "$price",
+          productType: "$product_type",
+          period: "$period",
+          status: "$status",
+          transactionWay: "$transaction_way",
           likesCount: {
             $size: { $ifNull: ["$like_by_user_ids", []] }, // 如果 like_by_user_ids 不存在，使用空数组
           },
@@ -616,79 +549,25 @@ const searchPosts = async (req, res) => {
         { article_title: { $regex: searchRegex } },
         { content: { $regex: searchRegex } },
       ],
-    });
+    }, { article_pic: 0 });
     let events = await Event.find({
       $or: [
         { event_title: { $regex: searchRegex } },
         { event_intro: { $regex: searchRegex } },
       ],
-    });
+    }, { event_pic: 0 });
     let products = await Product.find({
       $or: [
         { product_title: { $regex: searchRegex } },
         { description: { $regex: searchRegex } },
       ],
-    });
+    }, { product_pic: 0 });
 
-    articles.forEach((article) => {
-      const item = {
-        _id: article._id,
-        title: article.article_title,
-        content: article.content,
-        type: "post",
-        coverPhoto: convertToBase64(article.article_pic),
-        // location: article.location,
-        datetime: article.post_date,
-      };
-      result.push(item);
-    });
-
-    events.forEach((event) => {
-      const item = {
-        _id: event._id,
-        title: event.event_title,
-        content: event.event_intro,
-        type: "tour",
-        coverPhoto: convertToBase64(event.event_pic),
-        // location: event.location,
-        datetime: event.start_time,
-        currency: event.currency,
-        budget: event.budget,
-        end_time: event.end_time,
-        people_lb: event.people_lb,
-        people_ub: event.people_ub,
-        status: event.status,
-      };
-      result.push(item);
-    });
-
-    products.forEach((product) => {
-      const item = {
-        _id: product._id,
-        title: product.product_title,
-        content: product.description,
-        type: "trans",
-        coverPhoto: convertToBase64(product.product_pic),
-        // location: product.location,
-        datetime: product.post_time,
-        currency: product.currency,
-        price: product.price,
-        product_type: product.product_type,
-        period: product.period,
-        status: product.status,
-        transaction_way: product.transaction_way,
-      };
-      result.push(item);
-    });
+    result = formatContentList(articles, events, products, { withPhoto: false });
 
     if (result.length === 0) {
       return res.status(200).json({ message: "資料庫中無任何內容" });
     }
-
-    // 依時間倒序排序
-    result.sort((a, b) => {
-      return new Date(b.datetime) - new Date(a.datetime);
-    });
 
     return res.status(200).json({ result });
   } catch (err) {
@@ -708,6 +587,182 @@ function convertToBase64(image) {
   return photoBase64;
 }
 
+const chunkedImage = async (req, res, next) => {
+  const { imageIds } = req.body;
+  const BATCH_SIZE = 2;
+  console.log("imageIds: ", imageIds);
+
+  // 初始化响应头，设置为分块传输编码
+  res.writeHead(200, {
+    'Content-Type': 'application/json',
+    'Transfer-Encoding': 'chunked'
+  });
+
+  let startIndex = 0;
+  try {
+
+    while (startIndex < imageIds.length) {
+      const batchIds = imageIds.slice(startIndex, startIndex + BATCH_SIZE);
+      console.log('Processing batchIds:', batchIds); // 確認當前批次的 ID
+      // 使用 Promise.all 並行執行三個查詢
+      const [articleImages, eventImages, productImages] = await Promise.all([
+        Article.find({ _id: { $in: batchIds } }, { _id: 1, article_pic: 1 }),
+        Event.find({ _id: { $in: batchIds } }, { _id: 1, event_pic: 1 }),
+        Product.find({ _id: { $in: batchIds } }, { _id: 1, product_pic: 1 })
+      ]);
+
+      // 合併結果
+      const images = [
+        ...articleImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.article_pic) })),
+        ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
+        ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
+      ];
+      // 如果找到了圖片，將其寫入响应
+      //console.log(images);
+      if (images.length > 0) {
+        res.write(JSON.stringify(images));
+        res.write("\n"); // 每批之間增加一個換行符作為分隔
+      }
+
+      // 更新起始索引
+      startIndex += BATCH_SIZE;
+      // await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  } finally {
+    // 結束响应
+    res.end();
+  }
+};
+
+const getImage = async (req, res) => {
+  const { imageIds } = req.body;
+  try {
+    const [articleImages, eventImages, productImages] = await Promise.all([
+      Article.find({ _id: { $in: imageIds } }, { _id: 1, article_pic: 1 }),
+      Event.find({ _id: { $in: imageIds } }, { _id: 1, event_pic: 1 }),
+      Product.find({ _id: { $in: imageIds } }, { _id: 1, product_pic: 1 })
+    ]);
+
+    // 合併結果
+    const images = [
+      ...articleImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.article_pic) })),
+      ...eventImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.event_pic) })),
+      ...productImages.map(img => ({ pid: img._id, coverPhoto: convertToBase64(img.product_pic) }))
+    ];
+    // 測試壓縮圖片用的
+    // let post = await Article.findById("6648f06ee94efb2b30f6521c");
+    // let updates = {
+    //   article_pic: await compressImage(post.article_pic)
+    // };
+    // console.log("updates.article_pic", post.article_pic);
+    // post = await Article.findByIdAndUpdate("6648e7645fe4372dd1c6f444", updates, { new: true });
+    // console.log("post", post.article_pic);
+    return res.status(200).json({ images });
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).send('Server Error');
+  }
+};
+
+
+
+async function compressImage(image) {
+  let photoBase64 = null;
+  try {
+    if (image && image.contentType) {
+      const base64Data = image.data; // 从数据库中获取的 Base64 数据
+      const imageBuffer = Buffer.from(base64Data, 'base64');
+
+      const compressedBuffer = await sharp(imageBuffer)
+        .resize({ width: 50, withoutEnlargement: true }) // 调整宽度以压缩图片，保持合适的大小
+        // .toFormat('jpeg') // 选择一种常见的压缩格式，如 jpeg
+        .jpeg({ quality: 80 }) // 设置压缩质量（0-100）
+        .toBuffer();
+
+      // photoBase64 = `data:${image.contentType};base64,${compressedBuffer.toString('base64')}`;
+      image = {
+        data: compressedBuffer.toString('base64'),
+        contentType: 'image/jpeg'
+      }
+      return image
+      // return photoBase64;
+    }
+  } catch (error) {
+    console.error('Error compressing image:', error);
+    throw new Error('Image compression failed');
+  }
+}
+
+function formatContentList(articles, events, products, withPhoto) {
+
+  let result = [];
+  // 抽取文章需要的資訊並統一格式
+  articles.forEach((article) => {
+    const item = {
+      _id: article._id,
+      title: article.article_title,
+      content: article.content,
+      type: "post",
+      coverPhoto: withPhoto ? convertToBase64(article.article_pic) : null,
+      location: article.location,
+      datetime: article.post_date,
+    };
+    result.push(item);
+  });
+
+  // 抽取活動需要的資訊並統一格式
+  events.forEach((event) => {
+    const item = {
+      _id: event._id,
+      title: event.event_title,
+      content: event.event_intro,
+      type: "tour",
+      coverPhoto: withPhoto ? convertToBase64(event.event_pic) : null,
+      location: event.location,
+      datetime: event.start_time,
+      currency: event.currency,
+      budget: event.budget,
+      end_time: event.end_time,
+      people_lb: event.people_lb,
+      people_ub: event.people_ub,
+      status: event.status,
+    };
+    result.push(item);
+  });
+
+  // 抽取商品需要的資訊並統一格式
+  products.forEach((product) => {
+    const item = {
+      _id: product._id,
+      title: product.product_title,
+      content: product.description,
+      transaction_region_zh: product.transaction_region_zh,
+      transaction_region_en: product.transaction_region_en,
+      type: "trans",
+      coverPhoto: withPhoto ? convertToBase64(product.product_pic) : null,
+      location: product.location,
+      datetime: product.post_time,
+      currency: product.currency,
+      price: product.price,
+      productType: product.product_type,
+      period: product.period,
+      status: product.status,
+      transactionWay: product.transaction_way,
+    };
+    result.push(item);
+  });
+  // 依時間倒序排序
+  result.sort((a, b) => {
+    return new Date(b.datetime) - new Date(a.datetime);
+  });
+  return result;
+}
+
+
 exports.getAllPosts = getAllPosts;
 exports.getUserPosts = getUserPosts;
 exports.createPost = createPost;
@@ -719,3 +774,5 @@ exports.commentPost = commentPost;
 exports.collectProduct = collectProduct;
 exports.getAllPostsSortedByLikes = getAllPostsSortedByLikes;
 exports.searchPosts = searchPosts;
+exports.chunkedImage = chunkedImage;
+exports.getImage = getImage;

@@ -223,4 +223,26 @@ export const api = {
                 })
             )
     },
+    createTour: (tour) => {
+        const token = window.localStorage.getItem('access_token');
+
+        return (
+            axios.post(hostname + '/tour/create', tour, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(res => res.data)
+                .catch(err => err)
+        )
+    },
+    getImage: (imageIds) => {
+        //console.log(imageIds);
+        return (
+            axios.post(hostname + '/post/getPhoto'
+            ,{ imageIds: imageIds,})
+                .then(res => res.data.images)
+                .catch(err => err)
+        )
+    },
 };

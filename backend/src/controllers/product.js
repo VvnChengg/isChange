@@ -1,5 +1,7 @@
 const ProductModel = require("../models/product.js");
 const MemberModel = require("../models/member.js");
+const common = require('./common');
+const getReactionInfo = common.getReactionInfo;
 
 class productApi {
   async createProduct(req, res) {
@@ -91,7 +93,7 @@ class productApi {
       delete responseTrans.product_pic;
       responseTrans.product_pic = photoBase64;
 
-      if (user_id !== trans.creator_id.toString()) {
+      if (user_id.toString() !== trans.creator_id.toString()) {
         return res.status(401).json({
           success: false,
           message: "沒有權限編輯該交易",
@@ -158,7 +160,7 @@ class productApi {
 
       const trans = await ProductModel.findById(tid);
 
-      if (!user_id.equals(trans.creator_id)) {
+      if (user_id.toString() !== trans.creator_id.toString()) {
         return res.status(401).json({
           success: false,
           message: "沒有權限編輯該交易",
@@ -208,7 +210,7 @@ class productApi {
   async productDetail(req, res) {
     try {
       const { tid } = req.params;
-
+      const { userId } = req.query;
       const trans = await ProductModel.findById(tid);
 
       // Convert image data to base64
@@ -219,9 +221,19 @@ class productApi {
         };base64,${trans.product_pic.data.toString("base64")}`;
       }
 
+      let {isLiked, isSaved, saveList} = await getReactionInfo(trans, userId, "Product");
+
       let responseTrans = trans.toObject(); // Convert the Mongoose document to a plain JavaScript object
       delete responseTrans.product_pic;
-      responseTrans.product_pic = photoBase64;
+
+      responseTrans = {
+        ...responseTrans,
+        event_pic: photoBase64,
+        like_count: responseTrans.like_by_user_ids.length,
+        save_count: saveList.length,
+        is_liked: isLiked >= 0 ? true : false, // 使用者是否有按讚
+        is_saved: isSaved > 0 ? true : false, // 使用者是否有收藏
+      };
 
       if (!trans) {
         return res.status(404).json({
