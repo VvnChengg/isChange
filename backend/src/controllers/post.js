@@ -474,76 +474,25 @@ const collectProduct = async (req, res) => {
 const getAllPostsSortedByLikes = async (req, res, next) => {
   try {
     // 取得文章、活動、商品資訊
-    let articles = await Article.aggregate([
-      {
-        $project: {
-          title: "$article_title",
-          content: 1,
-          type: { $literal: "post" },
-          location: "$article_region",
-          datetime: "$post_date",
-          likesCount: {
-            $size: { $ifNull: ["$like_by_user_ids", []] },
-          },
-        },
-      },
-    ]);
-
-    let events = await Event.aggregate([
-      {
-        $project: {
-          title: "$event_title",
-          content: "$event_intro",
-          type: { $literal: "tour" },
-          location: "$destination",
-          datetime: "$start_time",
-          currency: "$currency",
-          budget: "$budget",
-          end_time: "$end_time",
-          people_lb: "$people_lb",
-          people_ub: "$people_ub",
-          status: "$status",
-          likesCount: {
-            $size: { $ifNull: ["$like_by_user_ids", []] }, // 如果 like_by_user_ids 不存在，使用空数组
-          },
-        },
-      },
-    ]);
-
-    let products = await Product.aggregate([
-      {
-        $project: {
-          title: "$product_title",
-          content: "$description",
-          type: { $literal: "trans" },
-          location: "$transaction_region",
-          datetime: "$post_time",
-          currency: "$currency",
-          price: "$price",
-          productType: "$product_type",
-          period: "$period",
-          status: "$status",
-          transactionWay: "$transaction_way",
-          likesCount: {
-            $size: { $ifNull: ["$like_by_user_ids", []] }, // 如果 like_by_user_ids 不存在，使用空数组
-          },
-        },
-      },
-    ]);
+    let articles = await Article.find({}, { article_pic: 0 });
+    let events = await Event.find({}, { event_pic: 0 });
+    let products = await Product.find({}, { product_pic: 0 });
 
     // 合併所有結果
-    let result = [...articles, ...events, ...products];
+    let result = formatContentList(articles, events, products, {
+      withPhoto: false,
+    });
+
+    if (result.length === 0) {
+      return res.status(500).json({ message: "資料庫中無任何內容" });
+    }
 
     // 依按讚數量倒序排序
     result.sort((a, b) => b.likesCount - a.likesCount);
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "沒有找到任何內容" });
-    }
-
-    res.status(200).json(result);
+    return res.status(200).json(result);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 };
 
