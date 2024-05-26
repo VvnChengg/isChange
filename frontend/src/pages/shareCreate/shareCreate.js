@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 
-import './shareCreate-style.css';
-
 import {
   FormInput,
   FormImage,
@@ -22,9 +20,6 @@ import { useToken } from '../../hooks/useToken';
 import { toast } from 'react-toastify';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
-
-
-
 
 export default function Share() {
   const intl = useIntl();
