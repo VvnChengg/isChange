@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function MyCollectPosts() {
     const token = useToken();
     const user_id = localStorage.getItem('user_id');
@@ -64,12 +65,12 @@ export default function MyCollectPosts() {
                     {intl.formatMessage({ id: 'home.noContent' })}
                 </NoContent>
                 :posts.map((post, index) => (
-                    <div key={`post${index}`} className="self-post-wrapper">
-                        <Post 
-                            post={post} 
-                            onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
-                        />
-                    </div>
+                    <Post
+                        key={post._id}
+                        post={post}
+                        showDivider={index !== posts.length - 1}
+                        onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
+                    />
                 ))
             }
             </PostContainer>

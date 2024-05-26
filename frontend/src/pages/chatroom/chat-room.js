@@ -9,7 +9,10 @@ import { useToken } from '../../hooks/useToken';
 import { Spin } from 'antd';
 
 import { io } from 'socket.io-client';
-const socket = io(process.env.REACT_APP_SOCKET_SERVER_URL);
+const socket = io(process.env.REACT_APP_SOCKET_SERVER_URL, {
+    path: '/socket.io',
+    transports: ['websocket'],
+});
 
 export default function Chatroom() {
     const { chatid } = useParams();
@@ -23,6 +26,9 @@ export default function Chatroom() {
     let lastExecutionTime = 0;
 
     useEffect(() => {
+        // 點進 detail 的時候，指定好 room (chatid)，之後就可以收到即時的訊息
+        socket.emit("join-room", chatid);
+
         socket.on("receive-message", newMsg => {
             setChatData(prevChatData => [...prevChatData, newMsg]);
             scrollToBottom(100);
@@ -33,7 +39,26 @@ export default function Chatroom() {
             socket.off("receive-message");
         };
     
-    }, []);
+    }, [chatid]);
+
+    useEffect(() => {
+        axios.get(`${hostname}/chat/detail/${chatid}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                setChatPhoto(response.data);
+                setChatData(response.data.messages);
+                scrollToBottom(0);
+                //console.log(response)
+
+                // console.log("[FE] A user join room:", chatid);
+            })
+            .catch(error => {
+                //console.error('API 請求失敗:', error);
+            });
+    }, [hostname, chatid, token]);
 
     const handleDownload = (imageUrl) => {
         const link = document.createElement('a');
@@ -155,32 +180,9 @@ export default function Chatroom() {
         }
     };
 
-
-
-    useEffect(() => {
-        axios.get(`${hostname}/chat/detail/${chatid}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                setChatPhoto(response.data);
-                setChatData(response.data.messages);
-                scrollToBottom(0);
-                //console.log(response)
-
-                // 點進 detail 的時候，指定好 room (chatid)，之後就可以收到即時的訊息
-                socket.emit("join-room", chatid);
-                // console.log("[FE] A user join room:", chatid);
-            })
-            .catch(error => {
-                //console.error('API 請求失敗:', error);
-            });
-    }, [hostname, chatid, token]);
-
     return (
-        <div>
-            {chatData && (
+        <>
+            {chatData ? (
                 <>
                     <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload} />
                     <ChatRoomInput
@@ -191,8 +193,8 @@ export default function Chatroom() {
                         handleFileInputChange={handleFileInputChange}
                     />
                 </>
-            )}
-            {!chatData && <Spin />}
-        </div>
+            )
+            : <Spin />}
+        </>
     );
 }

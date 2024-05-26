@@ -1,39 +1,22 @@
 .comment-container {
-  position: fixed;
-  top: 16%; /* 相對於父元素，距離頂部10% */
-  bottom: 10%; /* 相對於父元素，距離底部10% */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40%; 
+  width: 100%;
   max-height: 100vh; /* 更改最大高度 */
   overflow-y: auto; /* 添加垂直滾動條 */
-}
-
-
-.comment-title {
-  top: 2%; /* 相對於父元素，距離頂部 */
-  color: #008CD9;
-  /* font-size: 40px; */
-  font-weight: 800;
-  font-size: 28px;
-  line-height: 130%;
-
-  display: flex;
-  align-items: center;
-
-  white-space: nowrap;
-  overflow: hidden;
 }
   
 .comment-list-table {
   border-collapse: collapse;
-  border: 1px solid #008CD9;
   width: 100%;
   overflow: auto;
 }
 
 .comment-a-comment {
+  width: 100%;
   height: 40px;
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 5px;
 }
 
 .comment-bottom {
@@ -48,23 +31,6 @@
   vertical-align: top; 
 }
 
-<<<<<<< HEAD
-=======
-.private-message-chat-status {
-  vertical-align: bottom; 
-}
-
-.private-message-chat-unread{
-  display: inline-block;
-  width: 24px; /* 设置宽度 */
-  height: 24px;
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  text-align: center;
-  font-weight: bold;
-}
->>>>>>> 705d401da562d948dbd870785380de4711ba63b8
 
 .comment-name {
   color: #008CD9;
@@ -77,7 +43,6 @@
 .comment-text {
   font-size: 20px;
   vertical-align: bottom;
-  max-width: 0;
   white-space: nowrap; 
   overflow: hidden; 
   text-overflow: ellipsis; 

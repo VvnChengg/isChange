@@ -18,33 +18,33 @@ const ViewMemberPost = ({ posts, postLoading }) => {
 
   return (
     <div className={viewStyles.post}>
-        <div className={viewStyles.postContainer}>
-            <span className={viewStyles.postLabel}>
-                <FormattedMessage id='view.past' />
-            </span>
-            <div className={viewStyles.selfPostWrapper}>
-              {postLoading ?
-                <Spin />
-              : <div className={viewStyles.scrollableDiv}>
-                {posts.length === 0 ?
-                  <NoContent>
-                    {intl.formatMessage({ id: 'home.noContent' })}
-                  </NoContent>
-                  :posts.map((post, index) => (
-                    <div key={index}>
-                      <Post 
-                        post={post} 
-                        onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
-                      />
-                    </div>
-                  ))
-                }
-              </div>
+      <div className={viewStyles.postContainer}>
+        <span className={viewStyles.postLabel}>
+          <FormattedMessage id='view.past' />
+        </span>
+        <div className={viewStyles.selfPostWrapper}>
+          {postLoading ?
+            <Spin />
+            : <div className={viewStyles.scrollableDiv}>
+              {posts.length === 0 ?
+                <NoContent>
+                  {intl.formatMessage({ id: 'home.noContent' })}
+                </NoContent>
+                : posts.map((post, index) => (
+                  <Post
+                    key={post._id}
+                    post={post}
+                    showDivider={index !== posts.length - 1}
+                    onClick={() => navigate(`/${post.type}/detail/${post._id}`)}
+                  />
+                ))
               }
             </div>
+          }
         </div>
+      </div>
     </div>
-);
+  );
 };
 
 export default ViewMemberPost;

@@ -68,6 +68,8 @@ export default function CollectPost({ post, user_id, token, size}) {
                 }
             }
             
+        }else{
+            toast.error(`${intl.formatMessage({id: 'token.pleaseLogIn'})}`);
         }
     }
 
@@ -94,6 +96,9 @@ export default function CollectPost({ post, user_id, token, size}) {
     useEffect(() => {
         if(token && user_id){
             getCollectPost();
+        }else{
+            setImgSrc('/icons/collect.png');
+            setIsLoading(false);
         }
     }, [user_id, token])
 

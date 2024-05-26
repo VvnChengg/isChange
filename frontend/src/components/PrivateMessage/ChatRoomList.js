@@ -7,10 +7,14 @@ import './PrivateList.css';
 import { FormattedMessage } from 'react-intl';
 import { Spin } from 'antd';
 import Popup from '../StartPrivate/Popup';
+
 import {
-  SpinContainer,
-  NoContent,
-} from '../../pages/home/home-style';
+  ChatRoomWrapper,
+  ChatRoomContainer,
+  ChatRoomAvatar,
+  ChatRoomContent,
+  ChatRoomRow,
+} from './ChatRoomList-style';
 
 
 function formatDate(dateString) {
@@ -49,13 +53,11 @@ function ChatRoomList({ rooms }) {
       }
     };
 
-    console.log(rooms)
-
     if (rooms === undefined) {
       return( 
         <Spin />)
     } 
-    else if ( rooms === null) {
+    else if (rooms === null) {
       return (
       <div className="private-message-container"> 
         <p className="self-post-nothing-msg"> <FormattedMessage id='msg.nothingMsg' /></p>
@@ -69,40 +71,48 @@ function ChatRoomList({ rooms }) {
           <AiOutlineMail style={{ marginRight: '1vh', verticalAlign: 'middle' }}/> 
           <FormattedMessage id='msg.chatRoomTitle' />
         </h1>
-        <table className='private-message-chat-list-table'>
+        <ChatRoomWrapper>
             {rooms.map((room, index) => (
-              <React.Fragment key={`room_${index}`}>
-                <tbody className='private-message-a-chat' onClick={() => handleRoomClick(room)}>
-                <tr>
-                  <td rowSpan={2} style={{ width: '80px' }}>
-                    <img src={room.chat_to_photo||'/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} style={{ width: '100%', borderRadius: '50%'}} />
-                  </td>
-                  <td colSpan={1} className='private-message-chat-name' style={{textAlign:'left'}}>{room.chat_to_username}</td>
-                  <td colSpan={2} className='private-message-chat-time'>{formatDate(room.last_update)}</td>
-                </tr>
-                <tr className='private-message-bottom'>
-                  <td  className='private-message-chat-text' colSpan={2} style={{textAlign:'left'}}>
+              <ChatRoomContainer
+                key={`room_${index}`}
+                onClick={() => handleRoomClick(room)}
+                showBottom={index !== rooms.length - 1}
+              >
+                <ChatRoomAvatar>
+                  <img
+                    src={room.chat_to_photo || '/icons/profile.png'}
+                    alt='Avatar'
+                    onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }}
+                  />
+                </ChatRoomAvatar>
+                <ChatRoomContent>
+                  <ChatRoomRow>
+                    <div className='private-message-chat-name' style={{textAlign:'left'}}>{room.chat_to_username}</div>
+                    <div className='private-message-chat-time'>{formatDate(room.last_update)}</div>
+                  </ChatRoomRow>
+                  <ChatRoomRow>
                     {room.last_message ? 
-                      (<span>{room.last_message}</span>) 
-                      : 
-                      <span style={{ color: 'red' }}>
+                      <div>{room.last_message}</div> : 
+                      <div style={{ color: 'red' }}>
                         <FormattedMessage id='msg.userNotEntered' />
-                        </span>
+                      </div>
                     }
-                  </td>
-                  <td colSpan={1} className='private-message-chat-status'>
-                    {room.stranger === true ?
-                    <span style={{ color: 'red' }}>
-                      <FormattedMessage id='msg.stranger' />
-                    </span> :
-                    (room.unread_cnt === 0 ? null : <span className='private-message-chat-unread'>{room.unread_cnt}</span>)
-                    }
-                  </td>
-                </tr>
-                </tbody>
-              </React.Fragment>
+                    <div className='private-message-chat-status'>
+                      {room.stranger === true ?
+                        <div style={{ color: 'red' }}>
+                          <FormattedMessage id='msg.stranger' />
+                        </div> :
+                        (room.unread_cnt === 0 ?
+                          null :
+                          <div className='private-message-chat-unread'>{room.unread_cnt}</div>
+                        )
+                      }
+                    </div>
+                  </ChatRoomRow>
+                </ChatRoomContent>
+              </ChatRoomContainer>
             ))}
-        </table>
+        </ChatRoomWrapper>
         {isOpen && popupData && (
         <Popup
           other_id={popupData.first_person}

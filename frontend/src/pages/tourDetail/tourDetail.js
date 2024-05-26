@@ -39,9 +39,11 @@ export default function TourDetail() {
 
     useEffect(() => {
         // api: get tour detail
-        viewTour();
+        if(tid){
+            viewTour();
+        }
 
-    }, []);
+    }, [tid, user_id]);
 
     async function viewTour() {
         function formatDate(dateString) {

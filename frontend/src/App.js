@@ -38,7 +38,6 @@ import ShareToEdit from './pages/shareToEdit';
 import ShareEdit from './pages/shareEdit';
 import ShareToDelete from './pages/shareToDelete';
 import SelfPost from './pages/allSelfPost/selfPost';
-import Comment from './pages/comment';
 
 // my collect post
 import MyCollectPost from './pages/myCollectPosts.js/myCollectPosts';
@@ -138,7 +137,6 @@ function App() {
                       <Route path='to-edit' element={<ShareToEdit />} />
                       <Route path='edit/:pid' element={<ShareEdit />} />
                       <Route path='to-delete' element={<ShareToDelete />} />
-                      <Route path='comment/:pid' element={<Comment />} />
                       <Route path='mycollect' element={<MyCollectPost />} />
                     </Route>
                     <Route path='tour'>

@@ -57,20 +57,17 @@ export default function TransDetail() {
     }
 
     useEffect(() => {
-        // 串好就可以把 sampleTrans 拿掉
-        // setTrans(sampleTrans);
         // api: get trans detail
-        viewPost();
-    }, []);
+        if(tid){
+            viewPost();
+        }
+    }, [tid]);
 
     function contact() {
-        // console.log('contact');
-
         // api: send msg
         if(trans.creator_username){
             navigate(`/member/${trans.creator_username}`);
         }
-        
     }
 
     async function viewPost() {

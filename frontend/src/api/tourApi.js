@@ -53,7 +53,7 @@ export const tourApi = {
                 formData.append(key, file);
             } else if (key === 'user_id') {
                 formData.append('userId', value);
-            } else if(key === 'save_by_user_ids' || key === 'like_by_user_ids'){
+            } else if (key === 'save_by_user_ids' || key === 'like_by_user_ids') {
                 return
             }
             else {
