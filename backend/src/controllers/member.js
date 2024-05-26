@@ -274,11 +274,12 @@ const studentVerificationCode = async (req, res) => {
 
   // send email
   try {
+    const user_auth = await MemberAuth.findOne({ user_id: userId });
     await transporter.sendMail({
       from: process.env.NODEMAILER_USER,
       to: exchange_school_email,
       subject: "isChange Student Verification Code",
-      text: `Your student verification code is: ${code}`,
+      text: `Your student verification code is: ${user_auth.code}`,
     });
 
     return res.status(200).json({
