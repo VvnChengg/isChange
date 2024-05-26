@@ -3,7 +3,6 @@ const Article = require("../models/article");
 const Product = require("../models/product");
 require("dotenv").config(); // 加了這行就可以抓到 ipdata api key
 
-
 // filter：取得附近文章、揪團、商品
 const filterDistanceAll = async (req, res) => {
   const { longitude, latitude } = req.body;
@@ -150,7 +149,7 @@ const sortDistanceAll = async (req, res) => {
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
-          // coverPhoto: "$article_pic",  
+          // coverPhoto: "$article_pic",
           location: "$location",
           article_region_en: "$article_region_en",
           article_region_zh: "$article_region_zh",
@@ -190,6 +189,7 @@ const sortDistanceAll = async (req, res) => {
           end_time: "$end_time",
           people_lb: "$people_lb",
           people_ub: "$people_ub",
+          status: "$status",
           creator_id: "$creator_id",
         },
       },
