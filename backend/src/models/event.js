@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const eventSchema = new Schema({
   event_title: {
     type: String,
-    maxlength: 15,
+    maxlength: 30,
     required: true,
   },
   event_pic: {
