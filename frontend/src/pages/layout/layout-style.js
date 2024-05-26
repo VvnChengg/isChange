@@ -24,16 +24,16 @@ export const Footer = styled.div`
     align-items: center;
 
 
-    @media (max-width: 768px) {
+    @media screen and (max-width: 500px) {
         display: flex;
         position: fixed;
         left: 0;
         bottom: 0;
         z-index: 9999;
         background-color: white;
-        border-top: 1px solid #008cd9;  // 修改为 border-top
+        border-top: 1px solid #008cd9;
         width: 100%;
         height: 50px;
-        align-items: center;  // 修改为 align-items
+        align-items: center;
     }
 `;
