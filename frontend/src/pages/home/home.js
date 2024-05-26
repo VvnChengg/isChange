@@ -41,7 +41,13 @@ export default function Home({
     const [hotPosts, setHotPosts] = useState([]);
     const [geoPosts, setGeoPosts] = useState([]);
     const [toRenderPosts, setToRenderPosts] = useState([]);
+
+    // coverphoto
     const [images, setImages] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [remainingImageIds, setRemainingImageIds] = useState([]);
+
+    
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -203,27 +209,37 @@ export default function Home({
         setToRenderPosts(renderPosts());
     }, [type, sort, filters, geoPosts]);
 
-    //console.log(isLoading, toRenderPosts.length)
-    console.log('目前抓到的文章',toRenderPosts.length)
-    const imageIds = toRenderPosts.map(post => post._id);
-    console.log('目前抓到的圖片',imageIds.length);
-    //console.log(imageIds);
-
-
-    // get picture
+    // coverphoto
     useEffect(() => {
-        // setIsLoading(true);
-        api.getImage(imageIds)
-        .then(res => {
-            //console.log(res)
-            setImages(res); // 設置返回的圖片數據
-            // setIsLoading(false); // 加載結束
-        })
-        .catch(err => {
-            console.log(err);
-            // setIsLoading(false);
-        });
-    }, [toRenderPosts]); 
+        const ids = toRenderPosts.map(post => post._id);
+        setRemainingImageIds(ids);
+    }, [toRenderPosts]);
+
+    // 在加載圖片時，只操作 remainingImageIds：
+    useEffect(() => {
+        if (remainingImageIds.length > 0 && !isLoading && hasMore) {
+            setIsLoading(true);
+            const nextBatchIds = remainingImageIds
+                .slice(0, 5); // 每次只取五個圖片 id
+            api.getImage(nextBatchIds)
+            .then(res => {
+                setImages(prevImages => [...prevImages, ...res]); // 合併新返回的圖片數據
+                setIsLoading(false); // 加載結束
+
+                // 更新 remainingImageIds，刪除已加載的圖片 id
+                setRemainingImageIds(prevIds => prevIds.slice(5));
+                
+                if (res.length === 0 || remainingImageIds.length <= 5) {
+                    setHasMore(false);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                setIsLoading(false);
+            });
+        }
+    }, [remainingImageIds, isLoading, hasMore]);
+    
 
     function getCoverPhotoByPid(pid) {
         const item = images.find(element => element.pid === pid);
