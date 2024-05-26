@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URL, { dbName: "isChange_prod" })
+  .connect(process.env.MONGODB_URL, { dbName: "isChange" })
   .then(() => {
     console.log("Connected to MongoDB");
   })
