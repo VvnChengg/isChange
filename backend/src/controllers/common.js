@@ -18,16 +18,21 @@ class commonApi {
             const collection = await FavoriteModel.find({ user_id, item_id: post_id, save_type: type });
             if (!collection || collection.length === 0) {
                 const fav = await FavoriteModel.create(payload);
+                // 獲取最新的收藏數
+                const save_count = await FavoriteModel.countDocuments({ item_id: post_id, save_type: type });
                 return res.status(201).json({
                     success: true,
                     message: '成功收藏文章',
-                    favId: fav._id,
+                    save_count: save_count
                 });
             } else {
                 await FavoriteModel.deleteMany({ user_id, item_id: post_id, save_type: type });
+                // 獲取最新的收藏數
+                const save_count = await FavoriteModel.countDocuments({ item_id: post_id, save_type: type });
                 return res.status(200).json({
                     success: true,
                     message: '成功取消收藏文章',
+                    save_count: save_count
                 });
             }
         } catch (err) {
