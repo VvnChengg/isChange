@@ -2,9 +2,8 @@ import styled from 'styled-components';
 
 export const CreateContainer = styled.div `
     width: 50%;
-    height: calc(100% - 80px);
 
-    padding-top: 20px;
+    padding: 20px 0;
     
     position: absolute;
         top: 80px;

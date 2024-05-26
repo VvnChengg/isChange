@@ -14,7 +14,6 @@ export const useToken = () => {
 
         // 判斷是否有token，若無則導向登入頁面
         if (!storedToken) {
-            console.log('here')
             toast.error(intl.formatMessage({ id: 'token.pleaseLogIn' }));
             navigate('/login');
             return;
