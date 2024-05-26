@@ -11,17 +11,13 @@ export const loginApi = {
             }
         })
         .then(res => {
-            // console.log(res)
             if(res.data.status === 'success'){
-                // console.log('Login or register successful:', res.data);
                 return 1;
             } else {
-                // console.log('Login or register failed: ' + res.data.message);
                 return null;
               }
         })
         .catch(err => {
-            // console.log(err);
             throw err;
         });
     },
@@ -34,7 +30,6 @@ export const loginApi = {
         })
         .then(res => {
             if (res.data.status === 'success') {
-                // console.log('Save localStorage data');
                 // 如果登入成功，則將使用者資訊存儲到 localStorage 中
                 const now = new Date();
                 const expiryTime = now.getTime() + 3600000; // 設定token過期時間為 1 hour later    
@@ -53,7 +48,6 @@ export const loginApi = {
             return res.data;
         })
         .catch(err => {
-            // console.log(err)
             throw err;
         });
     },
@@ -79,7 +73,6 @@ export const loginApi = {
             tokenId: tokenId
         })
         .then(res =>{
-            // console.log(res.data);
             if(res.data.status === 'success'){
                 const now = new Date();
                 const expiryTime = now.getTime() + 3600000; // 設定token過期時間為 1 hour later    
