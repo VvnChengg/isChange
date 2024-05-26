@@ -158,7 +158,7 @@ class commonApi {
                 result.push(item);
             });
             if (result.length <= 0) {
-                return res.status(500).json({ message: "還沒有收藏內容" });
+                return res.status(200).json({ message: "還沒有收藏內容" });
               }
               // 依時間倒序排序
               result.sort((a, b) => {
