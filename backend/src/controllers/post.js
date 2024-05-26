@@ -474,6 +474,7 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
     let articles = await Article.find({}, { article_pic: 0 });
     let events = await Event.find({}, { event_pic: 0 });
     let products = await Product.find({}, { product_pic: 0 });
+    console.log("articles", articles);
 
     // 合併所有結果
     let result = formatContentList(articles, events, products, {
@@ -696,6 +697,7 @@ function formatContentList(articles, events, products, withPhoto) {
       article_region_en: article.article_region_en,
       article_region_zh: article.article_region_zh,
       datetime: article.post_date,
+      likesCount: article.like_by_user_ids ? article.like_by_user_ids.length : 0
     };
     result.push(item);
   });
@@ -718,6 +720,7 @@ function formatContentList(articles, events, products, withPhoto) {
       people_lb: event.people_lb,
       people_ub: event.people_ub,
       status: event.status,
+      likesCount: event.like_by_user_ids ? event.like_by_user_ids.length : 0
     };
     result.push(item);
   });
@@ -742,6 +745,7 @@ function formatContentList(articles, events, products, withPhoto) {
       period: product.period,
       status: product.status,
       transactionWay: product.transaction_way,
+      likesCount: product.like_by_user_ids ? product.like_by_user_ids.length : 0
     };
     result.push(item);
   });
