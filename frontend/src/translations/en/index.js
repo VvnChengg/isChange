@@ -177,6 +177,7 @@ const en = {
     'view.followingList': 'Following List',
     'view.viewIntro': 'View Introduction',
     'view.viewPost': 'View Post',
+    'view.followHint': 'Want to know more about {other_username}? Follow {other_username}!',
 
     'edit.changePassword': 'Password',
     'edit.changeUsernameandSchool': 'Other Information',
