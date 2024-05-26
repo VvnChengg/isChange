@@ -484,7 +484,7 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
     });
 
     if (result.length === 0) {
-      return res.status(500).json({ message: "資料庫中無任何內容" });
+      return res.status(200).json({ message: "還沒有任何文章" });
     }
 
     // 依按讚數量倒序排序
