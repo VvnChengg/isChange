@@ -34,6 +34,7 @@ const filterDistanceAll = async (req, res) => {
           article_region_zh: "$article_region_zh",
           datetime: "$post_date",
           distance: "$dist.calculated",
+          status: "$status",
         },
       },
     ]);
@@ -69,6 +70,7 @@ const filterDistanceAll = async (req, res) => {
           people_lb: "$people_lb",
           people_ub: "$people_ub",
           creator_id: "$creator_id",
+          status: "$status",
         },
       },
     ]);
@@ -110,6 +112,8 @@ const filterDistanceAll = async (req, res) => {
 
     // 合併所有結果
     let result = [...articles, ...events, ...products];
+
+    result = result.filter(result => result.status !== 'delete');
 
     result.sort((a, b) => {
       return b.distance - a.distance;
@@ -232,6 +236,8 @@ const sortDistanceAll = async (req, res) => {
 
     // 合併所有結果
     let result = [...articles, ...events, ...products];
+
+    result = result.filter(result => result.status !== 'delete');
 
     result.sort((a, b) => {
       return b.distance - a.distance;
