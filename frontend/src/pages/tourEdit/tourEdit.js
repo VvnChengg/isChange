@@ -119,13 +119,11 @@ export default function TourCreate() {
             tour.location = location;
         }
 
-        console.log(tour);
-
         try{
             const data = await tourApi.editTour(tour, token);
             if(data.success){
                 toast.success(`${intl.formatMessage({ id: 'tour.editSuccess' })}`);
-                // navigate('/post/published');
+                navigate('/post/published');
             }else{
                 toast.error(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
             }

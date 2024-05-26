@@ -203,19 +203,13 @@ export default function Home({
         setToRenderPosts(renderPosts());
     }, [type, sort, filters, geoPosts]);
 
-    //console.log(isLoading, toRenderPosts.length)
-    console.log('目前抓到的文章',toRenderPosts.length)
     const imageIds = toRenderPosts.map(post => post._id);
-    console.log('目前抓到的圖片',imageIds.length);
-    //console.log(imageIds);
-
 
     // get picture
     useEffect(() => {
         // setIsLoading(true);
         api.getImage(imageIds)
         .then(res => {
-            //console.log(res)
             setImages(res); // 設置返回的圖片數據
             // setIsLoading(false); // 加載結束
         })

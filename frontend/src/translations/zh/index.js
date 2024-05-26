@@ -179,6 +179,7 @@ const zh = {
     'view.followingList': '追蹤名單',
     'view.viewIntro': '查看自我介紹',
     'view.viewPost': '查看文章',
+    'view.followHint': '不想錯過有趣的文章？追蹤{other_username}吧！',
 
     'edit.changePassword': '修改密碼',
     'edit.changeUsernameandSchool': '修改其他資訊',

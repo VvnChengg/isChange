@@ -5,7 +5,6 @@ import { AuthContext } from '../../App';
 
 export default function GetFollowingList() {
     const navigate = useNavigate();
-    const { token } = useContext(AuthContext);
 
     function onClick() {
         navigate('member/following');
