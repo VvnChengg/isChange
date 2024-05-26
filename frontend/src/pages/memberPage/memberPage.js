@@ -99,7 +99,6 @@ export default function MemberPage() {
     // 先讀取使用者資料
     const getOtherMemberInfo = async () => {
         const memberInfo = await viewApi.getOtherMember(other_username);
-        console.log(memberInfo);
 
         setMemberInfo(prevMemberInfo => ({ ...prevMemberInfo, ...memberInfo }));
         setIsLoading(false);
@@ -120,14 +119,6 @@ export default function MemberPage() {
         }
         setPostLoading(false);
     }
-
-    useEffect(() => {
-        console.log(posts);
-    }, [posts]);
-
-    useEffect(() => {
-        console.log(showFloatingHeader);
-    }, [showFloatingHeader]);
 
 
     useEffect(() => {
