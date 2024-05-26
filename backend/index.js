@@ -10,7 +10,9 @@ const { Server } = require("socket.io");
 require("dotenv").config(); // 加了這行就可以抓到 port
 
 const socketPort = process.env.SOCKET_PORT || 8080;
-const corsOrigin = process.env.CORS_ORIGIN || `http://localhost:${process.env.CLIENT_PORT || 3001}`;
+const corsOrigin =
+  process.env.CORS_ORIGIN ||
+  `http://localhost:${process.env.CLIENT_PORT || 3001}`;
 
 const io = new Server(socketPort, {
   cors: {
@@ -58,7 +60,6 @@ const server = app.listen(process.env.PORT || 3000, () =>
 
 // Socket 連接事件處理邏輯
 io.on("connection", (socket) => {
-  
   // 使用者點開某聊天室細節時，加入此聊天室的（chatid)
   socket.on("join-room", (room) => {
     socket.join(room);
