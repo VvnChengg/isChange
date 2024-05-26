@@ -224,6 +224,7 @@ const zh = {
 
     'post.create': '創建貼文',
     'post.edit': '更新貼文',
+    'post.message': '私訊發文者',
     'post.uploadImage': '上傳圖片',
     'post.checkEditFailed': '讀取編輯頁面失敗，請再試一次',
     'post.createSuccess': '創建文章成功',
@@ -284,6 +285,7 @@ const zh = {
     'trans.date': '租借日期',
     'trans.create': '創建商品',
     'trans.edit': '編輯商品',
+    'trans.message': '私訊發文者',
     'trans.draft':'草稿',
     'trans.instock': '銷售中',
     'trans.reserved':'已保留',

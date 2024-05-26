@@ -222,6 +222,7 @@ const en = {
 
     'post.create': 'Create post',
     'post.edit': 'Edit post',
+    'post.message': 'Contact author',
     'post.uploadImage': 'Upload image',
     'post.checkEditFailed': 'Loading edit page failed, please try again',
     'post.createSuccess': 'Create post successfully',
@@ -281,6 +282,7 @@ const en = {
     'trans.date': 'Rent date',
     'trans.create': 'Create product',
     'trans.edit': 'Edit product',
+    'trans.message': 'Contact author',
     'trans.draft':'draft',
     'trans.instock': 'in stock',
     'trans.reserved':'reserved',

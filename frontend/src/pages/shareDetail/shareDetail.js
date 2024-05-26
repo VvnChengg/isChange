@@ -92,7 +92,7 @@ export default function MyComponent() {
               />
               {user_id !== post.creator_id && post.creator_username &&
                   <Button
-                      text={intl.formatMessage({ id: 'tour.message' })}
+                      text={intl.formatMessage({ id: 'post.message' })}
                       onClick={() => contact()}
                   />
               }

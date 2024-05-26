@@ -73,19 +73,14 @@ export default function TransDetail() {
     async function viewPost() {
         try{
             const data = await transApi.viewTrans(tid, user_id);
-            // console.log(data);
-            // console.log(data.trans.product_title);
-            // console.log(data.trans.currency);
-            // console.log(data.trans.description);
-            // console.log(data.trans.product_type);
             
             if(data.success){
                 let period = data.trans.period;
-                let dates = period.split(" - "); // split the string into an array of two strings
+                let dates = period.split(" - ");
             
-                let rent_start_time = dates[0]; // "2024-05-24"
-                let rent_end_time = dates[1]; // "2024-06-23"
-                // console.log(data);
+                let rent_start_time = dates[0];
+                let rent_end_time = dates[1];
+                
                 setTrans(prevTrans => ({
                     ...prevTrans,
                     ...data.trans,
@@ -106,13 +101,11 @@ export default function TransDetail() {
                     product_pic: data.trans.product_pic,
                     creator_username: data.trans.creator_username,
                     creator_id: data.trans.creator_id,
-                    // __v: data.__v
                 }));
                 // toast.success(`${intl.formatMessage({id: 'trans.viewPageSuccess' })}`);
                 }
 
         }catch(e){
-            // alert(`${intl.formatMessage({ id: 'trans.viewPageFailed' })}`);
             toast.error(`${intl.formatMessage({ id: 'trans.viewPageFailed' })}`);
         }
         setIsLoading(false);
@@ -121,7 +114,6 @@ export default function TransDetail() {
     if (isLoading) {
         return <Spin />;
     }
-
 
     return (
         <DetailContainer>
@@ -134,7 +126,7 @@ export default function TransDetail() {
                 />
                 {user_id !== trans.creator_id && trans.creator_username &&
                     <Button
-                        text={intl.formatMessage({ id: 'tour.message' })}
+                        text={intl.formatMessage({ id: 'trans.message' })}
                         onClick={() => contact()}
                     />
                 }
