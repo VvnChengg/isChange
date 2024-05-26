@@ -39,9 +39,9 @@ const eventSchema = new Schema({
     required: true,
     validate: {
       validator: function (value) {
-        return value < this.end_time;
+        return value <= this.end_time;
       },
-      message: "Start time must be before end time",
+      message: "Start time must be before or equal end time",
     },
   },
   end_time: {
