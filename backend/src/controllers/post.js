@@ -104,9 +104,6 @@ const getUserPosts = async (req, res, next) => {
       withPhoto: false,
     });
 
-    if (result.length <= 0) {
-      return res.status(500).json({ message: "使用者無創建任何內容" });
-    }
   } catch (err) {
     return next(err);
   }
