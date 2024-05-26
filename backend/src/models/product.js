@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
   product_title: {
     type: String,
-    maxlength: 15,
+    maxlength: 30,
     required: true,
   },
   product_pic: {
