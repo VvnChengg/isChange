@@ -23,7 +23,7 @@ import Icon from '../../components/Icon';
 
 import { Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-
+// coverphoto
 const Post = lazy(() => import('../../components/Post'));
 const PostPhoto = lazy(() => import('../../components/Post/PostPhoto'));
 
@@ -36,20 +36,18 @@ export default function Home({
     const navigate = useNavigate();
 
     const [showSideBar, setShowSideBar] = useState(false);
-    
     const [posts, setPosts] = useState([]);
     const [hotPosts, setHotPosts] = useState([]);
     const [geoPosts, setGeoPosts] = useState([]);
     const [toRenderPosts, setToRenderPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
 
     // coverphoto
     const [images, setImages] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [remainingImageIds, setRemainingImageIds] = useState([]);
 
-    
-
-    const [isLoading, setIsLoading] = useState(true);
 
     function sortPosts(posts) {
         posts.sort((postA, postB) => {
@@ -209,13 +207,13 @@ export default function Home({
         setToRenderPosts(renderPosts());
     }, [type, sort, filters, geoPosts]);
 
-    // coverphoto
+    // coverphoto 建立一個 id 清單 toRenderPost為所有會顯示的文章
     useEffect(() => {
         const ids = toRenderPosts.map(post => post._id);
         setRemainingImageIds(ids);
     }, [toRenderPosts]);
 
-    // 在加載圖片時，只操作 remainingImageIds：
+    // coverphoto api 一次只叫5個
     useEffect(() => {
         if (remainingImageIds.length > 0 && !isLoading && hasMore) {
             setIsLoading(true);
@@ -240,7 +238,7 @@ export default function Home({
         }
     }, [remainingImageIds, isLoading, hasMore]);
     
-
+    // coverphoto id與圖對應函數
     function getCoverPhotoByPid(pid) {
         const item = images.find(element => element.pid === pid);
         return item ? item.coverPhoto : null;
