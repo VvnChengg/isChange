@@ -402,9 +402,9 @@ const getUserPosts = async (req, res, next) => {
 
   try {
     const member = await Member.findOne({ username: username });
-    articles = await Article.find({ creator_id: member._id }, { article_pic: 0 });
-    events = await Event.find({ creator_id: member._id }, { event_pic: 0 });
-    products = await Product.find({ creator_id: member._id }, { product_pic: 0 });
+    articles = await Article.find({ creator_id: member._id, status: { $nin: ["delete"] } }, { article_pic: 0 });
+    events = await Event.find({ creator_id: member._id, status: { $nin: ["delete"] } }, { event_pic: 0 });
+    products = await Product.find({ creator_id: member._id, status: { $nin: ["delete"] } }, { product_pic: 0 });
 
     // 抽取文章需要的資訊並統一格式
     articles.forEach((article) => {
