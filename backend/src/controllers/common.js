@@ -80,9 +80,9 @@ class commonApi {
             const eventIds = groupedData.Event?.map(item => item.item_id);
             const productIds = groupedData.Product?.map(item => item.item_id);
 
-            articles = await Article.find({ _id: { $in: articleIds } }, { article_pic: 0 });
-            events = await Event.find({ _id: { $in: eventIds } }, { event_pic: 0 });
-            products = await Product.find({ _id: { $in: productIds } }, { product_pic: 0 });
+            articles = await Article.find({ _id: { $in: articleIds }, status: { $nin: ["delete"] } }, { article_pic: 0 });
+            events = await Event.find({ _id: { $in: eventIds }, status: { $nin: ["delete"] } }, { event_pic: 0 });
+            products = await Product.find({ _id: { $in: productIds }, status: { $nin: ["delete"] } }, { product_pic: 0 });
 
             // 抽取文章需要的資訊並統一格式
             articles.forEach((article) => {
