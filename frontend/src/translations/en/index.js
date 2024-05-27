@@ -128,6 +128,7 @@ const en = {
     'login.invalidEmailInput': 'Invalid email input format',
     'login.error': 'Login failed, please try again',
     'login.errorGoogleAccount': 'This account has already been registered, please use the original account to login',
+    'login.errorGoogleSSO': 'This account has already been registered with Google SSO, please use Google SSO to login',
 
     'register.tryAgain': 'Please try again',
     'register.emailRegistered': 'Email is registered',

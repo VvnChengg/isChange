@@ -130,6 +130,7 @@ const zh = {
     'login.invalidEmailInput': '無效的電子信箱格式',
     'login.error': '登入失敗，請再試一次',
     'login.errorGoogleAccount': '此帳號已註冊，請使用原本的帳號登入',
+    'login.errorGoogleSSO': '此帳號已使用Google SSO註冊，請使用Google SSO登入',
 
     'register.tryAgain': '請再試一次',
     'register.emailRegistered': '電子信箱已被註冊',

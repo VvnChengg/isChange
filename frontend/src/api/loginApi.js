@@ -11,11 +11,7 @@ export const loginApi = {
             }
         })
         .then(res => {
-            if(res.data.status === 'success'){
-                return 1;
-            } else {
-                return null;
-              }
+            return res;
         })
         .catch(err => {
             throw err;

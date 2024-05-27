@@ -41,6 +41,9 @@ const LoginForm = () => {
       return data;
     } catch (error) {
       // Handle error
+      if(error.response && error.response.data.status === 'google') {
+        toast.error(intl.formatMessage({ id: 'login.errorGoogleSSO' }));
+      }
       if (error.response && error.response.data.status === 'None') {
         // 如果使用者資訊不存在，執行其他登入邏輯（例如發送驗證郵件等）
         // 實現使用電子郵件登入的邏輯
