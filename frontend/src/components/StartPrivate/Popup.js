@@ -7,6 +7,7 @@ import { acceptChat } from'../../api/acceptChatApi';
 import { deleteChat } from '../../api/deleteChatApi';
 import './StartPrivate.css';
 import { FormattedMessage } from 'react-intl';
+import { Button } from 'antd';
 
 
 
@@ -77,13 +78,13 @@ const Popup = ({ isOpen, onClose, other_id, other_name, direction, chatid }) => 
           </label>
           <div className='startprivate-button-container'>
             <div className='startprivate-buttons'>
-              <button className='button' onClick={() => handleButtonClick('confirm')} disabled={!isChecked} >
-              <FormattedMessage id='msg.confirmButton' />
-              </button>
-              <div className='startprivate-spacer'></div>
-              <button className='button' onClick={() => handleButtonClick('reject')} disabled={!isChecked} >
-              <FormattedMessage id='msg.rejectButton' />
-              </button>
+              <Button type='primary' onClick={() => handleButtonClick('confirm')} disabled={!isChecked} >
+                <FormattedMessage id='msg.confirmButton' />
+              </Button>
+              <div className='startprivate-spacer' />
+              <Button onClick={() => handleButtonClick('reject')} disabled={!isChecked} >
+                <FormattedMessage id='msg.rejectButton' />
+              </Button>
             </div>
           </div>
         </div>

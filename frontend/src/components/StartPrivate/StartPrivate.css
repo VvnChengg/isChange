@@ -23,13 +23,16 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
+
+  &:hover {
+    color: #008CD9;
+  }
 }
 
 .startprivate-popup-content {
   text-align: left;
   overflow-y: auto; /* 滑桿 */
   max-height: 360px; /* 最大高度 */
-  
 }
 
 .startprivate-label {
@@ -45,7 +48,8 @@
 
 .startprivate-buttons {
   display: flex;
-  align-items: center; 
+  align-items: center;
+  gap: 5px;
 }
 
 .startprivate-spacer {
