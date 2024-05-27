@@ -28,9 +28,12 @@ const Post = lazy(() => import('../../components/Post'));
 const PostPhoto = lazy(() => import('../../components/Post/PostPhoto'));
 
 export default function Home({
-    keyword, search, setSearch,
-    type, setType, sort, setSort,
-    radius, setRadius, filters, setFilters,
+    keyword, setKeyword,
+    search, setSearch,
+    type, setType,
+    sort, setSort,
+    radius, setRadius,
+    filters, setFilters,
     filterOptions
 }) {
     const navigate = useNavigate();
@@ -47,7 +50,6 @@ export default function Home({
     const [images, setImages] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [remainingImageIds, setRemainingImageIds] = useState([]);
-
 
     function sortPosts(posts) {
         posts.sort((postA, postB) => {
@@ -109,8 +111,15 @@ export default function Home({
         return tempPosts;
     }
 
+    function onClickPost(post) {
+        setKeyword('');
+        navigate(`/${post.type}/detail/${post._id}`)
+    }
+
     // get posts
     useEffect(() => {
+        if (search) return;
+
         setIsLoading(true);
         api.getAllPosts()
         .then(res => {
@@ -243,7 +252,6 @@ export default function Home({
         const item = images.find(element => element.pid === pid);
         return item ? item.coverPhoto : null;
     }
-    
 
     return (
         <HomeContainer>
@@ -274,7 +282,10 @@ export default function Home({
                         </NoContent>
                         : toRenderPosts.map((post, index) => (
                             <React.Fragment key={post._id}>
-                                <PostWrapper showDivider={index !== toRenderPosts.length - 1} onClick={() => navigate(`/${post.type}/detail/${post._id}`)}>
+                                <PostWrapper
+                                    showDivider={index !== toRenderPosts.length - 1}
+                                    onClick={() => onClickPost(post)}
+                                >
                                     <Suspense fallback={<div>Loading post...</div>}>
                                         <Post post={post} showDivider={index !== toRenderPosts.length - 1} />
                                     </Suspense>
