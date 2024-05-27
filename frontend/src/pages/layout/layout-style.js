@@ -24,7 +24,7 @@ export const Footer = styled.div`
     align-items: center;
 
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 1200px) {
         display: flex;
         position: fixed;
         left: 0;
