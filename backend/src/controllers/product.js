@@ -1,12 +1,13 @@
 const ProductModel = require("../models/product.js");
 const MemberModel = require("../models/member.js");
+const FavoriteModel = require("../models/favorite");
 const common = require('./common');
 const getReactionInfo = common.getReactionInfo;
 
 class productApi {
   async createProduct(req, res) {
     try {
-      console.log(req.file);
+      // console.log(req.file);
 
       let { location, transaction_region_en, transaction_region_zh } = req.body;
 
@@ -79,7 +80,7 @@ class productApi {
       const { user_id } = req.query;
 
       const trans = await ProductModel.findById(tid);
-      console.log("check before" + user_id);
+      // console.log("check before" + user_id);
 
       // Convert image data to base64
       let photoBase64 = null;
@@ -193,6 +194,7 @@ class productApi {
         });
       }
 
+      await FavoriteModel.deleteMany( {item_id: trans_id} );
       await ProductModel.findByIdAndDelete(trans_id);
       return res.status(200).json({
         success: true,

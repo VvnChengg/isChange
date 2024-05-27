@@ -268,6 +268,7 @@ const deleteContent = async (req, res, next) => {
     if (deleteItem.creator_id.toString() !== userId.toString()) {
       return res.status(401).json({ message: "您沒有權限刪除此" + itemType });
     }
+    deleteFavorite = await Favorite.deleteMany( {item_id: id} );
     deleteItem = await model.findByIdAndDelete(id);
     res.status(200).json({ message: "成功刪除" + itemType });
   } catch (err) {
