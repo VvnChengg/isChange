@@ -68,17 +68,55 @@ export default function TourCreate() {
             tour.location = location;
         }
 
-        try{
-            const data = await tourApi.createTour(tour, token);
-            console.log(data);
-            if(data.success){
-                toast.success(intl.formatMessage({ id: 'tour.createSuccess' }));
-                navigate('/post/published');
-            }else{
+        // Error control
+        console.log(tour);
+        let trySubmit = true;
+        if (tour.event_title === "") {
+            toast.error(intl.formatMessage({ id: 'tour.titleRequired' }));
+            trySubmit = false;
+        }
+
+        if (tour.longitude === "" && tour.latitude === "") {
+            toast.error(intl.formatMessage({ id: 'tour.destinationRequired' }));
+            trySubmit = false;
+        }
+
+        if (tour.people_lb === "" && tour.people_ub === "") {
+            toast.error(intl.formatMessage({ id: 'tour.rangeOfPeopleRequired' }));
+            trySubmit = false;
+        }else if (tour.people_lb >= tour.people_ub) {
+            toast.error(intl.formatMessage({ id: 'tour.rangeOfPeopleError' }));
+            trySubmit = false;
+        }
+
+        if (tour.budget === "") {
+            toast.error(intl.formatMessage({ id: 'tour.rangeOfBudgetRequired' }));
+            trySubmit = false;
+        }
+
+        if (tour.start_time === "" && tour.end_time === "") {
+            toast.error(intl.formatMessage({ id: 'tour.dateRequired' }));
+            trySubmit = false;
+        }
+
+        if (tour.event_intro === "") {
+            toast.error(intl.formatMessage({ id: 'tour.descriptionRequired' }));
+            trySubmit = false;
+        }
+
+        if (trySubmit) {
+            try{
+                const data = await tourApi.createTour(tour, token);
+                console.log(data);
+                if(data.success){
+                    toast.success(intl.formatMessage({ id: 'tour.createSuccess' }));
+                    navigate('/post/published');
+                }else{
+                    toast.error(intl.formatMessage({ id: 'tour.createFailed' }));
+                }
+            }catch(err){
                 toast.error(intl.formatMessage({ id: 'tour.createFailed' }));
             }
-        }catch(err){
-            toast.error(intl.formatMessage({ id: 'tour.createFailed' }));
         }
 
         setIsSubmitting(false);

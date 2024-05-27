@@ -244,6 +244,9 @@ const zh = {
     'post.inputLocation': '請輸入地點',
     'post.editSuccess': '編輯文章成功',
     'post.editFailed': '編輯文章失敗，請再試一次',
+    'post.titleRequired': '必填標題',
+    'post.locationRequired': '必填地點',
+    'post.descriptionRequired': '必填文字說明',
 
     'tour.destination': '目的地',
     'tour.inputDestination': '想要去哪裡玩？',
@@ -273,7 +276,13 @@ const zh = {
     'tour.likeSuccess': '成功按讚揪團',
     'tour.likeCancelSucess': '成功取消按讚揪團',
     'tour.likeFailed': '按讚揪團失敗',
-
+    'tour.titleRequired': '必填標題',
+    'tour.destinationRequired': '必填目的地',
+    'tour.rangeOfPeopleRequired': '必填徵求人數範圍',
+    'tour.rangeOfBudgetRequired': '必填預算範圍',
+    'tour.dateRequired': '必填日期',
+    'tour.descriptionRequired': '必填文字說明',
+    'tour.rangeOfPeopleError': '人數下限應小於上限',
 
     'trans.type': '交易類別',
     'trans.sell': '賣出',
@@ -315,6 +324,10 @@ const zh = {
     'trans.likeSuccess': '成功按讚商品',
     'trans.likeCancelSucess': '成功取消按讚商品',
     'trans.likeFailed': '按讚商品失敗',
+    'trans.titleRequired': '必填標題',
+    'trans.productRegionRequired': '必填交易地點',
+    'trans.priceRequired': '必填價錢',
+    'trans.descriptionRequired': '必填文字說明',
 
     /* collect */
     'collect.getCollectFailed': '取得收藏列表失敗',
