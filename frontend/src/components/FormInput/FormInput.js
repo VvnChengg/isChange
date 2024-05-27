@@ -464,7 +464,6 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
             value={value}
             noOptionsText="No locations"
             onChange={(event, newValue) => {
-                console.log(newValue);
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);
             }}
@@ -472,10 +471,6 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
                 setInputValue(newInputValue);
             }}
             renderInput={(params) => (
-                // <TextField {...params} 
-                // // label="Add a location" 
-                // fullWidth
-                // />
                 <FormTextBox ref={params.InputProps.ref}>
                     <FormTextTitle>{title}</FormTextTitle>
                     <input

@@ -84,6 +84,7 @@ export const HeaderSearchContainer = styled.div `
 `
 
 export const HeaderButtonContainer = styled.div `
+    width: 77.844px;
     height: 25px;
     
     position: absolute;
@@ -102,7 +103,8 @@ export const HeaderButtonContainer = styled.div `
 `
 
 export const HeaderButton = styled.div `
-    height: 100%;
+    width: 25px;
+    height: 25px;
     aspect-ratio: 1 / 1;
     border-radius: 5px;
 

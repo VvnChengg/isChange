@@ -23,7 +23,7 @@ import Icon from '../../components/Icon';
 
 import { Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-
+// coverphoto
 const Post = lazy(() => import('../../components/Post'));
 const PostPhoto = lazy(() => import('../../components/Post/PostPhoto'));
 
@@ -36,14 +36,18 @@ export default function Home({
     const navigate = useNavigate();
 
     const [showSideBar, setShowSideBar] = useState(false);
-    
     const [posts, setPosts] = useState([]);
     const [hotPosts, setHotPosts] = useState([]);
     const [geoPosts, setGeoPosts] = useState([]);
     const [toRenderPosts, setToRenderPosts] = useState([]);
-    const [images, setImages] = useState([]);
-
     const [isLoading, setIsLoading] = useState(true);
+
+
+    // coverphoto
+    const [images, setImages] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [remainingImageIds, setRemainingImageIds] = useState([]);
+
 
     function sortPosts(posts) {
         posts.sort((postA, postB) => {
@@ -203,28 +207,38 @@ export default function Home({
         setToRenderPosts(renderPosts());
     }, [type, sort, filters, geoPosts]);
 
-    //console.log(isLoading, toRenderPosts.length)
-    console.log('目前抓到的文章',toRenderPosts.length)
-    const imageIds = toRenderPosts.map(post => post._id);
-    console.log('目前抓到的圖片',imageIds.length);
-    //console.log(imageIds);
-
-
-    // get picture
+    // coverphoto 建立一個 id 清單 toRenderPost為所有會顯示的文章
     useEffect(() => {
-        // setIsLoading(true);
-        api.getImage(imageIds)
-        .then(res => {
-            //console.log(res)
-            setImages(res); // 設置返回的圖片數據
-            // setIsLoading(false); // 加載結束
-        })
-        .catch(err => {
-            console.log(err);
-            // setIsLoading(false);
-        });
-    }, [toRenderPosts]); 
+        const ids = toRenderPosts.map(post => post._id);
+        setRemainingImageIds(ids);
+    }, [toRenderPosts]);
 
+    // coverphoto api 一次只叫5個
+    useEffect(() => {
+        if (remainingImageIds.length > 0 && !isLoading && hasMore) {
+            setIsLoading(true);
+            const nextBatchIds = remainingImageIds
+                .slice(0, 5); // 每次只取五個圖片 id
+            api.getImage(nextBatchIds)
+            .then(res => {
+                setImages(prevImages => [...prevImages, ...res]); // 合併新返回的圖片數據
+                setIsLoading(false); // 加載結束
+
+                // 更新 remainingImageIds，刪除已加載的圖片 id
+                setRemainingImageIds(prevIds => prevIds.slice(5));
+                
+                if (res.length === 0 || remainingImageIds.length <= 5) {
+                    setHasMore(false);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                setIsLoading(false);
+            });
+        }
+    }, [remainingImageIds, isLoading, hasMore]);
+    
+    // coverphoto id與圖對應函數
     function getCoverPhotoByPid(pid) {
         const item = images.find(element => element.pid === pid);
         return item ? item.coverPhoto : null;

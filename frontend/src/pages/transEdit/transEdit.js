@@ -63,12 +63,6 @@ export default function TransEdit() {
     async function checkValidation(){
         try{
             const data = await transApi.editViewTrans(tid, user_id, token);
-            // console.log(data);
-            // console.log(data.trans.product_title);
-            // console.log(data.trans.currency);
-            // console.log(data.trans.description);
-            // console.log(data.trans.product_type);
-            // console.log(data);
             
             if(data.success){
                 let period = data.trans.period;
@@ -76,8 +70,6 @@ export default function TransEdit() {
             
                 let rent_start_time = dates[0]; // "2024-05-24"
                 let rent_end_time = dates[1]; // "2024-06-23"
-
-                // console.log(data);
             
                 setTrans({
                     rent_start_time: rent_start_time,
@@ -149,18 +141,13 @@ export default function TransEdit() {
 
         try{
             const data = await transApi.editTrans(trans, token);
-            // console.log(data);
             if(data.success){
-                // alert(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
                 toast.success(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
                 navigate('/post/published'); // redirect
             }else{
-                // alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
                 toast.error(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
             }
         }catch(e){
-            // console.log(e);
-            // alert(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
             toast.error(`${intl.formatMessage({ id: 'trans.editFailed' })}`);
         }
         setIsSubmitting(false)

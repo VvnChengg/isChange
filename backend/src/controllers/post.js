@@ -269,7 +269,10 @@ const deleteContent = async (req, res, next) => {
       return res.status(401).json({ message: "您沒有權限刪除此" + itemType });
     }
 
+    deleteFavorite = await Favorite.deleteMany( {item_id: id} );
+    // 修改貼文刪除方式
     deleteItem = await model.findByIdAndUpdate(id, { status: "delete" });
+
     res.status(200).json({ message: "成功刪除" + itemType });
   } catch (err) {
     if (err.name === "CastError") {
@@ -497,8 +500,8 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
 
 const searchPosts = async (req, res) => {
   const { keyword } = req.query;
-  if (!keyword) {
-    return res.status(400).json({ message: "搜尋內容不能為空" });
+  if (!keyword || keyword.trim() === "") {
+    return res.status(200).json({ result: [] }); // 返回空結果
   }
 
   let result = [];

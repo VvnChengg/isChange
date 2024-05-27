@@ -18,6 +18,8 @@ const LOR = async (req, res) => {
     const existingUser = await MemberAuth.findOne({ email });
     if (existingUser && existingUser.password) {
       return res.status(200).json({ status: "success" });
+    } else if (existingUser && existingUser.source === "google") {
+      return res.status(401).json({ status: "google" });
     }
     return res.status(404).json({ status: "None" });
   } catch (error) {
@@ -109,7 +111,6 @@ const registerMember = async (req, res) => {
     length: 6,
     charset: "numeric",
   });
-
   const user = await MemberAuth.findOne({ email });
 
   // create member and memberAuth in database

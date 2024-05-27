@@ -1,5 +1,6 @@
 const TourModel = require("../models/event.js");
 const MemberModel = require("../models/member.js");
+const FavoriteModel = require("../models/favorite");
 const common = require('./common');
 const getReactionInfo = common.getReactionInfo;
 
@@ -59,7 +60,7 @@ class tourApi {
       };
 
       const tour = await TourModel.create(payload);
-      console.log("tour", tour);
+      // console.log("tour", tour);
 
       return res.status(201).json({
         success: true,
@@ -140,7 +141,7 @@ class tourApi {
       const { userId } = req.query;
 
       const tour = await TourModel.findById(eid);
-      console.log("tour creator_id", tour.creator_id);
+      // console.log("tour creator_id", tour.creator_id);
 
       // Convert image data to base64
       let photoBase64 = null;
@@ -231,9 +232,9 @@ class tourApi {
       });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({
+      return res.status(400).json({
         success: false,
-        message: "編輯揪團失敗",
+        message: "編輯揪團失敗: " + err.message,
       });
     }
   }
@@ -258,6 +259,7 @@ class tourApi {
         });
       }
 
+      await FavoriteModel.deleteMany( {item_id: event_id} );
       await TourModel.findByIdAndDelete(event_id);
       return res.status(200).json({
         success: true,

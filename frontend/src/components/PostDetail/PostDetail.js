@@ -19,7 +19,7 @@ import {
 import SharePage from '../../components/SharePage';
 import LikePost from '../../components/LikePost';
 import CollectPost from '../CollectPost/CollectPost';
-import CommentDetailList from '../Comment/CommentDetailList';
+import Comment from '../Comment';
 import Tag from '../Tag';
 import Icon from '../Icon';
 
@@ -80,6 +80,37 @@ export default function PostDetail({ post }) {
                             {post.transaction_region_zh.join(', ')}
                         </PostDetailRow>
                     }
+
+                    {intl.locale === 'en' && post.destination_en &&
+                        <PostDetailRow>
+                            <Icon.Location />
+                            {post.destination_en.join(', ')}
+                        </PostDetailRow>
+                    }
+
+                    {intl.locale === 'zh' && post.destination_zh &&
+                        <PostDetailRow>
+                            <Icon.Location />
+                            {post.destination_zh.join(', ')}
+                        </PostDetailRow>
+                    }
+
+                    {intl.locale === 'en' && post.article_region_en &&
+                        <PostDetailRow>
+                            <Icon.Location />
+                            {post.article_region_en.join(', ')}
+                        </PostDetailRow>
+                    }
+
+
+                    {intl.locale === 'zh' && post.article_region_zh &&
+                        <PostDetailRow>
+                            <Icon.Location />
+                            {post.article_region_zh.join(', ')}
+                        </PostDetailRow>
+                    }
+
+
 
                     {post.trans_type &&
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -150,7 +181,7 @@ export default function PostDetail({ post }) {
                         {post.coverPhoto && <PostDetailImage src={post.coverPhoto} alt='post_image' />}
                     </PostDetailContent>
                 </div>
-                {post.comment_list && <CommentDetailList pid={post._id} comments={post.comment_list}/>}
+                {post.comment_list && <Comment pid={post._id} comments={post.comment_list} />}
             </InnerWrapper>
         </PostDetailWrapper>
     )

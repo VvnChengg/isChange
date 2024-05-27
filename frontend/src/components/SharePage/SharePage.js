@@ -6,7 +6,6 @@ import { FacebookShareButton,
     TwitterShareButton, 
     EmailShareButton, 
     LineShareButton,
-    FacebookMessengerShareButton
 } from 'react-share';
 
 import { 
@@ -14,7 +13,6 @@ import {
     StyledTwitterIcon, 
     StyledEmailIcon, 
     StyledLineIcon,
-    StyledFacebookMessengerIcon,
     StyledImg,
     StyledLinkIcon,
     StyledButton,
@@ -62,10 +60,6 @@ export default function SharePage({url}) {
                     <FacebookShareButton url={url}>
                         <StyledFacebookIcon round={true} />
                     </FacebookShareButton>
-
-                    <FacebookMessengerShareButton url={url}>
-                        <StyledFacebookMessengerIcon round={true} />
-                    </FacebookMessengerShareButton>
 
                     <TwitterShareButton url={url}>
                         <StyledTwitterIcon round={true} />
