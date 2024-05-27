@@ -5,17 +5,23 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
-
-const socketPort = process.env.SOCKET_PORT || 8080;
-const corsOrigin = process.env.CORS_ORIGIN || `http://localhost:${process.env.CLIENT_PORT || 3001}`;
-
-const io = require("socket.io")(socketPort, {
-  cors: {
-    origin: [corsOrigin], // client
-  },
-}); // 初始化 WebSocket 伺服器
+const { Server } = require("socket.io");
 
 require("dotenv").config(); // 加了這行就可以抓到 port
+
+const socketPort = process.env.SOCKET_PORT || 8080;
+const corsOrigin =
+  process.env.CORS_ORIGIN ||
+  `http://localhost:${process.env.CLIENT_PORT || 3001}`;
+
+const io = new Server(socketPort, {
+  cors: {
+    origin: [corsOrigin], // client
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true,
+  },
+}); // 初始化 WebSocket 伺服器
 
 // Middleware
 app.use(cors());
@@ -54,7 +60,6 @@ const server = app.listen(process.env.PORT || 3000, () =>
 
 // Socket 連接事件處理邏輯
 io.on("connection", (socket) => {
-  
   // 使用者點開某聊天室細節時，加入此聊天室的（chatid)
   socket.on("join-room", (room) => {
     socket.join(room);
@@ -62,7 +67,7 @@ io.on("connection", (socket) => {
 
   // 當收到客戶端發送的訊息時，將訊息發送給所有客戶端
   socket.on("send-message", (newMsg, room) => {
-    socket.broadcast.to(room).emit("receive-message", newMsg); // 傳送到私人聊天室
+    socket.to(room).emit("receive-message", newMsg); // 傳送到私人聊天室
   });
 
   // 當客戶端與後端斷開連接時

@@ -1,8 +1,7 @@
 // selfPost.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PostContainer, HomeContainer} from '../home/home-style';
-import Post from '../../components/Post';
+import { PostContainer, HomeContainer,  NoContent} from '../home/home-style';
 import DeleteButton from '../../components/Button/DeleteButton'; 
 import axios from 'axios';
 import './selfPost.css'
@@ -12,6 +11,14 @@ import { useToken } from '../../hooks/useToken';
 import CreateAllButton from '../../components/Button/CreateAllButton';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
+// coverPhoto
+import { api } from '../../api';
+import { PostWrapper } from '../../components/Post/Post-style'
+
+const Post = lazy(() => import('../../components/Post'));
+const PostPhoto = lazy(() => import('../../components/Post/PostPhoto'));
+
+
 
 
 export default function SelfPost() {
@@ -28,6 +35,10 @@ export default function SelfPost() {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    // coverphoto
+    const [images, setImages] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [remainingImageIds, setRemainingImageIds] = useState([]);
 
     
     const handleButtonClick = (postID,postType,event) => {
@@ -53,7 +64,6 @@ export default function SelfPost() {
         })
         .then(response => {
             setPosts(response.data.result);
-            //console.log('已更新:', response.data);
             setIsLoading(false);
         })
         .catch(error => {
@@ -70,28 +80,74 @@ export default function SelfPost() {
         //console.log(selectedPost, isModalOpen);
     }, [selectedPost, selectedPostType, showConfirmPopup]);
 
+
+    // coverphoto
+    useEffect(() => {
+        const ids = posts.map(post => post._id);
+        setRemainingImageIds(ids);
+    }, [posts]);
+
+    // 在加載圖片時，只操作 remainingImageIds：
+    useEffect(() => {
+        if (remainingImageIds.length > 0 && !isLoading && hasMore) {
+            setIsLoading(true);
+            const nextBatchIds = remainingImageIds
+                .slice(0, 5); // 每次只取五個圖片 id
+            api.getImage(nextBatchIds)
+            .then(res => {
+                setImages(prevImages => [...prevImages, ...res]); // 合併新返回的圖片數據
+                setIsLoading(false); // 加載結束
+
+                // 更新 remainingImageIds，刪除已加載的圖片 id
+                setRemainingImageIds(prevIds => prevIds.slice(5));
+                
+                if (res.length === 0 || remainingImageIds.length <= 5) {
+                    setHasMore(false);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                setIsLoading(false);
+            });
+        }
+    }, [remainingImageIds, isLoading, hasMore]);
+    
+
+    function getCoverPhotoByPid(pid) {
+        const item = images.find(element => element.pid === pid);
+        return item ? item.coverPhoto : null;
+    }
+
     if (isLoading) {
         return <Spin />;
     }
 
     return (
         <>
-            {error && error.response && error.response.status === 500 ? (
+            {error && error.response && error.response.status === 500 && posts.length === 0 ? (
                 // nothing-container 這個取名比較廣泛感覺可以共用在所有沒找到的地方（？
-                <div className="nothing-container"> 
+                <NoContent>
                     <p className="self-post-nothing-msg"> <FormattedMessage id='selfpost.nothingMsg' /></p>
-                </div>
+                </NoContent>
             ) : (
                 <HomeContainer>
-
-                <PostContainer>
-                    {posts.map((post, index) => (
-                        <div key={`post${index}`} className="self-post-wrapper">
-                            <Post post={post} onClick={() => navigate(`/${post.type}/edit/${post._id}`)}/>
-                            <DeleteButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
-                        </div>
-                    ))}
-                </PostContainer>
+                    <PostContainer>
+                        {posts.map((post, index) => (
+                            <React.Fragment key={post._id}>
+                                <div className="self-post-wrapper" >
+                                    <PostWrapper showDivider={index !== posts.length - 1} onClick={() => navigate(`/${post.type}/edit/${post._id}`)}>
+                                        <Suspense fallback={<div>Loading post...</div>}>
+                                            <Post post={post} showDivider={index !== posts.length - 1} />
+                                        </Suspense>
+                                        <Suspense fallback={<div>Loading photo...</div>}>
+                                            <PostPhoto src={getCoverPhotoByPid(post._id)} />
+                                        </Suspense>
+                                    </PostWrapper>
+                                    <DeleteButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
+                                </div>
+                            </React.Fragment>
+                        ))}
+                    </PostContainer>
                 </HomeContainer>
 
             )}

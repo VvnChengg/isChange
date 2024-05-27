@@ -231,9 +231,9 @@ class tourApi {
       });
     } catch (err) {
       console.error(err);
-      return res.status(500).json({
+      return res.status(400).json({
         success: false,
-        message: "編輯揪團失敗",
+        message: "編輯揪團失敗: " + err.message,
       });
     }
   }
