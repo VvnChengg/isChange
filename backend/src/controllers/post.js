@@ -496,8 +496,8 @@ const getAllPostsSortedByLikes = async (req, res, next) => {
 
 const searchPosts = async (req, res) => {
   const { keyword } = req.query;
-  if (!keyword) {
-    return res.status(400).json({ message: "搜尋內容不能為空" });
+  if (!keyword || keyword.trim() === "") {
+    return res.status(200).json({ result: [] }); // 返回空結果
   }
 
   let result = [];
