@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { LoadingOutlined } from '@ant-design/icons';
 
 
+
 export default function FollowMemberButton({ username, token }) {
     const intl = useIntl();
     const [isFollowing, setIsFollowing] = useState(false);
@@ -14,6 +15,7 @@ export default function FollowMemberButton({ username, token }) {
 
 
     async function changeFollowStatus() {
+        setIsLoading(true);
         if (!token || token === '' || new Date().getTime() > expiry_time) {
             toast.error(intl.formatMessage({ id: 'alert.login' }));
             return;
@@ -35,6 +37,7 @@ export default function FollowMemberButton({ username, token }) {
                 toast.error(intl.formatMessage({ id: 'view.followError' }));
             }
         }
+        setIsLoading(false);
     }
 
     async function getFollowingList() {
@@ -65,7 +68,7 @@ export default function FollowMemberButton({ username, token }) {
         }
     }, [token]);
 
-    const buttonText =
+    let buttonText =
         isLoading ?
             <div>
                 <LoadingOutlined /> {intl.formatMessage({ id: 'loading' })}

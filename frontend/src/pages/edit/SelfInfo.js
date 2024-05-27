@@ -19,7 +19,6 @@ export const SelfInfo = ({setIntroText, introText}) => {
 
     // 儲存自我介紹
     const handleSubmitIntro = async() => {
-        // console.log('儲存自我介紹:', introText);
         if (introText.length > 200) {
             toast.error(`${intl.formatMessage({ id: 'edit.introRule' })}`);
             return;
@@ -32,7 +31,6 @@ export const SelfInfo = ({setIntroText, introText}) => {
                 toast.success(`${intl.formatMessage({ id: 'edit.saveIntroSuccess' })}`);
             }
         }catch(error){
-            // console.error(error);
             toast.error(`${intl.formatMessage({ id: 'edit.saveIntroFail' })}`);
         }
     }
@@ -45,7 +43,6 @@ export const SelfInfo = ({setIntroText, introText}) => {
             <FormattedMessage id='edit.introRule'>
             {text=> <textarea onChange={ChangeIntro} value={introText} className={editStyles.selfIntro} placeholder={text}/> }
             </FormattedMessage>
-            {/* <button onClick={handleSubmitIntro}>儲存自我介紹</button> */}
 
             <FormattedMessage id='edit.saveIntro'>
             {text=> <Button

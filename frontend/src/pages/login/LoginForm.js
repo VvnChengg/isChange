@@ -47,7 +47,6 @@ const LoginForm = () => {
       if (error.response && error.response.data.status === 'None') {
         // 如果使用者資訊不存在，執行其他登入邏輯（例如發送驗證郵件等）
         // 實現使用電子郵件登入的邏輯
-        // console.log('電子信箱建立新帳號:', email);
         navigate('/register');
 
       }
@@ -61,7 +60,6 @@ const LoginForm = () => {
 
 
   const responseGoogle = async (response) => {
-    // console.log(response);
     const tokenId = response.credential;
 
     if(tokenId){
@@ -73,7 +71,6 @@ const LoginForm = () => {
           navigate('/');
         }
       }catch(error){
-        // console.log(error);
         if(error.response.data.error === '此帳號已註冊，請使用原本的帳號登入'){
           toast.error(intl.formatMessage({ id: 'login.errorGoogleAccount' }));
         }else{
