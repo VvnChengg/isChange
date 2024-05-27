@@ -80,13 +80,12 @@ class commonApi {
             const eventIds = groupedData.Event?.map(item => item.item_id);
             const productIds = groupedData.Product?.map(item => item.item_id);
 
-            articles = await Article.find({ _id: { $in: articleIds } });
-            events = await Event.find({ _id: { $in: eventIds } });
-            products = await Product.find({ _id: { $in: productIds } });          
+            articles = await Article.find({ _id: { $in: articleIds } }, { article_pic: 0 });
+            events = await Event.find({ _id: { $in: eventIds } }, { event_pic: 0 });
+            products = await Product.find({ _id: { $in: productIds } }, { product_pic: 0 });
 
             // 抽取文章需要的資訊並統一格式
             articles.forEach((article) => {
-                console.log("1",article.article_pic);
                 // Convert image data to base64
                 let photoBase64 = null;
                 if (article.article_pic && article.article_pic.contentType) {
@@ -106,7 +105,7 @@ class commonApi {
             });
 
             events.forEach((event) => {
-                console.log("2",event.event_pic);
+                console.log("2", event.event_pic);
                 // Convert image data to base64
                 let photoBase64 = null;
                 if (event.event_pic && event.event_pic.contentType) {
@@ -133,7 +132,7 @@ class commonApi {
 
             // 抽取商品需要的資訊並統一格式
             products.forEach((product) => {
-                console.log("3",product.product_pic);
+                console.log("3", product.product_pic);
                 // Convert image data to base64
                 let photoBase64 = null;
                 if (product.product_pic && product.product_pic.contentType) {
@@ -159,11 +158,11 @@ class commonApi {
             });
             if (result.length <= 0) {
                 return res.status(200).json({ message: "還沒有收藏內容" });
-              }
-              // 依時間倒序排序
-              result.sort((a, b) => {
+            }
+            // 依時間倒序排序
+            result.sort((a, b) => {
                 return new Date(b.datetime) - new Date(a.datetime);
-              });
+            });
 
             return res.status(200).json({
                 success: true,
@@ -195,7 +194,7 @@ class commonApi {
                 (save) => save.user_id.toString() === userId.toString()
             ).length;
         }
-        return {isLiked, isSaved, saveList};
+        return { isLiked, isSaved, saveList };
     }
 }
 module.exports = new commonApi();
