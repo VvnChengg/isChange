@@ -3,7 +3,6 @@ const Article = require("../models/article");
 const Product = require("../models/product");
 require("dotenv").config(); // 加了這行就可以抓到 ipdata api key
 
-
 // filter：取得附近文章、揪團、商品
 const filterDistanceAll = async (req, res) => {
   const { longitude, latitude } = req.body;
@@ -35,6 +34,7 @@ const filterDistanceAll = async (req, res) => {
           article_region_zh: "$article_region_zh",
           datetime: "$post_date",
           distance: "$dist.calculated",
+          status: "$status",
         },
       },
     ]);
@@ -70,6 +70,7 @@ const filterDistanceAll = async (req, res) => {
           people_lb: "$people_lb",
           people_ub: "$people_ub",
           creator_id: "$creator_id",
+          status: "$status",
         },
       },
     ]);
@@ -111,6 +112,8 @@ const filterDistanceAll = async (req, res) => {
 
     // 合併所有結果
     let result = [...articles, ...events, ...products];
+
+    result = result.filter(result => result.status !== 'delete');
 
     result.sort((a, b) => {
       return b.distance - a.distance;
@@ -150,7 +153,7 @@ const sortDistanceAll = async (req, res) => {
           title: "$article_title",
           content: 1,
           type: { $literal: "post" },
-          // coverPhoto: "$article_pic",  
+          // coverPhoto: "$article_pic",
           location: "$location",
           article_region_en: "$article_region_en",
           article_region_zh: "$article_region_zh",
@@ -190,6 +193,7 @@ const sortDistanceAll = async (req, res) => {
           end_time: "$end_time",
           people_lb: "$people_lb",
           people_ub: "$people_ub",
+          status: "$status",
           creator_id: "$creator_id",
         },
       },
@@ -232,6 +236,8 @@ const sortDistanceAll = async (req, res) => {
 
     // 合併所有結果
     let result = [...articles, ...events, ...products];
+
+    result = result.filter(result => result.status !== 'delete');
 
     result.sort((a, b) => {
       return b.distance - a.distance;
