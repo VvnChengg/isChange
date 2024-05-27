@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 
-import './shareCreate-style.css';
-
 import {
   FormInput,
   FormImage,
   FormLocation
 } from '../../components/FormInput';
 import Button from '../../components/Button';
+
 import {
+  CreateContainer,
   CreateButtonContainer
-} from '../transCreate/transCreate-style';
+} from './shareCreate-style';
 
 import { api } from '../../api';
 
@@ -20,9 +20,6 @@ import { useToken } from '../../hooks/useToken';
 import { toast } from 'react-toastify';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
-
-
-
 
 export default function Share() {
   const intl = useIntl();
@@ -138,8 +135,7 @@ export default function Share() {
   }
 
   return (
-    <div className='container'>
-      <div className='content'>
+    <CreateContainer>
         <FormInput
           type='input'
           title={intl.formatMessage({ id: 'title' })}
@@ -197,7 +193,6 @@ export default function Share() {
             onClick={isSubmitting ? undefined : onSubmit}
           />
         </CreateButtonContainer>
-      </div>
-    </div>
+      </CreateContainer>
   );
 }

@@ -10,6 +10,27 @@ export const HomeContainer = styled.div `
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    @media screen and (max-width: 1200px) {
+        top: 130px;
+        width: 55%;
+    }
+
+    @media screen and (max-width: 1100px) {
+        width: 60%;
+    }
+
+    @media screen and (max-width: 1000px) {
+        width: 70%;
+    }
+
+    @media screen and (max-width: 900px) {
+        width: 80%;
+    }
+
+    @media screen and (max-width: 800px) {
+        width: 90%;
+    }
     
     @media screen and (max-width: 500px) {
         top: 120px;
@@ -29,9 +50,7 @@ export const PostContainer = styled.div `
     flex-direction: column;
     align-items: center;
 
-
-    @media screen and (max-width: 768px) {
-        overflow: scroll;
+    @media screen and (max-width: 500px) {
         padding-bottom: 100px;
     }
 `
@@ -64,16 +83,16 @@ export const HomeTopBar = styled.div `
     width: 95%;
 
     position: fixed;
-        top: 100px;
+        top: 80px;
         z-index: 2;
     
-    padding-bottom: 10px;
+    padding: 20px 0 10px 0;
     
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 1200px) {
         width: 90%;
         background-color: ${props => props.theme.fill};
     }

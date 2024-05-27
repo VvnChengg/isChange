@@ -61,15 +61,11 @@ export default function TourCreate() {
 
         try{
             const data = await tourApi.editViewTour(tid, user_id, token);
-            console.log(tour);
             if(data.success){
                 const data = await tourApi.viewTour(tid);
                 if(data.success){
                     data.tour.start_time = formatDate(data.tour.start_time);
                     data.tour.end_time = formatDate(data.tour.end_time);
-                    console.log(data);
-                    console.log(data.tour.destination_en);
-                    console.log(data.tour.destination_zh);
                     setTour(prevTour => ({ 
                         ...prevTour,
                         ...data.tour,
@@ -119,13 +115,12 @@ export default function TourCreate() {
             tour.location = location;
         }
 
-        console.log(tour);
-
         try{
             const data = await tourApi.editTour(tour, token);
+            console.log(data);
             if(data.success){
                 toast.success(`${intl.formatMessage({ id: 'tour.editSuccess' })}`);
-                // navigate('/post/published');
+                navigate('/post/published');
             }else{
                 toast.error(`${intl.formatMessage({ id: 'tour.editFailed' })}`);
             }

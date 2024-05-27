@@ -128,6 +128,7 @@ const en = {
     'login.invalidEmailInput': 'Invalid email input format',
     'login.error': 'Login failed, please try again',
     'login.errorGoogleAccount': 'This account has already been registered, please use the original account to login',
+    'login.errorGoogleSSO': 'This account has already been registered with Google SSO, please use Google SSO to login',
 
     'register.tryAgain': 'Please try again',
     'register.emailRegistered': 'Email is registered',
@@ -177,6 +178,7 @@ const en = {
     'view.followingList': 'Following List',
     'view.viewIntro': 'View Introduction',
     'view.viewPost': 'View Post',
+    'view.followHint': 'Want to know more about {other_username}? Follow {other_username}!',
 
     'edit.changePassword': 'Password',
     'edit.changeUsernameandSchool': 'Other Information',
@@ -221,6 +223,7 @@ const en = {
 
     'post.create': 'Create post',
     'post.edit': 'Edit post',
+    'post.message': 'Contact author',
     'post.uploadImage': 'Upload image',
     'post.checkEditFailed': 'Loading edit page failed, please try again',
     'post.createSuccess': 'Create post successfully',
@@ -280,6 +283,7 @@ const en = {
     'trans.date': 'Rent date',
     'trans.create': 'Create product',
     'trans.edit': 'Edit product',
+    'trans.message': 'Contact author',
     'trans.draft':'draft',
     'trans.instock': 'in stock',
     'trans.reserved':'reserved',

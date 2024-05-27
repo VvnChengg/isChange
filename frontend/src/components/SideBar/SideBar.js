@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 
-import { Checkbox, Col, Row, InputNumber } from 'antd';
+import { Checkbox, Col, Row, Input } from 'antd';
 
 import {
     SideBarWrapper,
@@ -65,13 +65,22 @@ export default function SideBar({
                 <SideBarTitle>
                     <FormattedMessage id='sidebar.distance' />
                 </SideBarTitle>
-                <InputNumber
+                {/* <InputNumber
                     addonAfter='km'
                     defaultValue={40075}
                     min={1}
                     max={40075}
-                    value={radius}
                     onPressEnter={e=> setRadius(e.target.value)}
+                /> */}
+                <Input.Search
+                    type='number'
+                    suffix='km'
+                    enterButton='✔︎'
+                    defaultValue={40075}
+                    min={1}
+                    max={40075}
+                    onPressEnter={e => setRadius(e.target.value)}
+                    onSearch={value => setRadius(value)}
                 />
                 {type === 'trans' &&
                     <>

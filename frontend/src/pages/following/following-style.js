@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+    width: 40%;
     height: 60%;
     margin: 2rem auto;
     padding: 1.5rem;
@@ -8,6 +9,11 @@ export const Container = styled.div`
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: auto;
+
+    @media screen and (max-width: 768px) {
+        width: 80%;
+        height: 50%;
+    }
 `;
 
 export const Title = styled.h1`
@@ -54,13 +60,27 @@ export const Username = styled.span`
 
 export const UnfollowButton = styled.button`
   padding: 5px 10px;
-  background-color: #ff4d4d;
+  background-color: ${props => props.isLoading ? '#cccccc' : '#ff4d4d'};
   color: white;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: ${props => props.isLoading ? 'not-allowed' : 'pointer'};
 
   &:hover {
-    background-color: #ff1a1a;
+    background-color: ${props => props.isLoading ? '#cccccc' : '#ff1a1a'};
+  }
+`;
+
+
+export const DisabledButton = styled.button`
+  padding: 5px 10px;
+  background-color: #cccccc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: #cccccc;
   }
 `;

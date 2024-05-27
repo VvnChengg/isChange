@@ -35,7 +35,7 @@ const zh = {
     'selfpost.edit':'編輯',
     'selfpost.delete':'刪除',
     'selfpost.cancel':'算了',
-    'selfpost.cancelnotification':'確定要取消嗎？',
+    'selfpost.cancelnotification':'確定要刪除嗎？',
     'selfpost.nothingMsg' :'尚未發表文章！',
 
     'sidebar.generalSort': '一般排序',
@@ -130,6 +130,7 @@ const zh = {
     'login.invalidEmailInput': '無效的電子信箱格式',
     'login.error': '登入失敗，請再試一次',
     'login.errorGoogleAccount': '此帳號已註冊，請使用原本的帳號登入',
+    'login.errorGoogleSSO': '此帳號已使用Google SSO註冊，請使用Google SSO登入',
 
     'register.tryAgain': '請再試一次',
     'register.emailRegistered': '電子信箱已被註冊',
@@ -179,6 +180,7 @@ const zh = {
     'view.followingList': '追蹤名單',
     'view.viewIntro': '查看自我介紹',
     'view.viewPost': '查看文章',
+    'view.followHint': '不想錯過有趣的文章？追蹤{other_username}吧！',
 
     'edit.changePassword': '修改密碼',
     'edit.changeUsernameandSchool': '修改其他資訊',
@@ -223,6 +225,7 @@ const zh = {
 
     'post.create': '創建貼文',
     'post.edit': '更新貼文',
+    'post.message': '私訊發文者',
     'post.uploadImage': '上傳圖片',
     'post.checkEditFailed': '讀取編輯頁面失敗，請再試一次',
     'post.createSuccess': '創建文章成功',
@@ -283,6 +286,7 @@ const zh = {
     'trans.date': '租借日期',
     'trans.create': '創建商品',
     'trans.edit': '編輯商品',
+    'trans.message': '私訊發文者',
     'trans.draft':'草稿',
     'trans.instock': '銷售中',
     'trans.reserved':'已保留',

@@ -27,7 +27,7 @@ export const PostInfoContainer = styled.div `
     align-items: center;
     gap: 7px;
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 700px) {
         display: block;
     }
 `
@@ -75,7 +75,6 @@ export const PostTitle = styled.div `
 
     @media screen and (max-width: 500px) {
         font-size: 24px;
-       // overflow: scroll;
     }
 `
 
@@ -90,6 +89,7 @@ export const PostPreview = styled.div `
     color: #6B6B6B;
 
     white-space: nowrap;
+    text-overflow: ellipsis; 
     overflow: hidden;
 
     @media screen and (max-width: 500px) {
@@ -98,8 +98,8 @@ export const PostPreview = styled.div `
 `
 
 export const PostImage = styled.img `
-    height: calc(100% - 40px);
-    aspect-ratio: 1 / 1;
+    width: 100px;
+    height: 100px;
 
     position: absolute;
         right: 0;

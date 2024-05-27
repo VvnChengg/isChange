@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { useIntl } from 'react-intl';
@@ -23,6 +24,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [showPasswordForm, setShowPasswordForm] = useState(false); // 狀態用於顯示/隱藏密碼表單
 
+  const { setToken } = useContext(AuthContext);
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -39,10 +41,12 @@ const LoginForm = () => {
       return data;
     } catch (error) {
       // Handle error
+      if(error.response && error.response.data.status === 'google') {
+        toast.error(intl.formatMessage({ id: 'login.errorGoogleSSO' }));
+      }
       if (error.response && error.response.data.status === 'None') {
         // 如果使用者資訊不存在，執行其他登入邏輯（例如發送驗證郵件等）
         // 實現使用電子郵件登入的邏輯
-        // console.log('電子信箱建立新帳號:', email);
         navigate('/register');
 
       }
@@ -56,18 +60,17 @@ const LoginForm = () => {
 
 
   const responseGoogle = async (response) => {
-    // console.log(response);
     const tokenId = response.credential;
 
     if(tokenId){
       try{
         const data = await loginApi.sso_login(tokenId);
-        // console.log(data);
+
         if(data.status === 'success'){
+          setToken(data.data.access_token);
           navigate('/');
         }
       }catch(error){
-        // console.log(error);
         if(error.response.data.error === '此帳號已註冊，請使用原本的帳號登入'){
           toast.error(intl.formatMessage({ id: 'login.errorGoogleAccount' }));
         }else{
