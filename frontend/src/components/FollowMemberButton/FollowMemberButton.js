@@ -9,49 +9,68 @@ import { LoadingOutlined } from '@ant-design/icons';
 export default function FollowMemberButton({ username, token }) {
     const intl = useIntl();
     const [isFollowing, setIsFollowing] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const expiry_time = localStorage.getItem('expiry_time');
+
 
     async function changeFollowStatus() {
-        try{
+        if (!token || token === '' || new Date().getTime() > expiry_time) {
+            toast.error(intl.formatMessage({ id: 'alert.login' }));
+            return;
+        }
+
+        try {
             const data = await viewApi.changeFollowStatus(username, token);
-            if(data.message === '成功追蹤'){
+            if (data.message === '成功追蹤') {
                 setIsFollowing(true);
                 toast.success(intl.formatMessage({ id: 'view.followSuccess' }));
-            }else if(data.message === '成功取消追蹤'){
+            } else if (data.message === '成功取消追蹤') {
                 setIsFollowing(false);
                 toast.success(intl.formatMessage({ id: 'view.followCancelSuccess' }));
             }
-        }catch(err){
-            toast.error(intl.formatMessage({ id: 'view.followError' }));
+        } catch (err) {
+            if (!token || token === '' || new Date().getTime() > expiry_time) {
+                toast.error(intl.formatMessage({ id: 'alert.login' }));
+            } else {
+                toast.error(intl.formatMessage({ id: 'view.followError' }));
+            }
         }
     }
 
-    async function getFollowingList(){
-        try{
+    async function getFollowingList() {
+        setIsLoading(true);
+        try {
             const data = await viewApi.getFollowingList(token);
-            if(data){
+            if (data) {
                 if (data.some(item => item.username === username)) {
                     setIsFollowing(true);
-                }else{
+                } else {
                     setIsFollowing(false);
                 }
             }
-        }catch(err){
-            toast.error(intl.formatMessage({ id: 'view.checkFollowFailed' }));
+        } catch (err) {
+            if (!token || token === '' || new Date().getTime() > expiry_time) {
+                toast.error(intl.formatMessage({ id: 'alert.login' }));
+            } else {
+                toast.error(intl.formatMessage({ id: 'view.checkFollowFailed' }));
+            }
+
         }
         setIsLoading(false);
     }
 
     useEffect(() => {
-        getFollowingList();
-    }, []);
+        if (token) {
+            getFollowingList();
+        }
+    }, [token]);
 
-    const buttonText = 
-    isLoading ? 
-    <div>
-        <LoadingOutlined/> {intl.formatMessage({ id: 'loading' })}
-    </div>
-    : isFollowing ? intl.formatMessage({ id: 'view.unfollow' }) : intl.formatMessage({ id: 'view.follow' });
+    const buttonText =
+        isLoading ?
+            <div>
+                <LoadingOutlined /> {intl.formatMessage({ id: 'loading' })}
+            </div>
+            : isFollowing ? intl.formatMessage({ id: 'view.unfollow' }) : intl.formatMessage({ id: 'view.follow' });
 
     return (
         <Button
@@ -62,7 +81,6 @@ export default function FollowMemberButton({ username, token }) {
                 width: 'auto',
                 minWidth: '100px',
                 padding: '5px 10px',
-                zIndex: "1000",
                 whiteSpace: "nowrap",
             }}
             text={buttonText}
