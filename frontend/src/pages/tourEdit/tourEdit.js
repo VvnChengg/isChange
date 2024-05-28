@@ -117,7 +117,6 @@ export default function TourCreate() {
 
         try{
             const data = await tourApi.editTour(tour, token);
-            console.log(data);
             if(data.success){
                 toast.success(`${intl.formatMessage({ id: 'tour.editSuccess' })}`);
                 navigate('/post/published');
