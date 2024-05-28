@@ -4,9 +4,9 @@ import './DeleteButton.css'
 
 const DeleteButton = ({ onClick }) => {
   return (
-    <button className='self-post-delete-button' onClick={onClick}>
+    <div className='self-post-delete-button' onClick={onClick}>
       <Icon.Trash />
-    </button>
+    </div>
   );
 };
 

@@ -147,9 +147,7 @@ export default function SelfPost() {
                                             <PostPhoto src={getCoverPhotoByPid(post._id)} />
                                         </Suspense>
                                     </PostWrapper>
-                                    <div style={{ width: '30px', height: '30px', textAlign: 'center' }}>
-                                        <DeleteButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
-                                    </div>
+                                    <DeleteButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
                                 </div>
                             </React.Fragment>
                         ))}
