@@ -35,6 +35,8 @@ export default function TourCreate() {
         event_intro: '',
         event_pic: '',
         user_id: user_id,
+        latitude: '',
+        longitude: '',
     })
 
     async function onSubmit() {
@@ -75,7 +77,8 @@ export default function TourCreate() {
             toast.error(intl.formatMessage({ id: 'tour.titleRequired' }));
             trySubmit = false;
         }
-
+        console.log(tour);
+        console.log(tour.longitude);
         if (tour.longitude === "" && tour.latitude === "") {
             toast.error(intl.formatMessage({ id: 'tour.destinationRequired' }));
             trySubmit = false;
