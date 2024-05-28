@@ -124,7 +124,7 @@ export default function SelfPost() {
 
     return (
         <>
-            {error && error.response && error.response.status === 500 && posts.length === 0 ? (
+            {error && error.response && error.response.status === 500 || posts.length === 0 ? (
                 // nothing-container 這個取名比較廣泛感覺可以共用在所有沒找到的地方（？
                 <NoContent>
                     <p className="self-post-nothing-msg"> <FormattedMessage id='selfpost.nothingMsg' /></p>
