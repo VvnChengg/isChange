@@ -6,7 +6,8 @@ export const CreateContainer = styled.div `
     padding: 20px 0;
     
     position: absolute;
-        top: 80px;
+    top: 80px;
+    padding-bottom: 80px;
 
     display: flex;
         flex-direction: column;
