@@ -14,6 +14,7 @@ import {
   ChatRoomAvatar,
   ChatRoomContent,
   ChatRoomRow,
+  ChatRoomPreview
 } from './ChatRoomList-style';
 
 
@@ -92,7 +93,7 @@ function ChatRoomList({ rooms }) {
                   </ChatRoomRow>
                   <ChatRoomRow>
                     {room.last_message ? 
-                      <div>{room.last_message}</div> : 
+                      <ChatRoomPreview>{room.last_message}</ChatRoomPreview> : 
                       <div style={{ color: 'red' }}>
                         <FormattedMessage id='msg.userNotEntered' />
                       </div>

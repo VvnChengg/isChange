@@ -35,10 +35,11 @@ export default function TourCreate() {
         event_intro: '',
         event_pic: '',
         user_id: user_id,
+        latitude: '',
+        longitude: '',
     })
 
     async function onSubmit() {
-        console.log(tour);
         setIsSubmitting(true);
 
         if(tour.destination_en_string !== undefined || tour.destination_zh_string !== undefined){
@@ -69,13 +70,12 @@ export default function TourCreate() {
         }
 
         // Error control
-        console.log(tour);
         let trySubmit = true;
         if (tour.event_title === "") {
             toast.error(intl.formatMessage({ id: 'tour.titleRequired' }));
             trySubmit = false;
         }
-
+        
         if (tour.longitude === "" && tour.latitude === "") {
             toast.error(intl.formatMessage({ id: 'tour.destinationRequired' }));
             trySubmit = false;
@@ -84,7 +84,7 @@ export default function TourCreate() {
         if (tour.people_lb === "" && tour.people_ub === "") {
             toast.error(intl.formatMessage({ id: 'tour.rangeOfPeopleRequired' }));
             trySubmit = false;
-        }else if (tour.people_lb >= tour.people_ub) {
+        }else if (tour.people_lb > tour.people_ub) {
             toast.error(intl.formatMessage({ id: 'tour.rangeOfPeopleError' }));
             trySubmit = false;
         }

@@ -67,7 +67,9 @@ export default function Post({ post, onClick, showDivider }) {
                     }
                     {getLocation() && 
                         <PostInfo>
-                            <Icon.Location />
+                            <PostIcon>
+                                <Icon.Location />
+                            </PostIcon>
                             {getLocation()}
                         </PostInfo>
                     }
@@ -90,7 +92,7 @@ export default function Post({ post, onClick, showDivider }) {
                 </PostInfoContainer>
                 {renderStatus()}
             </PostTopBar>
-            <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '80%'}}>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '10px', width: '75%'}}>
                 <PostTitle>{post ? post.title : samplePost.title}</PostTitle>
                 <PostPreview>{post && post.content ? post.content : samplePost.content}</PostPreview>
             </div>

@@ -12,27 +12,6 @@
     overflow: auto;
 }
 
-@media screen and (max-width: 768px) {
-    .editContainer {
-        margin-top: 50px;
-        width: 80%;
-        height: 60%;
-    }
-    .floatingDiv{
-        width: 80%;
-    }
-}
-
-@media screen and (max-width: 1200px) {
-    .editContainer {
-        margin-top: 50px;
-        width: 90%;
-        height: 60%;
-    }
-    
-}
-
-
 .editForm {
     margin-top: 1rem;
 }
@@ -215,4 +194,25 @@
     color: red;
     margin-left: auto;
     white-space: nowrap;
+}
+
+
+@media screen and (max-width: 768px) {
+    .editContainer {
+        margin-top: 50px;
+        width: 80%;
+        height: 60%;
+    }
+    .floatingDiv{
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .editContainer {
+        margin-top: 50px;
+        width: 90%;
+        height: 60%;
+    }
+    
 }

@@ -47,7 +47,11 @@ export const api = {
     searchPosts: (keyword) => {
         return (
             axios.get(hostname + '/post/search?keyword=' + keyword)
-            .then(res => res.data.result)
+            .then(res => {
+                if (res.data.message === '資料庫中無任何內容')
+                    return [];
+                else return res.data.result;
+            })
             .catch(err => console.log(err))
         )
     },

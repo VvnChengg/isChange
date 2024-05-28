@@ -68,14 +68,9 @@ export const PostDetailTitle = styled.div`
 
     min-height: 50px;
 `
-export const PostDetailButtonContainer = styled.div`
+export const PostDetailButtonContainer = styled.div `
+    height: 30px;
     display: flex;
-    flex-direction: row;
-
-    @media (min-width: 600px) {
-        flex-direction: row;
-    }
-
 `
 
 export const PostDetailRow = styled.div`

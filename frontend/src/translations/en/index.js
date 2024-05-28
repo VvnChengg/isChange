@@ -250,7 +250,7 @@ const en = {
     'tour.inputDestination': 'Where to go?',
     'tour.people': 'Range of people',
     'tour.peopleUnit': 'People',
-    'tour.budget': 'Range of budget',
+    'tour.budget': 'Budget',
     'tour.min': 'Min',
     'tour.max': 'Max',
     'tour.date': 'Date',
@@ -277,10 +277,10 @@ const en = {
     'tour.titleRequired': 'Title required',
     'tour.destinationRequired': 'Destination required',
     'tour.rangeOfPeopleRequired': 'Range of people required',
-    'tour.rangeOfBudgetRequired': 'Range of budget required',
+    'tour.rangeOfBudgetRequired': 'Budget required',
     'tour.dateRequired': 'Date required',
     'tour.descriptionRequired': 'Description required',
-    'tour.rangeOfPeopleError': 'Range of people min should be less than max',
+    'tour.rangeOfPeopleError': 'Range of people min should not be greater than max',
 
     'trans.type': 'Type',
     'trans.sell': 'Sell',
@@ -341,7 +341,7 @@ const en = {
     'header.login': 'Login',
 
     /* hooks */
-    'token.pleaseLogIn': 'Please login first',
+    'token.pleaseLogIn': 'Please login',
     'token.Expiry': 'Login expired, please login again',
 };
 

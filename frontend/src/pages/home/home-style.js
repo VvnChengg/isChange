@@ -35,8 +35,6 @@ export const HomeContainer = styled.div `
     @media screen and (max-width: 500px) {
         top: 120px;
         width: 90%;
-
-        overflow: scroll;
     }
 `
 

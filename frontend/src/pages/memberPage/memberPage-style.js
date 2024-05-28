@@ -32,7 +32,7 @@ export const Container = styled.div`
 export const HeaderBackground = styled.div`
     position: absolute;
     top: 100px;
-    background-color: grey;
+    background-color: #008CD9;
     width: 60%;
     height: 200px;
     border-radius: 10px;

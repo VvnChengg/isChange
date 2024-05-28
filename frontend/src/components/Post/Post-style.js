@@ -27,7 +27,10 @@ export const PostInfoContainer = styled.div `
     align-items: center;
     gap: 7px;
 
+    flex-wrap: wrap;
+
     @media screen and (max-width: 700px) {
+        width: 60%;
         display: block;
     }
 `
@@ -35,13 +38,10 @@ export const PostInfoContainer = styled.div `
 export const PostInfo = styled.div `
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 3px;
 
     float: left;
-
-    @media screen and (max-width: 500px) {
-        gap: 5px;
-    }
+    text-align: left;
 `
 
 export const PostIcon = styled.div `
@@ -66,11 +66,10 @@ export const PostTitle = styled.div `
     font-weight: 800;
     font-size: 28px;
     line-height: 130%;
-
-    display: flex;
-    align-items: center;
+    text-align: left;
 
     white-space: nowrap;
+    text-overflow: ellipsis; 
     overflow: hidden;
 
     @media screen and (max-width: 500px) {
@@ -82,9 +81,7 @@ export const PostPreview = styled.div `
     font-weight: 400;
     font-size: 20px;
     line-height: 130%;
-
-    display: flex;
-    align-items: center;
+    text-align: left;
 
     color: #6B6B6B;
 
