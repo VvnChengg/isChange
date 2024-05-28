@@ -34,11 +34,9 @@ export const viewApi = {
     getOtherMemberPosts: (username) => {
         return axios.get(`${hostname}/member/posts/${username}`)
         .then(res => {
-            // console.log(res);
             return res.data
         })
         .catch(err => {
-            // console.log(err)
             return err
         });
     },

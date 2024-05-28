@@ -39,6 +39,11 @@ export default function Header({
         navigate('/');
     }
 
+    function onSearch() {
+        setSearch(true);
+        navigate('/');
+    }
+
     function changeLanguage() {
         if (language === 'zh') setLanguage('en');
         else if (language === 'en') setLanguage('zh');
@@ -61,7 +66,7 @@ export default function Header({
                     id='header.search'
                     value={keyword}
                     onChange={e => setKeyword(e.target.value)}
-                    onSearch={() => setSearch(true)}
+                    onSearch={() => onSearch()}
                 />
             </HeaderSearchContainer>
             <HeaderButtonContainer>

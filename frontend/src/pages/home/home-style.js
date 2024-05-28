@@ -50,6 +50,10 @@ export const PostContainer = styled.div `
     flex-direction: column;
     align-items: center;
 
+    @media screen and (max-width: 1200px) {
+        padding-bottom: 60px;
+    }
+
     @media screen and (max-width: 500px) {
         padding-bottom: 100px;
     }

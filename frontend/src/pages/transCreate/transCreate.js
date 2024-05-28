@@ -74,17 +74,41 @@ export default function TransCreate() {
             trans.location = location;
         }
 
-        try{
-            const data = await transApi.createTrans(trans, token);
-            if(data.success){
-                toast.success(intl.formatMessage({ id: 'trans.createSuccess'}));
-                navigate('/post/published');
-            }else{
+        // Error control
+        let trySubmit = true;
+        if (trans.trans_title === "") {
+        toast.error(intl.formatMessage({ id: 'trans.titleRequired' }));
+        trySubmit = false;
+        }
+
+        if (trans.longitude === "" && trans.latitude === "") {
+        toast.error(intl.formatMessage({ id: 'trans.productRegionRequired' }));
+        trySubmit = false;
+        }
+
+        if (trans.budget === "") {
+            toast.error(intl.formatMessage({ id: 'trans.priceRequired' }));
+            trySubmit = false;
+        }
+
+        if (trans.trans_intro === "") {
+            toast.error(intl.formatMessage({ id: 'trans.descriptionRequired' }));
+            trySubmit = false;
+        }
+
+        if (trySubmit) {
+            try{
+                const data = await transApi.createTrans(trans, token);
+                if(data.success){
+                    toast.success(intl.formatMessage({ id: 'trans.createSuccess'}));
+                    navigate('/post/published');
+                }else{
+                    toast.error(intl.formatMessage({ id: 'trans.createFail'}));
+                }
+            }
+            catch(e){
                 toast.error(intl.formatMessage({ id: 'trans.createFail'}));
             }
-        }
-        catch(e){
-            toast.error(intl.formatMessage({ id: 'trans.createFail'}));
         }
 
         setIsSubmitting(false);

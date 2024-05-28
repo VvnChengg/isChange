@@ -2,13 +2,36 @@
 
 .editContainer {
     width: 40%;
+    height: 90%;
     margin: 2rem auto;
     padding: 1.5rem;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 10%;
+    margin-top: 100px;
+    overflow: auto;
 }
+
+@media screen and (max-width: 768px) {
+    .editContainer {
+        margin-top: 50px;
+        width: 80%;
+        height: 60%;
+    }
+    .floatingDiv{
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .editContainer {
+        margin-top: 50px;
+        width: 90%;
+        height: 60%;
+    }
+    
+}
+
 
 .editForm {
     margin-top: 1rem;
@@ -76,6 +99,19 @@
     margin-top: 20px;
 }
 
+.introContainer {
+    position: relative;
+}
+  
+
+.selfIntro::before {
+    content: '';
+    display: block;
+    height: 20px;
+    /* Adjust this value to match the height of your label */
+  }
+
+  
 .selfIntro {
     align-items: center;
     width: 100%;
@@ -179,14 +215,4 @@
     color: red;
     margin-left: auto;
     white-space: nowrap;
-}
-
-
-@media screen and (max-width: 768px) {
-    .editContainer {
-      width: 80%;
-    }
-    .floatingDiv{
-        width: 80%;
-    }
 }

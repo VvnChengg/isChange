@@ -82,7 +82,6 @@ function App() {
   const [filters, setFilters] = useState(filterOptions);
   const [token, setToken] = useState(localStorage.getItem('access_token') || '');
 
-
   const oauth_cliend_id = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
 
   useEffect(() => {
@@ -116,11 +115,15 @@ function App() {
                   >
                     <Route path='' element={
                       <Home
-                        keyword={keyword} search={search} setSearch={setSearch}
-                        type={type} setType={setType} sort={sort} setSort={setSort}
-                        radius={radius} setRadius={setRadius} filters={filters} setFilters={setFilters}
+                        keyword={keyword} setKeyword={setKeyword}
+                        search={search} setSearch={setSearch}
+                        type={type} setType={setType}
+                        sort={sort} setSort={setSort}
+                        radius={radius} setRadius={setRadius}
+                        filters={filters} setFilters={setFilters}
                         filterOptions={filterOptions}
-                      />} />
+                      />}
+                    />
                     <Route path='login' element={<LoginForm />} />
                     <Route path='register' element={<Register />} />
                     <Route path='edit' element={<Edit />} />

@@ -44,12 +44,14 @@ export const SelfInfo = ({setIntroText, introText}) => {
             {text=> <textarea onChange={ChangeIntro} value={introText} className={editStyles.selfIntro} placeholder={text}/> }
             </FormattedMessage>
 
-            <FormattedMessage id='edit.saveIntro'>
-            {text=> <Button
-                style = {{width: '100%', marginTop: '10px'}}
-                onClick={handleSubmitIntro} 
-                text={text}/>}
-            </FormattedMessage>
+            <div className={editStyles.introContainer}>
+                <FormattedMessage id='edit.saveIntro'>
+                {text=> <Button
+                    style = {{width: '100%', marginTop: '10px'}}
+                    onClick={handleSubmitIntro} 
+                    text={text}/>}
+                </FormattedMessage>
+            </div>
         </Fragment>
     );
 };

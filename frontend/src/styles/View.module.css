@@ -6,6 +6,25 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 100px;
+  overflow: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .isChange {
+    margin-top: 50px;
+    width: 80%;
+    height: 60%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .isChange {
+    margin-top: 50px;
+    width: 90%;
+    height: 60%;
+  }
+  
 }
 
 
@@ -13,7 +32,7 @@
   display: flex;
   justify-content: space-between;
   margin: 10%;
-  height: 20%;
+  height: 30%;
 }
 
 .profileLeft, .profileCenter, .profileRight {
@@ -114,14 +133,6 @@ footer {
   color: white;
   padding: 2px 5px;
 }
-
-
-@media screen and (max-width: 768px) {
-  .isChange {
-    width: 80%;
-  }
-}
-
 
 .selfPostWrapper {
   width: 100%;

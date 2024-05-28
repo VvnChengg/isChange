@@ -118,9 +118,9 @@ export default function SelfPost() {
         return item ? item.coverPhoto : null;
     }
 
-    if (isLoading) {
-        return <Spin />;
-    }
+    // if (isLoading) {
+    //     return <Spin />;
+    // }
 
     return (
         <>

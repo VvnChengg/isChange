@@ -242,6 +242,9 @@ const en = {
     'post.inputLocation': 'Where are you?',
     'post.editSuccess': 'Edit post successfully',
     'post.editFailed': 'Edit post failed, please try again',
+    'post.titleRequired': 'Title required',
+    'post.locationRequired': 'Location required',
+    'post.descriptionRequired': 'Description required',
 
     'tour.destination': 'Destination',
     'tour.inputDestination': 'Where to go?',
@@ -271,6 +274,13 @@ const en = {
     'tour.likeSuccess': 'Like tour successfully',
     'tour.likeCancelSucess': 'Cancel like tour successfully',
     'tour.likeFailed': 'Like tour failed',
+    'tour.titleRequired': 'Title required',
+    'tour.destinationRequired': 'Destination required',
+    'tour.rangeOfPeopleRequired': 'Range of people required',
+    'tour.rangeOfBudgetRequired': 'Range of budget required',
+    'tour.dateRequired': 'Date required',
+    'tour.descriptionRequired': 'Description required',
+    'tour.rangeOfPeopleError': 'Range of people min should be less than max',
 
     'trans.type': 'Type',
     'trans.sell': 'Sell',
@@ -312,6 +322,11 @@ const en = {
     'trans.likeSuccess': 'Like product successfully',
     'trans.likeCancelSucess': 'Cancel like product successfully',
     'trans.likeFailed': 'Like product failed',
+    'trans.titleRequired': 'Title required',
+    'trans.productRegionRequired': 'Product Region Required',
+    'trans.priceRequired': 'Price Required',
+    'trans.descriptionRequired': 'Description required',
+    
     
     /* collect */
     'collect.getCollectFailed': 'Get collect list failed',

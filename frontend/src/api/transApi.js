@@ -6,7 +6,7 @@ export const transApi = {
     viewTrans: (tid, user_id) => {
         return axios.get(`${hostname}/trans/detail/${tid}`, {
             params: {
-                user_id: user_id
+                userId: user_id
             },
         })
             .then(res => {

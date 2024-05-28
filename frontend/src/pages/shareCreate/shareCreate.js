@@ -32,8 +32,6 @@ export default function Share() {
     title: '',
     content: '',
     photo: '',
-    // status: ['draft'],
-
     region_object: '',
     latitude: '',
     longitude: '',
@@ -117,18 +115,36 @@ export default function Share() {
       post.location = location;
     }
 
+    // Error control
+    let trySubmit = true;
+    if (post.title === "") {
+      toast.error(intl.formatMessage({ id: 'post.titleRequired' }));
+      trySubmit = false;
+    }
 
-    try {
-      const data = await api.createPost(post, token);
-      if (data.success) {
-        toast.success(intl.formatMessage({ id: 'post.createSuccess' }));
-        navigate('/post/published');
-      } else {
+    if (post.longitude === "" && post.latitude === "") {
+      toast.error(intl.formatMessage({ id: 'post.locationRequired' }));
+      trySubmit = false;
+    }
+
+    if (post.content === "") {
+      toast.error(intl.formatMessage({ id: 'post.descriptionRequired' }));
+      trySubmit = false;
+    }
+
+    if (trySubmit) {
+      try {
+        const data = await api.createPost(post, token);
+        if (data.success) {
+          toast.success(intl.formatMessage({ id: 'post.createSuccess' }));
+          navigate('/post/published');
+        } else {
+          toast.error(intl.formatMessage({ id: 'post.createFail' }));
+        }
+      }
+      catch (e) {
         toast.error(intl.formatMessage({ id: 'post.createFail' }));
       }
-    }
-    catch (e) {
-      toast.error(intl.formatMessage({ id: 'post.createFail' }));
     }
 
     setIsSubmitting(false);

@@ -21,10 +21,21 @@
   }
 }
 
-.private-message-chat-time,
-.private-message-chat-status {
+.private-message-chat-time {
   font-size: 15px;
   color: #999;
+}
+
+.private-message-chat-unread {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: red;
+  color: #fff;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+  vertical-align: center;
 }
 
 .private-message-chat-name {

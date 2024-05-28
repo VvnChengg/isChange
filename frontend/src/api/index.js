@@ -163,7 +163,7 @@ export const api = {
     getPostDetail: (pID) => {
         const user_id = window.localStorage.getItem('user_id');
         return axios.get(`${hostname}/post/detail/${pID}`, {
-            query: {
+            params: {
                 userId: user_id,
             }
         })
