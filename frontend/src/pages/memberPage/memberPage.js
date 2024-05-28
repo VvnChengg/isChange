@@ -29,6 +29,8 @@ import {
 import { PostWrapper } from '../../components/Post/Post-style.js'
 
 import { viewApi } from '../../api/viewApi.js';
+import { api } from '../../api';
+
 import { useParams } from 'react-router-dom';
 import FollowMemberButton from '../../components/FollowMemberButton/index.js';
 import StartPrivate from '../../components/StartPrivate/StartPrivate.js';
@@ -36,7 +38,6 @@ import { toast } from 'react-toastify';
 import { useIntl } from 'react-intl';
 import { Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { FaCheckCircle } from 'react-icons/fa';
 
 const Post = lazy(() => import('../../components/Post/index.js'));
 const PostPhoto = lazy(() => import('../../components/Post/PostPhoto.js'));
@@ -47,7 +48,6 @@ export default function MemberPage() {
     const intl = useIntl();
     const [postLoading, setPostLoading] = useState(true);
     const navigate = useNavigate();
-    const [images, setImages] = useState([]);
     const user_id = localStorage.getItem('user_id');
 
 
@@ -63,9 +63,15 @@ export default function MemberPage() {
     const [posts, setPosts] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
-
     const [showFloatingHeader, setShowFloatingHeader] = useState(undefined);
     const [isMounted, setIsMounted] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+
+    // coverphoto
+    const [images, setImages] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [remainingImageIds, setRemainingImageIds] = useState([]);
+    
 
     useEffect(() => {
         setIsMounted(true);
@@ -95,6 +101,37 @@ export default function MemberPage() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isMounted]);
 
+    useEffect(() => {
+        if(posts.length !== 0){
+            const ids = posts.map(post => post._id);
+            setRemainingImageIds(ids);
+        }
+
+    }, [posts])
+
+    // coverphoto api 一次只叫5個
+    useEffect(() => {
+        if (remainingImageIds.length > 0 && !isLoading && hasMore) {
+            const nextBatchIds = remainingImageIds
+                .slice(0, 5); // 每次只取五個圖片 id
+            api.getImage(nextBatchIds)
+            .then(res => {
+                setImages(prevImages => [...prevImages, ...res]); // 合併新返回的圖片數據
+
+                // 更新 remainingImageIds，刪除已加載的圖片 id
+                setRemainingImageIds(prevIds => prevIds.slice(5));
+                
+                if (res.length === 0 || remainingImageIds.length <= 5) {
+                    setHasMore(false);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
+    }, [remainingImageIds, isLoading, hasMore]);
+
+
 
     // 先讀取使用者資料
     const getOtherMemberInfo = async () => {
@@ -108,6 +145,9 @@ export default function MemberPage() {
     async function getPostList() {
         try {
             const data = await viewApi.getOtherMemberPosts(other_username);
+
+            console.log(data);
+
             if (data) {
                 setPosts(data.result);
             } else {
@@ -148,13 +188,15 @@ export default function MemberPage() {
 
                 <FloatingHeader show={showFloatingHeader && isMounted}>
                     <Row>
-                        <NavBarAvatar src={memberInfo.photo} alt="Avatar" style={{ width: '40px', height: '40px' }} />
+                        <NavBarAvatar src={memberInfo.photo || '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} style={{ width: '40px', height: '40px' }} />
                         <Username>{memberInfo.username}</Username>
                         <NavInfo>{intl.formatMessage({ id: 'view.followHint' }, { other_username: other_username })}</NavInfo>
                         <FollowMemberButton
+                            isFollowing={isFollowing}
+                            setIsFollowing={setIsFollowing}
                             username={other_username}
                             token={token}
-                            style={{ marginLeft: 'auto' }} // 移动到这里
+                            style={{ marginLeft: 'auto' }}
                         />
                     </Row>
                 </FloatingHeader>
@@ -164,7 +206,7 @@ export default function MemberPage() {
                     <MemberContainer>
                         <AvatarContainer>
                             <div style={{ position: 'relative', width: '100px', height: '100px', top: '-75px' }}>
-                                <Avatar src={memberInfo.photo} alt="Avatar" />
+                                <Avatar src={memberInfo.photo|| '/icons/profile.png'} alt='Avatar' onError={(e) => { e.target.onerror = null; e.target.src='/icons/profile.png'; }} />
                                 {memberInfo.student_verification && <StyledFaCheckCircle />}
                             </div>
                             <UserInfo>
@@ -182,6 +224,8 @@ export default function MemberPage() {
                             />
 
                             <FollowMemberButton
+                                isFollowing={isFollowing}
+                                setIsFollowing={setIsFollowing}
                                 username={other_username}
                                 token={token}
                             />

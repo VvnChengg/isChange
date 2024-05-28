@@ -7,9 +7,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 
 
-export default function FollowMemberButton({ username, token }) {
+export default function FollowMemberButton({ username, token, isFollowing, setIsFollowing }) {
     const intl = useIntl();
-    const [isFollowing, setIsFollowing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const expiry_time = localStorage.getItem('expiry_time');
 
