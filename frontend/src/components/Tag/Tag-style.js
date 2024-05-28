@@ -7,6 +7,8 @@ export const TagWrapper = styled.div`
     background: ${props => props.theme[props.type]};
     color: ${props => props.theme.fill};
 
+    white-space: nowrap;
+
     &:not(:first-child) {
         width: 100px;
         padding: 2px;
@@ -15,5 +17,4 @@ export const TagWrapper = styled.div`
         margin-left: auto; 
     }
     z-index : 1;
-
 `;
