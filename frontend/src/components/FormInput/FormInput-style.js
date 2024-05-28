@@ -30,6 +30,7 @@ export const FormTextInput = styled.input `
 `
 
 export const FormTextarea = styled.textarea `
+    width: 100%;
     border: 0;
     padding: 0;
 

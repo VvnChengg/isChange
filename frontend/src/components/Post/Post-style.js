@@ -27,6 +27,8 @@ export const PostInfoContainer = styled.div `
     align-items: center;
     gap: 7px;
 
+    flex-wrap: wrap;
+
     @media screen and (max-width: 700px) {
         display: block;
     }
@@ -82,9 +84,7 @@ export const PostPreview = styled.div `
     font-weight: 400;
     font-size: 20px;
     line-height: 130%;
-
-    display: flex;
-    align-items: center;
+    text-align: left;
 
     color: #6B6B6B;
 

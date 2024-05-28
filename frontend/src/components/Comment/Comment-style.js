@@ -21,11 +21,14 @@ export const CommentLeft = styled.div `
 
 export const CommentName = styled.div `
     color: ${props => props.theme.main};
+    text-align: left;
+    white-space: nowrap;
 `
 
 export const CommentContent = styled.div `
     margin-left: 5px;
     text-align: left;
+    white-space: wrap;
 `
 
 export const CommentTime = styled.div `
