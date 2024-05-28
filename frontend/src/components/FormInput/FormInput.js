@@ -114,12 +114,6 @@ export function FormBudget({ title, placeholder, currency, setCurrency, budget, 
                         placeholder={placeholder}
                     />
                 </div>
-                {/* <FormTextInput
-                    value={currency}
-                    onChange={e => setCurrency(e.target.value)}
-                    placeholder={intl.formatMessage({ id: 'formInput.unit' })}
-                    style={{ width: '50px', textAlign: 'right' }}
-                /> */}
                 <FormTextSelect value={currency} onChange={e => setCurrency(e.target.value)}>
                     {currencies.map(currency => (
                         <option key={currency} value={currency}>{currency}</option>
@@ -131,9 +125,6 @@ export function FormBudget({ title, placeholder, currency, setCurrency, budget, 
 }
 
 export function FormDate({ title, setDate, defaultMinDate, defaultMaxDate }) {
-    // console.log(defaultMinDate, defaultMaxDate)
-    // console.log(dayjs(defaultMinDate, dateFormat), dayjs(defaultMaxDate, dateFormat))
-    // console.log(dayjs(defaultMinDate, dateFormat).isValid(), dayjs(defaultMaxDate, dateFormat).isValid())
     const intl = useIntl();
     return (
         <FormTextBox>
@@ -190,8 +181,6 @@ export function FormCheck({ title, options, onChange, defaultOption, trans_NowSt
 export function FormImage({ title, placeholder, text, setText, setImagePreviewUrl, imagePreviewUrl }) {
     const intl = useIntl();
     const fileInput = useRef(null);
-    const [blobUrl, setBlobUrl] = useState(null);
-
 
     const handleButtonClick = () => {
         fileInput.current.click();
@@ -207,9 +196,6 @@ export function FormImage({ title, placeholder, text, setText, setImagePreviewUr
 
         reader.readAsDataURL(file);
     }
-    // useEffect(() => {
-    //     console.log(imagePreviewUrl);
-    // }, [imagePreviewUrl])
 
     return (
         <FormTextBox style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -392,8 +378,6 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
 
     React.useEffect(() => {
         // 這裡的代碼只有在 `value` 變化時才會運行
-        // console.log("value");
-        // console.log(value);
 
         if (value !== null && value !== undefined  && value.description !== undefined && value.description !== null) {
             // 這邊可以轉經緯度, 但還沒確定有沒要用所以先註解掉
@@ -402,16 +386,12 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
                 if (status === 'OK') {
                     const latitude = results[0].geometry.location.lat();
                     const longitude = results[0].geometry.location.lng();
-                    // console.log('Latitude: ' + latitude);
-                    // console.log('Longitude: ' + longitude);
-
 
                     (async () => {
                         try {
                             const region_en = await getCityOrCountryNameEN(latitude, longitude);
                             const region_zh = await getCityOrCountryNameZH(latitude, longitude);
-                            // console.log(region_en);
-                            // console.log(region_zh);
+
                             setRegionCountry_Latitude_Longitute({
                                 destination_string: value.description,
                                 destination_zh_string: region_zh,
@@ -430,18 +410,6 @@ export function FormLocation({ type, title, placeholder, value, defaultValue, se
         }
 
     }, [value]);
-
-    // React.useEffect(() => {
-    //     // 這裡的代碼只有在 `inputValue` 變化時才會運行
-    //     console.log("inputValue")
-    //     console.log(inputValue)
-    // }, [inputValue]);
-
-    // React.useEffect(() => {
-    //     // 這裡的代碼只有在 `fetch` 變化時才會運行
-    //     console.log("fetch")
-    //     console.log(fetch)
-    // }, [fetch]);
 
     return (
         <Autocomplete
