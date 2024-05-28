@@ -16,9 +16,9 @@ const getAllPosts = async (req, res, next) => {
   let result = [];
   try {
     // 取得所有文章、活動、商品資訊
-    articles = await Article.find({}, { article_pic: 0 });
-    events = await Event.find({}, { event_pic: 0 });
-    products = await Product.find({}, { product_pic: 0 });
+    articles = await Article.find({status: { $nin: [ "delete" ] }}, { article_pic: 0 });
+    events = await Event.find({status: { $nin: [ "delete" ] }}, { event_pic: 0 });
+    products = await Product.find({status: { $nin: [ "delete" ] }}, { product_pic: 0 });
 
     result = formatContentList(articles, events, products, {
       withPhoto: false,
@@ -96,9 +96,9 @@ const getUserPosts = async (req, res, next) => {
   const searchId = req.params.uid;
   // const uId = req.body.userId;
   try {
-    articles = await Article.find({ creator_id: searchId }, { article_pic: 0 });
-    events = await Event.find({ creator_id: searchId }, { event_pic: 0 });
-    products = await Product.find({ creator_id: searchId }, { product_pic: 0 });
+    articles = await Article.find({ creator_id: searchId,status: { $nin: [ "delete" ] }}, { article_pic: 0 });
+    events = await Event.find({ creator_id: searchId,status: { $nin: [ "delete" ] } }, { event_pic: 0 });
+    products = await Product.find({ creator_id: searchId,status: { $nin: [ "delete" ] } }, { product_pic: 0 });
 
     result = formatContentList(articles, events, products, {
       withPhoto: false,
@@ -133,9 +133,9 @@ const createPost = async (req, res, next) => {
     }
     const article_pic = req.file
       ? {
-          data: req.file.buffer,
-          contentType: req.file.mimetype,
-        }
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      }
       : null;
     let newPost = new Article({
       article_title: post.title,
@@ -176,9 +176,9 @@ const updatePost = async (req, res, next) => {
   }
   const article_pic = req.file
     ? {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
-      }
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    }
     : null;
   const updates = {
     article_title: req.body.title,
@@ -268,8 +268,11 @@ const deleteContent = async (req, res, next) => {
     if (deleteItem.creator_id.toString() !== userId.toString()) {
       return res.status(401).json({ message: "您沒有權限刪除此" + itemType });
     }
+
     deleteFavorite = await Favorite.deleteMany( {item_id: id} );
-    deleteItem = await model.findByIdAndDelete(id);
+    // 修改貼文刪除方式
+    deleteItem = await model.findByIdAndUpdate(id, { status: "delete" });
+
     res.status(200).json({ message: "成功刪除" + itemType });
   } catch (err) {
     if (err.name === "CastError") {
@@ -472,9 +475,9 @@ const collectProduct = async (req, res) => {
 const getAllPostsSortedByLikes = async (req, res, next) => {
   try {
     // 取得文章、活動、商品資訊
-    let articles = await Article.find({}, { article_pic: 0 });
-    let events = await Event.find({}, { event_pic: 0 });
-    let products = await Product.find({}, { product_pic: 0 });
+    let articles = await Article.find({}, { article_pic: 0, status: { $nin: [ "delete" ] } });
+    let events = await Event.find({}, { event_pic: 0, status: { $nin: [ "delete" ] } });
+    let products = await Product.find({}, { product_pic: 0, status: { $nin: [ "delete" ] } });
     console.log("articles", articles);
 
     // 合併所有結果
@@ -537,6 +540,7 @@ const searchPosts = async (req, res) => {
     result = formatContentList(articles, events, products, {
       withPhoto: false,
     });
+    result = result.filter(result => result.status !== 'delete');
 
     if (result.length === 0) {
       return res.status(200).json({ message: "資料庫中無任何內容" });

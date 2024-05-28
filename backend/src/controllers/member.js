@@ -33,9 +33,8 @@ const showMember = async (req, res) => {
     // Convert photo data to base64
     let photoBase64 = null;
     if (user.photo && user.photo.contentType) {
-      photoBase64 = `data:${
-        user.photo.contentType
-      };base64,${user.photo.data.toString("base64")}`;
+      photoBase64 = `data:${user.photo.contentType
+        };base64,${user.photo.data.toString("base64")}`;
     }
     const resData = {
       _id: user._id,
@@ -189,9 +188,8 @@ const showMemberDetail = async (req, res) => {
     // Convert photo data to base64
     let photoBase64 = null;
     if (observed_user.photo && observed_user.photo.contentType) {
-      photoBase64 = `data:${
-        observed_user.photo.contentType
-      };base64,${observed_user.photo.data.toString("base64")}`;
+      photoBase64 = `data:${observed_user.photo.contentType
+        };base64,${observed_user.photo.data.toString("base64")}`;
     }
     const resData = {
       _id: observed_user._id,
@@ -405,9 +403,9 @@ const getUserPosts = async (req, res, next) => {
 
   try {
     const member = await Member.findOne({ username: username });
-    articles = await Article.find({ creator_id: member._id });
-    events = await Event.find({ creator_id: member._id });
-    products = await Product.find({ creator_id: member._id });
+    articles = await Article.find({ creator_id: member._id, status: { $nin: ["delete"] } }, { article_pic: 0 });
+    events = await Event.find({ creator_id: member._id, status: { $nin: ["delete"] } }, { event_pic: 0 });
+    products = await Product.find({ creator_id: member._id, status: { $nin: ["delete"] } }, { product_pic: 0 });
 
     // 抽取文章需要的資訊並統一格式
     articles.forEach((article) => {
@@ -495,9 +493,8 @@ const getFollowingList = async (req, res) => {
         followedUser.photo.contentType &&
         followedUser.photo.data
       ) {
-        photoBase64 = `data:${
-          followedUser.photo.contentType
-        };base64,${followedUser.photo.data.toString("base64")}`;
+        photoBase64 = `data:${followedUser.photo.contentType
+          };base64,${followedUser.photo.data.toString("base64")}`;
       }
 
       return {
