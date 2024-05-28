@@ -121,7 +121,7 @@ export const api = {
             return new File([u8arr], filename, { type: mime });
         }
 
-        const file = post.photo === "" ? "" : dataURLtoFile(post.photo, 'post.png');
+        const file = post.photo == null || post.photo == "" ? "" : dataURLtoFile(post.photo, 'post.png');
         const formData = new FormData();
 
 

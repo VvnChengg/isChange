@@ -28,7 +28,7 @@ export const transApi = {
             }
             return new File([u8arr], filename, { type: mime });
         }
-        const file = data.product_pic === "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
+        const file = data.product_pic == null || data.product_pic == "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
         // console.log(JSON.stringify(data.destination_zh));
@@ -87,7 +87,8 @@ export const transApi = {
             }
             return new File([u8arr], filename, { type: mime });
         }
-        const file = data.product_pic === "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
+
+        const file = data.product_pic == null || data.product_pic == "" ? "" : dataURLtoFile(data.product_pic, 'transaction.png');
         const formData = new FormData();
 
         formData.append('product_title', data.trans_title);
@@ -105,7 +106,6 @@ export const transApi = {
         formData.append('transaction_region_en', JSON.stringify(data.destination_en));
         formData.append('transaction_region_zh', JSON.stringify(data.destination_zh));
         formData.append('location', JSON.stringify(data.location));
-
 
         return axios.put(`${hostname}/trans/edit/${data.tid}`,
             formData, {

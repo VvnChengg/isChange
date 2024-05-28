@@ -106,7 +106,6 @@ export default function TransEdit() {
 
     async function onSubmit() {
         setIsSubmitting(true);
-
         
         if(trans.destination_en_string !== undefined || trans.destination_zh_string !== undefined){
             // 送出前先把destination_en, destination_zh轉成後端需要的格式
@@ -141,6 +140,7 @@ export default function TransEdit() {
 
         try{
             const data = await transApi.editTrans(trans, token);
+            console.log(data);
             if(data.success){
                 toast.success(`${intl.formatMessage({ id: 'trans.editSuccess' })}`);
                 navigate('/post/published'); // redirect
