@@ -204,6 +204,7 @@ export default function Share() {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button
             text={intl.formatMessage({ id: 'back' })}
+            secondary={true}
             onClick={() => window.history.back()}
           />
           <Button

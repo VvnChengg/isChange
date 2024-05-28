@@ -5,6 +5,9 @@
     /* flex-direction: column; */
     padding-bottom: 5px;
     background-color: #fff;
+    width: 90%;
+    top: 80px;
+
   }
   
   .header {
