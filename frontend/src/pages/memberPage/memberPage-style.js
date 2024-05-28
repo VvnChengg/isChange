@@ -38,7 +38,7 @@ export const HeaderBackground = styled.div`
     border-radius: 10px;
 
     @media (max-width: 768px) {
-        width: 100%;
+      width: 100%;
     }
 `;
 

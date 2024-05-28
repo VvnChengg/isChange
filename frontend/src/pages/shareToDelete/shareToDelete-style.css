@@ -5,8 +5,11 @@
   flex-direction: column;
   background-color: #fff;
   width: 70%;
+  top: 80px;
+  position: absolute;
+  overflow: auto;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 728px) {
     width: 90%;
   }
 }
