@@ -52,9 +52,9 @@ const eventSchema = new Schema({
     type: Number,
     validate: {
       validator: function (value) {
-        return value < this.people_ub;
+        return value <= this.people_ub;
       },
-      message: "People lower bound must be less than upper bound",
+      message: "People lower bound must be less than or equal to upper bound",
     },
   },
   people_ub: {
