@@ -77,8 +77,7 @@ export default function TourCreate() {
             toast.error(intl.formatMessage({ id: 'tour.titleRequired' }));
             trySubmit = false;
         }
-        console.log(tour);
-        console.log(tour.longitude);
+        
         if (tour.longitude === "" && tour.latitude === "") {
             toast.error(intl.formatMessage({ id: 'tour.destinationRequired' }));
             trySubmit = false;
