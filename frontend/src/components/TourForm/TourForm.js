@@ -8,7 +8,6 @@ import {
     FormImage,
     FormLocation
 } from '../FormInput';
-import Button from '../Button';
 
 export default function TourForm({ tour, setTour }) {
     // console.log(tour)
