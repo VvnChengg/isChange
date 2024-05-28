@@ -181,7 +181,7 @@ export default function PostDetail({ post }) {
                         {post.coverPhoto && <PostDetailImage src={post.coverPhoto} alt='post_image' />}
                     </PostDetailContent>
                 </div>
-                {post.comment_list && <Comment pid={post._id} comments={post.comment_list} />}
+                {post.comment_list && <Comment pid={post._id} comments={post.comment_list} user_id={user_id} token={token}/>}
             </InnerWrapper>
         </PostDetailWrapper>
     )

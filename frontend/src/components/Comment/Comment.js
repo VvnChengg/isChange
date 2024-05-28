@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-
+import { toast } from 'react-toastify';
 import { Button, Input, Spin } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import {
@@ -28,21 +28,25 @@ function formatDate(dateString) {
   return formattedDate;
 }
 
-export default function Comment({ pid, comments }) {
+export default function Comment({ pid, comments, user_id, token }) {
     const intl = useIntl();
     const [content, setContent] = useState('');
 
     async function onSubmit() {
-      try {
-        const datetime = formatDate(Date.now());
-        const comment = {pid, content, datetime};
-        await api.commentPost(comment);
-        alert(intl.formatMessage({ id: 'post.commentSuccess' }));
-        window.location.reload()
-      }
-      catch (e) {
-        console.log(e);
-        alert(intl.formatMessage({ id: 'post.commentFail' }));
+      if(token && user_id) {
+        try {
+          const datetime = formatDate(Date.now());
+          const comment = {pid, content, datetime};
+          await api.commentPost(comment);
+          alert(intl.formatMessage({ id: 'post.commentSuccess' }));
+          window.location.reload()
+        }
+        catch (e) {
+          console.log(e);
+          alert(intl.formatMessage({ id: 'post.commentFail' }));
+        }
+      } else{
+        toast.error(`${intl.formatMessage({id: 'token.pleaseLogIn'})}`);
       }
     };
 
