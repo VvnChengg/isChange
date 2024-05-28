@@ -17,6 +17,7 @@ export default function FollowMemberButton({ username, token, isFollowing, setIs
         setIsLoading(true);
         if (!token || token === '' || new Date().getTime() > expiry_time) {
             toast.error(intl.formatMessage({ id: 'alert.login' }));
+            setIsLoading(false);
             return;
         }
 
