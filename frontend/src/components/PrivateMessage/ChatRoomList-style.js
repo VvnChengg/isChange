@@ -36,3 +36,11 @@ export const ChatRoomRow = styled.div `
     display: flex;
     justify-content: space-between;
 `
+
+export const ChatRoomPreview = styled.div `
+    width: 80%;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    overflow: hidden;
+`
