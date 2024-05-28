@@ -280,7 +280,7 @@ const en = {
     'tour.rangeOfBudgetRequired': 'Budget required',
     'tour.dateRequired': 'Date required',
     'tour.descriptionRequired': 'Description required',
-    'tour.rangeOfPeopleError': 'Range of people min should be less than max',
+    'tour.rangeOfPeopleError': 'Range of people min should not be greater than max',
 
     'trans.type': 'Type',
     'trans.sell': 'Sell',

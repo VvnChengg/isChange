@@ -84,7 +84,7 @@ export default function TourCreate() {
         if (tour.people_lb === "" && tour.people_ub === "") {
             toast.error(intl.formatMessage({ id: 'tour.rangeOfPeopleRequired' }));
             trySubmit = false;
-        }else if (tour.people_lb >= tour.people_ub) {
+        }else if (tour.people_lb > tour.people_ub) {
             toast.error(intl.formatMessage({ id: 'tour.rangeOfPeopleError' }));
             trySubmit = false;
         }

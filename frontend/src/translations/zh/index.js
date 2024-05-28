@@ -282,7 +282,7 @@ const zh = {
     'tour.rangeOfBudgetRequired': '必填預算',
     'tour.dateRequired': '必填日期',
     'tour.descriptionRequired': '必填文字說明',
-    'tour.rangeOfPeopleError': '人數下限應小於上限',
+    'tour.rangeOfPeopleError': '人數下限不應大於上限',
 
     'trans.type': '交易類別',
     'trans.sell': '賣出',
