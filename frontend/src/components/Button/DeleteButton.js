@@ -1,10 +1,12 @@
-import {  FaTrash } from 'react-icons/fa';
+import Icon from '../Icon';
 import './DeleteButton.css'
 
 
 const DeleteButton = ({ onClick }) => {
   return (
-    <button className='self-post-delete-button' onClick={onClick}><FaTrash /></button>
+    <button className='self-post-delete-button' onClick={onClick}>
+      <Icon.Trash />
+    </button>
   );
 };
 

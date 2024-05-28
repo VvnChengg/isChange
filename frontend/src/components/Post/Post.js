@@ -27,8 +27,8 @@ export default function Post({ post, onClick, showDivider }) {
         if (!post) return;
         
         if (intl.locale === 'en') {
-            if (post.artical_region_en && post.artical_region_en[0])
-                return post.artical_region_en.join(', ');
+            if (post.article_region_en && post.article_region_en[0])
+                return post.article_region_en.join(', ');
             else if (post.destination_en && post.destination_en[0])
                 return post.destination_en.join(', ');
             else if (post.transaction_region_en && post.transaction_region_en[0])
