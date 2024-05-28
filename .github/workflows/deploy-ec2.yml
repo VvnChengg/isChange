@@ -22,7 +22,7 @@ jobs:
     - name: Log in to Docker Hub
       uses: docker/login-action@v1
       with:
-        username: ${{ secrets.GITHUB_ACTOR }}
+        username: ${{ github.actor }}
         password: ${{ secrets.GH_TOKEN }}
 
     - name: Build and push frontend Docker image
@@ -30,14 +30,14 @@ jobs:
       with:
         context: ./frontend
         push: true
-        tags: ${{ secrets.GITHUB_ACTOR }}/frontend:latest
+        tags: ${{ github.actor }}/frontend:latest
 
     - name: Build and push backend Docker image
       uses: docker/build-push-action@v2
       with:
         context: ./backend
         push: true
-        tags: ${{ secrets.GITHUB_ACTOR }}/backend:latest
+        tags: ${{ github.actor }}/backend:latest
 
   deploy:
     needs: build
@@ -55,6 +55,6 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         port: ${{ secrets.EC2_PORT }}
         script: |
-          cd /path/to/docker-compose
+          cd ~/docker-compose
           docker-compose pull
           docker-compose up -d
