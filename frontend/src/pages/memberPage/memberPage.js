@@ -145,9 +145,6 @@ export default function MemberPage() {
     async function getPostList() {
         try {
             const data = await viewApi.getOtherMemberPosts(other_username);
-
-            console.log(data);
-
             if (data) {
                 setPosts(data.result);
             } else {
