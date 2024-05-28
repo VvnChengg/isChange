@@ -25,12 +25,10 @@ const zh = {
     'msg.confirmButton': '確認',
     'msg.rejectButton': '拒絕',
     'msg.chatRoomTitle': '聊天室',
-    'msg.userNotEntered': '使用者尚未輸入信息',
+    'msg.userNotEntered': '使用者尚未輸入訊息',
     'msg.stranger':'陌生！！',
     'msg.input':'輸入訊息！！',
     'msg.nothingMsg':'沒有聊天!',
-
-
 
     'selfpost.edit':'編輯',
     'selfpost.delete':'刪除',
@@ -91,8 +89,6 @@ const zh = {
     'personalbutton.myPost': '已發布',
     'personalbutton.myCollect': '已收藏',
     
-
-
     /* pages */
     'title': '標題',
     'inputTitle': '標題是什麼咧～',
@@ -101,8 +97,8 @@ const zh = {
     'back': '返回上頁',
     'loading': '讀取中',
     'shareToOthers': '分享給其他人',
-    'CopyURLSuccess': 'URL已成功複製',
-    'CopyURLFailed': 'URL複製失敗',
+    'CopyURLSuccess': 'URL 已成功複製',
+    'CopyURLFailed': 'URL 複製失敗',
 
     'home.noContent': '沒有貼文',
 
@@ -143,7 +139,7 @@ const zh = {
     'register.registerFailed': '註冊失敗，請再試一次',
     'register.passwordHint': '輸入密碼',
     'register.pleasePasswordHint': '請輸入密碼',
-    'register.passwordRule': '密碼至少8個字',
+    'register.passwordRule': '密碼至少 8 個字',
     'register.confirmPassword': '確認密碼',
     'register.pleaseConfirmPassword': '請再次輸入密碼',
     'register.passwordNotMatch': '密碼不同',
@@ -180,7 +176,7 @@ const zh = {
     'view.followingList': '追蹤名單',
     'view.viewIntro': '查看自我介紹',
     'view.viewPost': '查看文章',
-    'view.followHint': '不想錯過有趣的文章？追蹤{other_username}吧！',
+    'view.followHint': '不想錯過有趣的文章？追蹤 {other_username} 吧！',
 
     'edit.changePassword': '修改密碼',
     'edit.changeUsernameandSchool': '修改其他資訊',
