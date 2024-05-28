@@ -40,7 +40,6 @@ export default function TourCreate() {
     })
 
     async function onSubmit() {
-        console.log(tour);
         setIsSubmitting(true);
 
         if(tour.destination_en_string !== undefined || tour.destination_zh_string !== undefined){
@@ -71,7 +70,6 @@ export default function TourCreate() {
         }
 
         // Error control
-        console.log(tour);
         let trySubmit = true;
         if (tour.event_title === "") {
             toast.error(intl.formatMessage({ id: 'tour.titleRequired' }));

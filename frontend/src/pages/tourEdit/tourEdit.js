@@ -69,10 +69,9 @@ export default function TourCreate() {
                     setTour(prevTour => ({ 
                         ...prevTour,
                         ...data.tour,
-                        longitude: data.tour.location.coordinates[0],
-                        latitude: data.tour.location.coordinates[1],
-                        region_object: (intl.locale === 'en' ? data.tour.destination_en : data.tour.destination_zh).join(', ')
-                    }));
+                        longitude: data.tour && data.tour.location && data.tour.location.coordinates && data.tour.location.coordinates[0],
+                        latitude: data.tour && data.tour.location && data.tour.location.coordinates && data.tour.location.coordinates[1],
+                        region_object: intl && intl.locale === 'en' ? (data.tour && data.tour.destination_en && data.tour.destination_en.join(', ')) : (data.tour && data.tour.destination_zh && data.tour.destination_zh.join(', '))                    }));
                 }else{
                     toast.error(`${intl.formatMessage({ id: 'tour.viewPageFailed' })}`);
                 }
