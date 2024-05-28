@@ -341,7 +341,7 @@ const en = {
     'header.login': 'Login',
 
     /* hooks */
-    'token.pleaseLogIn': 'Please login first',
+    'token.pleaseLogIn': 'Please login',
     'token.Expiry': 'Login expired, please login again',
 };
 
