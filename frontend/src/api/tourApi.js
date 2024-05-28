@@ -43,7 +43,7 @@ export const tourApi = {
             }
             return new File([u8arr], filename, { type: mime });
         }
-        const file = data.event_pic === "" ? "" : dataURLtoFile(data.event_pic, 'tour.png');
+        const file = data.event_pic == null || data.event_pic == "" ? "" : dataURLtoFile(data.event_pic, 'tour.png');
         const formData = new FormData();
 
         Object.entries(data).forEach(([key, value]) => {
@@ -87,7 +87,7 @@ export const tourApi = {
             }
             return new File([u8arr], filename, { type: mime });
         }
-        const file = data.event_pic === "" ? "" : dataURLtoFile(data.event_pic, 'tour.png');
+        const file = data.event_pic == null || data.event_pic == "" ? "" : dataURLtoFile(data.event_pic, 'tour.png');
         const formData = new FormData();
 
         Object.entries(data).forEach(([key, value]) => {
