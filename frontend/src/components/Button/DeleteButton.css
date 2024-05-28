@@ -11,4 +11,7 @@
   .self-post-delete-button svg {
     width: 20px;
     height: 20px;
+    & path {
+      fill: #008CD9;
+    }
   }
