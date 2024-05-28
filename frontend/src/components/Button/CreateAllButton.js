@@ -6,18 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import './CreateAllButton.css'
 import { Menu } from 'antd';
 
-const CreateAllButton = () => {
+const CreateAllButton =  ({openMenu, toggleMenu} ) => {
   const navigate = useNavigate();
   const [showSubButtons, setShowSubButtons] = useState(false);
 
 
   const toggleSubButtons = () => {
-    setShowSubButtons(!showSubButtons);
+    toggleMenu('createAll');
   };
 
   return (
   <div className="circle-button-container">
-    {showSubButtons && (
+    {openMenu === 'createAll' && (
       <Menu className="sub-buttons">
         <Menu.Item key="1" onClick={() => navigate('/post/create')}>
           <div className="centered-content">

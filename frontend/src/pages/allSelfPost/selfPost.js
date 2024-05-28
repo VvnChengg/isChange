@@ -135,7 +135,11 @@ export default function SelfPost() {
                         {posts.map((post, index) => (
                             <React.Fragment key={post._id}>
                                 <div className="self-post-wrapper" >
-                                    <PostWrapper showDivider={index !== posts.length - 1} onClick={() => navigate(`/${post.type}/edit/${post._id}`)}>
+                                    <PostWrapper
+                                        showDivider={index !== posts.length - 1}
+                                        onClick={() => navigate(`/${post.type}/edit/${post._id}`)}
+                                        style={{ width: '90%' }}
+                                    >
                                         <Suspense fallback={<div>Loading post...</div>}>
                                             <Post post={post} showDivider={index !== posts.length - 1} />
                                         </Suspense>
@@ -143,7 +147,9 @@ export default function SelfPost() {
                                             <PostPhoto src={getCoverPhotoByPid(post._id)} />
                                         </Suspense>
                                     </PostWrapper>
-                                    <DeleteButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
+                                    <div style={{ width: '30px', height: '30px', textAlign: 'center' }}>
+                                        <DeleteButton onClick={(event) => handleButtonClick(post._id, post.type, event)} />
+                                    </div>
                                 </div>
                             </React.Fragment>
                         ))}

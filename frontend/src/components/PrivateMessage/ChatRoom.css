@@ -3,10 +3,12 @@
 /* 整個聊天室容器 */
 .private-message-chat-room-container {
   width: 50%;
-  height: 80%;
+  height: 95%;
 
-  position: absolute;
-    top: 100px;
+  margin: auto;
+
+  /* position: absolute;
+    top: 100px; */
   
   padding: 2%;
   border: 2px solid #008CD9; /* 添加 2 像素寬度的實線邊框，顏色為 #008CD9 */
@@ -15,12 +17,12 @@
   display: block;
 
   @media screen and (max-width: 1200px) {
-    height: 75%;
+    height: 80%;
   }
 
   @media screen and (max-width: 500px) {
     width: 85%;
-    height: 75%;
+    height: 80%;
   }
 }
 
@@ -52,9 +54,10 @@
 /* 輸入框 */
 .private-message-input-box{
   width: 50%;
+  margin: auto;
 
-  position: absolute;
-    bottom: 40px;
+  /* position: absolute;
+    bottom: 40px; */
 
   padding: 0.005%;
   border-radius: 15px;

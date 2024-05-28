@@ -1,7 +1,5 @@
-import Button from "../Button";
 import { PersonalMenu } from "./PersonalMenu";
-import { useState, useContext } from "react";
-import { AuthContext } from '../../App';
+import { useState } from "react";
 import { useIntl } from 'react-intl';
 
 
@@ -13,16 +11,14 @@ import {
 
 
 
-export default function PersonalPostButton() {
+export default function PersonalPostButton( {openMenu, toggleMenu} ) {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const { token } = useContext(AuthContext);
 
     const intl = useIntl();
 
     function onClick() {
-        setIsMenuOpen(!isMenuOpen);
+        toggleMenu('personal');
     }
 
 
@@ -35,7 +31,7 @@ export default function PersonalPostButton() {
 
                 <MenuWrapper>
                     <PersonalMenu
-                        isOpen={isMenuOpen}
+                        isOpen={openMenu === 'personal'}
                         setIsOpen={setIsMenuOpen}
                     />
                 </MenuWrapper>

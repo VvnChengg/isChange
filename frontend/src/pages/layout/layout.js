@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import {
     LayoutWrapper,
@@ -9,8 +10,6 @@ import Header from '../../components/Header';
 import PersonalPostButton from '../../components/PersonalPostButton';
 import CreateAllButton from '../../components/Button/CreateAllButton.js';
 import GetFollowingList from '../../components/GetFollowingList';
-import { AuthContext } from '../../App';
-import { useContext } from 'react';
 
 
 export default function Layout({
@@ -20,7 +19,11 @@ export default function Layout({
     setSort, setRadius,
     setFilters, filterOptions
 }) {
-    const { token } = useContext(AuthContext);
+    const [openMenu, setOpenMenu] = useState(null);
+
+    const toggleMenu = (menu) => {
+        setOpenMenu(openMenu === menu ? null : menu);
+    };
     return (
         <LayoutWrapper>
             <Header
@@ -37,8 +40,8 @@ export default function Layout({
             />
 
             <Footer>
-                <CreateAllButton />
-                <PersonalPostButton />
+                <CreateAllButton openMenu={openMenu} toggleMenu={toggleMenu} />
+                <PersonalPostButton openMenu={openMenu} toggleMenu={toggleMenu} />
                 <GetFollowingList />
             </Footer>
             <Outlet />

@@ -67,7 +67,7 @@ export default function PostDetail({ post }) {
                         }
                     </PostDetailButtonContainer>
 
-                    {intl.locale === 'en' && post.transaction_region_en &&
+                    {intl.locale === 'en' && post.transaction_region_en && post.transaction_region_en.length > 0 &&
                         <PostDetailRow>
                             <PostDetailIcon>
                                 <Icon.Location />
@@ -76,7 +76,7 @@ export default function PostDetail({ post }) {
                         </PostDetailRow>
                     }
 
-                    {intl.locale === 'zh' && post.transaction_region_zh &&
+                    {intl.locale === 'zh' && post.transaction_region_zh && post.transaction_region_zh.length > 0 &&
                         <PostDetailRow>
                             <PostDetailIcon>
                                 <Icon.Location />
@@ -85,7 +85,7 @@ export default function PostDetail({ post }) {
                         </PostDetailRow>
                     }
 
-                    {intl.locale === 'en' && post.destination_en &&
+                    {intl.locale === 'en' && post.destination_en && post.destination_en.length > 0 &&
                         <PostDetailRow>
                             <PostDetailIcon>
                                 <Icon.Location />
@@ -94,7 +94,7 @@ export default function PostDetail({ post }) {
                         </PostDetailRow>
                     }
 
-                    {intl.locale === 'zh' && post.destination_zh &&
+                    {intl.locale === 'zh' && post.destination_zh && post.destination_zh.length > 0 &&
                         <PostDetailRow>
                             <PostDetailIcon>
                                 <Icon.Location />
@@ -103,7 +103,7 @@ export default function PostDetail({ post }) {
                         </PostDetailRow>
                     }
 
-                    {intl.locale === 'en' && post.article_region_en &&
+                    {intl.locale === 'en' && post.article_region_en && post.article_region_en.length > 0 &&
                         <PostDetailRow>
                             <PostDetailIcon>
                                 <Icon.Location />
@@ -113,7 +113,7 @@ export default function PostDetail({ post }) {
                     }
 
 
-                    {intl.locale === 'zh' && post.article_region_zh &&
+                    {intl.locale === 'zh' && post.article_region_zh && post.article_region_zh.length > 0 &&
                         <PostDetailRow>
                             <PostDetailIcon>
                                 <Icon.Location />

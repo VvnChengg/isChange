@@ -183,7 +183,9 @@ export default function Chatroom() {
     return (
         <>
             {chatData ? (
-                <>
+                <div style={{ width: '100%', height: 'calc(100% - 100px)',
+                    position: 'absolute', top: '100px' }}
+                >
                     <ChatRoom chatData={chatData} chatPhoto={chatPhoto} userId={userId} handleDownload={handleDownload} />
                     <ChatRoomInput
                         handleInputChange={handleInputChange}
@@ -192,7 +194,7 @@ export default function Chatroom() {
                         handleKeyDown={handleKeyDown}
                         handleFileInputChange={handleFileInputChange}
                     />
-                </>
+                </div>
             )
             : <Spin />}
         </>
