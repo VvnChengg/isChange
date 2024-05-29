@@ -14,7 +14,7 @@ export default function SloganAnimation() {
     }, []);
 
     const handleClick = () => {
-        navigate('/');  // Navigate to the next page when the animated element is clicked
+        navigate('/home');  // Navigate to the next page when the animated element is clicked
     };
 
 

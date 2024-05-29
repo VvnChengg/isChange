@@ -68,7 +68,7 @@ const LoginForm = () => {
 
         if(data.status === 'success'){
           setToken(data.data.access_token);
-          navigate('/');
+          navigate('/home');
         }
       }catch(error){
         if(error.response.data.error === '此帳號已註冊，請使用原本的帳號登入'){

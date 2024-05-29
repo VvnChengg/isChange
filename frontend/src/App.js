@@ -116,7 +116,8 @@ function App() {
                         setFilters={setFilters} filterOptions={filterOptions}
                       />}
                   >
-                    <Route path='' element={
+                    <Route path='' element={<SloganAnimation />} />
+                    <Route path='/home' element={
                       <Home
                         keyword={keyword} setKeyword={setKeyword}
                         search={search} setSearch={setSearch}
