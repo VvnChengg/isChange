@@ -7,6 +7,7 @@ export const CreateContainer = styled.div `
     
     position: absolute;
     top: 80px;
+    padding-top: 20px;
     padding-bottom: 80px;
 
     display: flex;

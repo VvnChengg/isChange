@@ -36,12 +36,12 @@ export default function Header({
         setType('all');
         setRadius(40075);
         setFilters(filterOptions);
-        navigate('/');
+        navigate('/home');
     }
 
     function onSearch() {
         setSearch(true);
-        navigate('/');
+        navigate('/home');
     }
 
     function changeLanguage() {

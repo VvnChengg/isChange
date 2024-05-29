@@ -34,7 +34,7 @@ const LoginFormPwd = ({ email }) => { // 從 props 中獲取 email
       if (data.status === 'success') {
         toast.success(`${intl.formatMessage({ id: 'login.loginSuccess' })}`);
         setToken(data.data.access_token);
-        navigate('/');
+        navigate('/home');
       }
     } catch (error) {
       // console.error(error);

@@ -81,8 +81,8 @@ const en = {
 
     'sidebar.tourFilter': 'Tour Filter',
     'option.ongoing': 'Ongoing',
-    'option.complete': 'Complete',
-    'option.end': 'End',
+    'option.complete': 'Closed',
+    'option.end': 'Archived',
 
     'sidebar.distance': 'Distance Filter',
 
@@ -259,8 +259,8 @@ const en = {
     'tour.edit': 'Edit tour',
     'tour.message': 'Contact team lead',
     'tour.ongoing':'ongoing',
-    'tour.complete':'complete',
-    'tour.end':'end',
+    'tour.complete':'closed',
+    'tour.end':'archived',
     'tour.viewPageFailed': 'Failed to view tour page, please try again',
     'tour.viewPageSuccess': 'View tour page successfully',
     'tour.checkEditFailed': 'Loading edit page failed, please try again',
