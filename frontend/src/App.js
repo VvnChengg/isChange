@@ -56,6 +56,9 @@ import TransDetail from './pages/transDetail';
 // google login api
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+// slogan
+import SloganAnimation from './pages/slogan/slogan';
+
 export const AuthContext = React.createContext();
 
 function App() {
@@ -132,7 +135,7 @@ function App() {
                     <Route path='member/following' element={<Following />} />
                     <Route path='chat-list' element={<PrivateMessageList />} />
                     <Route path='chatroom/:chatid' element={<Chatroom />} />
-                    <Route path='testing' element={<StartPrivate />} />
+                    <Route path='slogan' element={<SloganAnimation />} />
                     <Route path='post'>
                       <Route path='detail/:pid' element={<ShareDetail />} />
                       <Route path='create' element={<ShareCreate />} />
