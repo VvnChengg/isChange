@@ -81,8 +81,8 @@ const en = {
 
     'sidebar.tourFilter': 'Tour Filter',
     'option.ongoing': 'Ongoing',
-    'option.complete': 'Complete',
-    'option.end': 'End',
+    'option.complete': 'Closed',
+    'option.end': 'Archived',
 
     'sidebar.distance': 'Distance Filter',
 
